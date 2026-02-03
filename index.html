@@ -8,10 +8,12 @@
         body { 
             background-color: #0b0e14; color: white; 
             font-family: sans-serif; margin: 0; padding: 0; 
-            overflow-x: hidden;
         }
 
-        /* 1. THE HOME SCREEN (STAYS ON TOP UNTIL CLICKED) */
+        /* THE TRICK: A hidden checkbox to control the menu */
+        #menu-toggle { display: none; }
+
+        /* 1. HOME MENU SCREEN */
         #home-screen {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -19,56 +21,69 @@
             display: flex; flex-direction: column;
             justify-content: center; align-items: center;
             z-index: 9999;
-            transition: 0.5s ease-in-out;
+            transition: transform 0.6s cubic-bezier(0.7, 0, 0.3, 1);
         }
-        #home-screen.hide { transform: translateY(-100%); }
 
-        .start-btn {
+        /* THE ANIMATION: When checkbox is checked, slide menu UP */
+        #menu-toggle:checked ~ #home-screen {
+            transform: translateY(-100%);
+        }
+
+        .start-label {
             padding: 15px 40px; background: #ff0055;
-            color: white; border: none; border-radius: 50px;
+            color: white; border-radius: 50px;
             font-weight: bold; cursor: pointer; font-size: 1.2rem;
+            box-shadow: 0 0 20px rgba(255, 0, 85, 0.4);
         }
 
-        /* 2. BOTTOM TASKBAR (MOBILE STYLE) */
+        /* 2. TASKBAR (BOTTOM) */
         .bottom-nav {
             position: fixed; bottom: 0; left: 0;
-            width: 100%; height: 60px;
+            width: 100%; height: 70px;
             background: #151921; border-top: 1px solid #333;
             display: flex; justify-content: space-around; align-items: center;
             z-index: 1000;
         }
-        .nav-item { 
-            background: none; border: none; color: #888; 
-            font-size: 0.8rem; cursor: pointer;
+
+        .nav-btn {
+            background: none; border: none; color: #888;
+            font-size: 0.7rem; text-align: center; cursor: pointer;
         }
-        .nav-item.active { color: #ff0055; font-weight: bold; }
+        
+        /* Home button at the bottom simply unchecks the box to bring menu back */
+        .home-trigger { color: #ff0055; }
 
-        /* 3. CONTENT SECTIONS */
-        .page { display: none; padding: 20px; padding-bottom: 80px; }
-        .page.active { display: block; animation: fadeIn 0.3s; }
-
+        /* 3. GAME GRID */
+        .content { padding: 20px; padding-bottom: 90px; }
+        
         .game-grid { 
-            display: grid; grid-template-columns: 1fr 1fr; gap: 15px; 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); 
+            gap: 15px; 
         }
+
         .card { 
-            background: #151921; padding: 10px; border-radius: 10px; 
-            text-align: center; text-decoration: none; color: white;
-            border: 1px solid #333;
+            background: #151921; border-radius: 12px; padding: 10px;
+            text-decoration: none; color: white; border: 1px solid #333;
+            display: block; text-align: center;
         }
+
         .card img { width: 100%; border-radius: 8px; aspect-ratio: 1/1; object-fit: cover; }
 
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 <body>
 
+    <input type="checkbox" id="menu-toggle">
+
     <div id="home-screen">
-        <h1 style="font-size: 3rem; margin-bottom: 20px;">M HUB</h1>
-        <button class="start-btn" onclick="enterHub()">ENTER HUB</button>
+        <h1 style="font-size: 4rem; margin: 0;">M HUB</h1>
+        <p style="color: #444; margin-bottom: 30px; letter-spacing: 3px;">GAMING & MEDIA</p>
+        <label for="menu-toggle" class="start-label">START HUB</label>
     </div>
 
-    <div id="games-page" class="page active">
-        <h2>Games</h2>
+    <div class="content">
+        <h2 style="border-left: 4px solid #ff0055; padding-left: 10px;">GAMES</h2>
         <div class="game-grid">
             <a href="https://v6p9d9t4.ssl.hwcdn.net/html/1365121/index.html" class="card">
                 <img src="https://raw.githubusercontent.com/not-under-maintenance/thumb/main/retro-bowl.png">
@@ -78,45 +93,22 @@
                 <img src="https://raw.githubusercontent.com/not-under-maintenance/thumb/main/slope.png">
                 <p>Slope</p>
             </a>
+            <a href="https://1v1.lol" class="card">
+                <img src="https://raw.githubusercontent.com/not-under-maintenance/thumb/main/1v1-lol.png">
+                <p>1v1.LOL</p>
+            </a>
         </div>
-    </div>
 
-    <div id="media-page" class="page">
-        <h2>YouTube & TikTok</h2>
-        <p style="color: #666;">Streaming content coming soon...</p>
-    </div>
-
-    <div id="movies-page" class="page">
-        <h2>Movies</h2>
-        <p style="color: #666;">Movie library coming soon...</p>
+        <h2 style="margin-top: 40px; border-left: 4px solid #ff0055; padding-left: 10px;">STREAMING</h2>
+        <p style="color: #666;">YouTube, TikTok, and Movies coming in next update...</p>
     </div>
 
     <nav class="bottom-nav">
-        <button class="nav-item active" onclick="showPage('games-page', this)">🎮<br>Games</button>
-        <button class="nav-item" onclick="showPage('media-page', this)">📱<br>Social</button>
-        <button class="nav-item" onclick="showPage('movies-page', this)">🍿<br>Movies</button>
-        <button class="nav-item" onclick="goHome()">🏠<br>Home</button>
+        <div class="nav-btn" style="color: #ff0055;">🎮<br>GAMES</div>
+        <div class="nav-btn">📺<br>TV</div>
+        <div class="nav-btn">🍿<br>MOVIES</div>
+        <label for="menu-toggle" class="nav-btn home-trigger">🏠<br>HOME</label>
     </nav>
 
-    <script>
-        function enterHub() {
-            document.getElementById('home-screen').classList.add('hide');
-        }
-
-        function goHome() {
-            document.getElementById('home-screen').classList.remove('hide');
-        }
-
-        function showPage(pageId, btn) {
-            // Hide all pages
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            // Show the one we want
-            document.getElementById(pageId).classList.add('active');
-            
-            // Change button colors
-            document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-        }
-    </script>
 </body>
 </html>
