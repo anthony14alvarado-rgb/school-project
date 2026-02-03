@@ -2,120 +2,124 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Kasane Teto vs Z-Kit Demon</title>
+<title>LuminalOS</title>
 <style>
-  body {
-    margin: 0;
-    background: black;
-    color: #ff4fa3;
-    font-family: Arial, sans-serif;
-    text-align: center;
-  }
-  canvas {
-    background: #111;
-    display: block;
-    margin: auto;
-    border: 2px solid #ff4fa3;
-  }
+:root {
+  --bg: #05060a;
+  --panel: #0c1020;
+  --accent: #ff4fa3;
+  --text: #d7d7ff;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  font-family: monospace;
+  color: var(--text);
+}
+
+.topbar {
+  background: #080b18;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--accent);
+}
+
+.window-controls {
+  color: var(--accent);
+}
+
+.container {
+  display: flex;
+  height: calc(100vh - 34px);
+}
+
+.sidebar {
+  width: 200px;
+  background: var(--panel);
+  border-right: 1px solid #222;
+  padding: 10px;
+}
+
+.sidebar h3 {
+  color: var(--accent);
+  font-size: 14px;
+}
+
+.app {
+  padding: 6px;
+  margin: 4px 0;
+  background: #11152a;
+  cursor: pointer;
+}
+
+.app:hover {
+  background: #1b2040;
+}
+
+.main {
+  flex: 1;
+  padding: 10px;
+}
+
+iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  background: black;
+}
+
+.status {
+  color: red;
+  font-size: 12px;
+}
 </style>
 </head>
+
 <body>
 
-<h1>🎤 Kasane Teto vs Z-Kit Demon</h1>
-<p>Beat LuminalOS • Reach Top 1</p>
+<div class="topbar">
+  <span class="window-controls">▣ ▢ ✕</span>
+  <span style="margin-left:10px;">LuminalOS — SYSTEM BREACH DETECTED</span>
+</div>
 
-<canvas id="game" width="600" height="400"></canvas>
-<p id="score">Score: 0</p>
+<div class="container">
+
+  <div class="sidebar">
+    <h3>MODULES</h3>
+
+    <div class="app" onclick="loadApp('https://classroom6x.org/run-3/')">
+      RUN_3.exe
+    </div>
+
+    <div class="app" onclick="loadApp('https://classroom6x.org/slope/')">
+      SLOPE.sys
+    </div>
+
+    <div class="app" onclick="loadApp('https://classroom6x.org/retro-bowl/')">
+      RETRO.app
+    </div>
+
+    <div class="app" onclick="loadApp('https://classroom6x.org/idle-breakout/')">
+      IDLE_CORE.dll
+    </div>
+
+    <div class="app" onclick="alert('Z-Kit Demon Active')">
+      Z-KIT.log
+    </div>
+
+    <p class="status">STATUS: INFECTED</p>
+  </div>
+
+  <div class="main">
+    <iframe id="screen"></iframe>
+  </div>
+
+</div>
 
 <script>
-const canvas = document.getElementById("game");
-const ctx = canvas.getContext("2d");
-
-let keys = {};
-let score = 0;
-let gameOver = false;
-
-const teto = {
-  x: 280,
-  y: 300,
-  size: 20,
-  speed: 4
-};
-
-const demon = {
-  x: 280,
-  y: 50,
-  size: 30,
-  dx: 2,
-  hp: 50
-};
-
-document.addEventListener("keydown", e => keys[e.key] = true);
-document.addEventListener("keyup", e => keys[e.key] = false);
-
-function update() {
-  if (gameOver) return;
-
-  // Movement
-  if (keys["ArrowLeft"] || keys["a"]) teto.x -= teto.speed;
-  if (keys["ArrowRight"] || keys["d"]) teto.x += teto.speed;
-  if (keys["ArrowUp"] || keys["w"]) teto.y -= teto.speed;
-  if (keys["ArrowDown"] || keys["s"]) teto.y += teto.speed;
-
-  // Attack
-  if (keys[" "]) {
-    if (Math.abs(teto.x - demon.x) < 30 && Math.abs(teto.y - demon.y) < 30) {
-      demon.hp--;
-      score += 10;
-    }
-  }
-
-  // Demon movement
-  demon.x += demon.dx;
-  if (demon.x < 0 || demon.x > canvas.width - demon.size) demon.dx *= -1;
-
-  // Collision
-  if (
-    Math.abs(teto.x - demon.x) < 25 &&
-    Math.abs(teto.y - demon.y) < 25
-  ) {
-    gameOver = true;
-    alert("💀 LuminalOS Corrupted\nFinal Score: " + score);
-  }
-
-  // Win
-  if (demon.hp <= 0) {
-    gameOver = true;
-    alert("🏆 Z-Kit Demon Defeated!\nTOP 1 SCORE: " + score);
-  }
-
-  score++;
-  document.getElementById("score").textContent = "Score: " + score;
+function loadApp(url) {
+  document.getElementById("screen").src = url;
 }
-
-function draw() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-  // Teto
-  ctx.fillStyle = "#ff4fa3";
-  ctx.fillRect(teto.x, teto.y, teto.size, teto.size);
-
-  // Demon
-  ctx.fillStyle = "red";
-  ctx.fillRect(demon.x, demon.y, demon.size, demon.size);
-
-  // HP
-  ctx.fillStyle = "white";
-  ctx.fillText("Demon HP: " + demon.hp, 10, 20);
-}
-
-function loop() {
-  update();
-  draw();
-  requestAnimationFrame(loop);
-}
-
-loop();
 </script>
 
 </body>
