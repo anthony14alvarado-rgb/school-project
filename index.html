@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="page-title">TITAN OS | V7</title>
-    <link id="favicon" rel="icon" href="https://www.google.com/favicon.ico">
+    <title id="page-title">Assignment_Final.pdf</title>
+    <link id="favicon" rel="icon" href="https://cdn-icons-png.flaticon.com/512/337/337946.png">
     <style>
         :root {
             --primary: #ff0055;
@@ -12,6 +12,7 @@
             --glass: rgba(255, 255, 255, 0.05);
             --accent-glow: rgba(255, 0, 85, 0.4);
             --shift: 0px;
+            --blur: 20px;
         }
 
         body, html {
@@ -42,217 +43,201 @@
             letter-spacing: 10px; backdrop-filter: blur(10px);
         }
 
-        /* --- MAIN UI WRAPPER --- */
+        /* --- MAIN VIEWPORT (SHIFT LOGIC) --- */
         .viewport-wrapper {
             transform: translateY(var(--shift));
             transition: transform 0.6s cubic-bezier(0.2, 1, 0.3, 1);
             height: 100%; display: flex; flex-direction: column;
         }
 
-        /* --- HEADER --- */
+        /* --- UI COMPONENTS --- */
         .top-nav {
             display: flex; justify-content: space-between; align-items: center;
-            padding: 20px 40px; background: rgba(0,0,0,0.3); backdrop-filter: blur(15px);
+            padding: 20px 40px; background: rgba(0,0,0,0.4); backdrop-filter: blur(15px);
             border-bottom: 1px solid rgba(255,255,255,0.05);
         }
 
-        .greeting { font-weight: 800; font-size: 1.1rem; }
-        .greeting span { color: var(--primary); }
-
-        /* --- SEARCH --- */
-        .search-area { padding: 50px 20px 20px; text-align: center; }
+        .search-area { padding: 40px 20px; text-align: center; }
         .search-bar {
             background: var(--glass); border: 1px solid rgba(255,255,255,0.1);
-            backdrop-filter: blur(20px); border-radius: 100px;
-            display: flex; max-width: 650px; margin: 0 auto; padding: 10px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            backdrop-filter: blur(var(--blur)); border-radius: 100px;
+            display: flex; max-width: 600px; margin: 0 auto; padding: 8px;
         }
         .search-bar input {
             flex: 1; background: none; border: none; color: white;
-            padding: 10px 25px; outline: none; font-size: 1.1rem;
+            padding: 10px 20px; outline: none; font-size: 1rem;
         }
 
-        /* --- APP GRID --- */
         .app-grid {
             flex: 1; overflow-y: auto; padding: 30px;
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-            gap: 20px; scrollbar-width: none;
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 20px; padding-bottom: 100px;
         }
-        .app-grid::-webkit-scrollbar { display: none; }
 
         .app-item {
-            background: var(--glass); border-radius: 24px; padding: 25px 15px;
+            background: var(--glass); border-radius: 24px; padding: 20px;
             text-align: center; text-decoration: none; color: white;
-            border: 1px solid rgba(255,255,255,0.05); transition: 0.4s;
-            display: flex; flex-direction: column; align-items: center;
+            border: 1px solid rgba(255,255,255,0.05); transition: 0.3s;
         }
-        .app-item:hover {
-            transform: translateY(-8px);
-            border-color: var(--primary);
-            background: rgba(255,255,255,0.1);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.4);
-        }
-        .app-icon { font-size: 3rem; margin-bottom: 15px; filter: drop-shadow(0 5px 15px rgba(0,0,0,0.3)); }
+        .app-item:hover { transform: translateY(-5px); border-color: var(--primary); background: rgba(255,255,255,0.1); }
+        .app-icon { font-size: 2.5rem; margin-bottom: 10px; display: block; }
 
         /* --- SETTINGS SIDEBAR --- */
         #side-settings {
             position: fixed; right: -320px; top: 0; width: 300px; height: 100%;
-            background: rgba(5, 7, 12, 0.95); backdrop-filter: blur(30px);
-            z-index: 50000; padding: 40px 25px; transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            border-left: 1px solid var(--primary);
+            background: rgba(5, 7, 12, 0.98); backdrop-filter: blur(30px);
+            z-index: 50000; padding: 40px 25px; transition: 0.5s;
+            border-left: 1px solid var(--primary); overflow-y: auto;
         }
 
         .set-btn {
             background: var(--primary); border: none; color: white;
-            padding: 14px; border-radius: 12px; cursor: pointer; width: 100%;
-            font-weight: 700; margin-top: 15px; transition: 0.3s;
+            padding: 12px; border-radius: 10px; cursor: pointer; width: 100%;
+            font-weight: bold; margin-top: 10px;
         }
-        .set-btn:hover { filter: brightness(1.2); transform: scale(1.02); }
+
+        /* --- CONTACT KEEPER UI --- */
+        #contact-list { max-height: 200px; overflow-y: auto; margin: 10px 0; font-size: 0.8rem; }
+        .contact-card { background: rgba(255,255,255,0.05); padding: 8px; border-radius: 8px; margin-bottom: 5px; border: 1px solid rgba(255,255,255,0.1); }
 
         /* --- DOCK --- */
         .dock {
             position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
-            background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
-            backdrop-filter: blur(20px); padding: 10px 25px; border-radius: 30px;
-            display: flex; gap: 25px; z-index: 1000;
+            background: rgba(255,255,255,0.05); backdrop-filter: blur(20px);
+            padding: 10px 30px; border-radius: 40px; display: flex; gap: 30px; border: 1px solid rgba(255,255,255,0.1);
         }
-        .dock-item { font-size: 1.8rem; cursor: pointer; transition: 0.3s; }
-        .dock-item:hover { transform: scale(1.3) translateY(-10px); }
     </style>
 </head>
-<body id="bg-layer">
+<body id="main-bg">
 
     <div id="lock-screen">
-        <div style="font-size: 0.8rem; letter-spacing: 5px; opacity: 0.5;">ENCRYPTED SESSION</div>
-        <h1 style="font-size: 3.5rem; margin: 10px 0;">TITAN <span style="color: var(--primary)">OS</span></h1>
+        <h1 style="letter-spacing: 5px;">TITAN <span style="color:var(--primary)">SECURE</span></h1>
         <input type="password" id="pin-field" class="pin-input" maxlength="4" placeholder="••••" oninput="validatePin(this.value)">
+        <p id="status" style="margin-top: 20px; font-size: 0.8rem; opacity: 0.5;">LOCKED</p>
     </div>
 
     <div class="viewport-wrapper">
         <header class="top-nav">
-            <div class="greeting" id="greet-text">Good Loading... <span>User</span></div>
-            <div style="display: flex; align-items: center; gap: 20px;">
-                <div id="clock-display" style="font-weight: 200; opacity: 0.7;">00:00</div>
-                <button onclick="openSettings(true)" style="background:none; border:none; color:white; font-size: 1.4rem; cursor:pointer;">⚙️</button>
-            </div>
+            <div style="font-weight: 900;">TITAN <span style="color: var(--primary)">OS</span></div>
+            <div id="clock" style="font-family: monospace;">00:00:00</div>
+            <button onclick="toggleSettings(true)" style="background:none; border:none; color:white; font-size: 1.5rem; cursor:pointer;">⚙️</button>
         </header>
 
         <section class="search-area">
             <div class="search-bar">
                 <form action="https://duckduckgo.com/" method="GET" target="_blank" style="display:flex; width:100%;">
-                    <input type="text" name="q" placeholder="Search the unblocked web..." required>
-                    <button type="submit" style="background:var(--primary); border:none; color:white; border-radius:50px; padding: 0 25px; cursor:pointer; font-weight: bold;">GO</button>
+                    <input type="text" name="q" placeholder="Search unblocked..." required>
+                    <button type="submit" style="background:var(--primary); border:none; color:white; border-radius:50px; padding: 0 20px; cursor:pointer;">GO</button>
                 </form>
             </div>
         </section>
 
         <main class="app-grid">
-            <a href="https://youtube.com" target="_blank" class="app-item"><div class="app-icon">📺</div>YouTube</a>
-            <a href="https://tiktok.com" target="_blank" class="app-item"><div class="app-icon">📱</div>TikTok</a>
-            <a href="https://soundcloud.com" target="_blank" class="app-item"><div class="app-icon">🎵</div>Music</a>
-            <a href="https://1v1.lol" target="_blank" class="app-item"><div class="app-icon">🔫</div>1v1.LOL</a>
-            <a href="https://kbhgames.com/game/slope" target="_blank" class="app-item"><div class="app-icon">🏐</div>Slope</a>
-            <a href="https://discord.com" target="_blank" class="app-item"><div class="app-icon">💬</div>Discord</a>
-            <a href="https://poki.com" target="_blank" class="app-item"><div class="app-icon">🕹️</div>Poki</a>
-            <a href="https://reddit.com" target="_blank" class="app-item"><div class="app-icon">🤖</div>Reddit</a>
-            <a href="https://chess.com" target="_blank" class="app-item"><div class="app-icon">♟️</div>Chess</a>
+            <a href="https://youtube.com" target="_blank" class="app-item"><span class="app-icon">📺</span>YouTube</a>
+            <a href="https://tiktok.com" target="_blank" class="app-item"><span class="app-icon">🎵</span>TikTok</a>
+            <a href="https://soundcloud.com" target="_blank" class="app-item"><span class="app-icon">☁️</span>SoundCloud</a>
+            <a href="https://1v1.lol" target="_blank" class="app-item"><span class="app-icon">🎮</span>1v1.LOL</a>
+            <a href="https://kbhgames.com/game/slope" target="_blank" class="app-item"><span class="app-icon">🏐</span>Slope</a>
+            <a href="https://discord.com" target="_blank" class="app-item"><span class="app-icon">💬</span>Discord</a>
+            <a href="https://poki.com" target="_blank" class="app-item"><span class="app-icon">🕹️</span>Poki</a>
+            <a href="https://reddit.com" target="_blank" class="app-item"><span class="app-icon">🤖</span>Reddit</a>
         </main>
     </div>
 
     <div id="side-settings">
-        <div style="display:flex; justify-content:space-between; align-items:center;">
-            <h3>SYSTEM SETTINGS</h3>
-            <span onclick="openSettings(false)" style="cursor:pointer; font-size: 1.5rem;">✕</span>
-        </div>
+        <h3 style="margin-top:0">SYSTEM</h3>
+        <label style="font-size:0.7rem; opacity:0.5">RECOVERY</label>
+        <button class="set-btn" onclick="shiftUI('150px')">Shift Down</button>
+        <button class="set-btn" onclick="shiftUI('-150px')">Shift Up</button>
+        <button class="set-btn" onclick="shiftUI('0px')" style="background:#333">Reset</button>
+
+        <label style="font-size:0.7rem; opacity:0.5; display:block; margin-top:20px">WALLPAPER</label>
+        <input type="file" id="wall-up" style="display:none" onchange="uploadWall(this)">
+        <button class="set-btn" onclick="document.getElementById('wall-up').click()">Upload Image</button>
+
+        <hr style="opacity:0.1; margin: 20px 0;">
         
-        <div style="margin-top: 30px;">
-            <label style="font-size: 0.7rem; opacity: 0.5;">BROKEN SCREEN FIX</label>
-            <button class="set-btn" onclick="shiftUI('180px')">Shift Down (Top Dead)</button>
-            <button class="set-btn" onclick="shiftUI('-180px')">Shift Up (Bottom Dead)</button>
-            <button class="set-btn" onclick="shiftUI('0px')" style="background:#333;">Reset Center</button>
-
-            <label style="font-size: 0.7rem; opacity: 0.5; display:block; margin-top:30px;">PERSONALIZATION</label>
-            <input type="file" id="wall-input" style="display:none" onchange="loadWall(this)">
-            <button class="set-btn" onclick="document.getElementById('wall-input').click()">Upload Wallpaper</button>
-            
-            <div style="display:flex; gap:10px; margin-top:15px;">
-                <button onclick="changeTheme('#ff0055')" style="flex:1; background:#ff0055; height:30px; border:none; border-radius:8px;"></button>
-                <button onclick="changeTheme('#00d2ff')" style="flex:1; background:#00d2ff; height:30px; border:none; border-radius:8px;"></button>
-                <button onclick="changeTheme('#a855f7')" style="flex:1; background:#a855f7; height:30px; border:none; border-radius:8px;"></button>
-            </div>
-
-            <button class="set-btn" onclick="cloakTab()" style="background:#222; margin-top:40px;">🕵️ CLOAK SESSION</button>
-        </div>
+        <h3>CONTACT KEEPER</h3>
+        <div id="contact-list"></div>
+        <input type="text" id="c-name" placeholder="Name" style="width:100%; padding:8px; background:var(--glass); border:1px solid #444; color:white; border-radius:5px; margin-bottom:5px;">
+        <input type="text" id="c-val" placeholder="Tag/Link" style="width:100%; padding:8px; background:var(--glass); border:1px solid #444; color:white; border-radius:5px;">
+        <button class="set-btn" onclick="saveContact()">+ SAVE</button>
+        
+        <button class="set-btn" onclick="cloak()" style="background:#222; margin-top:30px">🕵️ CLOAK TAB</button>
     </div>
 
     <div class="dock">
-        <div class="dock-item" onclick="window.open('https://google.com')">🌐</div>
-        <div class="dock-item" onclick="window.open('https://gmail.com')">📧</div>
-        <div class="dock-item" onclick="openSettings(true)">⚙️</div>
-        <div class="dock-item" onclick="location.reload()">🔄</div>
+        <div onclick="window.open('https://google.com')" style="cursor:pointer">🌐</div>
+        <div onclick="toggleSettings(true)" style="cursor:pointer">⚙️</div>
+        <div onclick="location.reload()" style="cursor:pointer">🔄</div>
     </div>
 
     <script>
-        // 1. PIN SYSTEM
-        const PASS = "1234";
-        function validatePin(val) {
-            if(val === PASS) {
-                document.getElementById('lock-screen').style.transform = "scale(1.5)";
-                document.getElementById('lock-screen').style.opacity = "0";
-                setTimeout(() => document.getElementById('lock-screen').style.display = "none", 800);
-            } else if (val.length === 4) {
+        // 1. PIN LOCK (1234)
+        function validatePin(v) {
+            if(v === "1234") {
+                document.getElementById('lock-screen').style.transform = "translateY(-100%)";
+            } else if(v.length === 4) {
                 document.getElementById('pin-field').value = "";
-                alert("ACCESS DENIED");
+                document.getElementById('status').innerText = "DENIED";
             }
         }
 
-        // 2. GREETING & CLOCK
-        function updateHUD() {
-            const now = new Date();
-            const hrs = now.getHours();
-            let msg = "Good Night";
-            if(hrs < 12) msg = "Good Morning";
-            else if(hrs < 18) msg = "Good Afternoon";
-            else if(hrs < 22) msg = "Good Evening";
-            
-            document.getElementById('greet-text').innerHTML = `${msg}, <span>User</span>`;
-            document.getElementById('clock-display').innerText = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-        }
-        setInterval(updateHUD, 1000);
-        updateHUD();
+        // 2. HUD & CLOCK
+        setInterval(() => { document.getElementById('clock').innerText = new Date().toLocaleTimeString(); }, 1000);
 
-        // 3. SYSTEM CONTROLS
-        function openSettings(show) { document.getElementById('side-settings').style.right = show ? "0px" : "-320px"; }
-        function shiftUI(px) { document.documentElement.style.setProperty('--shift', px); }
-        function changeTheme(c) { document.documentElement.style.setProperty('--primary', c); localStorage.setItem('titan-theme', c); }
-        
-        function loadWall(input) {
-            if (input.files && input.files[0]) {
-                const reader = new FileReader();
-                reader.onload = e => {
-                    document.getElementById('bg-layer').style.backgroundImage = `url(${e.target.result})`;
+        // 3. SETTINGS
+        function toggleSettings(s) { document.getElementById('side-settings').style.right = s ? "0px" : "-320px"; }
+        function shiftUI(v) { document.documentElement.style.setProperty('--shift', v); }
+        function uploadWall(i) {
+            if (i.files && i.files[0]) {
+                const r = new FileReader();
+                r.onload = e => {
+                    document.getElementById('main-bg').style.backgroundImage = `url(${e.target.result})`;
                     localStorage.setItem('titan-bg', e.target.result);
                 };
-                reader.readAsDataURL(input.files[0]);
+                r.readAsDataURL(i.files[0]);
             }
         }
 
-        function cloakTab() {
-            document.title = "Assignment_Final.pdf";
-            document.getElementById('favicon').setAttribute('href', 'https://cdn-icons-png.flaticon.com/512/337/337946.png');
-            alert("Stealth Active: Tab looks like a PDF.");
+        // 4. CONTACTS
+        function saveContact() {
+            const n = document.getElementById('c-name').value;
+            const v = document.getElementById('c-val').value;
+            if(n && v) {
+                let c = JSON.parse(localStorage.getItem('titan-contacts') || '[]');
+                c.push({n, v});
+                localStorage.setItem('titan-contacts', JSON.stringify(c));
+                render();
+            }
+        }
+        function render() {
+            const list = JSON.parse(localStorage.getItem('titan-contacts') || '[]');
+            document.getElementById('contact-list').innerHTML = list.map((item, i) => `
+                <div class="contact-card"><b>${item.n}:</b> ${item.v}</div>
+            `).join('');
         }
 
-        // 4. LOAD SAVED SETTINGS
-        window.onload = () => {
-            const savedTheme = localStorage.getItem('titan-theme');
-            const savedBg = localStorage.getItem('titan-bg');
-            if(savedTheme) changeTheme(savedTheme);
-            if(savedBg) document.getElementById('bg-layer').style.backgroundImage = `url(${savedBg})`;
-        };
+        // 5. STEALTH
+        function cloak() { document.title = "Assignment_Final.pdf"; alert("Cloaked!"); }
+        window.onblur = () => { document.title = "Google"; };
+        window.onfocus = () => { document.title = "Assignment_Final.pdf"; };
 
-        // PANIC KEY
-        document.addEventListener('keydown', e => { if(e.key === "Escape") window.location.replace("https://google.com"); });
+        // 6. GHOST TERMINAL (Tilde Key ~)
+        document.addEventListener('keydown', e => {
+            if(e.key === "~") {
+                const cmd = prompt("TITAN CMD:");
+                if(cmd === "yt") window.open('https://youtube.com');
+                if(cmd === "1v1") window.open('https://1v1.lol');
+            }
+            if(e.key === "Escape") window.location.replace('https://classroom.google.com');
+        });
+
+        // LOAD DATA
+        window.onload = () => {
+            render();
+            if(localStorage.getItem('titan-bg')) document.getElementById('main-bg').style.backgroundImage = `url(${localStorage.getItem('titan-bg')})`;
+        };
     </script>
 </body>
 </html>
