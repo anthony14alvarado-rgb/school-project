@@ -8,15 +8,15 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100;400;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #00f2ff; /* Defaulting to Neon Cyan for the Phantom vibe */
-            --primary-glow: rgba(0, 242, 255, 0.2);
-            --bg: #030508;
-            --glass: rgba(255, 255, 255, 0.02);
-            --border: rgba(255, 255, 255, 0.07);
+            --primary: #00f2ff;
+            --primary-glow: rgba(0, 242, 255, 0.15);
+            --bg: #050505;
+            --glass: rgba(255, 255, 255, 0.03);
+            --border: rgba(255, 255, 255, 0.08);
             --shift: 0px;
         }
 
-        * { box-sizing: border-box; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); cursor: crosshair; }
+        * { box-sizing: border-box; transition: all 0.25s ease-out; cursor: default; }
 
         body, html {
             margin: 0; padding: 0;
@@ -25,21 +25,11 @@
             height: 100vh; overflow: hidden;
         }
 
-        /* --- PHANTOM BACKGROUND --- */
-        #phantom-canvas {
-            position: fixed; inset: 0; z-index: -1;
-            background: radial-gradient(circle at 50% 50%, #0a111a 0%, #030508 100%);
-        }
-        .glow-orb {
-            position: absolute; width: 400px; height: 400px;
-            background: var(--primary-glow); filter: blur(100px);
-            border-radius: 50%; pointer-events: none; opacity: 0.5;
-        }
-
-        /* --- DECOY OVERLAY --- */
-        #decoy-screen {
+        /* --- DECOY SCREEN --- */
+        #decoy {
             position: fixed; inset: 0; background: white; color: #333;
-            z-index: 200000; display: none; padding: 50px; font-family: 'Arial';
+            z-index: 200000; display: none; padding: 60px; font-family: 'Times New Roman', serif;
+            text-align: left; overflow-y: auto;
         }
 
         /* --- LOCK SCREEN --- */
@@ -49,137 +39,137 @@
         }
         .pin-field {
             background: none; border: none; border-bottom: 2px solid var(--primary);
-            color: white; font-size: 3rem; width: 200px; text-align: center;
-            outline: none; letter-spacing: 15px; margin-top: 20px;
+            color: white; font-size: 3rem; width: 180px; text-align: center;
+            outline: none; letter-spacing: 12px; margin-top: 20px; font-weight: 100;
         }
 
-        /* --- VIEWPORT --- */
+        /* --- MAIN WRAPPER --- */
         .wrapper { transform: translateY(var(--shift)); height: 100%; display: flex; flex-direction: column; }
 
-        .nav { display: flex; justify-content: space-between; align-items: center; padding: 40px 60px; }
-        .os-text { font-weight: 900; font-size: 1.2rem; letter-spacing: 8px; opacity: 0.8; }
-        .os-text span { color: var(--primary); }
+        header { display: flex; justify-content: space-between; align-items: center; padding: 30px 60px; }
+        .logo { font-weight: 900; letter-spacing: 5px; font-size: 1rem; opacity: 0.7; }
+        .logo span { color: var(--primary); }
 
-        /* --- THE GRID (THE BETTER VERSION) --- */
+        /* --- THE BENTO GRID --- */
         .grid {
-            flex: 1; display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 40px; padding: 20px 80px 150px; overflow-y: auto;
+            flex: 1; display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 20px; padding: 20px 60px 140px; overflow-y: auto;
         }
         .grid::-webkit-scrollbar { display: none; }
 
         .card {
             background: var(--glass); border: 1px solid var(--border);
-            border-radius: 40px; padding: 50px 20px; text-align: center;
+            border-radius: 24px; padding: 40px 20px; text-align: center;
             text-decoration: none; color: white; position: relative;
-            backdrop-filter: blur(20px); transform-style: preserve-3d;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            backdrop-filter: blur(25px); display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
         }
         .card:hover {
+            background: rgba(255,255,255,0.06);
             border-color: var(--primary);
-            background: rgba(255,255,255,0.05);
-            box-shadow: 0 0 50px var(--primary-glow);
+            transform: scale(1.02);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
-        .card i { font-size: 4rem; display: block; margin-bottom: 20px; transition: 0.5s; }
-        .card:hover i { transform: translateZ(50px) scale(1.1); }
+        .card i { font-size: 3rem; margin-bottom: 15px; font-style: normal; }
+        .card b { letter-spacing: 2px; font-size: 0.9rem; opacity: 0.9; }
 
         /* --- DOCK --- */
         .dock {
-            position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%);
-            background: rgba(255,255,255,0.02); border: 1px solid var(--border);
-            backdrop-filter: blur(40px); padding: 15px 45px; border-radius: 100px;
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+            background: rgba(10, 10, 10, 0.8); border: 1px solid var(--border);
+            backdrop-filter: blur(30px); padding: 12px 40px; border-radius: 100px;
             display: flex; gap: 40px; z-index: 1000;
         }
-        .dock-btn { font-size: 1.8rem; opacity: 0.4; transition: 0.3s; }
-        .dock-btn:hover { opacity: 1; transform: scale(1.2) translateY(-10px); color: var(--primary); }
+        .dock-btn { font-size: 1.5rem; opacity: 0.5; transition: 0.2s; cursor: pointer; }
+        .dock-btn:hover { opacity: 1; color: var(--primary); transform: translateY(-5px); }
 
-        /* --- FOLDER --- */
-        #folder {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.95);
-            z-index: 50000; display: none; padding: 100px;
-        }
-
+        /* --- SIDEBAR --- */
         #sidebar {
             position: fixed; right: -400px; top: 0; width: 380px; height: 100%;
-            background: rgba(5,7,10,0.98); backdrop-filter: blur(50px); z-index: 90000;
+            background: rgba(10, 10, 10, 0.98); backdrop-filter: blur(50px); z-index: 90000;
             padding: 60px 40px; border-left: 1px solid var(--border);
         }
-        .input-box { width: 100%; padding: 15px; background: rgba(255,255,255,0.05); border: 1px solid #222; color: white; border-radius: 15px; margin: 10px 0; font-family: 'Outfit'; }
-        .btn { background: var(--primary); border: none; color: black; padding: 15px; border-radius: 15px; width: 100%; font-weight: 900; margin-top: 10px; cursor: pointer; }
+        .input-box { width: 100%; padding: 15px; background: rgba(255,255,255,0.03); border: 1px solid #222; color: white; border-radius: 12px; margin: 10px 0; font-family: 'Outfit'; outline: none; }
+        .input-box:focus { border-color: var(--primary); }
+        .btn { background: var(--primary); border: none; color: black; padding: 15px; border-radius: 12px; width: 100%; font-weight: 900; margin-top: 10px; cursor: pointer; }
 
+        /* --- OVERLAY --- */
+        #folder {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.95);
+            z-index: 50000; display: none; padding: 80px 60px;
+        }
     </style>
 </head>
 <body id="body">
 
-    <div id="phantom-canvas">
-        <div class="glow-orb" id="orb"></div>
-    </div>
-
-    <div id="decoy-screen" onclick="toggleDecoy()">
-        <h2 style="color: #4285f4;">Untitled Document</h2>
-        <p style="color: #999;">Last edit was 2 minutes ago</p>
+    <div id="decoy" onclick="toggleDecoy()">
+        <h1>Notes on Cellular Respiration</h1>
+        <p style="color: #666;">Date: February 2026</p>
         <hr>
-        <div style="margin-top: 40px; line-height: 1.6;">
-            The industrial revolution and its consequences have been a significant topic of historical debate... (Keep typing or click to return)
+        <div style="margin-top: 30px; font-size: 1.2rem; line-height: 1.8;">
+            Cellular respiration is a set of metabolic reactions and processes that take place in the cells of organisms to convert biochemical energy from nutrients into adenosine triphosphate (ATP). The reactions involved in respiration are catabolic reactions, which break large molecules into smaller ones, releasing energy because weak high-energy bonds are replaced by stronger bonds in the products.
         </div>
     </div>
 
     <div id="lock-screen">
-        <div class="os-text" style="font-size: 3rem;">PHANTOM <span>OS</span></div>
-        <input type="password" class="pin-field" maxlength="4" id="pin" oninput="checkPin(this.value)">
+        <div class="logo" style="font-size: 2rem;">ONYX <span>SYSTEM</span></div>
+        <input type="password" class="pin-field" maxlength="4" id="pin" oninput="checkPin(this.value)" placeholder="••••">
     </div>
 
     <div class="wrapper">
-        <header class="nav">
-            <div class="os-text">TITAN <span>PHANTOM</span></div>
-            <div id="time" style="font-weight: 100; font-size: 1.5rem;">00:00</div>
-            <div onclick="toggleSidebar(true)" style="cursor:pointer;">⚙️</div>
+        <header>
+            <div class="logo">TITAN <span>ONYX</span></div>
+            <div id="time" style="font-weight: 100; letter-spacing: 2px;">00:00:00</div>
+            <div onclick="toggleSidebar(true)" style="cursor:pointer; opacity: 0.5;">SETTINGS</div>
         </header>
 
         <main class="grid">
-            <a href="https://youtube.com" target="_blank" class="card"><i>📺</i>YOUTUBE</a>
-            <a href="https://tiktok.com" target="_blank" class="card"><i>🎵</i>TIKTOK</a>
-            <div class="card" onclick="toggleFolder(true)" style="border-style: dashed; opacity: 0.8;"><i>📁</i>GAMES</div>
-            <a href="https://discord.com" target="_blank" class="card"><i>💬</i>DISCORD</a>
-            <a href="https://soundcloud.com" target="_blank" class="card"><i>☁️</i>SOUNDCLOUD</a>
+            <a href="https://youtube.com" target="_blank" class="card"><i>📺</i><b>YOUTUBE</b></a>
+            <a href="https://tiktok.com" target="_blank" class="card"><i>🎵</i><b>TIKTOK</b></a>
+            <div class="card" onclick="toggleFolder(true)" style="background: var(--primary-glow); border-color: var(--primary);"><i>🕹️</i><b>GAMES</b></div>
+            <a href="https://discord.com" target="_blank" class="card"><i>💬</i><b>DISCORD</b></a>
+            <a href="https://soundcloud.com" target="_blank" class="card"><i>☁️</i><b>SOUNDCLOUD</b></a>
+            <a href="https://reddit.com" target="_blank" class="card"><i>🤖</i><b>REDDIT</b></a>
         </main>
     </div>
 
     <div id="folder">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 50px;">
-            <h1 class="os-text">GAME <span>VAULT</span></h1>
-            <span onclick="toggleFolder(false)" style="font-size: 3rem;">✕</span>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 40px;">
+            <h2 class="logo">GAMES <span>VAULT</span></h2>
+            <span onclick="toggleFolder(false)" style="cursor:pointer; font-size: 2rem;">✕</span>
         </div>
         <div class="grid">
-            <a href="https://docs-google-com-opensocial.googleusercontent.com/gadgets/ifr?url=https://cdn.jsdelivr.net/gh/sk1id/v@main/1v1.xml" target="_blank" class="card"><i>🔫</i>1v1.LOL</a>
-            <a href="https://kbhgames.com/game/slope" target="_blank" class="card"><i>⚽</i>SLOPE</a>
-            <a href="https://v6p9d9t4.ssl.hwcdn.net/html/1365121/index.html" target="_blank" class="card"><i>🏈</i>RETRO BOWL</a>
-            <a href="https://classic.minecraft.net" target="_blank" class="card"><i>⛏️</i>MINECRAFT</a>
+            <a href="https://docs-google-com-opensocial.googleusercontent.com/gadgets/ifr?url=https://cdn.jsdelivr.net/gh/sk1id/v@main/1v1.xml" target="_blank" class="card"><i>🔫</i><b>1v1.LOL</b></a>
+            <a href="https://kbhgames.com/game/slope" target="_blank" class="card"><i>⚽</i><b>SLOPE</b></a>
+            <a href="https://v6p9d9t4.ssl.hwcdn.net/html/1365121/index.html" target="_blank" class="card"><i>🏈</i><b>RETRO BOWL</b></a>
+            <a href="https://classic.minecraft.net" target="_blank" class="card"><i>⛏️</i><b>MINECRAFT</b></a>
         </div>
     </div>
 
     <div id="sidebar">
-        <h2 class="os-text">SYSTEM <span>CORE</span></h2>
+        <h2 class="logo">ONYX <span>CONFIG</span></h2>
         
-        <h4 style="margin-top:40px; opacity:0.5;">SCREEN RECOVERY</h4>
-        <button class="btn" onclick="shift(200)">Shift Down</button>
-        <button class="btn" onclick="shift(-200)">Shift Up</button>
-        <button class="btn" onclick="shift(0)" style="background:#222; color:white;">Reset UI</button>
+        <p style="margin-top:40px; opacity:0.4; font-size:0.7rem; letter-spacing:1px;">SCREEN SHIFT (BROKEN SCREEN FIX)</p>
+        <button class="btn" onclick="shift(150)">Shift Down</button>
+        <button class="btn" onclick="shift(-150)">Shift Up</button>
+        <button class="btn" onclick="shift(0)" style="background:#222; color:white;">Reset Position</button>
 
-        <h4 style="margin-top:40px; opacity:0.5;">VISUAL TINT</h4>
-        <div style="display:flex; gap:10px;">
-            <div onclick="setTint('#00f2ff')" style="background:#00f2ff; width:30px; height:30px; border-radius:50%;"></div>
-            <div onclick="setTint('#ff0055')" style="background:#ff0055; width:30px; height:30px; border-radius:50%;"></div>
-            <div onclick="setTint('#9d00ff')" style="background:#9d00ff; width:30px; height:30px; border-radius:50%;"></div>
-            <div onclick="setTint('#00ff88')" style="background:#00ff88; width:30px; height:30px; border-radius:50%;"></div>
+        <p style="margin-top:30px; opacity:0.4; font-size:0.7rem; letter-spacing:1px;">SYSTEM ACCENT</p>
+        <div style="display:flex; gap:12px;">
+            <div onclick="setAccent('#00f2ff')" style="background:#00f2ff; width:25px; height:25px; border-radius:6px; cursor:pointer;"></div>
+            <div onclick="setAccent('#ff0055')" style="background:#ff0055; width:25px; height:25px; border-radius:6px; cursor:pointer;"></div>
+            <div onclick="setAccent('#00ff88')" style="background:#00ff88; width:25px; height:25px; border-radius:6px; cursor:pointer;"></div>
+            <div onclick="setAccent('#9d00ff')" style="background:#9d00ff; width:25px; height:25px; border-radius:6px; cursor:pointer;"></div>
         </div>
 
-        <h4 style="margin-top:40px; opacity:0.5;">CONTACTS</h4>
-        <div id="contact-render" style="max-height:100px; overflow:auto; margin-bottom:10px;"></div>
-        <input type="text" id="cn" placeholder="Name" class="input-box">
-        <input type="text" id="cv" placeholder="Tag" class="input-box">
-        <button class="btn" onclick="saveContact()">Save to Vault</button>
+        <p style="margin-top:30px; opacity:0.4; font-size:0.7rem; letter-spacing:1px;">CONTACT KEEPER</p>
+        <div id="c-list" style="max-height:80px; overflow:auto; margin-bottom:10px; font-size:0.8rem;"></div>
+        <input type="text" id="cn" placeholder="Service" class="input-box">
+        <input type="text" id="cv" placeholder="Username/Tag" class="input-box">
+        <button class="btn" onclick="saveContact()">Save to Onyx</button>
 
-        <button class="btn" onclick="toggleSidebar(false)" style="margin-top:50px; background:none; color:white; border: 1px solid #333;">Close</button>
+        <button class="btn" onclick="toggleSidebar(false)" style="margin-top:40px; background:none; color:white; border: 1px solid #333;">Close</button>
     </div>
 
     <div class="dock">
@@ -190,48 +180,43 @@
     </div>
 
     <script>
-        // MOUSE ORB EFFECT
-        const orb = document.getElementById('orb');
-        document.onmousemove = e => {
-            orb.style.left = e.clientX - 200 + 'px';
-            orb.style.top = e.clientY - 200 + 'px';
-            
-            // 3D CARD TILT
-            document.querySelectorAll('.card').forEach(card => {
-                const rect = card.getBoundingClientRect();
-                const x = (e.clientX - rect.left) / rect.width - 0.5;
-                const y = (e.clientY - rect.top) / rect.height - 0.5;
-                card.style.transform = `perspective(1000px) rotateY(${x * 20}deg) rotateX(${y * -20}deg)`;
-            });
-        };
+        // CORE LOGIC
+        function checkPin(v) { if(v === "1234") document.getElementById('lock-screen').style.opacity = "0"; setTimeout(() => { if(document.getElementById('lock-screen').style.opacity === "0") document.getElementById('lock-screen').style.display = "none"; }, 1000); }
+        
+        setInterval(() => { 
+            const d = new Date(); 
+            document.getElementById('time').innerText = d.toLocaleTimeString(); 
+        }, 1000);
 
-        // SYSTEM FUNCTIONS
-        function checkPin(v) { if(v === "1234") document.getElementById('lock-screen').style.transform = "translateY(-100%)"; }
-        setInterval(() => { const d = new Date(); document.getElementById('time').innerText = d.getHours() + ":" + String(d.getMinutes()).padStart(2, '0'); }, 1000);
         function toggleSidebar(o) { document.getElementById('sidebar').style.right = o ? "0px" : "-400px"; }
         function toggleFolder(o) { document.getElementById('folder').style.display = o ? "block" : "none"; }
+        
         function toggleDecoy() { 
-            const ds = document.getElementById('decoy-screen');
-            ds.style.display = (ds.style.display === "block") ? "none" : "block";
-            if(ds.style.display === "block") { document.title = "Google Docs"; } else { document.title = "Assignment_Final.pdf"; }
+            const d = document.getElementById('decoy');
+            const isVisible = d.style.display === "block";
+            d.style.display = isVisible ? "none" : "block";
+            document.title = isVisible ? "Assignment_Final.pdf" : "Google Docs - Cellular Respiration";
         }
+
         function shift(v) { document.documentElement.style.setProperty('--shift', v + 'px'); }
-        function setTint(c) { 
+        
+        function setAccent(c) { 
             document.documentElement.style.setProperty('--primary', c); 
-            document.documentElement.style.setProperty('--primary-glow', c + '33'); 
+            document.documentElement.style.setProperty('--primary-glow', c + '22'); 
         }
 
         function saveContact() {
             const n = document.getElementById('cn').value, v = document.getElementById('cv').value;
             if(n && v) {
-                let l = JSON.parse(localStorage.getItem('p-c') || '[]');
-                l.push({n, v}); localStorage.setItem('p-c', JSON.stringify(l));
+                let l = JSON.parse(localStorage.getItem('onyx-c') || '[]');
+                l.push({n, v}); localStorage.setItem('onyx-c', JSON.stringify(l));
                 renderC();
+                document.getElementById('cn').value = ''; document.getElementById('cv').value = '';
             }
         }
         function renderC() {
-            const l = JSON.parse(localStorage.getItem('p-c') || '[]');
-            document.getElementById('contact-render').innerHTML = l.map(i => `<div style="font-size:0.8rem; opacity:0.6;">${i.n}: ${i.v}</div>`).join('');
+            const l = JSON.parse(localStorage.getItem('onyx-c') || '[]');
+            document.getElementById('c-list').innerHTML = l.map(i => `<div>${i.n}: ${i.v}</div>`).join('');
         }
 
         window.onload = renderC;
