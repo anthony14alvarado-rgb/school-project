@@ -25,7 +25,6 @@
             transition: background 0.8s ease;
         }
 
-        /* --- LOCK SCREEN (PIN: 1234) --- */
         #lock-screen {
             position: fixed; inset: 0; background: black; z-index: 100000;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
@@ -38,14 +37,12 @@
             backdrop-filter: blur(15px); letter-spacing: 8px;
         }
 
-        /* --- VIEWPORT (BROKEN SCREEN FIX) --- */
         .viewport-wrapper {
             transform: translateY(var(--shift));
             transition: transform 0.6s cubic-bezier(0.2, 1, 0.3, 1);
             height: 100%; display: flex; flex-direction: column;
         }
 
-        /* --- UI ELEMENTS --- */
         .top-nav { display: flex; justify-content: space-between; align-items: center; padding: 30px 50px; }
         .logo { font-weight: 900; font-size: 1.5rem; letter-spacing: 2px; }
         .logo span { color: var(--primary); text-shadow: 0 0 15px var(--accent-glow); }
@@ -70,13 +67,11 @@
         .app-card:hover { border-color: var(--primary); transform: translateY(-10px); background: rgba(255,255,255,0.08); }
         .app-icon { font-size: 3rem; margin-bottom: 15px; display: block; }
 
-        /* --- GAMES FOLDER OVERLAY --- */
         #folder-overlay {
             display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85);
             backdrop-filter: blur(50px); z-index: 60000; padding: 60px;
         }
 
-        /* --- SIDEBAR --- */
         #side-settings {
             position: fixed; right: -350px; top: 0; width: 320px; height: 100%;
             background: rgba(8, 10, 15, 0.98); backdrop-filter: blur(40px);
@@ -140,8 +135,8 @@
 
     <div id="side-settings">
         <h3>SYSTEM</h3>
-        <button class="set-btn" onclick="shift(180)">Shift Down (Top Dead)</button>
-        <button class="set-btn" onclick="shift(-180)">Shift Up (Bottom Dead)</button>
+        <button class="set-btn" onclick="shift(180)">Shift Down</button>
+        <button class="set-btn" onclick="shift(-180)">Shift Up</button>
         <button class="set-btn" onclick="shift(0)" style="background:#222">Center</button>
         
         <h3 style="margin-top:30px">WALLPAPER</h3>
@@ -164,7 +159,6 @@
     </div>
 
     <script>
-        // CORE LOGIC
         function validatePin(v) { if(v === "1234") document.getElementById('lock-screen').style.transform = "translateY(-100%)"; }
         setInterval(() => { document.getElementById('clock').innerText = new Date().toLocaleTimeString(); }, 1000);
         function toggleSettings(o) { document.getElementById('side-settings').style.right = o ? "0px" : "-350px"; }
@@ -187,6 +181,7 @@
             if(n && v) {
                 let l = JSON.parse(localStorage.getItem('t-c') || '[]');
                 l.push({n, v}); localStorage.setItem('t-c', JSON.stringify(l)); render();
+                document.getElementById('c-name').value = ''; document.getElementById('c-val').value = '';
             }
         }
         function render() {
@@ -200,7 +195,7 @@
         }
 
         document.addEventListener('keydown', e => {
-            if(e.key === "Escape") { window.location.replace('https://classroom.google.com'); toggleFolder(false); }
+            if(e.key === "Escape") { toggleFolder(false); }
             if(e.key === "~") { let c = prompt("CMD:"); if(c==="1v1") window.open('https://1v1.lol'); }
         });
 
