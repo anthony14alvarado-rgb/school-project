@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Google Drive</title>
+    <title>M HUB - Gaming</title>
     <style>
-        /* --- Base Styles --- */
+        /* BASE STYLES */
         body { 
             background-color: #0b0e14; 
             color: white; 
             font-family: sans-serif; 
             text-align: center; 
-            margin: 0; 
-            overflow-x: hidden;
+            margin: 0;
+            padding: 0;
         }
         
         header { 
@@ -21,70 +21,49 @@
             background: #151921; 
         }
 
-        /* --- Home Menu Overlay --- */
+        /* THE MENU OVERLAY */
         #home-menu {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
-            height: 100vh;
+            height: 100%;
             background-color: #0b0e14;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
-            z-index: 1000;
-            transition: transform 0.8s cubic-bezier(0.85, 0, 0.15, 1);
+            z-index: 9999; /* Keeps it on top */
+            transition: opacity 0.6s ease, visibility 0.6s;
         }
 
-        /* This class triggers the smooth slide-up animation */
-        #home-menu.hide {
-            transform: translateY(-100%);
-        }
-
-        .menu-content {
-            text-align: center;
-            animation: fadeIn 1.5s ease-out;
+        /* Class to hide the menu */
+        .hidden {
+            opacity: 0 !important;
+            visibility: hidden !important;
         }
 
         .menu-title {
-            font-size: 5rem;
-            margin: 0;
-            letter-spacing: 5px;
-            background: linear-gradient(to bottom, #fff, #444);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .menu-subtitle {
-            color: #888;
-            margin-bottom: 40px;
-            font-size: 1rem;
-            text-transform: uppercase;
-            letter-spacing: 4px;
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px #ff0055;
         }
 
         #start-btn {
-            padding: 15px 50px;
+            padding: 15px 40px;
             font-size: 1.2rem;
-            font-weight: bold;
-            color: white;
-            background: transparent;
-            border: 2px solid #ff0055;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        #start-btn:hover {
             background: #ff0055;
-            box-shadow: 0 0 20px #ff0055;
-            transform: scale(1.05);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
         }
 
-        /* --- Game Grid --- */
+        /* GAME GRID */
         .game-grid { 
             display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); 
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); 
             gap: 15px; 
             padding: 20px; 
         }
@@ -99,19 +78,11 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            transition: transform 0.2s;
-            -webkit-tap-highlight-color: rgba(255, 0, 85, 0.1);
-        }
-
-        .game-card:hover {
-            transform: translateY(-5px);
-            border-color: #ff0055;
         }
 
         .game-img {
             width: 100%;
             border-radius: 8px;
-            pointer-events: none;
             aspect-ratio: 1/1;
             object-fit: cover;
         }
@@ -119,24 +90,15 @@
         .game-title {
             margin-top: 10px;
             font-weight: bold;
-            pointer-events: none;
-        }
-
-        /* Intro Fade In Animation */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.9); }
-            to { opacity: 1; transform: scale(1); }
         }
     </style>
 </head>
 <body>
 
     <div id="home-menu">
-        <div class="menu-content">
-            <h1 class="menu-title">M HUB</h1>
-            <p class="menu-subtitle">Premium Gaming Hub</p>
-            <button id="start-btn">START SESSION</button>
-        </div>
+        <h1 class="menu-title">M HUB</h1>
+        <p style="color: #666; margin-bottom: 20px;">Welcome to the Hub</p>
+        <button id="start-btn" onclick="enterSite()">ENTER HUB</button>
     </div>
 
     <header>
@@ -161,19 +123,10 @@
     </div>
 
     <script>
-        // Select the button and the menu
-        const startBtn = document.getElementById('start-btn');
-        const homeMenu = document.getElementById('home-menu');
-
-        // When button is clicked, add the "hide" class to slide it up
-        startBtn.addEventListener('click', () => {
-            homeMenu.classList.add('hide');
-            // Re-enable scrolling on body once menu is gone
-            document.body.style.overflow = 'auto';
-        });
-
-        // Prevent scrolling while menu is active
-        document.body.style.overflow = 'hidden';
+        function enterSite() {
+            // This finds the menu and adds the "hidden" class to fade it out
+            document.getElementById('home-menu').classList.add('hidden');
+        }
     </script>
 
 </body>
