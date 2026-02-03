@@ -4,183 +4,169 @@
     <meta charset="UTF-8">
     <title id="tab-title">Assignment_Final.pdf</title>
     <link id="tab-icon" rel="icon" href="https://cdn-icons-png.flaticon.com/512/337/337946.png">
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100;400;900&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100;400;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #00f2ff;
-            --bg: #010204;
-            --glass: rgba(255, 255, 255, 0.03);
+            --bg: #050608;
+            --surface: rgba(255, 255, 255, 0.03);
             --border: rgba(255, 255, 255, 0.08);
-            --accent: #ff0055;
+            --font: 'Outfit', sans-serif;
         }
 
-        /* --- ANIMATION CORE --- */
-        @keyframes slideIn { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-        @keyframes pulse { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
-        @keyframes textGlow { from { text-shadow: 0 0 10px rgba(0, 242, 255, 0); } to { text-shadow: 0 0 20px rgba(0, 242, 255, 0.6); } }
-
-        * { box-sizing: border-box; margin: 0; padding: 0; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
-        body, html { background: var(--bg); color: white; font-family: 'Outfit', sans-serif; height: 100vh; overflow: hidden; }
-
-        /* --- DECOY --- */
-        #decoy { position: fixed; inset: 0; background: #fff; color: #111; z-index: 999999; display: none; padding: 80px 15%; font-family: 'Times New Roman', serif; }
-
-        /* --- SEARCH MODAL --- */
-        #search-modal {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(20px);
-            z-index: 500000; display: none; flex-direction: column; align-items: center; justify-content: center;
+        * { box-sizing: border-box; margin: 0; padding: 0; transition: all 0.2s ease; }
+        body, html { 
+            background: var(--bg); color: white; font-family: var(--font); 
+            height: 100vh; overflow: hidden; 
         }
-        .search-box { width: 600px; background: #111; border: 1px solid var(--primary); padding: 30px; border-radius: 25px; box-shadow: 0 0 50px rgba(0,242,255,0.2); }
-        .search-box input { width: 100%; background: none; border: none; color: white; font-size: 2rem; font-family: 'Outfit'; outline: none; }
 
-        /* --- MAIN UI --- */
-        .app-space { height: 100vh; display: flex; flex-direction: column; padding: 40px 100px; }
-
-        header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 50px; animation: slideIn 0.8s ease; }
-        .logo { font-weight: 900; font-size: 2rem; letter-spacing: 15px; animation: textGlow 2s infinite alternate; }
-        .status { font-family: 'JetBrains Mono'; font-size: 0.7rem; color: var(--primary); display: flex; gap: 20px; }
-
-        /* --- SPACIOUS GRID --- */
-        .grid {
-            display: grid; grid-template-columns: repeat(12, 1fr); gap: 25px; 
-            flex: 1; overflow-y: auto; padding-bottom: 150px;
+        /* --- BACKGROUND GRADIENT --- */
+        #bg-glow {
+            position: fixed; inset: 0; z-index: -1;
+            background: radial-gradient(circle at 50% -20%, #101825 0%, #050608 100%);
         }
-        .grid::-webkit-scrollbar { width: 0; }
 
-        .tile {
-            background: var(--glass); border: 1px solid var(--border); border-radius: 35px;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            text-decoration: none; color: white; animation: slideIn 1s ease; cursor: pointer;
+        /* --- DECOY LAYER --- */
+        #decoy { 
+            position: fixed; inset: 0; background: #fff; color: #111; z-index: 99999; 
+            display: none; padding: 100px 15%; overflow-y: auto; font-family: serif; 
         }
-        .tile:hover { background: rgba(255,255,255,0.06); border-color: var(--primary); transform: scale(1.05) translateY(-10px); }
-        .tile i { font-style: normal; font-size: 4rem; margin-bottom: 20px; }
-        .tile b { letter-spacing: 5px; font-weight: 400; opacity: 0.5; font-size: 0.8rem; }
 
-        /* --- LIVE CHAT WIDGET --- */
-        #chat-widget {
-            position: fixed; bottom: 120px; right: 40px; width: 300px; height: 400px;
-            background: rgba(10,10,10,0.95); border: 1px solid var(--border); border-radius: 25px;
-            backdrop-filter: blur(20px); display: flex; flex-direction: column; overflow: hidden;
-            animation: slideIn 1.2s ease; z-index: 100;
+        /* --- TOP NAVIGATION (SEARCH & STATUS) --- */
+        nav {
+            height: 80px; padding: 0 60px; display: flex; align-items: center;
+            justify-content: space-between; border-bottom: 1px solid var(--border);
+            backdrop-filter: blur(20px);
         }
-        .chat-head { padding: 15px; background: var(--glass); border-bottom: 1px solid var(--border); font-size: 0.8rem; font-weight: 900; letter-spacing: 2px; }
-        .chat-body { flex: 1; padding: 15px; font-size: 0.85rem; font-family: 'JetBrains Mono'; overflow-y: auto; color: #888; }
-        .chat-input { padding: 10px; border-top: 1px solid var(--border); background: none; color: white; border: none; font-family: 'Outfit'; outline: none; }
+        .search-area { width: 400px; position: relative; }
+        .search-area input {
+            width: 100%; background: var(--surface); border: 1px solid var(--border);
+            padding: 12px 20px; border-radius: 12px; color: white; font-family: var(--font);
+        }
+        .search-area input:focus { border-color: var(--primary); outline: none; }
 
-        /* --- TASKBAR (CENTERED) --- */
-        .taskbar {
+        /* --- MAIN WORKSPACE --- */
+        .workspace {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px; padding: 60px; height: calc(100vh - 160px); overflow-y: auto;
+        }
+        .workspace::-webkit-scrollbar { width: 0; }
+
+        .app-card {
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: 24px; padding: 40px; text-align: center;
+            text-decoration: none; color: white; cursor: pointer;
+        }
+        .app-card:hover { 
+            background: rgba(255,255,255,0.07); border-color: var(--primary);
+            transform: translateY(-5px);
+        }
+        .app-card i { font-style: normal; font-size: 3.5rem; display: block; margin-bottom: 15px; }
+        .app-card h3 { font-weight: 700; letter-spacing: 2px; text-transform: uppercase; font-size: 0.9rem; }
+
+        /* --- THE VAULT OVERLAY --- */
+        #vault {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.98);
+            z-index: 10000; display: none; padding: 100px; overflow-y: auto;
+        }
+
+        /* --- APEX DOCK --- */
+        .dock {
             position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
-            background: rgba(15,15,15,0.7); border: 1px solid var(--border);
-            padding: 10px 40px; border-radius: 100px; backdrop-filter: blur(30px);
-            display: flex; gap: 30px; align-items: center; z-index: 10000;
+            background: rgba(15, 18, 24, 0.8); border: 1px solid var(--border);
+            padding: 12px 40px; border-radius: 100px; backdrop-filter: blur(40px);
+            display: flex; gap: 40px; align-items: center;
         }
-        .task-item { font-size: 1.8rem; cursor: pointer; opacity: 0.5; position: relative; }
-        .task-item:hover { opacity: 1; color: var(--primary); transform: translateY(-5px); }
-        .task-item.active::after { content: ''; position: absolute; bottom: -8px; left: 50%; width: 4px; height: 4px; background: var(--primary); border-radius: 50%; }
+        .dock-btn { font-size: 1.6rem; cursor: pointer; opacity: 0.4; }
+        .dock-btn:hover { opacity: 1; color: var(--primary); transform: translateY(-5px); }
 
     </style>
 </head>
 <body>
 
-    <div id="search-modal" onclick="toggleSearch(false)">
-        <div class="search-box" onclick="event.stopPropagation()">
-            <input type="text" id="s-input" placeholder="Neural Search..." oninput="filterGrid(this.value)">
-            <div style="margin-top: 20px; font-size: 0.7rem; color: var(--primary); font-family: 'JetBrains Mono';">SYSTEM_SEARCH_ACTIVE // ESC TO CLOSE</div>
-        </div>
-    </div>
+    <div id="bg-glow"></div>
 
     <div id="decoy" onclick="toggleDecoy()">
-        <h1 style="font-weight: normal; font-size: 2.5rem;">Macro-Economic Variables in Emerging Markets</h1>
-        <p style="margin-top:20px; font-size:1.1rem; line-height:2;">Analyzing the correlation between fiscal transparency and foreign direct investment (FDI) in the Southeast Asian corridor...</p>
+        <h1 style="font-weight: normal; font-size: 2rem;">Research_Outline_Draft_01</h1>
+        <hr style="margin: 20px 0;">
+        <p style="font-size: 1.2rem; line-height: 2;">
+            The analysis of modern educational frameworks suggests that student engagement is highly correlated with the accessibility of digital resources. This paper explores the impact of...
+        </p>
     </div>
 
-    <div class="app-space">
-        <header>
-            <div class="logo">TITAN<span>SINGULARITY</span></div>
-            <div class="status">
-                <div>USERS_ONLINE: <span id="user-count" style="color:var(--primary)">1,482</span></div>
-                <div>SERVER: US_WEST_1</div>
-                <div id="clock">00:00:00</div>
-            </div>
-        </header>
-
-        <main class="grid" id="main-grid">
-            <div class="tile" style="grid-column: span 8; grid-row: span 2;" onclick="window.open('https://youtube.com')">
-                <i>🎬</i><b>PRIME_MEDIA</b>
-            </div>
-            <div class="tile" style="grid-column: span 4; grid-row: span 1;" onclick="toggleSearch(true)">
-                <i>🔍</i><b>GLOBAL_SEARCH</b>
-            </div>
-            <div class="tile" style="grid-column: span 4; grid-row: span 1;" onclick="toggleDecoy()">
-                <i>👻</i><b>GHOST_MODE</b>
-            </div>
-            <a href="https://discord.com" target="_blank" class="tile" style="grid-column: span 3; grid-row: span 1;"><i>💬</i><b>COMMS</b></a>
-            <a href="https://tiktok.com" target="_blank" class="tile" style="grid-column: span 3; grid-row: span 1;"><i>🎵</i><b>VIBE</b></a>
-            <a href="https://kbhgames.com/game/slope" target="_blank" class="tile" style="grid-column: span 6; grid-row: span 1;"><i>⚽</i><b>SLOPE_ULTRA</b></a>
-        </main>
-    </div>
-
-    <div id="chat-widget">
-        <div class="chat-head">NEURAL_CHAT (LOCAL)</div>
-        <div class="chat-body" id="chat-log">
-            <div style="margin-bottom:10px;">[SYS]: Welcome to Singularity.</div>
-            <div style="margin-bottom:10px;"><span style="color:var(--primary)">User_422:</span> Has anyone seen the new unblocker?</div>
-            <div style="margin-bottom:10px;"><span style="color:var(--accent)">Guest_99:</span> Yea, it's fire.</div>
+    <nav>
+        <div style="font-weight: 900; letter-spacing: 5px; font-size: 1.2rem;">TITAN <span>APEX</span></div>
+        <div class="search-area">
+            <input type="text" id="search-bar" placeholder="Search Apps or Games..." oninput="search(this.value)">
         </div>
-        <input type="text" class="chat-input" placeholder="Type a message..." onkeypress="sendChat(event, this)">
+        <div id="time" style="font-weight: 700; opacity: 0.5;">00:00:00</div>
+    </nav>
+
+    <div class="workspace" id="main-grid">
+        <div class="app-card" onclick="toggleVault(true)">
+            <i>🕹️</i><h3>Game Vault</h3>
+        </div>
+        <a href="https://youtube.com" target="_blank" class="app-card"><i>📺</i><h3>YouTube</h3></a>
+        <a href="https://discord.com" target="_blank" class="app-card"><i>💬</i><h3>Discord</h3></a>
+        <a href="https://tiktok.com" target="_blank" class="app-card"><i>🎵</i><h3>TikTok</h3></a>
+        <a href="https://reddit.com" target="_blank" class="app-card"><i>🤖</i><h3>Reddit</h3></a>
+        <div class="app-card" onclick="toggleDecoy()"><i>👁️</i><h3>Ghost Mode</h3></div>
     </div>
 
-    <div class="taskbar">
-        <div class="task-item active" onclick="location.reload()">🏠</div>
-        <div class="task-item" onclick="toggleSearch(true)">🔍</div>
-        <div class="task-item" onclick="toggleDecoy()">👁️</div>
-        <div class="task-item" onclick="window.open('https://google.com')">🌐</div>
-        <div class="task-item" onclick="document.getElementById('chat-widget').style.display='none'">❌</div>
+    <div id="vault">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:50px;">
+            <h1 style="letter-spacing:10px;">TITAN_VAULT</h1>
+            <span onclick="toggleVault(false)" style="cursor:pointer; font-size:3rem;">✕</span>
+        </div>
+        <div class="workspace" style="padding:0;">
+            <a href="https://docs-google-com-opensocial.googleusercontent.com/gadgets/ifr?url=https://cdn.jsdelivr.net/gh/sk1id/v@main/1v1.xml" target="_blank" class="app-card"><i>🔫</i><h3>1v1.LOL</h3></a>
+            <a href="https://kbhgames.com/game/slope" target="_blank" class="app-card"><i>⚽</i><h3>Slope</h3></a>
+            <a href="https://classic.minecraft.net" target="_blank" class="app-card"><i>⛏️</i><h3>Minecraft</h3></a>
+            <a href="https://shellshock.io" target="_blank" class="app-card"><i>🥚</i><h3>Shell Shock</h3></a>
+            <a href="https://paper-io.com" target="_blank" class="app-card"><i>📄</i><h3>Paper.io</h3></a>
+        </div>
+    </div>
+
+    <div class="dock">
+        <div class="dock-btn" onclick="location.reload()">🔄</div>
+        <div class="dock-btn" onclick="toggleVault(true)">🎮</div>
+        <div class="dock-btn" onclick="toggleDecoy()">👁️</div>
+        <div class="dock-btn" onclick="window.open('https://google.com')">🌐</div>
     </div>
 
     <script>
-        // LIVE SIMULATION
-        setInterval(() => {
-            document.getElementById('clock').innerText = new Date().toLocaleTimeString();
-            let count = Math.floor(Math.random() * (1500 - 1400) + 1400);
-            document.getElementById('user-count').innerText = count.toLocaleString();
-        }, 3000);
+        // SYSTEM CLOCK
+        setInterval(() => { 
+            document.getElementById('time').innerText = new Date().toLocaleTimeString(); 
+        }, 1000);
 
-        function toggleSearch(o) {
-            document.getElementById('search-modal').style.display = o ? 'flex' : 'none';
-            if(o) document.getElementById('s-input').focus();
-        }
-
+        // UI LOGIC
+        function toggleVault(o) { document.getElementById('vault').style.display = o ? 'block' : 'none'; }
+        
         function toggleDecoy() {
             const d = document.getElementById('decoy');
-            d.style.display = (d.style.display === 'block') ? 'none' : 'block';
-            document.title = (d.style.display === 'block') ? 'Google Docs' : 'Assignment_Final.pdf';
+            const isV = d.style.display === "block";
+            d.style.display = isV ? "none" : "block";
+            document.title = isV ? "Assignment_Final.pdf" : "Google Docs - Research Draft";
         }
 
-        function sendChat(e, input) {
-            if(e.key === 'Enter' && input.value) {
-                const log = document.getElementById('chat-log');
-                log.innerHTML += `<div style="margin-bottom:10px;"><span style="color:#fff">You:</span> ${input.value}</div>`;
-                input.value = '';
-                log.scrollTop = log.scrollHeight;
-            }
-        }
+        // TAB CLOAK (SECURE)
+        window.onblur = () => { document.title = "Google Drive"; };
+        window.onfocus = () => { document.title = "Assignment_Final.pdf"; };
 
-        function filterGrid(q) {
-            const tiles = document.querySelectorAll('.tile');
-            tiles.forEach(t => {
-                t.style.display = t.innerText.toLowerCase().includes(q.toLowerCase()) ? 'flex' : 'none';
+        // SEARCH ENGINE
+        function search(q) {
+            const cards = document.querySelectorAll('.app-card');
+            cards.forEach(c => {
+                c.style.display = c.innerText.toLowerCase().includes(q.toLowerCase()) ? 'block' : 'none';
             });
         }
 
+        // GLOBAL KEY LISTENER
         document.addEventListener('keydown', (e) => {
-            if(e.key === 'Escape') toggleSearch(false);
-            if(e.ctrlKey && e.key === 'f') { e.preventDefault(); toggleSearch(true); }
+            if(e.key === "Escape") { toggleVault(false); }
+            if(e.ctrlKey && e.key === "b") { e.preventDefault(); toggleDecoy(); }
         });
-        
-        // TAB CLOAK
-        window.onblur = () => { document.title = "Google Drive"; };
-        window.onfocus = () => { document.title = "Assignment_Final.pdf"; };
     </script>
 </body>
 </html>
