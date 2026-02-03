@@ -3,164 +3,220 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="page-title">M HUB | TITAN OS</title>
+    <title id="page-title">TITAN OS | RECOVERY</title>
     <link id="favicon" rel="icon" href="https://www.google.com/favicon.ico">
     <style>
         :root {
             --primary: #ff0055;
             --dark: #05070a;
-            --glass: rgba(255, 255, 255, 0.05);
+            --glass: rgba(255, 255, 255, 0.08);
             --accent-glow: rgba(255, 0, 85, 0.3);
-            --blur: 15px;
+            --blur: 20px;
+            --shift: 0px; /* Controlled by JS for broken screens */
         }
 
         body, html {
             margin: 0; padding: 0;
-            background-color: var(--dark);
+            background: var(--dark);
             background-size: cover;
             background-position: center;
-            background-attachment: fixed;
             color: white;
-            font-family: 'Inter', system-ui, -apple-system, sans-serif;
-            transition: background 0.5s ease;
+            font-family: 'Inter', sans-serif;
+            height: 100vh;
+            overflow: hidden;
         }
+
+        /* --- LOCK SCREEN --- */
+        #lock-screen {
+            position: fixed; inset: 0;
+            background: #000; z-index: 100000;
+            display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+            transition: 0.8s cubic-bezier(0.8, 0, 0.2, 1);
+        }
+
+        .pin-input {
+            background: var(--glass); border: 2px solid var(--primary);
+            color: white; font-size: 2rem; width: 200px; text-align: center;
+            border-radius: 15px; padding: 10px; outline: none; margin-top: 20px;
+        }
+
+        /* --- MAIN LAYOUT (SHIFT-CAPABLE) --- */
+        .viewport-wrapper {
+            transform: translateY(var(--shift));
+            transition: transform 0.5s ease;
+            height: 100%;
+            display: flex; flex-direction: column;
+        }
+
+        /* --- TOP BAR --- */
+        .top-nav {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 20px 30px; background: rgba(0,0,0,0.4); backdrop-filter: blur(10px);
+        }
+
+        /* --- SEARCH SECTION --- */
+        .search-hero {
+            padding: 40px 20px;
+            text-align: center;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.5), transparent);
+        }
+
+        .search-box {
+            background: var(--glass); border: 1px solid rgba(255,255,255,0.1);
+            backdrop-filter: blur(var(--blur)); border-radius: 50px;
+            display: flex; max-width: 600px; margin: 0 auto; padding: 10px;
+        }
+
+        .search-box input {
+            flex: 1; background: none; border: none; color: white;
+            padding: 10px 20px; outline: none; font-size: 1.1rem;
+        }
+
+        /* --- APP GRID (SCROLLABLE) --- */
+        .app-container {
+            flex: 1; overflow-y: auto; padding: 20px;
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 15px; padding-bottom: 120px;
+        }
+
+        .app-card {
+            background: var(--glass); border-radius: 20px; padding: 15px;
+            text-align: center; text-decoration: none; color: white;
+            border: 1px solid rgba(255,255,255,0.05); transition: 0.3s;
+        }
+
+        .app-card:hover { transform: scale(1.05); border-color: var(--primary); background: rgba(255,255,255,0.15); }
+        .app-card .icon { font-size: 2.5rem; margin-bottom: 10px; }
 
         /* --- SETTINGS PANEL --- */
-        .settings-container { position: fixed; top: 20px; right: 20px; z-index: 20000; }
-        .settings-btn {
-            background: var(--glass); border: 1px solid rgba(255,255,255,0.1);
-            backdrop-filter: blur(var(--blur)); color: white; font-size: 1.5rem;
-            width: 50px; height: 50px; border-radius: 50%; cursor: pointer;
-            display: flex; align-items: center; justify-content: center; transition: 0.3s;
-        }
-        .settings-btn:hover { transform: rotate(45deg); background: var(--primary); }
-
-        #settings-menu {
-            position: absolute; top: 60px; right: 0;
-            background: rgba(5, 5, 10, 0.9); border: 1px solid rgba(255,255,255,0.1);
-            backdrop-filter: blur(25px); border-radius: 24px; width: 260px;
-            padding: 25px; display: none; box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        #settings-flyout {
+            position: fixed; right: -300px; top: 0; width: 280px; height: 100%;
+            background: rgba(10, 10, 15, 0.98); backdrop-filter: blur(30px);
+            z-index: 50000; padding: 30px; transition: 0.4s;
+            border-left: 1px solid var(--primary);
         }
 
-        .setting-label { font-size: 0.65rem; letter-spacing: 2px; opacity: 0.5; margin-bottom: 10px; display: block; }
-        .theme-row { display: flex; gap: 10px; margin-bottom: 20px; }
-        .theme-btn { width: 30px; height: 30px; border-radius: 8px; border: 2px solid rgba(255,255,255,0.1); cursor: pointer; }
-        
-        input[type="file"] { display: none; }
-        .upload-label {
-            display: block; padding: 10px; background: var(--glass);
-            border: 1px dashed rgba(255,255,255,0.3); border-radius: 10px;
-            text-align: center; font-size: 0.8rem; cursor: pointer; margin-bottom: 20px;
-        }
+        .setting-group { margin-bottom: 25px; }
+        .setting-group label { display: block; font-size: 0.7rem; opacity: 0.5; margin-bottom: 10px; letter-spacing: 2px; }
 
-        /* --- UI COMPONENTS --- */
-        #menu-switch { display: none; }
-        #home-menu {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(-45deg, #05070a, #1a0a0f, #070912, #05070a);
-            background-size: 400% 400%; animation: meshFlow 15s ease infinite;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            z-index: 10000; transition: 0.8s cubic-bezier(0.8, 0, 0.2, 1);
+        /* --- UTILITY BUTTONS --- */
+        .btn-action {
+            background: var(--primary); border: none; color: white;
+            padding: 12px; border-radius: 12px; cursor: pointer; width: 100%;
+            font-weight: bold; margin-top: 10px;
         }
-        #menu-switch:checked ~ #home-menu { transform: scale(1.2); opacity: 0; pointer-events: none; }
-
-        .search-inner {
-            display: flex; background: var(--glass); border: 1px solid rgba(255,255,255,0.1);
-            backdrop-filter: blur(var(--blur)); border-radius: 100px; padding: 8px; width: 400px;
-        }
-        .search-inner input { flex: 1; background: none; border: none; padding: 12px; color: white; outline: none; }
-        .search-inner button { background: var(--primary); border: none; color: white; border-radius: 50px; padding: 0 20px; cursor: pointer; }
-
-        .dashboard { padding: 80px 40px; display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 25px; }
-        .card {
-            background: var(--glass); border: 1px solid rgba(255,255,255,0.05);
-            backdrop-filter: blur(var(--blur)); border-radius: 20px; padding: 20px;
-            text-decoration: none; color: white; text-align: center; transition: 0.4s;
-        }
-        .card:hover { transform: translateY(-10px); border-color: var(--primary); background: rgba(255,255,255,0.08); }
-
-        @keyframes meshFlow { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
     </style>
 </head>
-<body id="main-body">
+<body id="bg-target">
 
-    <div class="settings-container">
-        <button class="settings-btn" onclick="toggleSettings()">⚙️</button>
-        <div id="settings-menu">
-            <span class="setting-label">SYSTEM ACCENT</span>
-            <div class="theme-row">
-                <button class="theme-btn" style="background: #ff0055;" onclick="setTheme('#ff0055')"></button>
-                <button class="theme-btn" style="background: #00d2ff;" onclick="setTheme('#00d2ff')"></button>
-                <button class="theme-btn" style="background: #a855f7;" onclick="setTheme('#a855f7')"></button>
-                <button class="theme-btn" style="background: #22c55e;" onclick="setTheme('#22c55e')"></button>
+    <div id="lock-screen">
+        <h1 style="letter-spacing: 10px;">TITAN SECURE</h1>
+        <p style="opacity: 0.5;">Enter PIN to Access System</p>
+        <input type="password" id="pin" class="pin-input" maxlength="4" placeholder="••••" oninput="checkPin(this.value)">
+        <p id="pin-hint" style="color: var(--primary); margin-top: 15px; font-size: 0.8rem; display: none;">ACCESS DENIED</p>
+    </div>
+
+    <div class="viewport-wrapper">
+        <header class="top-nav">
+            <div style="font-weight: 900; letter-spacing: 2px;">TITAN <span style="color: var(--primary);">V6</span></div>
+            <div id="live-clock" style="font-family: monospace; opacity: 0.6;">00:00:00</div>
+            <button onclick="toggleSettings(true)" style="background:none; border:none; color:white; font-size: 1.5rem; cursor:pointer;">⚙️</button>
+        </header>
+
+        <section class="search-hero">
+            <div class="search-box">
+                <form action="https://duckduckgo.com/" method="GET" target="_blank" style="display:flex; width:100%;">
+                    <input type="text" name="q" placeholder="Search unblocked web..." required>
+                    <button type="submit" style="background:var(--primary); border:none; color:white; border-radius:50px; padding: 0 20px; cursor:pointer;">GO</button>
+                </form>
             </div>
+        </section>
 
-            <span class="setting-label">CUSTOM WALLPAPER</span>
-            <label class="upload-label" for="bg-upload">📁 Upload Image</label>
-            <input type="file" id="bg-upload" accept="image/*" onchange="updateWallpaper(this)">
-
-            <span class="setting-label">GLASS BLUR</span>
-            <input type="range" min="0" max="40" value="15" style="width:100%; accent-color: var(--primary);" oninput="updateBlur(this.value)">
-            
-            <hr style="opacity: 0.1; margin: 20px 0;">
-            <button onclick="toggleStealth()" style="width:100%; padding: 10px; background: var(--primary); border: none; color: white; border-radius: 10px; cursor: pointer; font-weight: bold;">ENABLE CLOAK</button>
-        </div>
+        <main class="app-container">
+            <a href="https://youtube.com" target="_blank" class="app-card"><div class="icon">📺</div>YouTube</a>
+            <a href="https://tiktok.com" target="_blank" class="app-card"><div class="icon">🎵</div>TikTok</a>
+            <a href="https://soundcloud.com" target="_blank" class="app-card"><div class="icon">☁️</div>SoundCloud</a>
+            <a href="https://1v1.lol" target="_blank" class="app-card"><div class="icon">🎮</div>1v1.LOL</a>
+            <a href="https://kbhgames.com/game/slope" target="_blank" class="app-card"><div class="icon">⚽</div>Slope</a>
+            <a href="https://poki.com" target="_blank" class="app-card"><div class="icon">🕹️</div>Poki</a>
+            <a href="https://discord.com" target="_blank" class="app-card"><div class="icon">💬</div>Discord</a>
+            <a href="https://reddit.com" target="_blank" class="app-card"><div class="icon">🤖</div>Reddit</a>
+        </main>
     </div>
 
-    <input type="checkbox" id="menu-switch">
-
-    <div id="home-menu">
-        <h1 style="font-size: 5rem; font-weight: 900; margin: 0; letter-spacing: -2px;">TITAN <span style="color: var(--primary)">OS</span></h1>
-        <div class="search-inner" style="margin: 30px 0;">
-            <form action="https://duckduckgo.com/" method="GET" target="_blank" style="display:flex; width:100%;">
-                <input type="text" name="q" placeholder="Search the void..." required>
-                <button type="submit">GO</button>
-            </form>
+    <div id="settings-flyout">
+        <button onclick="toggleSettings(false)" style="background:none; border:none; color:white; float:right; cursor:pointer;">✕</button>
+        <h2 style="margin-top: 0;">SYSTEM</h2>
+        
+        <div class="setting-group">
+            <label>SCREEN RECOVERY</label>
+            <button class="btn-action" onclick="shiftUI('0px')">Center UI</button>
+            <button class="btn-action" onclick="shiftUI('200px')" style="background: #333;">Shift Down (Top Broken)</button>
+            <button class="btn-action" onclick="shiftUI('-200px')" style="background: #333;">Shift Up (Bottom Broken)</button>
         </div>
-        <label for="menu-switch" style="cursor: pointer; padding: 15px 50px; border: 1px solid white; border-radius: 100px; text-transform: uppercase; font-size: 0.7rem; letter-spacing: 4px;">Initialize</label>
-    </div>
 
-    <div class="dashboard">
-        <a href="https://youtube.com" target="_blank" class="card"><h2>YT</h2><p>YouTube</p></a>
-        <a href="https://tiktok.com" target="_blank" class="card"><h2>TT</h2><p>TikTok</p></a>
-        <a href="https://soundcloud.com" target="_blank" class="card"><h2>SC</h2><p>SoundCloud</p></a>
-        <a href="https://1v1.lol" target="_blank" class="card"><h2>1V</h2><p>1v1.LOL</p></a>
-        <a href="https://kbhgames.com/game/slope" target="_blank" class="card"><h2>SL</h2><p>Slope</p></a>
+        <div class="setting-group">
+            <label>WALLPAPER</label>
+            <input type="file" id="wall-upload" style="display:none" onchange="applyWall(this)">
+            <button class="btn-action" onclick="document.getElementById('wall-upload').click()">Upload Image</button>
+        </div>
+
+        <div class="setting-group">
+            <label>THEME COLOR</label>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:5px;">
+                <button onclick="setTheme('#ff0055')" style="background:#ff0055; height:30px; border:none; border-radius:5px; cursor:pointer;"></button>
+                <button onclick="setTheme('#00d2ff')" style="background:#00d2ff; height:30px; border:none; border-radius:5px; cursor:pointer;"></button>
+            </div>
+        </div>
+
+        <button class="btn-action" onclick="toggleCloak()" style="background:#222; margin-top:40px;">🕵️ CLOAK TAB</button>
     </div>
 
     <script>
-        function toggleSettings() {
-            const menu = document.getElementById('settings-menu');
-            menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+        // PASSWORD LOGIC (Default is 1234)
+        const CORRECT_PIN = "1234"; 
+        function checkPin(val) {
+            if(val.length === 4) {
+                if(val === CORRECT_PIN) {
+                    document.getElementById('lock-screen').style.transform = "translateY(-100%)";
+                } else {
+                    document.getElementById('pin-hint').style.display = "block";
+                    document.getElementById('pin').value = "";
+                }
+            }
         }
 
-        function setTheme(color) {
-            document.documentElement.style.setProperty('--primary', color);
-            document.documentElement.style.setProperty('--accent-glow', color + '4D');
+        // SCREEN RECOVERY LOGIC
+        function shiftUI(val) {
+            document.documentElement.style.setProperty('--shift', val);
         }
 
-        function updateBlur(val) {
-            document.documentElement.style.setProperty('--blur', val + 'px');
+        // SETTINGS TOGGLE
+        function toggleSettings(open) {
+            document.getElementById('settings-flyout').style.right = open ? "0px" : "-300px";
         }
 
-        function updateWallpaper(input) {
+        // THEME & WALLPAPER
+        function setTheme(c) { document.documentElement.style.setProperty('--primary', c); }
+        function applyWall(input) {
             if (input.files && input.files[0]) {
                 const reader = new FileReader();
-                reader.onload = function(e) {
-                    document.getElementById('main-body').style.backgroundImage = `url(${e.target.result})`;
-                }
+                reader.onload = e => document.getElementById('bg-target').style.backgroundImage = `url(${e.target.result})`;
                 reader.readAsDataURL(input.files[0]);
             }
         }
 
-        function toggleStealth() {
-            document.title = "Google Docs";
-            document.getElementById('favicon').setAttribute('href', 'https://ssl.gstatic.com/docs/documents/images/kix-favicon7.ico');
-            alert("Stealth Mode Activated");
+        // TAB CLOAK
+        function toggleCloak() {
+            document.title = "My Drive - Google Drive";
+            alert("Tab Cloaked!");
         }
 
-        // Close settings when clicking outside
-        window.onclick = (e) => { if (!e.target.closest('.settings-container')) document.getElementById('settings-menu').style.display = 'none'; }
+        // CLOCK
+        setInterval(() => {
+            document.getElementById('live-clock').innerText = new Date().toLocaleTimeString();
+        }, 1000);
     </script>
 </body>
 </html>
