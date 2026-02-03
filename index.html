@@ -3,114 +3,149 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>M HUB - Search & Play</title>
+    <title>M HUB | OS</title>
     <style>
         :root {
             --accent: #ff0055;
-            --bg: #0b0e14;
-            --panel: #151921;
+            --bg: #05070a;
+            --glass: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.1);
         }
 
         body { 
             background-color: var(--bg); color: white; 
-            font-family: 'Segoe UI', sans-serif; margin: 0; padding: 0; 
-            overflow-x: hidden;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; 
+            margin: 0; padding: 0; overflow-x: hidden;
         }
 
         #menu-toggle { display: none; }
 
-        /* --- 1. HOME SCREEN (With Search) --- */
+        /* --- CINEMATIC HOME SCREEN --- */
         #home-screen {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at center, #1a1f2b 0%, #0b0e14 100%);
+            background: radial-gradient(circle at top right, #1a0a0f 0%, #05070a 100%);
             display: flex; flex-direction: column;
             justify-content: center; align-items: center;
             z-index: 9999;
-            transition: transform 0.7s cubic-bezier(0.85, 0, 0.15, 1);
-            text-align: center;
+            transition: transform 0.8s cubic-bezier(0.8, 0, 0.2, 1);
         }
 
         #menu-toggle:checked ~ #home-screen {
-            transform: translateY(-100%);
+            transform: scale(1.1);
+            opacity: 0;
+            pointer-events: none;
         }
 
         .hero-title {
-            font-size: clamp(3rem, 10vw, 5rem); font-weight: 900; margin: 0;
-            background: linear-gradient(45deg, var(--accent), #ff7b00);
+            font-size: clamp(3.5rem, 12vw, 6rem); font-weight: 900; margin: 0;
+            letter-spacing: -3px;
+            background: linear-gradient(to bottom, #fff 30%, var(--accent));
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            margin-bottom: 20px;
         }
 
-        /* SEARCH BAR ON MAIN MENU */
-        .main-search-form {
-            width: 85%;
-            max-width: 500px;
-            margin-bottom: 30px;
+        /* DUCKDUCKGO SEARCH */
+        .search-container {
+            width: 90%; max-width: 550px; margin: 30px 0;
         }
 
         .search-box {
-            display: flex;
-            background: rgba(255, 255, 255, 0.05);
-            border: 2px solid #333;
-            border-radius: 50px;
-            overflow: hidden;
-            transition: 0.3s;
+            display: flex; background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 100px; padding: 5px;
+            backdrop-filter: blur(10px);
+            transition: 0.4s;
         }
 
         .search-box:focus-within {
             border-color: var(--accent);
-            background: rgba(255, 255, 255, 0.1);
-            box-shadow: 0 0 20px rgba(255, 0, 85, 0.3);
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 30px rgba(255, 0, 85, 0.2);
         }
 
         .search-box input {
             flex: 1; background: none; border: none;
-            padding: 15px 20px; color: white; font-size: 1rem; outline: none;
+            padding: 15px 25px; color: white; font-size: 1rem; outline: none;
         }
 
         .search-box button {
             background: var(--accent); border: none; color: white;
-            padding: 0 20px; cursor: pointer; font-weight: bold;
+            width: 50px; height: 50px; border-radius: 50%; 
+            cursor: pointer; font-weight: bold; transition: 0.3s;
         }
 
-        .start-label {
-            padding: 15px 40px; border: 2px solid var(--accent);
-            color: white; border-radius: 10px; font-weight: bold;
-            cursor: pointer; text-transform: uppercase; letter-spacing: 2px;
+        /* QUICK LINKS */
+        .quick-links {
+            display: flex; gap: 20px; margin-bottom: 40px;
+        }
+
+        .link-orb {
+            width: 45px; height: 45px; background: var(--glass);
+            border: 1px solid var(--glass-border); border-radius: 50%;
+            display: flex; justify-content: center; align-items: center;
+            text-decoration: none; font-size: 1.2rem; transition: 0.3s;
+        }
+
+        .link-orb:hover {
+            background: var(--accent); transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(255, 0, 85, 0.3);
+        }
+
+        .enter-btn {
+            background: none; border: 1px solid #333; color: #888;
+            padding: 12px 35px; border-radius: 100px; cursor: pointer;
+            text-transform: uppercase; font-size: 0.8rem; letter-spacing: 2px;
             transition: 0.3s;
         }
 
-        .start-label:hover {
-            background: var(--accent);
-            box-shadow: 0 0 20px var(--accent);
+        .enter-btn:hover { border-color: var(--accent); color: white; }
+
+        /* --- DASHBOARD CONTENT --- */
+        .dashboard { padding: 30px; padding-bottom: 120px; animation: fadeIn 1s; }
+
+        .section-header {
+            display: flex; align-items: center; gap: 15px; margin-bottom: 25px;
         }
 
-        /* --- 2. HUB CONTENT --- */
-        .content { padding: 20px; padding-bottom: 100px; }
-        
-        .game-grid { 
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); 
-            gap: 15px; 
+        .section-header h2 { font-size: 1.8rem; margin: 0; }
+        .line { flex: 1; height: 1px; background: var(--glass-border); }
+
+        .grid { 
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); 
+            gap: 20px; 
         }
 
-        .card { 
-            background: var(--panel); border-radius: 15px; padding: 10px;
-            text-decoration: none; color: white; border: 1px solid #333;
-            transition: 0.3s; text-align: center;
-        }
-        .card:hover { transform: translateY(-5px); border-color: var(--accent); }
-        .card img { width: 100%; border-radius: 10px; aspect-ratio: 1/1; object-fit: cover; }
-
-        /* --- 3. TASKBAR --- */
-        .bottom-nav {
-            position: fixed; bottom: 0; left: 0; width: 100%; height: 70px;
-            background: var(--panel); border-top: 1px solid #333;
-            display: flex; justify-content: space-around; align-items: center; z-index: 1000;
+        .game-card { 
+            background: var(--glass); border: 1px solid var(--glass-border);
+            border-radius: 20px; padding: 12px; text-decoration: none; color: white;
+            transition: 0.4s; text-align: center;
         }
 
-        .nav-btn { background: none; border: none; color: #888; cursor: pointer; font-size: 0.8rem; text-align: center; }
-        .home-trigger { color: var(--accent); font-weight: bold; }
+        .game-card:hover { 
+            background: rgba(255, 255, 255, 0.08);
+            border-color: var(--accent); 
+            transform: scale(1.05); 
+        }
+
+        .game-card img { width: 100%; border-radius: 14px; margin-bottom: 10px; }
+
+        /* --- NAVIGATION --- */
+        .navbar {
+            position: fixed; bottom: 20px; left: 50%;
+            transform: translateX(-50%);
+            width: 90%; max-width: 400px;
+            height: 65px; background: rgba(15, 18, 25, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 100px;
+            display: flex; justify-content: space-around; align-items: center;
+            z-index: 1000;
+        }
+
+        .nav-icon { font-size: 1.4rem; cursor: pointer; opacity: 0.5; transition: 0.3s; }
+        .nav-icon:hover, .active-nav { opacity: 1; color: var(--accent); }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 <body>
@@ -120,39 +155,49 @@
     <div id="home-screen">
         <h1 class="hero-title">M HUB</h1>
         
-        <form action="https://duckduckgo.com/" method="GET" target="_blank" class="main-search-form">
+        <form action="https://duckduckgo.com/" method="GET" target="_blank" class="search-container">
             <div class="search-box">
-                <input type="text" name="q" placeholder="Search the web..." required>
-                <button type="submit">GO</button>
+                <input type="text" name="q" placeholder="Explore the web..." required>
+                <button type="submit">🔍</button>
             </div>
         </form>
 
-        <label for="menu-toggle" class="start-label">OPEN GAMES</label>
+        <div class="quick-links">
+            <a href="https://youtube.com" target="_blank" class="link-orb">📺</a>
+            <a href="https://tiktok.com" target="_blank" class="link-orb">🎵</a>
+            <a href="https://discord.com" target="_blank" class="link-orb">💬</a>
+        </div>
+
+        <label for="menu-toggle" class="enter-btn">Open Dashboard</label>
     </div>
 
-    <div class="content">
-        <h2 style="color: var(--accent); border-left: 4px solid var(--accent); padding-left: 10px;">MY GAMES</h2>
-        <div class="game-grid">
-            <a href="https://v6p9d9t4.ssl.hwcdn.net/html/1365121/index.html" class="card">
+    <div class="dashboard">
+        <div class="section-header">
+            <h2>GAMES</h2>
+            <div class="line"></div>
+        </div>
+
+        <div class="grid">
+            <a href="https://v6p9d9t4.ssl.hwcdn.net/html/1365121/index.html" class="game-card">
                 <img src="https://raw.githubusercontent.com/not-under-maintenance/thumb/main/retro-bowl.png">
-                <p>Retro Bowl</p>
+                <span>Retro Bowl</span>
             </a>
-            <a href="https://kbhgames.com/game/slope" class="card">
+            <a href="https://kbhgames.com/game/slope" class="game-card">
                 <img src="https://raw.githubusercontent.com/not-under-maintenance/thumb/main/slope.png">
-                <p>Slope</p>
+                <span>Slope</span>
             </a>
-            <a href="https://1v1.lol" class="card">
+            <a href="https://1v1.lol" class="game-card">
                 <img src="https://raw.githubusercontent.com/not-under-maintenance/thumb/main/1v1-lol.png">
-                <p>1v1.LOL</p>
+                <span>1v1.LOL</span>
             </a>
         </div>
     </div>
 
-    <nav class="bottom-nav">
-        <div class="nav-btn" style="color: var(--accent);">🎮<br>GAMES</div>
-        <div class="nav-btn">📺<br>SOCIAL</div>
-        <div class="nav-btn">🍿<br>MOVIES</div>
-        <label for="menu-toggle" class="nav-btn home-trigger">🏠<br>HOME</label>
+    <nav class="navbar">
+        <div class="nav-icon active-nav">🎮</div>
+        <div class="nav-icon">🎥</div>
+        <div class="nav-icon">⚙️</div>
+        <label for="menu-toggle" class="nav-icon">🏠</label>
     </nav>
 
 </body>
