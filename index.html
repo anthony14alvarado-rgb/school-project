@@ -11,190 +11,156 @@
             --dark: #05070a;
             --glass: rgba(255, 255, 255, 0.05);
             --accent-glow: rgba(255, 0, 85, 0.3);
+            --blur: 15px;
         }
 
         body, html {
             margin: 0; padding: 0;
             background-color: var(--dark);
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
             color: white;
             font-family: 'Inter', system-ui, -apple-system, sans-serif;
-            overflow-x: hidden;
+            transition: background 0.5s ease;
         }
 
-        /* --- SETTINGS PANEL (TOP RIGHT) --- */
-        .settings-container {
-            position: fixed;
-            top: 25px;
-            right: 25px;
-            z-index: 20000; /* Stays above home menu */
-        }
-
+        /* --- SETTINGS PANEL --- */
+        .settings-container { position: fixed; top: 20px; right: 20px; z-index: 20000; }
         .settings-btn {
-            background: var(--glass);
-            border: 1px solid rgba(255,255,255,0.1);
-            backdrop-filter: blur(10px);
-            color: white;
-            font-size: 1.5rem;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: 0.3s;
+            background: var(--glass); border: 1px solid rgba(255,255,255,0.1);
+            backdrop-filter: blur(var(--blur)); color: white; font-size: 1.5rem;
+            width: 50px; height: 50px; border-radius: 50%; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; transition: 0.3s;
         }
+        .settings-btn:hover { transform: rotate(45deg); background: var(--primary); }
 
-        .settings-btn:hover {
-            transform: rotate(90deg);
-            background: var(--primary);
-            box-shadow: 0 0 20px var(--accent-glow);
-        }
-
-        /* Hidden Settings Menu */
         #settings-menu {
-            position: absolute;
-            top: 60px;
-            right: 0;
-            background: rgba(10, 10, 15, 0.95);
-            border: 1px solid rgba(255,255,255,0.1);
-            backdrop-filter: blur(20px);
-            border-radius: 20px;
-            width: 200px;
-            padding: 20px;
-            display: none;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+            position: absolute; top: 60px; right: 0;
+            background: rgba(5, 5, 10, 0.9); border: 1px solid rgba(255,255,255,0.1);
+            backdrop-filter: blur(25px); border-radius: 24px; width: 260px;
+            padding: 25px; display: none; box-shadow: 0 20px 50px rgba(0,0,0,0.5);
         }
 
-        .setting-item {
-            margin-bottom: 15px;
-            font-size: 0.8rem;
-            letter-spacing: 1px;
-            opacity: 0.7;
+        .setting-label { font-size: 0.65rem; letter-spacing: 2px; opacity: 0.5; margin-bottom: 10px; display: block; }
+        .theme-row { display: flex; gap: 10px; margin-bottom: 20px; }
+        .theme-btn { width: 30px; height: 30px; border-radius: 8px; border: 2px solid rgba(255,255,255,0.1); cursor: pointer; }
+        
+        input[type="file"] { display: none; }
+        .upload-label {
+            display: block; padding: 10px; background: var(--glass);
+            border: 1px dashed rgba(255,255,255,0.3); border-radius: 10px;
+            text-align: center; font-size: 0.8rem; cursor: pointer; margin-bottom: 20px;
         }
 
-        .theme-btn {
-            width: 25px; height: 25px; border-radius: 50%; border: none; cursor: pointer; margin-right: 10px;
-        }
-
-        /* --- UI OVERLAYS --- */
+        /* --- UI COMPONENTS --- */
         #menu-switch { display: none; }
-
         #home-menu {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: linear-gradient(-45deg, #05070a, #1a0a0f, #070912, #05070a);
-            background-size: 400% 400%;
-            animation: meshFlow 12s ease infinite;
-            display: flex; flex-direction: column;
-            justify-content: center; align-items: center;
-            z-index: 10000;
-            transition: 0.8s cubic-bezier(0.8, 0, 0.2, 1);
+            background-size: 400% 400%; animation: meshFlow 15s ease infinite;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            z-index: 10000; transition: 0.8s cubic-bezier(0.8, 0, 0.2, 1);
         }
+        #menu-switch:checked ~ #home-menu { transform: scale(1.2); opacity: 0; pointer-events: none; }
 
-        #menu-switch:checked ~ #home-menu { transform: translateY(-100%); }
-
-        @keyframes meshFlow {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        /* --- ELEMENTS --- */
-        .hub-title {
-            font-size: clamp(4rem, 15vw, 7rem); font-weight: 900; margin: 0;
-            letter-spacing: -4px;
-            background: linear-gradient(to bottom, #fff, var(--primary));
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-        }
-
-        .search-wrap { width: 90%; max-width: 600px; margin: 40px 0; }
         .search-inner {
-            display: flex; background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255,255,255,0.1);
-            backdrop-filter: blur(15px); border-radius: 100px; padding: 8px;
+            display: flex; background: var(--glass); border: 1px solid rgba(255,255,255,0.1);
+            backdrop-filter: blur(var(--blur)); border-radius: 100px; padding: 8px; width: 400px;
         }
-        .search-inner input { flex: 1; background: none; border: none; padding: 15px; color: white; outline: none; }
-        .search-inner button { background: var(--primary); border: none; color: white; border-radius: 50px; padding: 0 25px; cursor: pointer; }
+        .search-inner input { flex: 1; background: none; border: none; padding: 12px; color: white; outline: none; }
+        .search-inner button { background: var(--primary); border: none; color: white; border-radius: 50px; padding: 0 20px; cursor: pointer; }
 
-        .dashboard { padding: 100px 20px; max-width: 1200px; margin: auto; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; }
-        .card { background: var(--glass); border-radius: 20px; padding: 15px; text-decoration: none; color: white; text-align: center; border: 1px solid rgba(255,255,255,0.05); transition: 0.3s; }
-        .card:hover { transform: translateY(-5px); border-color: var(--primary); }
+        .dashboard { padding: 80px 40px; display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 25px; }
+        .card {
+            background: var(--glass); border: 1px solid rgba(255,255,255,0.05);
+            backdrop-filter: blur(var(--blur)); border-radius: 20px; padding: 20px;
+            text-decoration: none; color: white; text-align: center; transition: 0.4s;
+        }
+        .card:hover { transform: translateY(-10px); border-color: var(--primary); background: rgba(255,255,255,0.08); }
 
-        .navbar { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 400px; height: 60px; background: rgba(10, 12, 18, 0.8); backdrop-filter: blur(30px); border-radius: 100px; display: flex; justify-content: space-around; align-items: center; border: 1px solid rgba(255,255,255,0.1); z-index: 1000; }
+        @keyframes meshFlow { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
     </style>
 </head>
-<body>
+<body id="main-body">
 
     <div class="settings-container">
         <button class="settings-btn" onclick="toggleSettings()">⚙️</button>
         <div id="settings-menu">
-            <div class="setting-item">THEME SELECTOR</div>
-            <div style="display: flex;">
+            <span class="setting-label">SYSTEM ACCENT</span>
+            <div class="theme-row">
                 <button class="theme-btn" style="background: #ff0055;" onclick="setTheme('#ff0055')"></button>
                 <button class="theme-btn" style="background: #00d2ff;" onclick="setTheme('#00d2ff')"></button>
-                <button class="theme-btn" style="background: #00ff88;" onclick="setTheme('#00ff88')"></button>
+                <button class="theme-btn" style="background: #a855f7;" onclick="setTheme('#a855f7')"></button>
+                <button class="theme-btn" style="background: #22c55e;" onclick="setTheme('#22c55e')"></button>
             </div>
-            <hr style="opacity: 0.1; margin: 15px 0;">
-            <div class="setting-item" onclick="toggleStealth()" style="cursor: pointer;">🕵️ ENABLE CLOAK</div>
+
+            <span class="setting-label">CUSTOM WALLPAPER</span>
+            <label class="upload-label" for="bg-upload">📁 Upload Image</label>
+            <input type="file" id="bg-upload" accept="image/*" onchange="updateWallpaper(this)">
+
+            <span class="setting-label">GLASS BLUR</span>
+            <input type="range" min="0" max="40" value="15" style="width:100%; accent-color: var(--primary);" oninput="updateBlur(this.value)">
+            
+            <hr style="opacity: 0.1; margin: 20px 0;">
+            <button onclick="toggleStealth()" style="width:100%; padding: 10px; background: var(--primary); border: none; color: white; border-radius: 10px; cursor: pointer; font-weight: bold;">ENABLE CLOAK</button>
         </div>
     </div>
 
     <input type="checkbox" id="menu-switch">
 
     <div id="home-menu">
-        <h1 class="hub-title">TITAN OS</h1>
-        <form action="https://duckduckgo.com/" method="GET" target="_blank" class="search-wrap">
-            <div class="search-inner">
-                <input type="text" name="q" placeholder="Explore the web..." required>
-                <button type="submit">SEARCH</button>
-            </div>
-        </form>
-        <label for="menu-switch" style="cursor: pointer; padding: 15px 40px; border: 1px solid white; border-radius: 100px; font-size: 0.7rem; letter-spacing: 3px;">INITIALIZE</label>
+        <h1 style="font-size: 5rem; font-weight: 900; margin: 0; letter-spacing: -2px;">TITAN <span style="color: var(--primary)">OS</span></h1>
+        <div class="search-inner" style="margin: 30px 0;">
+            <form action="https://duckduckgo.com/" method="GET" target="_blank" style="display:flex; width:100%;">
+                <input type="text" name="q" placeholder="Search the void..." required>
+                <button type="submit">GO</button>
+            </form>
+        </div>
+        <label for="menu-switch" style="cursor: pointer; padding: 15px 50px; border: 1px solid white; border-radius: 100px; text-transform: uppercase; font-size: 0.7rem; letter-spacing: 4px;">Initialize</label>
     </div>
 
     <div class="dashboard">
-        <div class="grid">
-            <a href="https://youtube.com" target="_blank" class="card">📺<br>YOUTUBE</a>
-            <a href="https://tiktok.com" target="_blank" class="card">🎵<br>TIKTOK</a>
-            <a href="https://soundcloud.com" target="_blank" class="card">☁️<br>SOUNDCLOUD</a>
-            <a href="https://1v1.lol" target="_blank" class="card">🎮<br>1V1 LOL</a>
-        </div>
+        <a href="https://youtube.com" target="_blank" class="card"><h2>YT</h2><p>YouTube</p></a>
+        <a href="https://tiktok.com" target="_blank" class="card"><h2>TT</h2><p>TikTok</p></a>
+        <a href="https://soundcloud.com" target="_blank" class="card"><h2>SC</h2><p>SoundCloud</p></a>
+        <a href="https://1v1.lol" target="_blank" class="card"><h2>1V</h2><p>1v1.LOL</p></a>
+        <a href="https://kbhgames.com/game/slope" target="_blank" class="card"><h2>SL</h2><p>Slope</p></a>
     </div>
 
-    <nav class="navbar">
-        <div style="cursor: pointer;">🎮</div>
-        <div style="cursor: pointer;" onclick="toggleStealth()">🕵️</div>
-        <label for="menu-switch" style="cursor: pointer;">🏠</label>
-    </nav>
-
     <script>
-        // TOGGLE SETTINGS VISIBILITY
         function toggleSettings() {
             const menu = document.getElementById('settings-menu');
             menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
         }
 
-        // DYNAMIC THEME ENGINE
         function setTheme(color) {
             document.documentElement.style.setProperty('--primary', color);
             document.documentElement.style.setProperty('--accent-glow', color + '4D');
         }
 
-        // TAB CLOAKING
+        function updateBlur(val) {
+            document.documentElement.style.setProperty('--blur', val + 'px');
+        }
+
+        function updateWallpaper(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('main-body').style.backgroundImage = `url(${e.target.result})`;
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
         function toggleStealth() {
             document.title = "Google Docs";
             document.getElementById('favicon').setAttribute('href', 'https://ssl.gstatic.com/docs/documents/images/kix-favicon7.ico');
-            alert("Cloak Active!");
+            alert("Stealth Mode Activated");
         }
 
-        // CLOSE SETTINGS ON OUTSIDE CLICK
-        window.onclick = function(event) {
-            if (!event.target.matches('.settings-btn')) {
-                document.getElementById('settings-menu').style.display = "none";
-            }
-        }
+        // Close settings when clicking outside
+        window.onclick = (e) => { if (!e.target.closest('.settings-container')) document.getElementById('settings-menu').style.display = 'none'; }
     </script>
 </body>
 </html>
