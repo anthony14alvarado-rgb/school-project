@@ -14,11 +14,12 @@
         body { 
             background-color: var(--bg); color: white; 
             font-family: 'Segoe UI', sans-serif; margin: 0; padding: 0; 
+            overflow-x: hidden;
         }
 
         #menu-toggle { display: none; }
 
-        /* --- 1. HOME SCREEN --- */
+        /* --- 1. HOME SCREEN (With Search) --- */
         #home-screen {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -27,6 +28,7 @@
             justify-content: center; align-items: center;
             z-index: 9999;
             transition: transform 0.7s cubic-bezier(0.85, 0, 0.15, 1);
+            text-align: center;
         }
 
         #menu-toggle:checked ~ #home-screen {
@@ -34,32 +36,22 @@
         }
 
         .hero-title {
-            font-size: 5rem; font-weight: 900; margin: 0;
+            font-size: clamp(3rem, 10vw, 5rem); font-weight: 900; margin: 0;
             background: linear-gradient(45deg, var(--accent), #ff7b00);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
         }
 
-        .start-label {
-            margin-top: 30px; padding: 18px 60px; background: var(--accent);
-            color: white; border-radius: 12px; font-weight: bold;
-            cursor: pointer; text-transform: uppercase; letter-spacing: 2px;
-            transition: 0.3s;
-        }
-
-        /* --- 2. SEARCH BAR SECTION --- */
-        .search-area {
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-            background: var(--panel);
-            border-bottom: 1px solid #333;
+        /* SEARCH BAR ON MAIN MENU */
+        .main-search-form {
+            width: 85%;
+            max-width: 500px;
+            margin-bottom: 30px;
         }
 
         .search-box {
             display: flex;
-            width: 100%;
-            max-width: 600px;
-            background: #0b0e14;
+            background: rgba(255, 255, 255, 0.05);
             border: 2px solid #333;
             border-radius: 50px;
             overflow: hidden;
@@ -68,29 +60,38 @@
 
         .search-box:focus-within {
             border-color: var(--accent);
-            box-shadow: 0 0 15px rgba(255, 0, 85, 0.2);
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 20px rgba(255, 0, 85, 0.3);
         }
 
         .search-box input {
-            flex: 1;
-            background: none; border: none;
-            padding: 15px 25px; color: white;
-            font-size: 1rem; outline: none;
+            flex: 1; background: none; border: none;
+            padding: 15px 20px; color: white; font-size: 1rem; outline: none;
         }
 
         .search-box button {
-            background: var(--accent);
-            border: none; color: white;
-            padding: 0 25px; cursor: pointer;
-            font-weight: bold;
+            background: var(--accent); border: none; color: white;
+            padding: 0 20px; cursor: pointer; font-weight: bold;
         }
 
-        /* --- 3. CONTENT & GRID --- */
+        .start-label {
+            padding: 15px 40px; border: 2px solid var(--accent);
+            color: white; border-radius: 10px; font-weight: bold;
+            cursor: pointer; text-transform: uppercase; letter-spacing: 2px;
+            transition: 0.3s;
+        }
+
+        .start-label:hover {
+            background: var(--accent);
+            box-shadow: 0 0 20px var(--accent);
+        }
+
+        /* --- 2. HUB CONTENT --- */
         .content { padding: 20px; padding-bottom: 100px; }
         
         .game-grid { 
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); 
-            gap: 20px; 
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); 
+            gap: 15px; 
         }
 
         .card { 
@@ -101,14 +102,14 @@
         .card:hover { transform: translateY(-5px); border-color: var(--accent); }
         .card img { width: 100%; border-radius: 10px; aspect-ratio: 1/1; object-fit: cover; }
 
-        /* --- 4. TASKBAR --- */
+        /* --- 3. TASKBAR --- */
         .bottom-nav {
             position: fixed; bottom: 0; left: 0; width: 100%; height: 70px;
             background: var(--panel); border-top: 1px solid #333;
             display: flex; justify-content: space-around; align-items: center; z-index: 1000;
         }
 
-        .nav-btn { background: none; border: none; color: #888; cursor: pointer; font-size: 0.8rem; }
+        .nav-btn { background: none; border: none; color: #888; cursor: pointer; font-size: 0.8rem; text-align: center; }
         .home-trigger { color: var(--accent); font-weight: bold; }
     </style>
 </head>
@@ -118,19 +119,19 @@
 
     <div id="home-screen">
         <h1 class="hero-title">M HUB</h1>
-        <p style="color: #666; letter-spacing: 5px;">WEB ENGINE V1.0</p>
-        <label for="menu-toggle" class="start-label">START HUB</label>
-    </div>
-
-    <div class="search-area">
-        <form action="https://duckduckgo.com/" method="GET" target="_blank" class="search-box">
-            <input type="text" name="q" placeholder="Search the web with DuckDuckGo..." required>
-            <button type="submit">SEARCH</button>
+        
+        <form action="https://duckduckgo.com/" method="GET" target="_blank" class="main-search-form">
+            <div class="search-box">
+                <input type="text" name="q" placeholder="Search the web..." required>
+                <button type="submit">GO</button>
+            </div>
         </form>
+
+        <label for="menu-toggle" class="start-label">OPEN GAMES</label>
     </div>
 
     <div class="content">
-        <h2 style="margin-bottom: 20px; color: var(--accent);">GAMES</h2>
+        <h2 style="color: var(--accent); border-left: 4px solid var(--accent); padding-left: 10px;">MY GAMES</h2>
         <div class="game-grid">
             <a href="https://v6p9d9t4.ssl.hwcdn.net/html/1365121/index.html" class="card">
                 <img src="https://raw.githubusercontent.com/not-under-maintenance/thumb/main/retro-bowl.png">
@@ -149,7 +150,7 @@
 
     <nav class="bottom-nav">
         <div class="nav-btn" style="color: var(--accent);">🎮<br>GAMES</div>
-        <div class="nav-btn">📺<br>TV</div>
+        <div class="nav-btn">📺<br>SOCIAL</div>
         <div class="nav-btn">🍿<br>MOVIES</div>
         <label for="menu-toggle" class="nav-btn home-trigger">🏠<br>HOME</label>
     </nav>
