@@ -3,25 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>M HUB | ULTIMATE</title>
+    <title>M HUB | TITAN OS</title>
     <style>
         :root {
             --primary: #ff0055;
             --dark: #05070a;
             --glass: rgba(255, 255, 255, 0.05);
+            --accent-glow: rgba(255, 0, 85, 0.3);
         }
 
         body, html {
             margin: 0; padding: 0;
             background-color: var(--dark);
             color: white;
-            font-family: 'Inter', sans-serif;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
             overflow-x: hidden;
             height: 100%;
         }
 
-        /* --- THE ANIMATED BACKGROUND --- */
-        @keyframes meshGradient {
+        /* --- BACKGROUND ANIMATION --- */
+        @keyframes meshFlow {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
@@ -29,118 +30,131 @@
 
         #menu-switch { display: none; }
 
-        /* --- THE HOME SCREEN --- */
+        /* --- HOME SCREEN --- */
         #home-menu {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            /* Animated gradient background */
-            background: linear-gradient(-45deg, #05070a, #1a0a0f, #0a0f1a, #05070a);
+            background: linear-gradient(-45deg, #05070a, #1a0a0f, #070912, #05070a);
             background-size: 400% 400%;
-            animation: meshGradient 15s ease infinite;
+            animation: meshFlow 12s ease infinite;
             display: flex; flex-direction: column;
             justify-content: center; align-items: center;
             z-index: 10000;
             transition: all 0.9s cubic-bezier(0.8, 0, 0.2, 1);
-            text-align: center;
         }
 
         #menu-switch:checked ~ #home-menu {
-            transform: scale(1.2);
+            transform: scale(1.1) filter(blur(20px));
             opacity: 0;
             pointer-events: none;
         }
 
-        .hub-title {
-            font-size: clamp(3.5rem, 12vw, 6rem);
-            font-weight: 900; margin: 0;
-            letter-spacing: -2px;
-            background: linear-gradient(to bottom, #fff, var(--primary));
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 0 20px rgba(255, 0, 85, 0.3));
+        /* LIVE CLOCK */
+        #clock {
+            position: absolute;
+            top: 40px;
+            font-weight: 200;
+            font-size: 1.2rem;
+            letter-spacing: 4px;
+            color: rgba(255,255,255,0.5);
         }
 
+        .hub-title {
+            font-size: clamp(4rem, 15vw, 7rem);
+            font-weight: 900; margin: 0;
+            letter-spacing: -4px;
+            background: linear-gradient(to bottom, #fff, var(--primary));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 30px var(--accent-glow));
+        }
+
+        .status-bar {
+            display: flex; gap: 20px; margin-top: 10px;
+            font-size: 0.7rem; letter-spacing: 2px; color: #666;
+        }
+
+        .online-dot { color: #00ff88; animation: blink 1.5s infinite; }
+        @keyframes blink { 50% { opacity: 0; } }
+
         /* SEARCH BAR */
-        .search-wrap { width: 85%; max-width: 500px; margin: 30px 0; }
+        .search-wrap { width: 85%; max-width: 550px; margin: 40px 0; }
         .search-inner {
             display: flex; background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(255,255,255,0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 100px; padding: 6px;
+            backdrop-filter: blur(15px);
+            border-radius: 100px; padding: 8px;
             transition: 0.4s;
         }
         .search-inner:focus-within {
             border-color: var(--primary);
-            box-shadow: 0 0 25px rgba(255, 0, 85, 0.2);
+            box-shadow: 0 0 40px var(--accent-glow);
+            background: rgba(255, 255, 255, 0.07);
         }
         .search-inner input {
             flex: 1; background: none; border: none;
-            padding: 15px 20px; color: white; outline: none; font-size: 1rem;
+            padding: 15px 20px; color: white; outline: none; font-size: 1.1rem;
         }
         .search-inner button {
             background: var(--primary); border: none; color: white;
-            border-radius: 50px; padding: 0 25px; cursor: pointer;
+            border-radius: 50px; padding: 0 30px; cursor: pointer;
             font-weight: bold; transition: 0.3s;
         }
-        .search-inner button:hover { transform: scale(1.05); background: #ff1a6b; }
 
-        /* QUICK ORBS */
-        .row { display: flex; gap: 20px; margin-bottom: 40px; }
+        /* QUICK LAUNCH ORBS */
+        .orb-row { display: flex; gap: 25px; margin-bottom: 50px; }
         .orb {
-            width: 55px; height: 55px; background: var(--glass);
-            border-radius: 50%; display: flex; align-items: center;
-            justify-content: center; text-decoration: none; font-size: 1.4rem;
-            border: 1px solid rgba(255,255,255,0.1); transition: 0.4s;
-            backdrop-filter: blur(5px);
+            width: 60px; height: 60px; background: var(--glass);
+            border: 1px solid rgba(255,255,255,0.1); border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            text-decoration: none; font-size: 1.5rem; transition: 0.4s;
+            backdrop-filter: blur(10px);
         }
         .orb:hover { 
             background: var(--primary); 
-            transform: translateY(-8px) rotate(10deg); 
-            box-shadow: 0 10px 20px rgba(255, 0, 85, 0.4);
+            transform: translateY(-10px); 
+            box-shadow: 0 15px 30px var(--accent-glow);
         }
 
-        /* GLOWING START BUTTON */
-        .start-btn {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255,255,255,0.2);
-            color: white; padding: 15px 45px; border-radius: 100px;
-            cursor: pointer; font-weight: bold; text-transform: uppercase;
-            letter-spacing: 3px; font-size: 0.75rem;
-            transition: 0.4s;
-            animation: pulseGlow 2s infinite;
+        .start-label {
+            padding: 18px 50px; border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 100px; cursor: pointer; font-weight: bold;
+            text-transform: uppercase; letter-spacing: 4px; font-size: 0.8rem;
+            transition: 0.4s; background: rgba(255,255,255,0.02);
         }
-        @keyframes pulseGlow {
-            0% { box-shadow: 0 0 0px rgba(255, 0, 85, 0); }
-            50% { box-shadow: 0 0 20px rgba(255, 0, 85, 0.4); border-color: var(--primary); }
-            100% { box-shadow: 0 0 0px rgba(255, 0, 85, 0); }
-        }
-        .start-btn:hover { background: white; color: black; border-color: white; }
+        .start-label:hover { background: white; color: black; }
 
-        /* --- DASHBOARD GRID --- */
-        .main-hub { padding: 40px 20px; padding-bottom: 120px; max-width: 1000px; margin: auto; }
+        /* --- CONTENT DASHBOARD --- */
+        .dashboard { padding: 40px 20px; padding-bottom: 120px; max-width: 1100px; margin: auto; }
+        
         .grid {
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
             gap: 25px;
         }
-        .game-card {
-            background: #11141b; border-radius: 20px; padding: 15px;
+        .card {
+            background: var(--glass); border-radius: 24px; padding: 15px;
             text-decoration: none; color: white; text-align: center;
-            border: 1px solid #222; transition: 0.4s;
+            border: 1px solid rgba(255,255,255,0.05); transition: 0.4s;
+            backdrop-filter: blur(5px);
         }
-        .game-card:hover { border-color: var(--primary); transform: translateY(-10px); }
-        .game-card img { width: 100%; border-radius: 15px; margin-bottom: 12px; }
-        .game-card span { font-weight: 600; letter-spacing: 1px; }
+        .card:hover { 
+            border-color: var(--primary); 
+            transform: translateY(-10px) scale(1.02);
+            background: rgba(255,255,255,0.08);
+        }
+        .card img { width: 100%; border-radius: 18px; margin-bottom: 15px; }
 
-        /* --- FLOATING MODERN NAV --- */
-        .bottom-nav {
+        /* --- FLOATING NAVBAR --- */
+        .navbar {
             position: fixed; bottom: 30px; left: 50%;
-            transform: translateX(-50%); width: 90%; max-width: 380px;
-            background: rgba(15,18,25,0.7); backdrop-filter: blur(25px);
-            border-radius: 100px; height: 70px;
+            transform: translateX(-50%); width: 90%; max-width: 450px;
+            background: rgba(10, 12, 18, 0.8); backdrop-filter: blur(30px);
+            border-radius: 100px; height: 75px;
             display: flex; justify-content: space-around; align-items: center;
             border: 1px solid rgba(255,255,255,0.1);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+            z-index: 1000;
         }
-        .nav-item { font-size: 1.5rem; cursor: pointer; transition: 0.3s; opacity: 0.4; }
+        .nav-item { font-size: 1.6rem; cursor: pointer; transition: 0.3s; opacity: 0.4; }
         .nav-item:hover { opacity: 1; transform: scale(1.2); color: var(--primary); }
     </style>
 </head>
@@ -149,49 +163,80 @@
     <input type="checkbox" id="menu-switch">
 
     <div id="home-menu">
+        <div id="clock">00:00:00</div>
+        
         <h1 class="hub-title">M HUB</h1>
-        <p style="color: rgba(255,255,255,0.4); letter-spacing: 4px; font-size: 0.7rem; margin-top: 10px;">SYSTEM STATUS: OPTIMIZED</p>
+        
+        <div class="status-bar">
+            <span><span class="online-dot">●</span> SYSTEM ONLINE</span>
+            <span>|</span>
+            <span id="player-count">LOADING USERS...</span>
+        </div>
 
         <form action="https://duckduckgo.com/" method="GET" target="_blank" class="search-wrap">
             <div class="search-inner">
-                <input type="text" name="q" placeholder="Explore with Privacy..." required>
-                <button type="submit">SEARCH</button>
+                <input type="text" name="q" placeholder="Explore the deep web..." required>
+                <button type="submit">GO</button>
             </div>
         </form>
 
-        <div class="row">
+        <div class="orb-row">
             <a href="https://youtube.com" target="_blank" class="orb">📺</a>
             <a href="https://tiktok.com" target="_blank" class="orb">🎵</a>
             <a href="https://discord.com" target="_blank" class="orb">💬</a>
+            <a href="https://reddit.com" target="_blank" class="orb">🤖</a>
         </div>
 
-        <label for="menu-switch" class="start-btn">Initialize Hub</label>
+        <label for="menu-switch" class="start-label">Initialize Titan OS</label>
     </div>
 
-    <div class="main-hub">
-        <h2 style="margin-bottom: 30px; letter-spacing: 2px;">LIBRARY</h2>
+    <div class="dashboard">
+        <h2 style="letter-spacing: 5px; opacity: 0.5; font-size: 0.8rem; margin-bottom: 30px;">INTERNAL LIBRARY</h2>
         <div class="grid">
-            <a href="https://v6p9d9t4.ssl.hwcdn.net/html/1365121/index.html" class="game-card">
+            <a href="https://v6p9d9t4.ssl.hwcdn.net/html/1365121/index.html" class="card">
                 <img src="https://raw.githubusercontent.com/not-under-maintenance/thumb/main/retro-bowl.png">
-                <span>RETRO BOWL</span>
+                <div style="font-weight: 800;">RETRO BOWL</div>
             </a>
-            <a href="https://kbhgames.com/game/slope" class="game-card">
+            <a href="https://kbhgames.com/game/slope" class="card">
                 <img src="https://raw.githubusercontent.com/not-under-maintenance/thumb/main/slope.png">
-                <span>SLOPE</span>
+                <div style="font-weight: 800;">SLOPE RUNNER</div>
             </a>
-            <a href="https://1v1.lol" class="game-card">
+            <a href="https://1v1.lol" class="card">
                 <img src="https://raw.githubusercontent.com/not-under-maintenance/thumb/main/1v1-lol.png">
-                <span>1V1.LOL</span>
+                <div style="font-weight: 800;">1V1 ARENA</div>
             </a>
         </div>
     </div>
 
-    <nav class="bottom-nav">
+    <nav class="navbar">
         <div class="nav-item" style="opacity:1; color: var(--primary);">🎮</div>
         <div class="nav-item">🎬</div>
-        <div class="nav-item">⚙️</div>
-        <label for="menu-switch" class="nav-icon nav-item">🏠</label>
+        <div class="nav-item">🌐</div>
+        <div class="nav-item">🛡️</div>
+        <label for="menu-switch" class="nav-item">🏠</label>
     </nav>
+
+    <script>
+        // LIVE CLOCK LOGIC
+        function updateClock() {
+            const now = new Date();
+            const timeStr = now.getHours().toString().padStart(2, '0') + ":" + 
+                            now.getMinutes().toString().padStart(2, '0') + ":" + 
+                            now.getSeconds().toString().padStart(2, '0');
+            document.getElementById('clock').innerText = timeStr;
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        // PLAYER COUNT SIMULATOR
+        function updatePlayers() {
+            const basePlayers = 1420;
+            const random = Math.floor(Math.random() * 50);
+            document.getElementById('player-count').innerText = (basePlayers + random) + " USERS ACTIVE";
+        }
+        setInterval(updatePlayers, 3000);
+        updatePlayers();
+    </script>
 
 </body>
 </html>
