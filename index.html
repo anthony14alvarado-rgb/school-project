@@ -12,249 +12,199 @@
             --primary-rgb: 0, 242, 255;
             --accent: #ff0055;
             --bg-dark: #020305;
-            --bg-card: rgba(255, 255, 255, 0.03);
-            --border-thin: rgba(255, 255, 255, 0.08);
-            --font-main: 'Outfit', sans-serif;
-            --font-mono: 'JetBrains Mono', monospace;
+            --bg-card: rgba(255, 255, 255, 0.02);
+            --border-thin: rgba(255, 255, 255, 0.06);
             --shift: 0px;
+            --font-main: 'Outfit', sans-serif;
         }
 
-        /* --- CORE RESET --- */
-        * { box-sizing: border-box; margin: 0; padding: 0; cursor: none; outline: none; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+        /* --- THE TITAN ENGINE CORE --- */
+        * { box-sizing: border-box; margin: 0; padding: 0; cursor: none; transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1); }
         body, html { height: 100vh; background: var(--bg-dark); color: #fff; font-family: var(--font-main); overflow: hidden; }
 
-        /* --- VIRTUAL CURSOR --- */
-        #cursor-dot { position: fixed; width: 6px; height: 6px; background: var(--primary); border-radius: 50%; z-index: 1000001; pointer-events: none; }
-        #cursor-outline { position: fixed; width: 30px; height: 30px; border: 1px solid var(--primary); border-radius: 50%; z-index: 1000000; pointer-events: none; opacity: 0.5; }
+        /* --- HYPER-FLAT CURSOR --- */
+        #cursor-dot { position: fixed; width: 4px; height: 4px; background: var(--primary); border-radius: 50%; z-index: 1000001; pointer-events: none; }
+        #cursor-outline { position: fixed; width: 40px; height: 40px; border: 1px solid rgba(var(--primary-rgb), 0.3); border-radius: 50%; z-index: 1000000; pointer-events: none; }
 
-        /* --- BACKGROUND LAYER --- */
-        #canvas-wrap { position: fixed; inset: 0; z-index: -1; overflow: hidden; }
-        .glow { position: absolute; width: 60vw; height: 60vw; background: radial-gradient(circle, rgba(var(--primary-rgb), 0.05) 0%, transparent 70%); border-radius: 50%; filter: blur(80px); }
+        /* --- DECOY (THE "GHOST" DOCUMENT) --- */
+        #decoy { position: fixed; inset: 0; background: #fff; color: #111; z-index: 900000; display: none; padding: 100px; overflow-y: auto; text-align: left; }
 
-        /* --- DECOY LAYER --- */
-        #decoy-layer { position: fixed; inset: 0; background: #fff; color: #1a1a1b; z-index: 900000; display: none; padding: 100px; overflow-y: auto; }
-        .doc-header { display: flex; align-items: center; border-bottom: 1px solid #e5e7eb; padding-bottom: 10px; margin-bottom: 30px; }
-        .doc-title { font-size: 1.5rem; color: #4b5563; flex: 1; }
-
-        /* --- LOCK SCREEN --- */
+        /* --- PIN LOCK --- */
         #lock { position: fixed; inset: 0; background: #000; z-index: 1000000; display: flex; flex-direction: column; justify-content: center; align-items: center; }
-        .lock-logo { font-weight: 900; font-size: 3rem; letter-spacing: 15px; margin-bottom: 20px; text-transform: uppercase; }
-        .lock-logo span { color: var(--primary); text-shadow: 0 0 20px var(--primary); }
-        .pin-container { display: flex; gap: 10px; }
-        .pin-dot { width: 15px; height: 15px; border: 2px solid #333; border-radius: 50%; }
-        .pin-dot.active { background: var(--primary); border-color: var(--primary); box-shadow: 0 0 15px var(--primary); }
+        .pin-hint { font-size: 0.7rem; letter-spacing: 5px; opacity: 0.3; margin-top: 20px; text-transform: uppercase; }
 
-        /* --- APP WRAPPER --- */
-        .app-container { transform: translateY(var(--shift)); height: 100%; display: flex; flex-direction: column; padding: 0 60px; }
+        /* --- MASTER LAYOUT --- */
+        .viewport { transform: translateY(var(--shift)); height: 100%; display: flex; flex-direction: column; padding: 0 80px; }
 
-        header { height: 100px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-thin); }
-        .status-bar { display: flex; gap: 30px; font-family: var(--font-mono); font-size: 0.7rem; opacity: 0.5; }
+        header { height: 120px; display: flex; justify-content: space-between; align-items: center; }
+        .brand { font-weight: 900; letter-spacing: 12px; font-size: 1.4rem; text-transform: uppercase; }
+        .brand span { color: var(--primary); text-shadow: 0 0 30px var(--primary); }
 
-        /* --- BENTO MASTER GRID --- */
-        .bento-box { flex: 1; display: grid; grid-template-columns: repeat(6, 1fr); grid-template-rows: repeat(4, 1fr); gap: 20px; padding: 40px 0 120px; }
+        /* --- THE SEARCH BAR (LUMINAL KILLER) --- */
+        .search-container { max-width: 800px; margin: 0 auto 40px; width: 100%; position: relative; }
+        .search-input { width: 100%; background: var(--bg-card); border: 1px solid var(--border-thin); padding: 20px 30px; border-radius: 100px; color: white; font-size: 1.1rem; font-family: var(--font-main); backdrop-filter: blur(20px); }
+        .search-input:focus { border-color: var(--primary); background: rgba(255,255,255,0.05); }
+
+        /* --- WIDE GRID --- */
+        .app-grid {
+            flex: 1; display: grid; grid-template-columns: repeat(4, 1fr); gap: 25px; padding-bottom: 150px; overflow-y: auto;
+        }
+        .app-grid::-webkit-scrollbar { width: 0; }
+
+        .app-card {
+            background: var(--bg-card); border: 1px solid var(--border-thin); border-radius: 30px;
+            padding: 50px 30px; display: flex; flex-direction: column; align-items: center; 
+            text-decoration: none; color: white; backdrop-filter: blur(30px);
+        }
+        .app-card:hover { border-color: var(--primary); background: rgba(var(--primary-rgb), 0.05); transform: scale(1.02); }
+        .app-card i { font-size: 3.5rem; margin-bottom: 20px; font-style: normal; display: block; }
+        .app-card b { letter-spacing: 4px; font-size: 0.8rem; opacity: 0.5; text-transform: uppercase; }
+
+        /* --- FULL-SCREEN VAULT --- */
+        #vault-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.98); z-index: 800000; display: none; padding: 80px; overflow-y: auto; }
+        .vault-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 60px; }
         
-        .tile { 
-            background: var(--bg-card); border: 1px solid var(--border-thin); border-radius: 28px; 
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            text-decoration: none; color: white; position: relative; overflow: hidden; backdrop-filter: blur(40px);
-        }
-        .tile:hover { background: rgba(255,255,255,0.06); border-color: var(--primary); transform: translateY(-5px); }
-        
-        .tile i { font-size: 3rem; margin-bottom: 15px; font-style: normal; }
-        .tile .label { font-size: 0.65rem; font-weight: 900; letter-spacing: 3px; text-transform: uppercase; opacity: 0.4; }
-        .tile .title { font-size: 1.4rem; font-weight: 300; }
-
-        /* GRID LOGIC */
-        .g-1 { grid-column: span 3; grid-row: span 2; } /* Large Card */
-        .g-2 { grid-column: span 3; grid-row: span 1; } /* Wide Card */
-        .g-3 { grid-column: span 1; grid-row: span 1; } /* Square Card */
-        .g-4 { grid-column: span 2; grid-row: span 2; } /* Tall Card */
-
-        /* --- TERMINAL OVERLAY --- */
-        #terminal { 
-            position: fixed; top: 10%; left: 10%; width: 80%; height: 70%; 
-            background: rgba(0,0,0,0.95); border: 1px solid var(--primary); border-radius: 15px; 
-            z-index: 99999; display: none; padding: 30px; font-family: var(--font-mono);
-        }
-        .term-out { height: 90%; overflow-y: auto; font-size: 0.9rem; color: var(--primary); }
-        .term-in { background: none; border: none; color: white; width: 100%; font-family: var(--font-mono); font-size: 1rem; }
-
-        /* --- FOLDER OVERLAY --- */
-        #vault { position: fixed; inset: 0; background: rgba(2,3,5,0.98); z-index: 800000; display: none; padding: 100px; }
-
-        /* --- DOCK --- */
-        .dock {
-            position: fixed; bottom: 35px; left: 50%; transform: translateX(-50%);
-            display: flex; gap: 40px; background: rgba(255,255,255,0.03); border: 1px solid var(--border-thin);
-            padding: 15px 50px; border-radius: 100px; backdrop-filter: blur(30px); z-index: 1000;
-        }
-        .dock-item { font-size: 1.5rem; opacity: 0.4; transition: 0.2s; }
-        .dock-item:hover { opacity: 1; color: var(--primary); transform: scale(1.3); }
-
-        /* --- SIDEBAR --- */
-        #config {
-            position: fixed; right: -450px; top: 0; width: 420px; height: 100%;
-            background: rgba(0,0,0,0.96); border-left: 1px solid var(--border-thin); z-index: 950000;
+        /* --- SIDEBAR CONFIG --- */
+        #sidebar {
+            position: fixed; right: -450px; top: 0; width: 400px; height: 100%;
+            background: rgba(5,5,5,0.98); border-left: 1px solid var(--border-thin); z-index: 950000;
             padding: 80px 40px; backdrop-filter: blur(50px);
         }
-        .field { width: 100%; padding: 15px; background: rgba(255,255,255,0.03); border: 1px solid #222; border-radius: 12px; color: white; margin-bottom: 10px; font-family: var(--font-main); }
-        .action-btn { width: 100%; padding: 15px; border-radius: 12px; border: none; background: var(--primary); color: #000; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; margin-top: 10px; }
+        .config-btn { width: 100%; padding: 18px; background: var(--primary); border: none; border-radius: 15px; font-weight: 900; letter-spacing: 2px; margin-top: 10px; cursor: pointer; color: black; }
+        .config-input { width: 100%; padding: 15px; background: rgba(255,255,255,0.03); border: 1px solid #222; border-radius: 15px; color: white; margin-bottom: 10px; }
+
+        /* --- FLOATING DOCK --- */
+        .dock {
+            position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%);
+            background: rgba(10,10,10,0.8); border: 1px solid var(--border-thin);
+            padding: 15px 45px; border-radius: 100px; backdrop-filter: blur(40px);
+            display: flex; gap: 40px; z-index: 1000;
+        }
+        .dock i { font-size: 1.5rem; opacity: 0.4; cursor: pointer; transition: 0.2s; font-style: normal; }
+        .dock i:hover { opacity: 1; color: var(--primary); transform: translateY(-8px); }
     </style>
 </head>
-<body onkeydown="handleKeys(event)">
+<body onkeydown="handleGlobalKeys(event)">
 
     <div id="cursor-dot"></div>
     <div id="cursor-outline"></div>
 
-    <div id="canvas-wrap">
-        <div class="glow" id="mouse-glow"></div>
-    </div>
-
-    <div id="decoy-layer">
-        <div class="doc-header">
-            <div style="background:#4285f4; width:30px; height:30px; border-radius:4px; margin-right:15px;"></div>
-            <div class="doc-title" contenteditable="true">Untitled Analysis - Grade 11 History</div>
-            <div style="font-size:0.8rem; color:#999;">Saved to Drive</div>
-        </div>
-        <div contenteditable="true" style="font-size: 1.1rem; line-height: 2; outline:none;">
-            
-            The structural integrity of the human skeletal system is paramount to the protection of vital organs and the facilitation of movement. The axial skeleton, consisting of the skull, vertebral column, and thoracic cage, forms the central axis of the body. In contrast, the appendicular skeleton includes the limbs and girdles that attach them to the axial frame.
-            <br><br>
-            During the 18th century, medical advancements began to redefine our understanding of these systems. (Keep typing to maintain cover...)
-        </div>
-    </div>
-
     <div id="lock">
-        <div class="lock-logo">TITAN<span>OS</span></div>
-        <div class="pin-container" id="pin-ui">
-            <div class="pin-dot"></div><div class="pin-dot"></div><div class="pin-dot"></div><div class="pin-dot"></div>
-        </div>
-        <input type="password" id="pin-input" autofocus maxlength="4" style="position:absolute; opacity:0;" oninput="updatePinUI(this.value)">
+        <div class="brand">TITAN <span>HORIZON</span></div>
+        <input type="password" id="p-in" maxlength="4" oninput="checkLock(this.value)" style="background:none; border:none; border-bottom:2px solid var(--primary); color:white; font-size:3rem; text-align:center; width:200px; outline:none; letter-spacing:10px; margin-top:40px;">
+        <div class="pin-hint">Security Required</div>
     </div>
 
-    <div class="app-container">
+    <div id="decoy" onclick="toggleDecoy()">
+        <h1 style="font-family: 'Times New Roman'; font-weight: normal;">AP Biology: Unit 4 Statistics</h1>
+        <hr>
+        <p style="margin-top:20px; font-size: 1.2rem; line-height: 1.8;">
+            Chi-Square Analysis ($\chi^2$) is used to determine if there is a significant difference between the observed and expected frequencies in one or more categories. 
+            In the case of Mendelian genetics, we often use the formula:
+            <br><br>
+            $\chi^2 = \sum \frac{(o-e)^2}{e}$
+            <br><br>
+            Where 'o' is the observed result and 'e' is the expected result. This analysis helps biologists reject or fail to reject the null hypothesis. (Keep this screen up if a supervisor approaches).
+        </p>
+    </div>
+
+    <div class="viewport">
         <header>
-            <div class="status-bar">
-                <span>CPU: 12%</span>
-                <span>NET: 852 Mbps</span>
-                <span id="os-clock">00:00:00</span>
-            </div>
-            <div style="font-weight:900; letter-spacing:8px;">ZENITH_CORE</div>
-            <div class="status-bar" style="text-align:right;">
-                <span>TEMP: 32°C</span>
-                <span>STATUS: SECURE</span>
-            </div>
+            <div id="sys-time" style="font-family: 'JetBrains Mono'; opacity: 0.4; font-size: 0.8rem;">00:00:00</div>
+            <div class="brand">TITAN <span>OS</span></div>
+            <div onclick="toggleSidebar(true)" style="opacity:0.4; font-size:0.8rem; cursor:pointer; letter-spacing:2px;">SETTINGS_CONFIG</div>
         </header>
 
-        <main class="bento-box">
-            <div class="tile g-1" onclick="openVault()">
-                <i style="font-size: 5rem;">🎮</i>
-                <div class="title">Game Vault</div>
-                <div class="label">Encrypted Library</div>
+        <div class="search-container">
+            <input type="text" class="search-input" id="os-search" placeholder="Search Apps, Games, or Command..." oninput="filterApps(this.value)">
+        </div>
+
+        <main class="app-grid" id="main-grid">
+            <div class="app-card" onclick="toggleVault(true)">
+                <i>🎮</i><b>Game Vault</b>
             </div>
-
-            <a href="https://youtube.com" target="_blank" class="tile g-2">
-                <i>📺</i><div class="title">Media Player</div>
-            </a>
-
-            <div class="tile g-3" onclick="toggleSidebar(true)">
-                <i>⚙️</i><div class="label">Config</div>
-            </div>
-
-            <a href="https://discord.com" target="_blank" class="tile g-4">
-                <i>💬</i><div class="title">Comms</div>
-                <div class="label">Discord Native</div>
-            </a>
-
-            <div class="tile g-2" onclick="toggleTerminal()">
-                <i>📟</i><div class="title">Terminal</div>
-                <div class="label">System Access</div>
-            </div>
-
-            <a href="https://tiktok.com" target="_blank" class="tile g-3"><i>🎵</i></a>
-            <a href="https://soundcloud.com" target="_blank" class="tile g-3"><i>☁️</i></a>
-            <div class="tile g-3" onclick="toggleDecoy()"><i>👁️</i></div>
+            <a href="https://youtube.com" target="_blank" class="app-card"><i>📺</i><b>NeuralTube</b></a>
+            <a href="https://discord.com" target="_blank" class="app-card"><i>💬</i><b>CommCenter</b></a>
+            <a href="https://tiktok.com" target="_blank" class="app-card"><i>🎵</i><b>VibeStream</b></a>
+            <a href="https://soundcloud.com" target="_blank" class="app-card"><i>☁️</i><b>AudioCloud</b></a>
+            <a href="https://reddit.com" target="_blank" class="app-card"><i>🤖</i><b>ReadIt</b></a>
+            <div class="app-card" onclick="toggleDecoy()"><i>👁️</i><b>GhostMode</b></div>
+            <div class="app-card" onclick="toggleSidebar(true)"><i>⚙️</i><b>SysConfig</b></div>
         </main>
     </div>
 
-    <div id="vault">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:50px;">
-            <h1 style="letter-spacing:10px; font-weight:100;">TITAN_<span>VAULT</span></h1>
-            <span onclick="closeVault()" style="cursor:pointer; font-size:3rem;">✕</span>
+    <div id="vault-overlay">
+        <div class="vault-header">
+            <div class="brand" style="font-size: 2rem;">TITAN <span>VAULT</span></div>
+            <span onclick="toggleVault(false)" style="font-size: 3rem; cursor:pointer;">✕</span>
         </div>
-        <div class="bento-box" style="padding:0;">
-            <a href="https://docs-google-com-opensocial.googleusercontent.com/gadgets/ifr?url=https://cdn.jsdelivr.net/gh/sk1id/v@main/1v1.xml" target="_blank" class="tile g-3"><i>🔫</i><div class="label">1v1.LOL</div></a>
-            <a href="https://kbhgames.com/game/slope" target="_blank" class="tile g-3"><i>⚽</i><div class="label">Slope</div></a>
-            <a href="https://v6p9d9t4.ssl.hwcdn.net/html/1365121/index.html" target="_blank" class="tile g-3"><i>🏈</i><div class="label">Retro Bowl</div></a>
-            <a href="https://classic.minecraft.net" target="_blank" class="tile g-3"><i>⛏️</i><div class="label">Minecraft</div></a>
+        <div class="app-grid">
+            <a href="https://docs-google-com-opensocial.googleusercontent.com/gadgets/ifr?url=https://cdn.jsdelivr.net/gh/sk1id/v@main/1v1.xml" target="_blank" class="app-card"><i>🔫</i><b>1v1.LOL</b></a>
+            <a href="https://kbhgames.com/game/slope" target="_blank" class="app-card"><i>⚽</i><b>Slope</b></a>
+            <a href="https://v6p9d9t4.ssl.hwcdn.net/html/1365121/index.html" target="_blank" class="app-card"><i>🏈</i><b>Retro Bowl</b></a>
+            <a href="https://classic.minecraft.net" target="_blank" class="app-card"><i>⛏️</i><b>Minecraft Classic</b></a>
+            <a href="https://shellshock.io" target="_blank" class="app-card"><i>🥚</i><b>Shell Shockers</b></a>
+            <a href="https://bitlifeonline.io" target="_blank" class="app-card"><i>👶</i><b>BitLife</b></a>
+            <a href="https://paper-io.com" target="_blank" class="app-card"><i>📄</i><b>Paper.io 2</b></a>
+            <a href="https://zombsroyale.io" target="_blank" class="app-card"><i>🏹</i><b>ZombsRoyale</b></a>
         </div>
     </div>
 
-    <div id="terminal">
-        <div class="term-out" id="t-out">> TITAN CORE LOADED... TYPE 'HELP' FOR CMDS</div>
-        <input type="text" class="term-in" id="t-in" placeholder="_" onkeypress="runCommand(event, this.value)">
-    </div>
-
-    <div id="config">
-        <h2 style="font-weight:900; letter-spacing:4px; margin-bottom:40px;">OS_<span>RESOURCES</span></h2>
+    <div id="sidebar">
+        <h2 class="brand" style="font-size:1rem; margin-bottom:40px;">FACTORY <span>CONFIG</span></h2>
         
-        <p style="font-size:0.6rem; letter-spacing:2px; opacity:0.4; margin-bottom:10px;">UI CALIBRATION</p>
-        <button class="action-btn" onclick="shift(150)">Shift Down</button>
-        <button class="action-btn" onclick="shift(-150)">Shift Up</button>
-        <button class="action-btn" onclick="shift(0)" style="background:#222; color:white;">Reset UI</button>
+        <p style="font-size:0.6rem; opacity:0.4; letter-spacing:2px; margin-bottom:10px;">UI CALIBRATION</p>
+        <button class="config-btn" onclick="shift(150)">Shift Down</button>
+        <button class="config-btn" onclick="shift(-150)">Shift Up</button>
+        <button class="config-btn" onclick="shift(0)" style="background:#222; color:white;">Center UI</button>
 
-        <p style="font-size:0.6rem; letter-spacing:2px; opacity:0.4; margin:30px 0 10px;">THEME ENGINE</p>
-        <input type="color" class="field" oninput="setTheme(this.value)" style="height:60px; padding:5px;">
+        <p style="font-size:0.6rem; opacity:0.4; letter-spacing:2px; margin:30px 0 10px;">THEME ACCENT</p>
+        <input type="color" class="config-input" style="height:60px; padding:5px; border:none;" oninput="setTheme(this.value)">
 
-        <p style="font-size:0.6rem; letter-spacing:2px; opacity:0.4; margin:30px 0 10px;">ENCRYPTED CONTACTS</p>
-        <div id="c-render" style="font-family:var(--font-mono); font-size:0.7rem; margin-bottom:15px;"></div>
-        <input type="text" id="cn" placeholder="LABEL" class="field">
-        <input type="text" id="cv" placeholder="DATA" class="field">
-        <button class="action-btn" onclick="saveC()">Save to Core</button>
-        
-        <button class="action-btn" onclick="toggleSidebar(false)" style="margin-top:50px; border:1px solid #333; background:none; color:white;">Close Interface</button>
+        <p style="font-size:0.6rem; opacity:0.4; letter-spacing:2px; margin:30px 0 10px;">USER VAULT</p>
+        <div id="c-render" style="font-size:0.8rem; margin-bottom:10px;"></div>
+        <input type="text" id="cn" placeholder="Label" class="config-input">
+        <input type="text" id="cv" placeholder="Data" class="config-input">
+        <button class="config-btn" onclick="saveC()">Encrypt & Save</button>
+
+        <button class="config-btn" onclick="toggleSidebar(false)" style="margin-top:40px; background:none; color:white; border:1px solid #333;">Close</button>
     </div>
 
     <div class="dock">
-        <div class="dock-item" onclick="toggleDecoy()">👁️</div>
-        <div class="dock-item" onclick="openVault()">🎮</div>
-        <div class="dock-item" onclick="toggleTerminal()">📟</div>
-        <div class="dock-item" onclick="toggleSidebar(true)">⚙️</div>
+        <i onclick="location.reload()">🔄</i>
+        <i onclick="toggleDecoy()">👁️</i>
+        <i onclick="toggleVault(true)">🎮</i>
+        <i onclick="toggleSidebar(true)">⚙️</i>
     </div>
 
     <script>
-        // CURSOR PHYSICS
+        // CURSOR SCRIPT
         const dot = document.getElementById('cursor-dot');
         const out = document.getElementById('cursor-outline');
-        const glow = document.getElementById('mouse-glow');
         document.onmousemove = e => {
             dot.style.left = e.clientX + 'px'; dot.style.top = e.clientY + 'px';
-            out.animate({ left: e.clientX - 15 + 'px', top: e.clientY - 15 + 'px' }, { duration: 400, fill: "forwards" });
-            glow.style.left = e.clientX - (window.innerWidth*0.3) + 'px'; glow.style.top = e.clientY - (window.innerWidth*0.3) + 'px';
+            out.style.left = e.clientX - 20 + 'px'; out.style.top = e.clientY - 20 + 'px';
         };
 
-        // LOCK LOGIC
-        function updatePinUI(v) {
-            const dots = document.querySelectorAll('.pin-dot');
-            dots.forEach((d, i) => d.classList.toggle('active', i < v.length));
-            if(v === "1234") { document.getElementById('lock').style.transform = "translateY(-100%)"; }
+        // LOCK ENGINE
+        function checkLock(v) {
+            if(v === "1234") {
+                document.getElementById('lock').style.opacity = "0";
+                setTimeout(() => document.getElementById('lock').style.display = "none", 500);
+            }
         }
 
-        // SYSTEM CLOCK
-        setInterval(() => { document.getElementById('os-clock').innerText = new Date().toLocaleTimeString(); }, 1000);
+        // CLOCK
+        setInterval(() => { document.getElementById('sys-time').innerText = new Date().toLocaleTimeString(); }, 1000);
 
-        // UI TOGGLES
-        function toggleSidebar(o) { document.getElementById('config').style.right = o ? "0px" : "-450px"; }
-        function openVault() { document.getElementById('vault').style.display = "block"; }
-        function closeVault() { document.getElementById('vault').style.display = "none"; }
-        function toggleDecoy() { 
-            const d = document.getElementById('decoy-layer');
-            d.style.display = d.style.display === "block" ? "none" : "block";
-            document.title = d.style.display === "block" ? "Google Docs" : "Assignment_Final.pdf";
-        }
-        function toggleTerminal() {
-            const t = document.getElementById('terminal');
-            t.style.display = t.style.display === "block" ? "none" : "block";
+        // UI ACTIONS
+        function toggleSidebar(o) { document.getElementById('sidebar').style.right = o ? "0px" : "-450px"; }
+        function toggleVault(o) { document.getElementById('vault-overlay').style.display = o ? "block" : "none"; }
+        function toggleDecoy() {
+            const d = document.getElementById('decoy');
+            const isVis = d.style.display === "block";
+            d.style.display = isVis ? "none" : "block";
+            document.title = isVis ? "Assignment_Final.pdf" : "Google Docs - AP Biology";
         }
 
         function shift(v) { document.documentElement.style.setProperty('--shift', v + 'px'); }
@@ -264,44 +214,34 @@
             document.documentElement.style.setProperty('--primary-rgb', `${r},${g},${b}`);
         }
 
-        // TERMINAL LOGIC
-        function runCommand(e, val) {
-            if(e.key === "Enter") {
-                const out = document.getElementById('t-out');
-                const cmd = val.toLowerCase();
-                let res = "";
-                if(cmd === "help") res = "CMDS: CLEAR, GAMES, CLOAK, THEME, EXIT";
-                else if(cmd === "clear") { out.innerHTML = ""; document.getElementById('t-in').value = ""; return; }
-                else if(cmd === "games") { openVault(); res = "OPENING VAULT..."; }
-                else if(cmd === "cloak") { toggleDecoy(); res = "GHOST MODE ENABLED"; }
-                else res = "ERR: COMMAND NOT FOUND";
-                
-                out.innerHTML += `<div style="color:white;">> ${val}</div><div>${res}</div>`;
-                document.getElementById('t-in').value = "";
-                out.scrollTop = out.scrollHeight;
-            }
+        // SEARCH ENGINE
+        function filterApps(query) {
+            const cards = document.querySelectorAll('#main-grid .app-card');
+            cards.forEach(card => {
+                const text = card.innerText.toLowerCase();
+                card.style.display = text.includes(query.toLowerCase()) ? "flex" : "none";
+            });
         }
 
-        // KEYBOARD HOTKEYS
-        function handleKeys(e) {
-            if(e.key === "~") toggleTerminal();
-            if(e.key === "Escape") { toggleSidebar(false); closeVault(); document.getElementById('terminal').style.display="none"; }
-            if(e.ctrlKey && e.key === "m") toggleDecoy();
+        // HOTKEYS
+        function handleGlobalKeys(e) {
+            if(e.key === "Escape") { toggleSidebar(false); toggleVault(false); }
+            if(e.ctrlKey && e.key === "b") toggleDecoy();
         }
 
         // CONTACTS
         function saveC() {
             const n = document.getElementById('cn').value, v = document.getElementById('cv').value;
             if(n && v) {
-                let l = JSON.parse(localStorage.getItem('z-c') || '[]');
-                l.push({n, v}); localStorage.setItem('z-c', JSON.stringify(l));
+                let l = JSON.parse(localStorage.getItem('h-c') || '[]');
+                l.push({n, v}); localStorage.setItem('h-c', JSON.stringify(l));
                 renderC();
                 document.getElementById('cn').value = ''; document.getElementById('cv').value = '';
             }
         }
         function renderC() {
-            const l = JSON.parse(localStorage.getItem('z-c') || '[]');
-            document.getElementById('c-render').innerHTML = l.map(i => `<div>[${i.n}] >> ${i.v}</div>`).join('');
+            const l = JSON.parse(localStorage.getItem('h-c') || '[]');
+            document.getElementById('c-render').innerHTML = l.map(i => `<div>${i.n}: ${i.v}</div>`).join('');
         }
 
         window.onload = renderC;
