@@ -2,205 +2,229 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WebOS | Luminal Style</title>
+    <title>Luminal Pro | WebOS</title>
     <style>
-        /* --- CSS STYLING --- */
         :root {
-            --glass: rgba(255, 255, 255, 0.15);
-            --glass-heavy: rgba(255, 255, 255, 0.25);
-            --border: rgba(255, 255, 255, 0.3);
-            --text: white;
-            --shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            --bg-blur: blur(25px);
+            --glass: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --accent: #0078ff;
+            --font: 'Inter', -apple-system, system-ui, sans-serif;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        * { box-sizing: border-box; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background: linear-gradient(45deg, #1a2a6c, #b21f1f, #fdbb2d); /* Fallback Gradient */
-            background-size: 400% 400%;
-            animation: gradient 15s ease infinite;
-            height: 100vh;
+        body, html {
+            margin: 0; padding: 0;
+            height: 100vh; width: 100vw;
             overflow: hidden;
-            color: var(--text);
+            font-family: var(--font);
+            background: #000 url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop') center/cover no-repeat;
         }
 
-        @keyframes gradient {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        /* Desktop Icons */
+        /* Desktop Grid */
         #desktop {
-            padding: 20px;
-            display: grid;
-            grid-template-columns: repeat(auto-fill, 100px);
-            grid-auto-rows: 100px;
-            gap: 20px;
             height: calc(100vh - 70px);
+            padding: 25px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, 90px);
+            grid-auto-rows: 100px;
+            gap: 15px;
         }
 
-        .icon {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            border-radius: 10px;
-            transition: background 0.3s;
+        .desktop-icon {
+            display: flex; flex-direction: column; align-items: center;
+            cursor: pointer; padding: 10px; border-radius: 12px;
         }
 
-        .icon:hover { background: rgba(255,255,255,0.1); }
-        .icon span { margin-top: 8px; font-size: 14px; text-shadow: 1px 1px 3px rgba(0,0,0,0.5); }
+        .desktop-icon:hover { background: var(--glass); backdrop-filter: blur(5px); }
 
-        /* Window Styling */
+        .desktop-icon img { width: 45px; height: 45px; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3)); }
+
+        .desktop-icon span { 
+            color: white; font-size: 12px; margin-top: 8px; 
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5); font-weight: 500;
+        }
+
+        /* Pro Window System */
         .window {
-            position: absolute;
-            min-width: 300px;
-            min-height: 200px;
-            background: var(--glass);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            box-shadow: var(--shadow);
-            display: flex;
-            flex-direction: column;
+            position: absolute; min-width: 400px; min-height: 250px;
+            background: rgba(20, 20, 20, 0.7);
+            backdrop-filter: var(--bg-blur);
+            -webkit-backdrop-filter: var(--bg-blur);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            display: flex; flex-direction: column;
+            animation: windowOpen 0.3s ease-out;
             overflow: hidden;
-            resize: both;
+        }
+
+        @keyframes windowOpen {
+            from { transform: scale(0.9); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
         }
 
         .win-header {
-            padding: 10px 15px;
-            background: var(--glass-heavy);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            cursor: move;
-            user-select: none;
+            padding: 12px 18px; display: flex; justify-content: space-between;
+            align-items: center; background: rgba(255,255,255,0.05);
+            cursor: move; user-select: none;
         }
 
-        .win-controls button {
-            background: none;
-            border: none;
-            color: white;
-            cursor: pointer;
-            margin-left: 10px;
-            font-weight: bold;
+        .win-title { font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.8); }
+
+        .win-btns { display: flex; gap: 8px; }
+
+        .dot { width: 12px; height: 12px; border-radius: 50%; cursor: pointer; border: none; }
+        .dot.red { background: #ff5f56; }
+        .dot.yellow { background: #ffbd2e; }
+        .dot.green { background: #27c93f; }
+
+        .win-content { flex: 1; padding: 20px; color: white; overflow: auto; }
+
+        /* Custom Apps Style */
+        .terminal { font-family: 'Fira Code', monospace; color: #00ff41; font-size: 14px; }
+        .terminal input { 
+            background: transparent; border: none; color: #00ff41; 
+            outline: none; width: 80%; font-family: inherit;
         }
 
-        .win-content {
-            flex-grow: 1;
-            padding: 15px;
-            background: rgba(0,0,0,0.1);
-        }
-
-        iframe { width: 100%; height: 100%; border: none; }
-
-        /* Taskbar */
+        /* Floating Taskbar */
         #taskbar {
-            position: fixed;
-            bottom: 15px;
-            left: 50%;
+            position: fixed; bottom: 15px; left: 50%;
             transform: translateX(-50%);
-            width: fit-content;
-            padding: 5px 20px;
-            background: var(--glass);
+            background: rgba(20, 20, 20, 0.6);
             backdrop-filter: blur(20px);
-            border-radius: 30px;
-            border: 1px solid var(--border);
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            z-index: 9999;
+            padding: 8px 15px; border-radius: 24px;
+            border: 1px solid var(--glass-border);
+            display: flex; align-items: center; gap: 15px;
+            z-index: 999999;
         }
 
-        .start-btn { font-size: 24px; cursor: pointer; }
-        #clock { font-size: 14px; font-weight: 500; }
+        .task-item {
+            width: 44px; height: 44px; cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .task-item:hover { transform: scale(1.2) translateY(-5px); }
+        
+        #clock { color: white; font-size: 13px; font-weight: 600; padding: 0 10px; border-left: 1px solid var(--glass-border); }
+
     </style>
 </head>
 <body>
 
 <div id="desktop">
-    <div class="icon" onclick="createWindow('Browser', 'https://www.bing.com')">
-        <img src="https://img.icons8.com/fluency/48/internet.png" alt="web">
-        <span>Browser</span>
+    <div class="desktop-icon" onclick="openApp('terminal')">
+        <img src="https://cdn-icons-png.flaticon.com/512/906/906343.png">
+        <span>Terminal</span>
     </div>
-    <div class="icon" onclick="createWindow('Notes', 'about:blank', 'Type something here...')">
-        <img src="https://img.icons8.com/fluency/48/notepad.png" alt="notes">
-        <span>Notes</span>
+    <div class="desktop-icon" onclick="openApp('browser')">
+        <img src="https://cdn-icons-png.flaticon.com/512/888/888846.png">
+        <span>Web</span>
     </div>
 </div>
 
 <div id="taskbar">
-    <div class="start-btn">💠</div>
-    <div id="clock">00:00:00</div>
+    <img class="task-item" src="https://cdn-icons-png.flaticon.com/512/5968/5968282.png" onclick="openApp('settings')">
+    <img class="task-item" src="https://cdn-icons-png.flaticon.com/512/2991/2991148.png" onclick="openApp('browser')">
+    <div id="clock">12:00:00</div>
 </div>
 
 <script>
-    /* --- JAVASCRIPT LOGIC --- */
-    let zIndex = 10;
+    let zIndex = 100;
 
-    function createWindow(title, url, content = "") {
+    const APPS = {
+        terminal: {
+            title: "System Terminal",
+            content: `<div class="terminal">
+                <p>Welcome to LuminalOS Pro v2.0.0</p>
+                <p>Type 'help' for a list of commands.</p>
+                <div id="term-out"></div>
+                <span>$ </span><input type="text" id="term-in" autofocus onkeydown="runCommand(event)">
+            </div>`
+        },
+        browser: {
+            title: "Web Browser",
+            content: `<iframe src="https://www.bing.com" style="width:100%; height:100%; border:none; border-radius: 8px; background: white;"></iframe>`
+        },
+        settings: {
+            title: "System Settings",
+            content: `<h3>Appearance</h3><p>Change Wallpaper</p>
+            <input type="text" id="bg-url" placeholder="Paste image URL..." style="width:100%; padding:8px; border-radius:5px; border:none; margin-top:10px;">
+            <button onclick="setWall()" style="margin-top:10px; padding:8px 15px; border-radius:5px; border:none; background:var(--accent); color:white; cursor:pointer;">Apply</button>`
+        }
+    };
+
+    function openApp(key) {
+        const app = APPS[key];
         const win = document.createElement('div');
         win.className = 'window';
-        win.style.left = '100px';
-        win.style.top = '100px';
+        win.style.left = (150 + (zIndex * 2)) + 'px';
+        win.style.top = (100 + (zIndex * 2)) + 'px';
         win.style.zIndex = zIndex++;
 
         win.innerHTML = `
-            <div class="win-header">
-                <span>${title}</span>
-                <div class="win-controls">
-                    <button onclick="this.closest('.window').remove()">✕</button>
+            <div class="win-header" onmousedown="dragWindow(this.parentElement)">
+                <div class="win-btns">
+                    <div class="dot red" onclick="this.closest('.window').remove()"></div>
+                    <div class="dot yellow"></div>
+                    <div class="dot green"></div>
                 </div>
+                <div class="win-title">${app.title}</div>
+                <div style="width:50px"></div>
             </div>
-            <div class="win-content">
-                ${url !== 'about:blank' ? `<iframe src="${url}"></iframe>` : `<textarea style="width:100%; height:100%; background:transparent; color:white; border:none; outline:none; resize:none;">${content}</textarea>`}
-            </div>
+            <div class="win-content">${app.content}</div>
         `;
-
         document.body.appendChild(win);
-        makeDraggable(win);
-        
-        win.addEventListener('mousedown', () => {
-            win.style.zIndex = zIndex++;
-        });
     }
 
-    function makeDraggable(el) {
+    // Terminal Logic
+    function runCommand(e) {
+        if (e.key === 'Enter') {
+            const input = e.target.value.toLowerCase();
+            const output = document.getElementById('term-out');
+            let res = '';
+            
+            if (input === 'help') res = "Available: clear, help, about, exit";
+            else if (input === 'about') res = "LuminalOS: A glassmorphism WebOS experiment.";
+            else if (input === 'clear') { output.innerHTML = ''; e.target.value = ''; return; }
+            else res = `Command not found: ${input}`;
+
+            output.innerHTML += `<div>$ ${input}</div><div>${res}</div><br>`;
+            e.target.value = '';
+        }
+    }
+
+    // Window Dragger
+    function dragWindow(el) {
         let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
-        const header = el.querySelector('.win-header');
+        el.onmousedown = () => el.style.zIndex = zIndex++;
         
-        header.onmousedown = dragMouseDown;
-
-        function dragMouseDown(e) {
-            e.preventDefault();
+        const dragStart = (e) => {
+            e = e || window.event;
             pos3 = e.clientX;
             pos4 = e.clientY;
-            document.onmouseup = closeDragElement;
-            document.onmousemove = elementDrag;
+            document.onmouseup = () => { document.onmouseup = null; document.onmousemove = null; };
+            document.onmousemove = (e) => {
+                pos1 = pos3 - e.clientX;
+                pos2 = pos4 - e.clientY;
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                el.style.top = (el.offsetTop - pos2) + "px";
+                el.style.left = (el.offsetLeft - pos1) + "px";
+            };
         }
-
-        function elementDrag(e) {
-            e.preventDefault();
-            pos1 = pos3 - e.clientX;
-            pos2 = pos4 - e.clientY;
-            pos3 = e.clientX;
-            pos4 = e.clientY;
-            el.style.top = (el.offsetTop - pos2) + "px";
-            el.style.left = (el.offsetLeft - pos1) + "px";
-        }
-
-        function closeDragElement() {
-            document.onmouseup = null;
-            document.onmousemove = null;
-        }
+        dragStart();
     }
 
-    // Clock Update
+    // Wallpaper
+    function setWall() {
+        const url = document.getElementById('bg-url').value;
+        document.body.style.backgroundImage = `url('${url}')`;
+    }
+
+    // Live Clock
     setInterval(() => {
         document.getElementById('clock').innerText = new Date().toLocaleTimeString();
     }, 1000);
