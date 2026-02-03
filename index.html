@@ -5,28 +5,113 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Google Drive</title>
     <style>
-        body { background-color: #0b0e14; color: white; font-family: sans-serif; text-align: center; margin: 0; }
-        header { padding: 30px; border-bottom: 3px solid #ff0055; background: #151921; }
-        .game-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 15px; padding: 20px; }
-        
-        /* THE FIX: This makes the whole card a huge button */
-        .game-card { 
-            background: #151921; 
-            border-radius: 12px; 
-            padding: 10px; 
-            text-decoration: none; 
+        /* --- Base Styles --- */
+        body { 
+            background-color: #0b0e14; 
             color: white; 
+            font-family: sans-serif; 
+            text-align: center; 
+            margin: 0; 
+            overflow-x: hidden;
+        }
+        
+        header { 
+            padding: 20px; 
+            border-bottom: 3px solid #ff0055; 
+            background: #151921; 
+        }
+
+        /* --- Home Menu Overlay --- */
+        #home-menu {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background-color: #0b0e14;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: transform 0.8s cubic-bezier(0.85, 0, 0.15, 1);
+        }
+
+        /* This class triggers the smooth slide-up animation */
+        #home-menu.hide {
+            transform: translateY(-100%);
+        }
+
+        .menu-content {
+            text-align: center;
+            animation: fadeIn 1.5s ease-out;
+        }
+
+        .menu-title {
+            font-size: 5rem;
+            margin: 0;
+            letter-spacing: 5px;
+            background: linear-gradient(to bottom, #fff, #444);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .menu-subtitle {
+            color: #888;
+            margin-bottom: 40px;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+        }
+
+        #start-btn {
+            padding: 15px 50px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: white;
+            background: transparent;
+            border: 2px solid #ff0055;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        #start-btn:hover {
+            background: #ff0055;
+            box-shadow: 0 0 20px #ff0055;
+            transform: scale(1.05);
+        }
+
+        /* --- Game Grid --- */
+        .game-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); 
+            gap: 15px; 
+            padding: 20px; 
+        }
+
+        .game-card {
+            background: #151921;
+            border-radius: 12px;
+            padding: 10px;
+            text-decoration: none;
+            color: white;
             border: 2px solid #333;
             display: flex;
             flex-direction: column;
             align-items: center;
-            -webkit-tap-highlight-color: rgba(255, 0, 85, 0.3); /* Shows a flash when you tap on phone */
+            transition: transform 0.2s;
+            -webkit-tap-highlight-color: rgba(255, 0, 85, 0.1);
         }
 
-        .game-img { 
-            width: 100%; 
-            border-radius: 8px; 
-            pointer-events: none; /* This makes the click go THROUGH the image to the link */
+        .game-card:hover {
+            transform: translateY(-5px);
+            border-color: #ff0055;
+        }
+
+        .game-img {
+            width: 100%;
+            border-radius: 8px;
+            pointer-events: none;
             aspect-ratio: 1/1;
             object-fit: cover;
         }
@@ -34,32 +119,62 @@
         .game-title {
             margin-top: 10px;
             font-weight: bold;
-            pointer-events: none; /* This makes the click go THROUGH the text */
+            pointer-events: none;
+        }
+
+        /* Intro Fade In Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
         }
     </style>
 </head>
 <body>
 
-<header>
-    <h1>🎮 HUB</h1>
-</header>
+    <div id="home-menu">
+        <div class="menu-content">
+            <h1 class="menu-title">M HUB</h1>
+            <p class="menu-subtitle">Premium Gaming Hub</p>
+            <button id="start-btn">START SESSION</button>
+        </div>
+    </div>
 
-<div class="game-grid">
-    <a href="https://v6p9d9t4.ssl.hwcdn.net/html/1865181/index.html" class="game-card">
-        <img src="https://raw.githubusercontent.com/not-under-maintenance/thumb/main/retro-bowl.png" class="game-img">
-        <div class="game-title">Retro Bowl</div>
-    </a>
+    <header>
+        <h1>M HUB</h1>
+    </header>
 
-    <a href="https://kbhgames.com/game/slope" class="game-card">
-        <img src="https://raw.githubusercontent.com/not-under-maintenance/thumb/main/slope.png" class="game-img">
-        <div class="game-title">Slope</div>
-    </a>
+    <div class="game-grid">
+        <a href="https://v6p9d9t4.ssl.hwcdn.net/html/1365121/index.html" class="game-card">
+            <img src="https://raw.githubusercontent.com/not-under-maintenance/thumb/main/retro-bowl.png" class="game-img">
+            <div class="game-title">Retro Bowl</div>
+        </a>
 
-    <a href="https://1v1.lol" class="game-card">
-        <img src="https://raw.githubusercontent.com/not-under-maintenance/thumb/main/1v1-lol.png" class="game-img">
-        <div class="game-title">1v1.LOL</div>
-    </a>
-</div>
+        <a href="https://kbhgames.com/game/slope" class="game-card">
+            <img src="https://raw.githubusercontent.com/not-under-maintenance/thumb/main/slope.png" class="game-img">
+            <div class="game-title">Slope</div>
+        </a>
+
+        <a href="https://1v1.lol" class="game-card">
+            <img src="https://raw.githubusercontent.com/not-under-maintenance/thumb/main/1v1-lol.png" class="game-img">
+            <div class="game-title">1v1.LOL</div>
+        </a>
+    </div>
+
+    <script>
+        // Select the button and the menu
+        const startBtn = document.getElementById('start-btn');
+        const homeMenu = document.getElementById('home-menu');
+
+        // When button is clicked, add the "hide" class to slide it up
+        startBtn.addEventListener('click', () => {
+            homeMenu.classList.add('hide');
+            // Re-enable scrolling on body once menu is gone
+            document.body.style.overflow = 'auto';
+        });
+
+        // Prevent scrolling while menu is active
+        document.body.style.overflow = 'hidden';
+    </script>
 
 </body>
 </html>
