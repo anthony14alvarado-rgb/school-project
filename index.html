@@ -3,120 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Unblocked Hub</title>
+    <title>Google Drive</title>
     <style>
-        /* THEME STYLING */
-        body {
-            background-color: #0b0e14;
-            color: #e0e0e0;
-            font-family: 'Segoe UI', sans-serif;
-            margin: 0;
-            padding: 0;
-        }
-        header {
-            text-align: center;
-            padding: 40px 20px;
-            background: linear-gradient(180deg, #151921 0%, #0b0e14 100%);
-            border-bottom: 3px solid #ff0055;
-            margin-bottom: 20px;
-        }
-        h1 {
-            margin: 0;
-            font-size: 2.5rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            text-shadow: 0 0 10px #ff0055;
-        }
-        .search-container {
-            display: flex;
-            justify-content: center;
-        }
-        .search-bar {
-            width: 90%;
-            max-width: 600px;
-            padding: 12px 20px;
-            border-radius: 25px;
+        body { background-color: #0b0e14; color: white; font-family: sans-serif; text-align: center; margin: 0; }
+        header { padding: 30px; border-bottom: 3px solid #ff0055; background: #151921; }
+        .game-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 15px; padding: 20px; }
+        
+        /* THE FIX: This makes the whole card a huge button */
+        .game-card { 
+            background: #151921; 
+            border-radius: 12px; 
+            padding: 10px; 
+            text-decoration: none; 
+            color: white; 
             border: 2px solid #333;
-            background-color: #151921;
-            color: white;
-            margin-top: 20px;
-            outline: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            -webkit-tap-highlight-color: rgba(255, 0, 85, 0.3); /* Shows a flash when you tap on phone */
         }
-        .game-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-            gap: 25px;
-            padding: 20px 40px;
-        }
-        /* MAKING CARDS CLICKABLE */
-        .game-card {
-            background-color: #151921;
-            border-radius: 12px;
-            padding: 15px;
-            text-align: center;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            border: 1px solid #222;
-            text-decoration: none; /* Removes underline from links */
-            display: block; /* Makes the whole card clickable */
-            color: inherit;
-        }
-        .game-card:hover {
-            transform: translateY(-10px);
-            border-color: #ff0055;
-            box-shadow: 0px 0px 20px rgba(255, 0, 85, 0.4);
-        }
-        .game-img {
-            width: 100%;
+
+        .game-img { 
+            width: 100%; 
+            border-radius: 8px; 
+            pointer-events: none; /* This makes the click go THROUGH the image to the link */
             aspect-ratio: 1/1;
-            border-radius: 8px;
-            margin-bottom: 15px;
             object-fit: cover;
-            background-color: #2a3241;
         }
+
         .game-title {
+            margin-top: 10px;
             font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-size: 0.9rem;
+            pointer-events: none; /* This makes the click go THROUGH the text */
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <h1>🎮 Unblocked Hub</h1>
-        <div class="search-container">
-            <input type="text" class="search-bar" placeholder="Search for a game...">
-        </div>
-    </header>
+<header>
+    <h1>🎮 HUB</h1>
+</header>
 
-    <div class="game-grid">
-        <a href="https://v6p9d9t4.ssl.hwcdn.net/html/1865181/index.html" class="game-card" target="_blank">
-            <img src="https://raw.githubusercontent.com/not-under-maintenance/thumb/main/retro-bowl.png" class="game-img">
-            <div class="game-title">Retro Bowl</div>
-        </a>
+<div class="game-grid">
+    <a href="https://v6p9d9t4.ssl.hwcdn.net/html/1865181/index.html" class="game-card">
+        <img src="https://raw.githubusercontent.com/not-under-maintenance/thumb/main/retro-bowl.png" class="game-img">
+        <div class="game-title">Retro Bowl</div>
+    </a>
 
-        <a href="https://1v1.lol" class="game-card" target="_blank">
-            <img src="https://raw.githubusercontent.com/not-under-maintenance/thumb/main/1v1-lol.png" class="game-img">
-            <div class="game-title">1v1.LOL</div>
-        </a>
+    <a href="https://kbhgames.com/game/slope" class="game-card">
+        <img src="https://raw.githubusercontent.com/not-under-maintenance/thumb/main/slope.png" class="game-img">
+        <div class="game-title">Slope</div>
+    </a>
 
-        <a href="https://kbhgames.com/game/slope" class="game-card" target="_blank">
-            <img src="https://raw.githubusercontent.com/not-under-maintenance/thumb/main/slope.png" class="game-img">
-            <div class="game-title">Slope</div>
-        </a>
-
-        <a href="https://classic.minecraft.net" class="game-card" target="_blank">
-            <img src="https://raw.githubusercontent.com/not-under-maintenance/thumb/main/minecraft-classic.png" class="game-img">
-            <div class="game-title">Minecraft</div>
-        </a>
-
-        <a href="https://www.roblox.com/games" class="game-card" target="_blank">
-            <img src="https://raw.githubusercontent.com/not-under-maintenance/thumb/main/roblox.png" class="game-img">
-            <div class="game-title">Roblox</div>
-        </a>
-    </div>
+    <a href="https://1v1.lol" class="game-card">
+        <img src="https://raw.githubusercontent.com/not-under-maintenance/thumb/main/1v1-lol.png" class="game-img">
+        <div class="game-title">1v1.LOL</div>
+    </a>
+</div>
 
 </body>
 </html>
