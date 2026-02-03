@@ -42,10 +42,6 @@
             outline: none;
             font-size: 1rem;
         }
-        .search-bar:focus {
-            border-color: #ff0055;
-            box-shadow: 0 0 15px rgba(255, 0, 85, 0.5);
-        }
         .game-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
@@ -60,18 +56,21 @@
             transition: all 0.3s ease;
             cursor: pointer;
             border: 1px solid #222;
+            text-decoration: none; /* Keeps text color normal */
+            color: inherit;
         }
         .game-card:hover {
             transform: translateY(-10px);
             border-color: #ff0055;
             box-shadow: 0px 0px 20px rgba(255, 0, 85, 0.4);
         }
-        .placeholder-img {
+        .game-img {
             width: 100%;
             aspect-ratio: 1/1;
-            background: linear-gradient(45deg, #1f2530, #2a3241);
             border-radius: 8px;
             margin-bottom: 15px;
+            object-fit: cover; /* This makes images fit perfectly */
+            background-color: #2a3241;
         }
         .game-title {
             font-weight: bold;
@@ -92,23 +91,27 @@
 
     <div class="game-grid">
         <div class="game-card">
-            <div class="placeholder-img"></div>
+            <img src="https://raw.githubusercontent.com/not-under-maintenance/thumb/main/retro-bowl.png" class="game-img">
             <div class="game-title">Retro Bowl</div>
         </div>
+
         <div class="game-card">
-            <div class="placeholder-img"></div>
+            <img src="https://raw.githubusercontent.com/not-under-maintenance/thumb/main/1v1-lol.png" class="game-img">
             <div class="game-title">1v1.LOL</div>
         </div>
+
         <div class="game-card">
-            <div class="placeholder-img"></div>
+            <img src="https://raw.githubusercontent.com/not-under-maintenance/thumb/main/slope.png" class="game-img">
             <div class="game-title">Slope</div>
         </div>
+
         <div class="game-card">
-            <div class="placeholder-img"></div>
+            <img src="https://raw.githubusercontent.com/not-under-maintenance/thumb/main/minecraft-classic.png" class="game-img">
             <div class="game-title">Minecraft</div>
         </div>
+
         <div class="game-card">
-            <div class="placeholder-img"></div>
+            <img src="https://raw.githubusercontent.com/not-under-maintenance/thumb/main/roblox.png" class="game-img">
             <div class="game-title">Roblox</div>
         </div>
     </div>
