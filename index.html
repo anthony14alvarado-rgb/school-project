@@ -2,189 +2,185 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Assignment_Final.pdf</title>
+    <title id="tab-title">Assignment_Final.pdf</title>
+    <link id="tab-icon" rel="icon" href="https://cdn-icons-png.flaticon.com/512/337/337946.png">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100;400;900&family=JetBrains+Mono&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #00f2ff;
-            --bg: #030507;
-            --glass: rgba(255, 255, 255, 0.02);
-            --border: rgba(255, 255, 255, 0.07);
-            --shift: 0px;
+            --bg: #010204;
+            --glass: rgba(255, 255, 255, 0.03);
+            --border: rgba(255, 255, 255, 0.08);
+            --accent: #ff0055;
         }
 
-        /* --- ATOMIC RESET --- */
-        * { box-sizing: border-box; margin: 0; padding: 0; outline: none; transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1); }
-        body, html { 
-            background: var(--bg); color: white; font-family: 'Outfit', sans-serif; 
-            height: 100vh; overflow: hidden; 
+        /* --- ANIMATION CORE --- */
+        @keyframes slideIn { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        @keyframes pulse { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
+        @keyframes textGlow { from { text-shadow: 0 0 10px rgba(0, 242, 255, 0); } to { text-shadow: 0 0 20px rgba(0, 242, 255, 0.6); } }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+        body, html { background: var(--bg); color: white; font-family: 'Outfit', sans-serif; height: 100vh; overflow: hidden; }
+
+        /* --- DECOY --- */
+        #decoy { position: fixed; inset: 0; background: #fff; color: #111; z-index: 999999; display: none; padding: 80px 15%; font-family: 'Times New Roman', serif; }
+
+        /* --- SEARCH MODAL --- */
+        #search-modal {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(20px);
+            z-index: 500000; display: none; flex-direction: column; align-items: center; justify-content: center;
         }
+        .search-box { width: 600px; background: #111; border: 1px solid var(--primary); padding: 30px; border-radius: 25px; box-shadow: 0 0 50px rgba(0,242,255,0.2); }
+        .search-box input { width: 100%; background: none; border: none; color: white; font-size: 2rem; font-family: 'Outfit'; outline: none; }
 
-        /* --- THE DECOY (ADVANCED) --- */
-        #decoy { 
-            position: fixed; inset: 0; background: #fff; color: #1a1a1b; z-index: 999999; 
-            display: none; padding: 80px 20%; overflow-y: auto; font-family: 'Times New Roman', serif;
-        }
-        .doc-tools { display: flex; gap: 20px; border-bottom: 1px solid #ddd; padding-bottom: 10px; margin-bottom: 30px; font-size: 0.8rem; color: #888; text-transform: uppercase; }
+        /* --- MAIN UI --- */
+        .app-space { height: 100vh; display: flex; flex-direction: column; padding: 40px 100px; }
 
-        /* --- THE VIEWPORT --- */
-        .nexus { transform: translateY(var(--shift)); height: 100vh; display: flex; flex-direction: column; }
+        header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 50px; animation: slideIn 0.8s ease; }
+        .logo { font-weight: 900; font-size: 2rem; letter-spacing: 15px; animation: textGlow 2s infinite alternate; }
+        .status { font-family: 'JetBrains Mono'; font-size: 0.7rem; color: var(--primary); display: flex; gap: 20px; }
 
-        header { padding: 40px 100px; display: flex; justify-content: space-between; align-items: flex-end; }
-        .logo { font-weight: 900; font-size: 1.8rem; letter-spacing: 15px; text-transform: uppercase; }
-        .logo span { color: var(--primary); text-shadow: 0 0 30px var(--primary); }
-        .sys-data { font-family: 'JetBrains Mono'; font-size: 0.7rem; opacity: 0.4; letter-spacing: 3px; }
-
-        /* --- SEARCH ARCHITECTURE --- */
-        .search-wrap { padding: 0 100px; margin-bottom: 40px; }
-        .omni-search { 
-            width: 100%; background: var(--glass); border: 1px solid var(--border); 
-            padding: 25px 40px; border-radius: 20px; color: white; font-size: 1.2rem;
-            backdrop-filter: blur(30px); font-family: 'Outfit';
-        }
-        .omni-search:focus { border-color: var(--primary); background: rgba(255,255,255,0.05); }
-
-        /* --- THE GRID (WORLD #1 LAYOUT) --- */
+        /* --- SPACIOUS GRID --- */
         .grid {
-            display: grid; grid-template-columns: repeat(12, 1fr); gap: 20px; padding: 0 100px 120px; 
-            flex: 1; overflow-y: auto;
+            display: grid; grid-template-columns: repeat(12, 1fr); gap: 25px; 
+            flex: 1; overflow-y: auto; padding-bottom: 150px;
         }
         .grid::-webkit-scrollbar { width: 0; }
 
         .tile {
-            background: var(--glass); border: 1px solid var(--border); border-radius: 30px;
+            background: var(--glass); border: 1px solid var(--border); border-radius: 35px;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            text-decoration: none; color: white; cursor: pointer; position: relative;
-            backdrop-filter: blur(50px);
+            text-decoration: none; color: white; animation: slideIn 1s ease; cursor: pointer;
         }
-        .tile:hover { background: rgba(var(--primary), 0.1); border-color: var(--primary); transform: translateY(-5px); }
-        .tile i { font-style: normal; font-size: 4rem; margin-bottom: 15px; }
-        .tile b { font-weight: 400; letter-spacing: 4px; text-transform: uppercase; font-size: 0.8rem; opacity: 0.6; }
+        .tile:hover { background: rgba(255,255,255,0.06); border-color: var(--primary); transform: scale(1.05) translateY(-10px); }
+        .tile i { font-style: normal; font-size: 4rem; margin-bottom: 20px; }
+        .tile b { letter-spacing: 5px; font-weight: 400; opacity: 0.5; font-size: 0.8rem; }
 
-        /* SIZE VARIANTS */
-        .col-6 { grid-column: span 6; padding: 80px 0; }
-        .col-3 { grid-column: span 3; padding: 60px 0; }
-        .col-4 { grid-column: span 4; padding: 60px 0; }
-
-        /* --- THE DOCK --- */
-        .dock {
-            position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%);
-            background: rgba(10,12,15,0.8); border: 1px solid var(--border);
-            padding: 15px 50px; border-radius: 100px; backdrop-filter: blur(40px);
-            display: flex; gap: 50px; z-index: 10000;
+        /* --- LIVE CHAT WIDGET --- */
+        #chat-widget {
+            position: fixed; bottom: 120px; right: 40px; width: 300px; height: 400px;
+            background: rgba(10,10,10,0.95); border: 1px solid var(--border); border-radius: 25px;
+            backdrop-filter: blur(20px); display: flex; flex-direction: column; overflow: hidden;
+            animation: slideIn 1.2s ease; z-index: 100;
         }
-        .dock-btn { font-size: 1.6rem; cursor: pointer; opacity: 0.3; }
-        .dock-btn:hover { opacity: 1; color: var(--primary); }
+        .chat-head { padding: 15px; background: var(--glass); border-bottom: 1px solid var(--border); font-size: 0.8rem; font-weight: 900; letter-spacing: 2px; }
+        .chat-body { flex: 1; padding: 15px; font-size: 0.85rem; font-family: 'JetBrains Mono'; overflow-y: auto; color: #888; }
+        .chat-input { padding: 10px; border-top: 1px solid var(--border); background: none; color: white; border: none; font-family: 'Outfit'; outline: none; }
 
-        /* --- SETTINGS PANEL --- */
-        #panel {
-            position: fixed; right: -450px; top: 0; width: 400px; height: 100%;
-            background: #05070a; border-left: 1px solid var(--border);
-            padding: 80px 40px; z-index: 1000000;
+        /* --- TASKBAR (CENTERED) --- */
+        .taskbar {
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+            background: rgba(15,15,15,0.7); border: 1px solid var(--border);
+            padding: 10px 40px; border-radius: 100px; backdrop-filter: blur(30px);
+            display: flex; gap: 30px; align-items: center; z-index: 10000;
         }
-        .input-box { width: 100%; padding: 18px; background: rgba(255,255,255,0.03); border: 1px solid #222; border-radius: 15px; color: white; margin-bottom: 10px; font-family: 'Outfit'; }
-        .action-btn { width: 100%; padding: 18px; background: var(--primary); color: #000; font-weight: 900; border: none; border-radius: 15px; cursor: pointer; margin-top: 10px; letter-spacing: 2px; }
+        .task-item { font-size: 1.8rem; cursor: pointer; opacity: 0.5; position: relative; }
+        .task-item:hover { opacity: 1; color: var(--primary); transform: translateY(-5px); }
+        .task-item.active::after { content: ''; position: absolute; bottom: -8px; left: 50%; width: 4px; height: 4px; background: var(--primary); border-radius: 50%; }
 
     </style>
 </head>
-<body onkeydown="handleKeys(event)">
+<body>
 
-    <div id="decoy">
-        <div class="doc-tools">File &nbsp; Edit &nbsp; View &nbsp; Insert &nbsp; Format &nbsp; Tools</div>
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 40px;">
-            <h1 style="font-weight: normal; font-size: 2rem;">Quantitative Analysis of Global Markets</h1>
-            <div id="save-status" style="color:#999; font-size:0.9rem;">All changes saved to Drive</div>
-        </div>
-        
-        <div contenteditable="true" style="outline:none; font-size:1.1rem; line-height:2;">
-            The globalization of fiscal policy has led to an unprecedented level of interdependence among emerging economies. 
-            When evaluating the historical significance of market fluctuations, one must account for the volatility inherent in 
-            decentralized financial structures. 
-            <br><br>
-            <i>(Type your thoughts here. Click the dock eye or press Ctrl+B to return.)</i>
+    <div id="search-modal" onclick="toggleSearch(false)">
+        <div class="search-box" onclick="event.stopPropagation()">
+            <input type="text" id="s-input" placeholder="Neural Search..." oninput="filterGrid(this.value)">
+            <div style="margin-top: 20px; font-size: 0.7rem; color: var(--primary); font-family: 'JetBrains Mono';">SYSTEM_SEARCH_ACTIVE // ESC TO CLOSE</div>
         </div>
     </div>
 
-    <div class="nexus">
+    <div id="decoy" onclick="toggleDecoy()">
+        <h1 style="font-weight: normal; font-size: 2.5rem;">Macro-Economic Variables in Emerging Markets</h1>
+        <p style="margin-top:20px; font-size:1.1rem; line-height:2;">Analyzing the correlation between fiscal transparency and foreign direct investment (FDI) in the Southeast Asian corridor...</p>
+    </div>
+
+    <div class="app-space">
         <header>
-            <div class="logo">TITAN<span>PRIME</span></div>
-            <div style="text-align:right;">
-                <div id="clock" class="sys-data" style="font-size:1.2rem; opacity:1; margin-bottom:5px;">00:00:00</div>
-                <div class="sys-data">CORE_OS // STABLE // 0% LAG</div>
+            <div class="logo">TITAN<span>SINGULARITY</span></div>
+            <div class="status">
+                <div>USERS_ONLINE: <span id="user-count" style="color:var(--primary)">1,482</span></div>
+                <div>SERVER: US_WEST_1</div>
+                <div id="clock">00:00:00</div>
             </div>
         </header>
 
-        <div class="search-wrap">
-            <input type="text" class="omni-search" id="omni" placeholder="Search apps, games, or run command..." oninput="omniSearch(this.value)">
-        </div>
-
         <main class="grid" id="main-grid">
-            <div class="tile col-6" onclick="window.open('https://youtube.com')"><i>📺</i><b>NeuralTube</b></div>
-            <div class="tile col-6" onclick="alert('Vault Loaded: Scroll down for games.')"><i>🎮</i><b>Game Vault</b></div>
-            
-            <a href="https://discord.com" target="_blank" class="tile col-3"><i>💬</i><b>Discord</b></a>
-            <a href="https://tiktok.com" target="_blank" class="tile col-3"><i>🎵</i><b>TikTok</b></a>
-            <a href="https://soundcloud.com" target="_blank" class="tile col-3"><i>☁️</i><b>SoundCloud</b></a>
-            <a href="https://reddit.com" target="_blank" class="tile col-3"><i>🤖</i><b>Reddit</b></a>
-
-            <a href="https://docs-google-com-opensocial.googleusercontent.com/gadgets/ifr?url=https://cdn.jsdelivr.net/gh/sk1id/v@main/1v1.xml" target="_blank" class="tile col-4"><i>🔫</i><b>1v1.LOL</b></a>
-            <a href="https://kbhgames.com/game/slope" target="_blank" class="tile col-4"><i>⚽</i><b>Slope</b></a>
-            <a href="https://v6p9d9t4.ssl.hwcdn.net/html/1365121/index.html" target="_blank" class="tile col-4"><i>🏈</i><b>Retro Bowl</b></a>
+            <div class="tile" style="grid-column: span 8; grid-row: span 2;" onclick="window.open('https://youtube.com')">
+                <i>🎬</i><b>PRIME_MEDIA</b>
+            </div>
+            <div class="tile" style="grid-column: span 4; grid-row: span 1;" onclick="toggleSearch(true)">
+                <i>🔍</i><b>GLOBAL_SEARCH</b>
+            </div>
+            <div class="tile" style="grid-column: span 4; grid-row: span 1;" onclick="toggleDecoy()">
+                <i>👻</i><b>GHOST_MODE</b>
+            </div>
+            <a href="https://discord.com" target="_blank" class="tile" style="grid-column: span 3; grid-row: span 1;"><i>💬</i><b>COMMS</b></a>
+            <a href="https://tiktok.com" target="_blank" class="tile" style="grid-column: span 3; grid-row: span 1;"><i>🎵</i><b>VIBE</b></a>
+            <a href="https://kbhgames.com/game/slope" target="_blank" class="tile" style="grid-column: span 6; grid-row: span 1;"><i>⚽</i><b>SLOPE_ULTRA</b></a>
         </main>
     </div>
 
-    <div class="dock">
-        <div class="dock-btn" onclick="location.reload()">🔄</div>
-        <div class="dock-btn" onclick="toggleDecoy()">👁️</div>
-        <div class="dock-btn" onclick="togglePanel(true)">⚙️</div>
+    <div id="chat-widget">
+        <div class="chat-head">NEURAL_CHAT (LOCAL)</div>
+        <div class="chat-body" id="chat-log">
+            <div style="margin-bottom:10px;">[SYS]: Welcome to Singularity.</div>
+            <div style="margin-bottom:10px;"><span style="color:var(--primary)">User_422:</span> Has anyone seen the new unblocker?</div>
+            <div style="margin-bottom:10px;"><span style="color:var(--accent)">Guest_99:</span> Yea, it's fire.</div>
+        </div>
+        <input type="text" class="chat-input" placeholder="Type a message..." onkeypress="sendChat(event, this)">
     </div>
 
-    <div id="panel">
-        <h2 class="logo" style="font-size:1.2rem; margin-bottom:50px;">CORE<span>CONFIG</span></h2>
-        
-        <p class="sys-data" style="margin-bottom:10px;">SCREEN CALIBRATION</p>
-        <button class="action-btn" onclick="shift(180)">SHIFT_DOWN</button>
-        <button class="action-btn" onclick="shift(-180)">SHIFT_UP</button>
-        <button class="action-btn" onclick="shift(0)" style="background:#222; color:white;">RE_CENTER</button>
-
-        <p class="sys-data" style="margin-top:40px; margin-bottom:10px;">SYSTEM TINT</p>
-        <input type="color" class="input-box" style="height:60px; padding:5px; border:none;" oninput="setTheme(this.value)">
-
-        <button class="action-btn" onclick="togglePanel(false)" style="margin-top:60px; background:none; color:white; border:1px solid #333;">CLOSE_SESSION</button>
+    <div class="taskbar">
+        <div class="task-item active" onclick="location.reload()">🏠</div>
+        <div class="task-item" onclick="toggleSearch(true)">🔍</div>
+        <div class="task-item" onclick="toggleDecoy()">👁️</div>
+        <div class="task-item" onclick="window.open('https://google.com')">🌐</div>
+        <div class="task-item" onclick="document.getElementById('chat-widget').style.display='none'">❌</div>
     </div>
 
     <script>
-        // SYSTEM CORE
-        setInterval(() => { 
-            const d = new Date();
-            document.getElementById('clock').innerText = d.toLocaleTimeString(); 
-            document.getElementById('save-status').innerText = "Last edit was at " + d.getHours() + ":" + String(d.getMinutes()).padStart(2, '0');
-        }, 1000);
+        // LIVE SIMULATION
+        setInterval(() => {
+            document.getElementById('clock').innerText = new Date().toLocaleTimeString();
+            let count = Math.floor(Math.random() * (1500 - 1400) + 1400);
+            document.getElementById('user-count').innerText = count.toLocaleString();
+        }, 3000);
 
-        function togglePanel(o) { document.getElementById('panel').style.right = o ? "0px" : "-450px"; }
-        function toggleDecoy() { 
+        function toggleSearch(o) {
+            document.getElementById('search-modal').style.display = o ? 'flex' : 'none';
+            if(o) document.getElementById('s-input').focus();
+        }
+
+        function toggleDecoy() {
             const d = document.getElementById('decoy');
-            const isV = d.style.display === "block";
-            d.style.display = isV ? "none" : "block";
-            document.title = isV ? "Assignment_Final.pdf" : "Google Docs - Global Markets";
+            d.style.display = (d.style.display === 'block') ? 'none' : 'block';
+            document.title = (d.style.display === 'block') ? 'Google Docs' : 'Assignment_Final.pdf';
         }
 
-        function shift(v) { document.documentElement.style.setProperty('--shift', v + 'px'); }
-        function setTheme(c) { document.documentElement.style.setProperty('--primary', c); }
-
-        function handleKeys(e) {
-            if(e.key === "Escape") { togglePanel(false); }
-            if(e.ctrlKey && e.key === "b") toggleDecoy();
+        function sendChat(e, input) {
+            if(e.key === 'Enter' && input.value) {
+                const log = document.getElementById('chat-log');
+                log.innerHTML += `<div style="margin-bottom:10px;"><span style="color:#fff">You:</span> ${input.value}</div>`;
+                input.value = '';
+                log.scrollTop = log.scrollHeight;
+            }
         }
 
-        function omniSearch(q) {
+        function filterGrid(q) {
             const tiles = document.querySelectorAll('.tile');
             tiles.forEach(t => {
-                const text = t.innerText.toLowerCase();
-                t.style.display = text.includes(q.toLowerCase()) ? "flex" : "none";
+                t.style.display = t.innerText.toLowerCase().includes(q.toLowerCase()) ? 'flex' : 'none';
             });
         }
+
+        document.addEventListener('keydown', (e) => {
+            if(e.key === 'Escape') toggleSearch(false);
+            if(e.ctrlKey && e.key === 'f') { e.preventDefault(); toggleSearch(true); }
+        });
+        
+        // TAB CLOAK
+        window.onblur = () => { document.title = "Google Drive"; };
+        window.onfocus = () => { document.title = "Assignment_Final.pdf"; };
     </script>
 </body>
 </html>
