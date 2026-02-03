@@ -3,270 +3,120 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>M HUB - Dashboard</title>
+    <title>M HUB</title>
     <style>
-        /* --- BASE THEME --- */
-        :root {
-            --primary: #ff0055;
-            --bg-dark: #0b0e14;
-            --bg-panel: #151921;
-            --sidebar-width: 80px;
-        }
-
         body { 
-            background-color: var(--bg-dark); 
-            color: white; 
-            font-family: 'Segoe UI', sans-serif; 
-            margin: 0;
-            padding: 0;
-            overflow: hidden; /* Initial lock */
+            background-color: #0b0e14; color: white; 
+            font-family: sans-serif; margin: 0; padding: 0; 
+            overflow-x: hidden;
         }
 
-        /* --- 1. INTRO SPLASH SCREEN --- */
+        /* 1. THE HOME SCREEN (STAYS ON TOP UNTIL CLICKED) */
         #home-screen {
             position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: radial-gradient(circle at center, #1a1f2b 0%, #0b0e14 100%);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 10000; /* Highest priority */
-            transition: transform 0.6s cubic-bezier(0.85, 0, 0.15, 1);
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #0b0e14;
+            display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+            z-index: 9999;
+            transition: 0.5s ease-in-out;
+        }
+        #home-screen.hide { transform: translateY(-100%); }
+
+        .start-btn {
+            padding: 15px 40px; background: #ff0055;
+            color: white; border: none; border-radius: 50px;
+            font-weight: bold; cursor: pointer; font-size: 1.2rem;
         }
 
-        #home-screen.hide {
-            transform: translateY(-100%);
+        /* 2. BOTTOM TASKBAR (MOBILE STYLE) */
+        .bottom-nav {
+            position: fixed; bottom: 0; left: 0;
+            width: 100%; height: 60px;
+            background: #151921; border-top: 1px solid #333;
+            display: flex; justify-content: space-around; align-items: center;
+            z-index: 1000;
         }
+        .nav-item { 
+            background: none; border: none; color: #888; 
+            font-size: 0.8rem; cursor: pointer;
+        }
+        .nav-item.active { color: #ff0055; font-weight: bold; }
 
-        .hero-title {
-            font-size: 5rem;
-            font-weight: 900;
-            background: linear-gradient(45deg, #ff0055, #ff7b00);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin: 0;
-        }
+        /* 3. CONTENT SECTIONS */
+        .page { display: none; padding: 20px; padding-bottom: 80px; }
+        .page.active { display: block; animation: fadeIn 0.3s; }
 
-        .btn-launch {
-            margin-top: 30px;
-            padding: 15px 50px;
-            font-size: 1.2rem;
-            background: var(--primary);
-            color: white;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            font-weight: bold;
-            box-shadow: 0 0 20px rgba(255, 0, 85, 0.4);
-            transition: 0.3s;
-        }
-        .btn-launch:hover { transform: scale(1.1); }
-
-        /* --- 2. THE TASKBAR (SIDEBAR) --- */
-        .taskbar {
-            position: fixed;
-            left: 0; top: 0;
-            width: var(--sidebar-width);
-            height: 100%;
-            background: #0f1219;
-            border-right: 1px solid #333;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding-top: 20px;
-            z-index: 5000;
-        }
-
-        .task-btn {
-            width: 50px;
-            height: 50px;
-            margin-bottom: 20px;
-            border-radius: 12px;
-            border: none;
-            background: rgba(255,255,255,0.05);
-            color: #888;
-            font-size: 1.5rem;
-            cursor: pointer;
-            transition: 0.3s;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .task-btn:hover {
-            background: var(--primary);
-            color: white;
-            transform: scale(1.1);
-        }
-
-        .task-btn.active {
-            background: var(--primary);
-            color: white;
-            box-shadow: 0 0 15px var(--primary);
-        }
-
-        /* Bottom "Back to Home" button in sidebar */
-        .task-bottom {
-            margin-top: auto;
-            margin-bottom: 20px;
-        }
-
-        /* --- 3. MAIN CONTENT AREA --- */
-        .main-content {
-            margin-left: var(--sidebar-width); /* Pushes content right */
-            height: 100vh;
-            overflow-y: auto; /* Allows scrolling inside content */
-            padding: 20px;
-        }
-
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding-bottom: 20px;
-            border-bottom: 1px solid #333;
-            margin-bottom: 20px;
-        }
-
-        /* --- SECTIONS (Tabs) --- */
-        .section {
-            display: none; /* Hidden by default */
-            animation: fadeIn 0.4s;
-        }
-        .section.active {
-            display: block; /* Show if active */
-        }
-
-        /* Game Grid Styling */
         .game-grid { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); 
-            gap: 20px; 
+            display: grid; grid-template-columns: 1fr 1fr; gap: 15px; 
         }
-
-        .game-card {
-            background: var(--bg-panel);
-            border-radius: 15px;
-            padding: 10px;
-            text-decoration: none;
-            color: white;
+        .card { 
+            background: #151921; padding: 10px; border-radius: 10px; 
+            text-align: center; text-decoration: none; color: white;
             border: 1px solid #333;
-            transition: 0.3s;
-            text-align: center;
-            display: block;
         }
-        .game-card:hover { border-color: var(--primary); transform: translateY(-5px); }
-        .game-img { width: 100%; border-radius: 10px; aspect-ratio: 1/1; object-fit: cover; }
+        .card img { width: 100%; border-radius: 8px; aspect-ratio: 1/1; object-fit: cover; }
 
-        /* Animation */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Placeholders for other apps */
-        .app-placeholder {
-            text-align: center;
-            padding: 50px;
-            color: #555;
-            border: 2px dashed #333;
-            border-radius: 20px;
-        }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 <body>
 
     <div id="home-screen">
-        <h1 class="hero-title">M HUB</h1>
-        <p style="color:#888; letter-spacing: 2px;">ALL-IN-ONE ENTERTAINMENT</p>
-        <button class="btn-launch" onclick="toggleMenu(true)">LAUNCH SYSTEM</button>
+        <h1 style="font-size: 3rem; margin-bottom: 20px;">M HUB</h1>
+        <button class="start-btn" onclick="enterHub()">ENTER HUB</button>
     </div>
 
-    <nav class="taskbar">
-        <button class="task-btn active" onclick="switchTab('games', this)">🎮</button>
-        <button class="task-btn" onclick="switchTab('youtube', this)">📺</button>
-        <button class="task-btn" onclick="switchTab('tiktok', this)">🎵</button>
-        <button class="task-btn" onclick="switchTab('movies', this)">🍿</button>
-        
-        <button class="task-btn task-bottom" onclick="toggleMenu(false)">🏠</button>
+    <div id="games-page" class="page active">
+        <h2>Games</h2>
+        <div class="game-grid">
+            <a href="https://v6p9d9t4.ssl.hwcdn.net/html/1365121/index.html" class="card">
+                <img src="https://raw.githubusercontent.com/not-under-maintenance/thumb/main/retro-bowl.png">
+                <p>Retro Bowl</p>
+            </a>
+            <a href="https://kbhgames.com/game/slope" class="card">
+                <img src="https://raw.githubusercontent.com/not-under-maintenance/thumb/main/slope.png">
+                <p>Slope</p>
+            </a>
+        </div>
+    </div>
+
+    <div id="media-page" class="page">
+        <h2>YouTube & TikTok</h2>
+        <p style="color: #666;">Streaming content coming soon...</p>
+    </div>
+
+    <div id="movies-page" class="page">
+        <h2>Movies</h2>
+        <p style="color: #666;">Movie library coming soon...</p>
+    </div>
+
+    <nav class="bottom-nav">
+        <button class="nav-item active" onclick="showPage('games-page', this)">🎮<br>Games</button>
+        <button class="nav-item" onclick="showPage('media-page', this)">📱<br>Social</button>
+        <button class="nav-item" onclick="showPage('movies-page', this)">🍿<br>Movies</button>
+        <button class="nav-item" onclick="goHome()">🏠<br>Home</button>
     </nav>
 
-    <div class="main-content">
-        
-        <header>
-            <h2 id="page-title">GAMES</h2>
-            <div style="font-size: 0.9rem; color: #ff0055;">● ONLINE</div>
-        </header>
-
-        <div id="games" class="section active">
-            <div class="game-grid">
-                <a href="https://v6p9d9t4.ssl.hwcdn.net/html/1365121/index.html" class="game-card">
-                    <img src="https://raw.githubusercontent.com/not-under-maintenance/thumb/main/retro-bowl.png" class="game-img">
-                    <h3>Retro Bowl</h3>
-                </a>
-                <a href="https://kbhgames.com/game/slope" class="game-card">
-                    <img src="https://raw.githubusercontent.com/not-under-maintenance/thumb/main/slope.png" class="game-img">
-                    <h3>Slope</h3>
-                </a>
-                <a href="https://1v1.lol" class="game-card">
-                    <img src="https://raw.githubusercontent.com/not-under-maintenance/thumb/main/1v1-lol.png" class="game-img">
-                    <h3>1v1.LOL</h3>
-                </a>
-            </div>
-        </div>
-
-        <div id="youtube" class="section">
-            <div class="app-placeholder">
-                <h1>YouTube</h1>
-                <p>Search feature coming soon...</p>
-                <iframe width="100%" height="315" src="https://www.youtube.com/embed/jfKfPfyJRdk" title="YouTube video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="border-radius:15px;"></iframe>
-            </div>
-        </div>
-
-        <div id="tiktok" class="section">
-            <div class="app-placeholder">
-                <h1>TikTok</h1>
-                <p>Feed loading...</p>
-            </div>
-        </div>
-
-        <div id="movies" class="section">
-            <div class="app-placeholder">
-                <h1>Movies</h1>
-                <p>Library empty.</p>
-            </div>
-        </div>
-
-    </div>
-
     <script>
-        // Toggle the Intro Screen
-        function toggleMenu(hide) {
-            const screen = document.getElementById('home-screen');
-            if (hide) {
-                screen.classList.add('hide');
-            } else {
-                screen.classList.remove('hide');
-            }
+        function enterHub() {
+            document.getElementById('home-screen').classList.add('hide');
         }
 
-        // Switch Tabs (Games, YT, TikTok)
-        function switchTab(tabId, btnElement) {
-            // 1. Hide all sections
-            document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
-            // 2. Show the selected section
-            document.getElementById(tabId).classList.add('active');
+        function goHome() {
+            document.getElementById('home-screen').classList.remove('hide');
+        }
 
-            // 3. Update Sidebar Buttons (Highlight the clicked one)
-            document.querySelectorAll('.task-btn').forEach(btn => btn.classList.remove('active'));
-            btnElement.classList.add('active');
-
-            // 4. Update Header Title
-            document.getElementById('page-title').innerText = tabId.toUpperCase();
+        function showPage(pageId, btn) {
+            // Hide all pages
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            // Show the one we want
+            document.getElementById(pageId).classList.add('active');
+            
+            // Change button colors
+            document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
         }
     </script>
-
 </body>
 </html>
