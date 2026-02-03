@@ -1,172 +1,122 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title id="tab-title">Assignment_Final.pdf</title>
-    <link id="tab-icon" rel="icon" href="https://cdn-icons-png.flaticon.com/512/337/337946.png">
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100;400;700;900&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --primary: #00f2ff;
-            --bg: #050608;
-            --surface: rgba(255, 255, 255, 0.03);
-            --border: rgba(255, 255, 255, 0.08);
-            --font: 'Outfit', sans-serif;
-        }
-
-        * { box-sizing: border-box; margin: 0; padding: 0; transition: all 0.2s ease; }
-        body, html { 
-            background: var(--bg); color: white; font-family: var(--font); 
-            height: 100vh; overflow: hidden; 
-        }
-
-        /* --- BACKGROUND GRADIENT --- */
-        #bg-glow {
-            position: fixed; inset: 0; z-index: -1;
-            background: radial-gradient(circle at 50% -20%, #101825 0%, #050608 100%);
-        }
-
-        /* --- DECOY LAYER --- */
-        #decoy { 
-            position: fixed; inset: 0; background: #fff; color: #111; z-index: 99999; 
-            display: none; padding: 100px 15%; overflow-y: auto; font-family: serif; 
-        }
-
-        /* --- TOP NAVIGATION (SEARCH & STATUS) --- */
-        nav {
-            height: 80px; padding: 0 60px; display: flex; align-items: center;
-            justify-content: space-between; border-bottom: 1px solid var(--border);
-            backdrop-filter: blur(20px);
-        }
-        .search-area { width: 400px; position: relative; }
-        .search-area input {
-            width: 100%; background: var(--surface); border: 1px solid var(--border);
-            padding: 12px 20px; border-radius: 12px; color: white; font-family: var(--font);
-        }
-        .search-area input:focus { border-color: var(--primary); outline: none; }
-
-        /* --- MAIN WORKSPACE --- */
-        .workspace {
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 25px; padding: 60px; height: calc(100vh - 160px); overflow-y: auto;
-        }
-        .workspace::-webkit-scrollbar { width: 0; }
-
-        .app-card {
-            background: var(--surface); border: 1px solid var(--border);
-            border-radius: 24px; padding: 40px; text-align: center;
-            text-decoration: none; color: white; cursor: pointer;
-        }
-        .app-card:hover { 
-            background: rgba(255,255,255,0.07); border-color: var(--primary);
-            transform: translateY(-5px);
-        }
-        .app-card i { font-style: normal; font-size: 3.5rem; display: block; margin-bottom: 15px; }
-        .app-card h3 { font-weight: 700; letter-spacing: 2px; text-transform: uppercase; font-size: 0.9rem; }
-
-        /* --- THE VAULT OVERLAY --- */
-        #vault {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.98);
-            z-index: 10000; display: none; padding: 100px; overflow-y: auto;
-        }
-
-        /* --- APEX DOCK --- */
-        .dock {
-            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
-            background: rgba(15, 18, 24, 0.8); border: 1px solid var(--border);
-            padding: 12px 40px; border-radius: 100px; backdrop-filter: blur(40px);
-            display: flex; gap: 40px; align-items: center;
-        }
-        .dock-btn { font-size: 1.6rem; cursor: pointer; opacity: 0.4; }
-        .dock-btn:hover { opacity: 1; color: var(--primary); transform: translateY(-5px); }
-
-    </style>
+<meta charset="UTF-8">
+<title>Kasane Teto vs Z-Kit Demon</title>
+<style>
+  body {
+    margin: 0;
+    background: black;
+    color: #ff4fa3;
+    font-family: Arial, sans-serif;
+    text-align: center;
+  }
+  canvas {
+    background: #111;
+    display: block;
+    margin: auto;
+    border: 2px solid #ff4fa3;
+  }
+</style>
 </head>
 <body>
 
-    <div id="bg-glow"></div>
+<h1>🎤 Kasane Teto vs Z-Kit Demon</h1>
+<p>Beat LuminalOS • Reach Top 1</p>
 
-    <div id="decoy" onclick="toggleDecoy()">
-        <h1 style="font-weight: normal; font-size: 2rem;">Research_Outline_Draft_01</h1>
-        <hr style="margin: 20px 0;">
-        <p style="font-size: 1.2rem; line-height: 2;">
-            The analysis of modern educational frameworks suggests that student engagement is highly correlated with the accessibility of digital resources. This paper explores the impact of...
-        </p>
-    </div>
+<canvas id="game" width="600" height="400"></canvas>
+<p id="score">Score: 0</p>
 
-    <nav>
-        <div style="font-weight: 900; letter-spacing: 5px; font-size: 1.2rem;">TITAN <span>APEX</span></div>
-        <div class="search-area">
-            <input type="text" id="search-bar" placeholder="Search Apps or Games..." oninput="search(this.value)">
-        </div>
-        <div id="time" style="font-weight: 700; opacity: 0.5;">00:00:00</div>
-    </nav>
+<script>
+const canvas = document.getElementById("game");
+const ctx = canvas.getContext("2d");
 
-    <div class="workspace" id="main-grid">
-        <div class="app-card" onclick="toggleVault(true)">
-            <i>🕹️</i><h3>Game Vault</h3>
-        </div>
-        <a href="https://youtube.com" target="_blank" class="app-card"><i>📺</i><h3>YouTube</h3></a>
-        <a href="https://discord.com" target="_blank" class="app-card"><i>💬</i><h3>Discord</h3></a>
-        <a href="https://tiktok.com" target="_blank" class="app-card"><i>🎵</i><h3>TikTok</h3></a>
-        <a href="https://reddit.com" target="_blank" class="app-card"><i>🤖</i><h3>Reddit</h3></a>
-        <div class="app-card" onclick="toggleDecoy()"><i>👁️</i><h3>Ghost Mode</h3></div>
-    </div>
+let keys = {};
+let score = 0;
+let gameOver = false;
 
-    <div id="vault">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:50px;">
-            <h1 style="letter-spacing:10px;">TITAN_VAULT</h1>
-            <span onclick="toggleVault(false)" style="cursor:pointer; font-size:3rem;">✕</span>
-        </div>
-        <div class="workspace" style="padding:0;">
-            <a href="https://docs-google-com-opensocial.googleusercontent.com/gadgets/ifr?url=https://cdn.jsdelivr.net/gh/sk1id/v@main/1v1.xml" target="_blank" class="app-card"><i>🔫</i><h3>1v1.LOL</h3></a>
-            <a href="https://kbhgames.com/game/slope" target="_blank" class="app-card"><i>⚽</i><h3>Slope</h3></a>
-            <a href="https://classic.minecraft.net" target="_blank" class="app-card"><i>⛏️</i><h3>Minecraft</h3></a>
-            <a href="https://shellshock.io" target="_blank" class="app-card"><i>🥚</i><h3>Shell Shock</h3></a>
-            <a href="https://paper-io.com" target="_blank" class="app-card"><i>📄</i><h3>Paper.io</h3></a>
-        </div>
-    </div>
+const teto = {
+  x: 280,
+  y: 300,
+  size: 20,
+  speed: 4
+};
 
-    <div class="dock">
-        <div class="dock-btn" onclick="location.reload()">🔄</div>
-        <div class="dock-btn" onclick="toggleVault(true)">🎮</div>
-        <div class="dock-btn" onclick="toggleDecoy()">👁️</div>
-        <div class="dock-btn" onclick="window.open('https://google.com')">🌐</div>
-    </div>
+const demon = {
+  x: 280,
+  y: 50,
+  size: 30,
+  dx: 2,
+  hp: 50
+};
 
-    <script>
-        // SYSTEM CLOCK
-        setInterval(() => { 
-            document.getElementById('time').innerText = new Date().toLocaleTimeString(); 
-        }, 1000);
+document.addEventListener("keydown", e => keys[e.key] = true);
+document.addEventListener("keyup", e => keys[e.key] = false);
 
-        // UI LOGIC
-        function toggleVault(o) { document.getElementById('vault').style.display = o ? 'block' : 'none'; }
-        
-        function toggleDecoy() {
-            const d = document.getElementById('decoy');
-            const isV = d.style.display === "block";
-            d.style.display = isV ? "none" : "block";
-            document.title = isV ? "Assignment_Final.pdf" : "Google Docs - Research Draft";
-        }
+function update() {
+  if (gameOver) return;
 
-        // TAB CLOAK (SECURE)
-        window.onblur = () => { document.title = "Google Drive"; };
-        window.onfocus = () => { document.title = "Assignment_Final.pdf"; };
+  // Movement
+  if (keys["ArrowLeft"] || keys["a"]) teto.x -= teto.speed;
+  if (keys["ArrowRight"] || keys["d"]) teto.x += teto.speed;
+  if (keys["ArrowUp"] || keys["w"]) teto.y -= teto.speed;
+  if (keys["ArrowDown"] || keys["s"]) teto.y += teto.speed;
 
-        // SEARCH ENGINE
-        function search(q) {
-            const cards = document.querySelectorAll('.app-card');
-            cards.forEach(c => {
-                c.style.display = c.innerText.toLowerCase().includes(q.toLowerCase()) ? 'block' : 'none';
-            });
-        }
+  // Attack
+  if (keys[" "]) {
+    if (Math.abs(teto.x - demon.x) < 30 && Math.abs(teto.y - demon.y) < 30) {
+      demon.hp--;
+      score += 10;
+    }
+  }
 
-        // GLOBAL KEY LISTENER
-        document.addEventListener('keydown', (e) => {
-            if(e.key === "Escape") { toggleVault(false); }
-            if(e.ctrlKey && e.key === "b") { e.preventDefault(); toggleDecoy(); }
-        });
-    </script>
+  // Demon movement
+  demon.x += demon.dx;
+  if (demon.x < 0 || demon.x > canvas.width - demon.size) demon.dx *= -1;
+
+  // Collision
+  if (
+    Math.abs(teto.x - demon.x) < 25 &&
+    Math.abs(teto.y - demon.y) < 25
+  ) {
+    gameOver = true;
+    alert("💀 LuminalOS Corrupted\nFinal Score: " + score);
+  }
+
+  // Win
+  if (demon.hp <= 0) {
+    gameOver = true;
+    alert("🏆 Z-Kit Demon Defeated!\nTOP 1 SCORE: " + score);
+  }
+
+  score++;
+  document.getElementById("score").textContent = "Score: " + score;
+}
+
+function draw() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // Teto
+  ctx.fillStyle = "#ff4fa3";
+  ctx.fillRect(teto.x, teto.y, teto.size, teto.size);
+
+  // Demon
+  ctx.fillStyle = "red";
+  ctx.fillRect(demon.x, demon.y, demon.size, demon.size);
+
+  // HP
+  ctx.fillStyle = "white";
+  ctx.fillText("Demon HP: " + demon.hp, 10, 20);
+}
+
+function loop() {
+  update();
+  draw();
+  requestAnimationFrame(loop);
+}
+
+loop();
+</script>
+
 </body>
 </html>
