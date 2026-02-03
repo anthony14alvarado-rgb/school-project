@@ -11,9 +11,6 @@
             --dark: #05070a;
             --glass: rgba(255, 255, 255, 0.05);
             --accent-glow: rgba(255, 0, 85, 0.3);
-            --yt: #ff0000;
-            --tt: #00f2ea;
-            --sc: #ff5500;
         }
 
         body, html {
@@ -22,22 +19,67 @@
             color: white;
             font-family: 'Inter', system-ui, -apple-system, sans-serif;
             overflow-x: hidden;
-            scroll-behavior: smooth;
         }
 
-        /* --- STEALTH / PANIC --- */
-        .panic-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 99999; }
-
-        /* --- ANIMATIONS --- */
-        @keyframes meshFlow {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        /* --- SETTINGS PANEL (TOP RIGHT) --- */
+        .settings-container {
+            position: fixed;
+            top: 25px;
+            right: 25px;
+            z-index: 20000; /* Stays above home menu */
         }
 
+        .settings-btn {
+            background: var(--glass);
+            border: 1px solid rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            color: white;
+            font-size: 1.5rem;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.3s;
+        }
+
+        .settings-btn:hover {
+            transform: rotate(90deg);
+            background: var(--primary);
+            box-shadow: 0 0 20px var(--accent-glow);
+        }
+
+        /* Hidden Settings Menu */
+        #settings-menu {
+            position: absolute;
+            top: 60px;
+            right: 0;
+            background: rgba(10, 10, 15, 0.95);
+            border: 1px solid rgba(255,255,255,0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            width: 200px;
+            padding: 20px;
+            display: none;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+        }
+
+        .setting-item {
+            margin-bottom: 15px;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            opacity: 0.7;
+        }
+
+        .theme-btn {
+            width: 25px; height: 25px; border-radius: 50%; border: none; cursor: pointer; margin-right: 10px;
+        }
+
+        /* --- UI OVERLAYS --- */
         #menu-switch { display: none; }
 
-        /* --- HOME SCREEN --- */
         #home-menu {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -47,181 +89,112 @@
             display: flex; flex-direction: column;
             justify-content: center; align-items: center;
             z-index: 10000;
-            transition: transform 0.8s cubic-bezier(0.8, 0, 0.2, 1);
+            transition: 0.8s cubic-bezier(0.8, 0, 0.2, 1);
         }
 
-        #menu-switch:checked ~ #home-menu {
-            transform: translateY(-100%);
+        #menu-switch:checked ~ #home-menu { transform: translateY(-100%); }
+
+        @keyframes meshFlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
-        #clock {
-            position: absolute; top: 40px;
-            font-weight: 200; font-size: 1.2rem; letter-spacing: 4px; color: rgba(255,255,255,0.5);
-        }
-
+        /* --- ELEMENTS --- */
         .hub-title {
             font-size: clamp(4rem, 15vw, 7rem); font-weight: 900; margin: 0;
             letter-spacing: -4px;
             background: linear-gradient(to bottom, #fff, var(--primary));
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 0 30px var(--accent-glow));
         }
 
-        /* --- SEARCH ENGINE --- */
         .search-wrap { width: 90%; max-width: 600px; margin: 40px 0; }
         .search-inner {
             display: flex; background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(255,255,255,0.1);
             backdrop-filter: blur(15px); border-radius: 100px; padding: 8px;
-            transition: 0.4s;
         }
-        .search-inner:focus-within {
-            border-color: var(--primary);
-            box-shadow: 0 0 40px var(--accent-glow);
-        }
-        .search-inner input {
-            flex: 1; background: none; border: none; padding: 15px 20px;
-            color: white; outline: none; font-size: 1.1rem;
-        }
-        .search-inner button {
-            background: var(--primary); border: none; color: white;
-            border-radius: 50px; padding: 0 30px; cursor: pointer; font-weight: bold;
-        }
+        .search-inner input { flex: 1; background: none; border: none; padding: 15px; color: white; outline: none; }
+        .search-inner button { background: var(--primary); border: none; color: white; border-radius: 50px; padding: 0 25px; cursor: pointer; }
 
-        /* --- DASHBOARD --- */
-        .dashboard { padding: 60px 20px 150px; max-width: 1200px; margin: auto; }
-        .section-header { 
-            letter-spacing: 4px; opacity: 0.4; font-size: 0.7rem; 
-            margin: 40px 0 20px; text-transform: uppercase;
-            border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;
-        }
+        .dashboard { padding: 100px 20px; max-width: 1200px; margin: auto; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; }
+        .card { background: var(--glass); border-radius: 20px; padding: 15px; text-decoration: none; color: white; text-align: center; border: 1px solid rgba(255,255,255,0.05); transition: 0.3s; }
+        .card:hover { transform: translateY(-5px); border-color: var(--primary); }
 
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 20px;
-        }
-
-        /* --- CARDS --- */
-        .card {
-            background: var(--glass); border-radius: 20px; padding: 15px;
-            text-decoration: none; color: white; text-align: center;
-            border: 1px solid rgba(255,255,255,0.05); transition: 0.3s;
-            backdrop-filter: blur(10px); display: block;
-        }
-        .card:hover {
-            transform: translateY(-10px);
-            background: rgba(255,255,255,0.1);
-            border-color: var(--primary);
-        }
-        .card img { width: 100%; border-radius: 15px; margin-bottom: 15px; }
-        
-        /* Media Specific Styles */
-        .yt-card:hover { border-color: var(--yt); box-shadow: 0 0 20px rgba(255,0,0,0.2); }
-        .tt-card:hover { border-color: var(--tt); box-shadow: 0 0 20px rgba(0,242,234,0.2); }
-        .sc-card:hover { border-color: var(--sc); box-shadow: 0 0 20px rgba(255,85,0,0.2); }
-
-        /* --- NAVIGATION --- */
-        .navbar {
-            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
-            width: 90%; max-width: 500px; height: 70px;
-            background: rgba(10, 12, 18, 0.8); backdrop-filter: blur(30px);
-            border-radius: 100px; display: flex; justify-content: space-around;
-            align-items: center; border: 1px solid rgba(255,255,255,0.1);
-            z-index: 1000;
-        }
-        .nav-item { font-size: 1.5rem; cursor: pointer; transition: 0.3s; opacity: 0.5; text-decoration: none; color: white;}
-        .nav-item:hover { opacity: 1; transform: scale(1.2); color: var(--primary); }
+        .navbar { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 400px; height: 60px; background: rgba(10, 12, 18, 0.8); backdrop-filter: blur(30px); border-radius: 100px; display: flex; justify-content: space-around; align-items: center; border: 1px solid rgba(255,255,255,0.1); z-index: 1000; }
     </style>
 </head>
 <body>
 
+    <div class="settings-container">
+        <button class="settings-btn" onclick="toggleSettings()">⚙️</button>
+        <div id="settings-menu">
+            <div class="setting-item">THEME SELECTOR</div>
+            <div style="display: flex;">
+                <button class="theme-btn" style="background: #ff0055;" onclick="setTheme('#ff0055')"></button>
+                <button class="theme-btn" style="background: #00d2ff;" onclick="setTheme('#00d2ff')"></button>
+                <button class="theme-btn" style="background: #00ff88;" onclick="setTheme('#00ff88')"></button>
+            </div>
+            <hr style="opacity: 0.1; margin: 15px 0;">
+            <div class="setting-item" onclick="toggleStealth()" style="cursor: pointer;">🕵️ ENABLE CLOAK</div>
+        </div>
+    </div>
+
     <input type="checkbox" id="menu-switch">
 
     <div id="home-menu">
-        <div id="clock">00:00:00</div>
         <h1 class="hub-title">TITAN OS</h1>
-        
         <form action="https://duckduckgo.com/" method="GET" target="_blank" class="search-wrap">
             <div class="search-inner">
-                <input type="text" name="q" placeholder="Search the web securely..." required>
-                <input type="hidden" name="kae" value="d"> <button type="submit">GO</button>
+                <input type="text" name="q" placeholder="Explore the web..." required>
+                <button type="submit">SEARCH</button>
             </div>
         </form>
-
-        <label for="menu-switch" style="cursor: pointer; padding: 20px 60px; border: 1px solid white; border-radius: 100px; letter-spacing: 5px; font-weight: bold; font-size: 0.8rem; transition: 0.4s;" onmouseover="this.style.background='white'; this.style.color='black'" onmouseout="this.style.background='transparent'; this.style.color='white'">
-            INITIALIZE SYSTEM
-        </label>
+        <label for="menu-switch" style="cursor: pointer; padding: 15px 40px; border: 1px solid white; border-radius: 100px; font-size: 0.7rem; letter-spacing: 3px;">INITIALIZE</label>
     </div>
 
     <div class="dashboard">
-        
-        <div class="section-header">Communications & Media</div>
         <div class="grid">
-            <a href="https://youtube.com" target="_blank" class="card yt-card">
-                <div style="font-size: 2rem;">📺</div>
-                <div style="font-weight: 800; margin-top: 10px;">YOUTUBE</div>
-            </a>
-            <a href="https://tiktok.com" target="_blank" class="card tt-card">
-                <div style="font-size: 2rem;">🎵</div>
-                <div style="font-weight: 800; margin-top: 10px;">TIKTOK</div>
-            </a>
-            <a href="https://soundcloud.com" target="_blank" class="card sc-card">
-                <div style="font-size: 2rem;">☁️</div>
-                <div style="font-weight: 800; margin-top: 10px;">SOUNDCLOUD</div>
-            </a>
-            <a href="https://discord.com" target="_blank" class="card">
-                <div style="font-size: 2rem;">💬</div>
-                <div style="font-weight: 800; margin-top: 10px;">DISCORD</div>
-            </a>
-        </div>
-
-        <div class="section-header">Game Library</div>
-        <div class="grid">
-            <a href="https://1v1.lol" target="_blank" class="card">
-                <img src="https://raw.githubusercontent.com/not-under-maintenance/thumb/main/1v1-lol.png" alt="1v1">
-                <div style="font-weight: 800;">1V1 ARENA</div>
-            </a>
-            <a href="https://v6p9d9t4.ssl.hwcdn.net/html/1365121/index.html" target="_blank" class="card">
-                <img src="https://raw.githubusercontent.com/not-under-maintenance/thumb/main/retro-bowl.png" alt="Retro Bowl">
-                <div style="font-weight: 800;">RETRO BOWL</div>
-            </a>
-            <a href="https://kbhgames.com/game/slope" target="_blank" class="card">
-                <img src="https://raw.githubusercontent.com/not-under-maintenance/thumb/main/slope.png" alt="Slope">
-                <div style="font-weight: 800;">SLOPE RUNNER</div>
-            </a>
+            <a href="https://youtube.com" target="_blank" class="card">📺<br>YOUTUBE</a>
+            <a href="https://tiktok.com" target="_blank" class="card">🎵<br>TIKTOK</a>
+            <a href="https://soundcloud.com" target="_blank" class="card">☁️<br>SOUNDCLOUD</a>
+            <a href="https://1v1.lol" target="_blank" class="card">🎮<br>1V1 LOL</a>
         </div>
     </div>
 
     <nav class="navbar">
-        <a href="#" class="nav-item" title="Games">🎮</a>
-        <div class="nav-item" title="Stealth Mode" onclick="toggleStealth()">🕵️</div>
-        <a href="https://google.com" target="_blank" class="nav-item" title="Web">🌐</a>
-        <label for="menu-switch" class="nav-item" title="Home">🏠</label>
+        <div style="cursor: pointer;">🎮</div>
+        <div style="cursor: pointer;" onclick="toggleStealth()">🕵️</div>
+        <label for="menu-switch" style="cursor: pointer;">🏠</label>
     </nav>
 
     <script>
-        // LIVE CLOCK
-        function updateClock() {
-            const now = new Date();
-            document.getElementById('clock').innerText = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', second:'2-digit'});
+        // TOGGLE SETTINGS VISIBILITY
+        function toggleSettings() {
+            const menu = document.getElementById('settings-menu');
+            menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
         }
-        setInterval(updateClock, 1000);
-        updateClock();
 
-        // STEALTH / CLOAKING
+        // DYNAMIC THEME ENGINE
+        function setTheme(color) {
+            document.documentElement.style.setProperty('--primary', color);
+            document.documentElement.style.setProperty('--accent-glow', color + '4D');
+        }
+
+        // TAB CLOAKING
         function toggleStealth() {
             document.title = "Google Docs";
             document.getElementById('favicon').setAttribute('href', 'https://ssl.gstatic.com/docs/documents/images/kix-favicon7.ico');
-            alert("Stealth Active: Tab renamed to 'Google Docs'");
+            alert("Cloak Active!");
         }
 
-        // PANIC KEY (ESC)
-        document.addEventListener('keydown', (e) => {
-            if (e.key === "Escape") {
-                window.location.replace("https://classroom.google.com");
+        // CLOSE SETTINGS ON OUTSIDE CLICK
+        window.onclick = function(event) {
+            if (!event.target.matches('.settings-btn')) {
+                document.getElementById('settings-menu').style.display = "none";
             }
-        });
+        }
     </script>
 </body>
 </html>
