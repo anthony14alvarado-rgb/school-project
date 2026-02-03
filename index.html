@@ -3,129 +3,183 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>M HUB - Gaming</title>
+    <title>M HUB - Home</title>
     <style>
-        /* BASE STYLES */
+        /* BASE THEME */
         body { 
             background-color: #0b0e14; 
             color: white; 
-            font-family: sans-serif; 
-            text-align: center; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
             margin: 0;
             padding: 0;
-        }
-        
-        header { 
-            padding: 20px; 
-            border-bottom: 3px solid #ff0055; 
-            background: #151921; 
+            overflow: hidden; /* Keeps the screen still until you enter */
         }
 
-        /* THE MENU OVERLAY */
-        #home-menu {
+        /* FULL SCREEN HOME MENU */
+        #home-screen {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: #0b0e14;
+            background: radial-gradient(circle at center, #1a1f2b 0%, #0b0e14 100%);
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            z-index: 9999; /* Keeps it on top */
-            transition: opacity 0.6s ease, visibility 0.6s;
+            z-index: 10000;
+            transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* Class to hide the menu */
-        .hidden {
-            opacity: 0 !important;
-            visibility: hidden !important;
+        /* Smooth animation to hide the menu */
+        #home-screen.fade-out {
+            opacity: 0;
+            transform: scale(1.1);
+            pointer-events: none;
         }
 
-        .menu-title {
-            font-size: 3rem;
-            margin-bottom: 10px;
-            text-shadow: 0 0 10px #ff0055;
+        .hero-title {
+            font-size: clamp(3rem, 10vw, 5rem);
+            font-weight: 900;
+            letter-spacing: -2px;
+            margin: 0;
+            background: linear-gradient(45deg, #ff0055, #ff7b00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: glow 3s ease-in-out infinite alternate;
         }
 
-        #start-btn {
-            padding: 15px 40px;
+        /* URL SEARCH BAR PLACEHOLDER */
+        .search-container {
+            margin: 30px 0;
+            width: 80%;
+            max-width: 500px;
+        }
+
+        .search-bar-mock {
+            width: 100%;
+            padding: 15px 25px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid #333;
+            border-radius: 50px;
+            color: #888;
+            font-size: 1rem;
+            text-align: left;
+            cursor: not-allowed;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .btn-launch {
+            padding: 18px 60px;
             font-size: 1.2rem;
             background: #ff0055;
             color: white;
             border: none;
-            border-radius: 8px;
+            border-radius: 12px;
             cursor: pointer;
             font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            box-shadow: 0 10px 30px rgba(255, 0, 85, 0.3);
+            transition: 0.3s;
         }
 
-        /* GAME GRID */
+        .btn-launch:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(255, 0, 85, 0.5);
+            background: #ff1a6b;
+        }
+
+        /* GAME CONTENT (Hidden initially) */
+        header { 
+            padding: 20px; 
+            border-bottom: 2px solid #ff0055; 
+            background: #151921;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
         .game-grid { 
             display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); 
-            gap: 15px; 
-            padding: 20px; 
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); 
+            gap: 20px; 
+            padding: 30px; 
         }
 
         .game-card {
             background: #151921;
-            border-radius: 12px;
-            padding: 10px;
+            border-radius: 15px;
+            padding: 15px;
             text-decoration: none;
             color: white;
-            border: 2px solid #333;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            border: 1px solid #333;
+            transition: 0.3s;
+        }
+
+        .game-card:hover {
+            border-color: #ff0055;
+            transform: scale(1.03);
         }
 
         .game-img {
             width: 100%;
-            border-radius: 8px;
+            border-radius: 10px;
             aspect-ratio: 1/1;
             object-fit: cover;
         }
 
-        .game-title {
-            margin-top: 10px;
-            font-weight: bold;
+        @keyframes glow {
+            from { filter: drop-shadow(0 0 10px rgba(255,0,85,0.2)); }
+            to { filter: drop-shadow(0 0 30px rgba(255,0,85,0.6)); }
         }
     </style>
 </head>
 <body>
 
-    <div id="home-menu">
-        <h1 class="menu-title">M HUB</h1>
-        <p style="color: #666; margin-bottom: 20px;">Welcome to the Hub</p>
-        <button id="start-btn" onclick="enterSite()">ENTER HUB</button>
+    <div id="home-screen">
+        <h1 class="hero-title">M HUB</h1>
+        
+        <div class="search-container">
+            <div class="search-bar-mock">
+                <span>Enter Game URL...</span>
+                <span style="font-size: 0.8rem; opacity: 0.5;">[SOON]</span>
+            </div>
+        </div>
+
+        <button class="btn-launch" onclick="launchHub()">Enter Hub</button>
     </div>
 
     <header>
-        <h1>M HUB</h1>
+        <h2 style="margin:0; font-size: 1.5rem; color: #ff0055;">M HUB</h2>
+        <div style="font-size: 0.9rem; color: #666;">Status: Online</div>
     </header>
 
     <div class="game-grid">
         <a href="https://v6p9d9t4.ssl.hwcdn.net/html/1365121/index.html" class="game-card">
             <img src="https://raw.githubusercontent.com/not-under-maintenance/thumb/main/retro-bowl.png" class="game-img">
-            <div class="game-title">Retro Bowl</div>
+            <h3 style="text-align:center; font-size: 1rem;">Retro Bowl</h3>
         </a>
 
         <a href="https://kbhgames.com/game/slope" class="game-card">
             <img src="https://raw.githubusercontent.com/not-under-maintenance/thumb/main/slope.png" class="game-img">
-            <div class="game-title">Slope</div>
+            <h3 style="text-align:center; font-size: 1rem;">Slope</h3>
         </a>
 
         <a href="https://1v1.lol" class="game-card">
             <img src="https://raw.githubusercontent.com/not-under-maintenance/thumb/main/1v1-lol.png" class="game-img">
-            <div class="game-title">1v1.LOL</div>
+            <h3 style="text-align:center; font-size: 1rem;">1v1.LOL</h3>
         </a>
     </div>
 
     <script>
-        function enterSite() {
-            // This finds the menu and adds the "hidden" class to fade it out
-            document.getElementById('home-menu').classList.add('hidden');
+        function launchHub() {
+            // Animates the menu away
+            document.getElementById('home-screen').classList.add('fade-out');
+            // Allows the user to scroll the game list
+            document.body.style.overflow = 'auto';
         }
     </script>
 
