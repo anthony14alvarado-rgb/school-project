@@ -15,25 +15,25 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
 
         body {
-            /* Using a high-quality galaxy background */
             background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), 
                         url('https://images.unsplash.com/photo-1462331940025-496dfbfc7564?q=80&w=2022&auto=format&fit=crop') no-repeat center center fixed;
             background-size: cover;
             color: white;
             height: 100vh;
-            display: flex; /* Creates the Sidebar + Main Content split */
+            display: flex;
             overflow: hidden;
         }
 
-        /* --- SIDEBAR (Middle Left) --- */
+        /* --- SIDEBAR (Left Side, Horizontal Text) --- */
         nav {
-            width: 80px;
+            width: 140px; /* Slightly wider to fit horizontal text */
             height: 100vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
-            align-items: center;
-            gap: 50px;
+            align-items: flex-start; /* Align text to the left of the sidebar */
+            padding-left: 30px;
+            gap: 30px;
             background: rgba(0, 0, 0, 0.2);
             backdrop-filter: blur(10px);
             border-right: 1px solid var(--glass-border);
@@ -41,16 +41,16 @@
         }
 
         nav a {
-            color: rgba(255, 255, 255, 0.4);
+            color: rgba(255, 255, 255, 0.5);
             text-decoration: none;
-            font-size: 12px;
+            font-size: 15px;
             font-weight: 600;
             text-transform: uppercase;
-            letter-spacing: 2px;
-            writing-mode: vertical-rl;
-            transform: rotate(180deg);
+            letter-spacing: 1px;
+            /* UNFLIPPED: Removed writing-mode and transform */
             transition: 0.3s;
             cursor: pointer;
+            position: relative;
         }
 
         nav a:hover, nav a.active {
@@ -58,13 +58,25 @@
             text-shadow: 0 0 15px var(--accent);
         }
 
-        /* --- MAIN CONTENT (Perfectly Centered) --- */
+        /* Line indicator for active page */
+        nav a.active::before {
+            content: '';
+            position: absolute;
+            left: -15px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 4px;
+            height: 15px;
+            background: var(--accent);
+            border-radius: 10px;
+        }
+
+        /* --- MAIN CONTENT (Middle) --- */
         main {
             flex: 1;
             display: flex;
             justify-content: center;
             align-items: center;
-            position: relative;
         }
 
         .center-group {
@@ -77,97 +89,100 @@
             padding: 20px;
         }
 
-        /* Search Bar */
+        /* Search Section */
         .search-wrapper {
             width: 100%;
-            max-width: 550px;
-            margin-bottom: 60px; /* Space between search and apps */
+            max-width: 580px;
+            margin-bottom: 50px;
         }
 
         .search-wrapper h1 {
             font-size: 64px;
             font-weight: 800;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
             letter-spacing: -3px;
-            background: linear-gradient(to bottom, #fff, #888);
+            background: linear-gradient(to bottom, #fff, #aaa);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
         .search-bar {
             width: 100%;
-            padding: 20px 30px;
+            padding: 22px 35px;
             border-radius: 50px;
             border: 1px solid var(--glass-border);
             background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(20px);
+            backdrop-filter: blur(25px);
             color: white;
             font-size: 18px;
             outline: none;
             transition: 0.3s;
             text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         }
 
         .search-bar:focus {
             border-color: var(--accent);
             background: rgba(255, 255, 255, 0.1);
-            box-shadow: 0 0 30px rgba(195, 166, 255, 0.2);
+            box-shadow: 0 0 40px rgba(195, 166, 255, 0.2);
         }
 
         /* App Grid */
         .app-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 20px;
+            gap: 25px;
             width: 100%;
         }
 
         .app-card {
             background: var(--glass);
-            backdrop-filter: blur(15px);
+            backdrop-filter: blur(20px);
             border: 1px solid var(--glass-border);
-            border-radius: 20px;
-            padding: 25px 15px;
+            border-radius: 24px;
+            padding: 30px 15px;
             display: flex;
             flex-direction: column;
             align-items: center;
             cursor: pointer;
-            transition: 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+            transition: 0.4s cubic-bezier(0.2, 1, 0.2, 1);
         }
 
         .app-card:hover {
             background: rgba(255, 255, 255, 0.12);
-            transform: translateY(-10px) scale(1.05);
+            transform: translateY(-12px);
             border-color: var(--accent);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
         }
 
         .app-card img {
-            width: 45px;
-            height: 45px;
-            margin-bottom: 12px;
-            filter: drop-shadow(0 5px 15px rgba(0,0,0,0.3));
+            width: 50px;
+            height: 50px;
+            margin-bottom: 15px;
+            filter: drop-shadow(0 8px 15px rgba(0,0,0,0.4));
         }
 
         .app-card span {
             font-size: 13px;
-            font-weight: 500;
-            color: rgba(255, 255, 255, 0.7);
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.8);
+            letter-spacing: 0.5px;
         }
 
-        /* Views Overlay */
+        /* Fullscreen App Overlay */
         #overlay {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background: #000; z-index: 1000; display: none;
         }
         #overlay iframe { width: 100%; height: 100%; border: none; }
         .close-btn {
-            position: fixed; top: 20px; right: 20px;
-            background: rgba(255,255,255,0.1); color: white; border: none;
-            padding: 10px 20px; border-radius: 8px; cursor: pointer;
-            backdrop-filter: blur(10px);
+            position: fixed; top: 25px; right: 25px;
+            background: rgba(255,255,255,0.15); color: white; border: none;
+            padding: 12px 24px; border-radius: 12px; cursor: pointer;
+            backdrop-filter: blur(10px); font-weight: bold;
         }
 
-        .page { display: none; }
+        .page { display: none; width: 100%; }
         .active-page { display: flex !important; }
 
     </style>
@@ -178,6 +193,7 @@
         <a onclick="showPage('home')" id="n-home" class="active">Home</a>
         <a onclick="showPage('games')" id="n-games">Games</a>
         <a onclick="showPage('settings')" id="n-settings">Settings</a>
+        <a onclick="showPage('about')" id="n-about">About</a>
     </nav>
 
     <main>
@@ -236,14 +252,14 @@
             <div class="search-wrapper">
                 <h1>Settings</h1>
                 <button class="search-bar" style="cursor:pointer" onclick="cloak()">Activate Tab Cloak</button>
-                <p style="margin-top:20px; color:rgba(255,255,255,0.5)">Panic Key: <b>~</b></p>
+                <p style="margin-top:20px; color:rgba(255,255,255,0.4)">Panic Button: Press <b>~</b> to hide</p>
             </div>
         </div>
 
     </main>
 
     <div id="overlay">
-        <button class="close-btn" onclick="exitApp()">Close App</button>
+        <button class="close-btn" onclick="exitApp()">X Close</button>
         <iframe id="frame" src=""></iframe>
     </div>
 
@@ -278,7 +294,7 @@
             let link = document.querySelector("link[rel*='icon']") || document.createElement('link');
             link.href = 'https://ssl.gstatic.com/images/branding/product/1x/drive_2020q4_32dp.png';
             document.getElementsByTagName('head')[0].appendChild(link);
-            alert("Cloaked as Google Drive");
+            alert("Cloak Active");
         }
 
         window.onkeydown = (e) => { if(e.key === '~') window.location.href="https://classroom.google.com"; };
