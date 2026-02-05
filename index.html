@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <title>Luminal Pro | WebOS</title>
+    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/2991/2991148.png">
     <style>
         :root {
             --bg-blur: blur(25px);
-            --glass: rgba(255, 255, 255, 0.1);
-            --glass-border: rgba(255, 255, 255, 0.2);
-            --accent: #0078ff;
-            --font: 'Inter', -apple-system, system-ui, sans-serif;
+            --glass: rgba(20, 20, 20, 0.6);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --accent: #6c5ce7;
+            --font: 'Inter', system-ui, sans-serif;
         }
 
         * { box-sizing: border-box; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
@@ -19,10 +20,10 @@
             height: 100vh; width: 100vw;
             overflow: hidden;
             font-family: var(--font);
-            background: #000 url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop') center/cover no-repeat;
+            background: #000 url('https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?q=80&w=2574&auto=format&fit=crop') center/cover no-repeat;
         }
 
-        /* Desktop Grid */
+        /* Desktop */
         #desktop {
             height: calc(100vh - 70px);
             padding: 25px;
@@ -37,198 +38,299 @@
             cursor: pointer; padding: 10px; border-radius: 12px;
         }
 
-        .desktop-icon:hover { background: var(--glass); backdrop-filter: blur(5px); }
-
-        .desktop-icon img { width: 45px; height: 45px; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3)); }
-
+        .desktop-icon:hover { background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); }
+        .desktop-icon img { width: 50px; height: 50px; border-radius: 12px; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.4)); }
+        
         .desktop-icon span { 
             color: white; font-size: 12px; margin-top: 8px; 
-            text-shadow: 0 2px 4px rgba(0,0,0,0.5); font-weight: 500;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.8); font-weight: 500;
+            text-align: center;
         }
 
-        /* Pro Window System */
+        /* Windows */
         .window {
-            position: absolute; min-width: 400px; min-height: 250px;
-            background: rgba(20, 20, 20, 0.7);
+            position: absolute; min-width: 400px; min-height: 300px;
+            background: var(--glass);
             backdrop-filter: var(--bg-blur);
             -webkit-backdrop-filter: var(--bg-blur);
             border: 1px solid var(--glass-border);
-            border-radius: 16px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            border-radius: 14px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.6);
             display: flex; flex-direction: column;
-            animation: windowOpen 0.3s ease-out;
+            animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             overflow: hidden;
+            resize: both;
         }
 
-        @keyframes windowOpen {
+        @keyframes popIn {
             from { transform: scale(0.9); opacity: 0; }
             to { transform: scale(1); opacity: 1; }
         }
 
         .win-header {
-            padding: 12px 18px; display: flex; justify-content: space-between;
-            align-items: center; background: rgba(255,255,255,0.05);
+            padding: 10px 15px; display: flex; justify-content: space-between;
+            align-items: center; background: rgba(255,255,255,0.03);
+            border-bottom: 1px solid var(--glass-border);
             cursor: move; user-select: none;
         }
 
-        .win-title { font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.8); }
+        .win-title { font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.9); pointer-events: none;}
+        .win-controls { display: flex; gap: 8px; }
+        .dot { width: 12px; height: 12px; border-radius: 50%; cursor: pointer; }
+        .dot.close { background: #ff5f56; } .dot.min { background: #ffbd2e; } .dot.max { background: #27c93f; }
 
-        .win-btns { display: flex; gap: 8px; }
+        .win-content { flex: 1; overflow: hidden; position: relative; }
+        iframe { width: 100%; height: 100%; border: none; background: #fff; }
 
-        .dot { width: 12px; height: 12px; border-radius: 50%; cursor: pointer; border: none; }
-        .dot.red { background: #ff5f56; }
-        .dot.yellow { background: #ffbd2e; }
-        .dot.green { background: #27c93f; }
-
-        .win-content { flex: 1; padding: 20px; color: white; overflow: auto; }
-
-        /* Custom Apps Style */
-        .terminal { font-family: 'Fira Code', monospace; color: #00ff41; font-size: 14px; }
-        .terminal input { 
-            background: transparent; border: none; color: #00ff41; 
-            outline: none; width: 80%; font-family: inherit;
+        /* Game Grid Styling */
+        .game-grid {
+            padding: 20px; display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); 
+            gap: 15px;
         }
+        .game-item {
+            background: rgba(255,255,255,0.1); border-radius: 10px;
+            padding: 15px; text-align: center; cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .game-item:hover { transform: translateY(-5px); background: rgba(255,255,255,0.2); }
+        .game-item img { width: 40px; height: 40px; margin-bottom: 8px; }
+        .game-item div { font-size: 12px; color: white; }
 
-        /* Floating Taskbar */
+        /* Taskbar */
         #taskbar {
             position: fixed; bottom: 15px; left: 50%;
             transform: translateX(-50%);
-            background: rgba(20, 20, 20, 0.6);
+            background: rgba(10, 10, 10, 0.7);
             backdrop-filter: blur(20px);
             padding: 8px 15px; border-radius: 24px;
             border: 1px solid var(--glass-border);
             display: flex; align-items: center; gap: 15px;
             z-index: 999999;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
-        .task-item {
-            width: 44px; height: 44px; cursor: pointer;
-            transition: transform 0.2s;
+        .task-icon {
+            width: 40px; height: 40px; cursor: pointer;
+            transition: transform 0.2s; border-radius: 10px;
         }
-
-        .task-item:hover { transform: scale(1.2) translateY(-5px); }
+        .task-icon:hover { transform: scale(1.15) translateY(-5px); }
         
-        #clock { color: white; font-size: 13px; font-weight: 600; padding: 0 10px; border-left: 1px solid var(--glass-border); }
+        #clock { 
+            color: rgba(255,255,255,0.8); font-size: 13px; font-weight: 600; 
+            padding-left: 15px; border-left: 1px solid rgba(255,255,255,0.2); 
+        }
+
+        /* Utility Classes */
+        .settings-panel { padding: 20px; color: white; }
+        .btn {
+            background: var(--accent); color: white; border: none;
+            padding: 8px 16px; border-radius: 6px; cursor: pointer;
+            margin-top: 10px; font-size: 12px; width: 100%;
+        }
+        .btn:hover { opacity: 0.9; }
+        input { 
+            width: 100%; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1);
+            padding: 8px; border-radius: 6px; color: white; margin-bottom: 10px;
+        }
 
     </style>
 </head>
 <body>
 
 <div id="desktop">
-    <div class="desktop-icon" onclick="openApp('terminal')">
-        <img src="https://cdn-icons-png.flaticon.com/512/906/906343.png">
-        <span>Terminal</span>
+    <div class="desktop-icon" onclick="openApp('arcade')">
+        <img src="https://cdn-icons-png.flaticon.com/512/808/808439.png">
+        <span>Arcade</span>
     </div>
     <div class="desktop-icon" onclick="openApp('browser')">
-        <img src="https://cdn-icons-png.flaticon.com/512/888/888846.png">
-        <span>Web</span>
+        <img src="https://cdn-icons-png.flaticon.com/512/3113/3113025.png">
+        <span>Surf</span>
+    </div>
+    <div class="desktop-icon" onclick="openApp('settings')">
+        <img src="https://cdn-icons-png.flaticon.com/512/3524/3524659.png">
+        <span>Settings</span>
     </div>
 </div>
 
 <div id="taskbar">
-    <img class="task-item" src="https://cdn-icons-png.flaticon.com/512/5968/5968282.png" onclick="openApp('settings')">
-    <img class="task-item" src="https://cdn-icons-png.flaticon.com/512/2991/2991148.png" onclick="openApp('browser')">
-    <div id="clock">12:00:00</div>
+    <img class="task-icon" src="https://cdn-icons-png.flaticon.com/512/808/808439.png" onclick="openApp('arcade')">
+    <img class="task-icon" src="https://cdn-icons-png.flaticon.com/512/3113/3113025.png" onclick="openApp('browser')">
+    <img class="task-icon" src="https://cdn-icons-png.flaticon.com/512/3524/3524659.png" onclick="openApp('settings')">
+    <div id="clock">12:00</div>
 </div>
 
 <script>
     let zIndex = 100;
 
+    // --- APP DATA ---
     const APPS = {
-        terminal: {
-            title: "System Terminal",
-            content: `<div class="terminal">
-                <p>Welcome to LuminalOS Pro v2.0.0</p>
-                <p>Type 'help' for a list of commands.</p>
-                <div id="term-out"></div>
-                <span>$ </span><input type="text" id="term-in" autofocus onkeydown="runCommand(event)">
-            </div>`
+        arcade: {
+            title: "Game Arcade",
+            width: 600, height: 400,
+            content: `
+                <div class="game-grid">
+                    <div class="game-item" onclick="launchGame('2048', 'https://play2048.co/')">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/2048_logo.svg/1200px-2048_logo.svg.png">
+                        <div>2048</div>
+                    </div>
+                    <div class="game-item" onclick="launchGame('Hextris', 'https://hextris.io/')">
+                        <img src="https://raw.githubusercontent.com/Hextris/hextris/gh-pages/favicon.ico">
+                        <div>Hextris</div>
+                    </div>
+                    <div class="game-item" onclick="launchGame('Minecraft (Clone)', 'https://classic.minecraft.net/')">
+                        <img src="https://cdn-icons-png.flaticon.com/512/5968/5968840.png">
+                        <div>Minecraft</div>
+                    </div>
+                    <div class="game-item" onclick="launchGame('Paper.io', 'https://paper-io.com/')">
+                        <img src="https://cdn-icons-png.flaticon.com/512/720/720307.png">
+                        <div>Paper.io</div>
+                    </div>
+                </div>`
         },
         browser: {
             title: "Web Browser",
-            content: `<iframe src="https://www.bing.com" style="width:100%; height:100%; border:none; border-radius: 8px; background: white;"></iframe>`
+            width: 800, height: 500,
+            content: `<iframe src="https://www.wikipedia.org" style="width:100%;height:100%;"></iframe>`
         },
         settings: {
-            title: "System Settings",
-            content: `<h3>Appearance</h3><p>Change Wallpaper</p>
-            <input type="text" id="bg-url" placeholder="Paste image URL..." style="width:100%; padding:8px; border-radius:5px; border:none; margin-top:10px;">
-            <button onclick="setWall()" style="margin-top:10px; padding:8px 15px; border-radius:5px; border:none; background:var(--accent); color:white; cursor:pointer;">Apply</button>`
+            title: "System Control",
+            width: 350, height: 400,
+            content: `
+                <div class="settings-panel">
+                    <h3>Stealth Mode</h3>
+                    <p>Disguise this tab as Google Drive.</p>
+                    <button class="btn" onclick="cloakTab()">Activate Cloak</button>
+                    <hr style="border-color:rgba(255,255,255,0.1); margin: 20px 0;">
+                    <h3>Panic Button</h3>
+                    <p>Press <b>~</b> (Tilde) to instantly close everything and open Google Classroom.</p>
+                    <hr style="border-color:rgba(255,255,255,0.1); margin: 20px 0;">
+                    <h3>Wallpaper</h3>
+                    <input type="text" id="bg-url" placeholder="Image URL...">
+                    <button class="btn" onclick="setWall()">Apply Wallpaper</button>
+                </div>`
         }
     };
 
+    // --- CORE OS FUNCTIONS ---
+
     function openApp(key) {
-        const app = APPS[key];
+        spawnWindow(APPS[key].title, APPS[key].content, APPS[key].width, APPS[key].height);
+    }
+
+    function launchGame(name, url) {
+        // Launches a game in a dedicated window
+        const content = `<iframe src="${url}" allowfullscreen="true" style="width:100%; height:100%; border:none;"></iframe>`;
+        spawnWindow(name, content, 800, 600);
+    }
+
+    function spawnWindow(title, content, w, h) {
         const win = document.createElement('div');
         win.className = 'window';
-        win.style.left = (150 + (zIndex * 2)) + 'px';
-        win.style.top = (100 + (zIndex * 2)) + 'px';
+        win.style.left = Math.max(0, (window.innerWidth/2) - (w/2) + (Math.random()*40)) + 'px';
+        win.style.top = Math.max(0, (window.innerHeight/2) - (h/2) + (Math.random()*40)) + 'px';
+        win.style.width = (w || 400) + 'px';
+        win.style.height = (h || 300) + 'px';
         win.style.zIndex = zIndex++;
-
+        
         win.innerHTML = `
             <div class="win-header" onmousedown="dragWindow(this.parentElement)">
-                <div class="win-btns">
-                    <div class="dot red" onclick="this.closest('.window').remove()"></div>
-                    <div class="dot yellow"></div>
-                    <div class="dot green"></div>
+                <div class="win-title">${title}</div>
+                <div class="win-controls">
+                    <div class="dot close" onclick="this.closest('.window').remove()"></div>
+                    <div class="dot min" onclick="toggleMax(this.closest('.window'))"></div>
+                    <div class="dot max" onclick="toggleMax(this.closest('.window'))"></div>
                 </div>
-                <div class="win-title">${app.title}</div>
-                <div style="width:50px"></div>
             </div>
-            <div class="win-content">${app.content}</div>
+            <div class="win-content">${content}</div>
         `;
+        
+        // Bring to front on click
+        win.onmousedown = () => win.style.zIndex = zIndex++;
         document.body.appendChild(win);
     }
 
-    // Terminal Logic
-    function runCommand(e) {
-        if (e.key === 'Enter') {
-            const input = e.target.value.toLowerCase();
-            const output = document.getElementById('term-out');
-            let res = '';
-            
-            if (input === 'help') res = "Available: clear, help, about, exit";
-            else if (input === 'about') res = "LuminalOS: A glassmorphism WebOS experiment.";
-            else if (input === 'clear') { output.innerHTML = ''; e.target.value = ''; return; }
-            else res = `Command not found: ${input}`;
+    // --- UTILITIES ---
 
-            output.innerHTML += `<div>$ ${input}</div><div>${res}</div><br>`;
-            e.target.value = '';
-        }
-    }
-
-    // Window Dragger
     function dragWindow(el) {
         let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
-        el.onmousedown = () => el.style.zIndex = zIndex++;
         
         const dragStart = (e) => {
-            e = e || window.event;
+            e.preventDefault();
             pos3 = e.clientX;
             pos4 = e.clientY;
-            document.onmouseup = () => { document.onmouseup = null; document.onmousemove = null; };
-            document.onmousemove = (e) => {
-                pos1 = pos3 - e.clientX;
-                pos2 = pos4 - e.clientY;
-                pos3 = e.clientX;
-                pos4 = e.clientY;
-                el.style.top = (el.offsetTop - pos2) + "px";
-                el.style.left = (el.offsetLeft - pos1) + "px";
-            };
+            document.onmouseup = dragEnd;
+            document.onmousemove = drag;
         }
-        dragStart();
+
+        const drag = (e) => {
+            e.preventDefault();
+            pos1 = pos3 - e.clientX;
+            pos2 = pos4 - e.clientY;
+            pos3 = e.clientX;
+            pos4 = e.clientY;
+            el.style.top = (el.offsetTop - pos2) + "px";
+            el.style.left = (el.offsetLeft - pos1) + "px";
+        }
+
+        const dragEnd = () => {
+            document.onmouseup = null;
+            document.onmousemove = null;
+        }
+
+        dragStart(event);
     }
 
-    // Wallpaper
+    function toggleMax(el) {
+        if (!el.dataset.max) {
+            el.dataset.prevLeft = el.style.left;
+            el.dataset.prevTop = el.style.top;
+            el.dataset.prevW = el.style.width;
+            el.dataset.prevH = el.style.height;
+            
+            el.style.left = '0px';
+            el.style.top = '0px';
+            el.style.width = '100vw';
+            el.style.height = 'calc(100vh - 70px)'; // Account for taskbar
+            el.dataset.max = "true";
+        } else {
+            el.style.left = el.dataset.prevLeft;
+            el.style.top = el.dataset.prevTop;
+            el.style.width = el.dataset.prevW;
+            el.style.height = el.dataset.prevH;
+            delete el.dataset.max;
+        }
+    }
+
+    // --- FEATURES ---
+
+    // Panic Button (~)
+    document.addEventListener('keydown', (e) => {
+        if (e.key === '`' || e.key === '~') {
+            window.location.replace("https://classroom.google.com");
+        }
+    });
+
+    // Tab Cloaking
+    function cloakTab() {
+        document.title = "My Drive - Google Drive";
+        let link = document.querySelector("link[rel*='icon']") || document.createElement('link');
+        link.type = 'image/x-icon';
+        link.rel = 'shortcut icon';
+        link.href = 'https://ssl.gstatic.com/images/branding/product/1x/drive_2020q4_32dp.png';
+        document.getElementsByTagName('head')[0].appendChild(link);
+    }
+
     function setWall() {
         const url = document.getElementById('bg-url').value;
-        document.body.style.backgroundImage = `url('${url}')`;
+        if(url) document.body.style.backgroundImage = `url('${url}')`;
     }
 
-    // Live Clock
     setInterval(() => {
-        document.getElementById('clock').innerText = new Date().toLocaleTimeString();
+        const now = new Date();
+        document.getElementById('clock').innerText = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
     }, 1000);
-</script>
 
+</script>
 </body>
 </html>
