@@ -3,34 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexus OS - Limbo Final</title>
+    <title>Nexus OS - Limbo Focus</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;800&family=Orbitron:wght@700&display=swap" rel="stylesheet">
     <style>
         :root {
             --glass: rgba(255, 255, 255, 0.05);
             --glass-border: rgba(255, 255, 255, 0.12);
             --accent: #c3a6ff;
-            --limbo-red: #4a0000;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
         body { background: #000; color: white; height: 100vh; overflow: hidden; }
 
-        /* --- LIMBO GAME --- */
+        /* --- LIMBO OVERLAY --- */
         #limbo-overlay {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background: #020202; z-index: 5000; display: flex;
             justify-content: center; align-items: center;
         }
 
-        #key-anchor { position: relative; width: 1px; height: 1px; }
+        #key-anchor {
+            position: relative; width: 320px; height: 200px;
+        }
 
-        .limbo-key {
-            position: absolute; width: 60px; height: 60px;
-            background: url('https://i.ibb.co/VWV0p0p/limbo-key-red.png') no-repeat center center;
-            background-size: contain; filter: grayscale(1) brightness(0.2);
-            cursor: pointer; transition: transform 0.2s, filter 0.5s, left 0.4s, top 0.4s;
-            margin-left: -30px; margin-top: -30px;
+        .limbo-block {
+            position: absolute;
+            width: 60px; height: 60px;
+            background: #222; /* Block Style */
+            border: 2px solid #444;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex; justify-content: center; align-items: center;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+        }
+
+        .limbo-block::after {
+            content: ''; width: 20px; height: 20px; background: rgba(255,255,255,0.1); border-radius: 2px;
         }
 
         .flash-bang { animation: flashEffect 0.8s forwards; }
@@ -40,38 +49,21 @@
             100% { background: transparent; }
         }
 
-        /* --- NEXUS OS INTERFACE --- */
+        /* --- OS UI --- */
         #nexus-interface { opacity: 0; transition: opacity 1.5s; height: 100%; display: flex; pointer-events: none; }
         #nexus-interface.active { opacity: 1; pointer-events: all; }
-
-        .bg-layer { 
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.85)), 
-            url('https://images.unsplash.com/photo-1462331940025-496dfbfc7564?q=80&w=2022&auto=format&fit=crop'); 
-            background-size: cover; z-index: -1; 
-        }
-
-        nav { 
-            width: 130px; height: 100vh; display: flex; flex-direction: column; 
-            justify-content: center; padding-left: 25px; gap: 35px; 
-            background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(25px); 
-            border-right: 1px solid var(--glass-border); z-index: 100; 
-        }
-
-        nav a { color: rgba(255, 255, 255, 0.3); text-decoration: none; font-size: 13px; font-weight: 800; text-transform: uppercase; cursor: pointer; letter-spacing: 2px; transition: 0.3s; }
+        .bg-layer { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.85)), url('https://images.unsplash.com/photo-1462331940025-496dfbfc7564?q=80&w=2022&auto=format&fit=crop'); background-size: cover; z-index: -1; }
+        nav { width: 130px; height: 100vh; display: flex; flex-direction: column; justify-content: center; padding-left: 25px; gap: 35px; background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(25px); border-right: 1px solid var(--glass-border); z-index: 100; }
+        nav a { color: rgba(255, 255, 255, 0.3); text-decoration: none; font-size: 13px; font-weight: 800; text-transform: uppercase; cursor: pointer; letter-spacing: 2px; }
         nav a.active { color: var(--accent); text-shadow: 0 0 15px var(--accent); }
-
         main { flex: 1; display: flex; justify-content: center; align-items: center; }
         .page { display: none; width: 100%; max-width: 850px; flex-direction: column; align-items: center; }
-        .active-page { display: flex; animation: fadeInUp 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
-
+        .active-page { display: flex; animation: fadeInUp 0.6s forwards; }
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
-
-        .search-bar { width: 100%; max-width: 450px; padding: 20px; border-radius: 50px; border: 1px solid var(--glass-border); background: rgba(255,255,255,0.04); color: white; text-align: center; margin-bottom: 40px; outline: none; font-size: 16px; }
-        
+        .search-bar { width: 100%; max-width: 450px; padding: 20px; border-radius: 50px; border: 1px solid var(--glass-border); background: rgba(255,255,255,0.04); color: white; text-align: center; margin-bottom: 40px; outline: none; }
         .app-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; width: 100%; }
         .app-card { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 20px; padding: 25px; transition: 0.4s; cursor: pointer; text-align: center; }
-        .app-card:hover { transform: translateY(-10px); background: rgba(255,255,255,0.08); border-color: var(--accent); }
+        .app-card:hover { transform: translateY(-10px); border-color: var(--accent); }
         .app-card img { width: 40px; height: 40px; margin-bottom: 12px; }
     </style>
 </head>
@@ -117,79 +109,96 @@
 
     <script>
         const anchor = document.getElementById('key-anchor');
-        let keyElements = [];
+        const gridPositions = [];
+        let blocks = [];
         let targetIndex = 0;
         let isWaiting = false;
-        let angle = 0;
-        let circleActive = false;
 
         function initLimbo() {
             anchor.innerHTML = '';
-            keyElements = [];
+            blocks = [];
+            gridPositions.length = 0;
             targetIndex = Math.floor(Math.random() * 8);
             isWaiting = false;
-            circleActive = false;
-            angle = 0;
 
+            // Define 8 fixed spots
             for (let i = 0; i < 8; i++) {
-                const key = document.createElement('div');
-                key.classList.add('limbo-key');
-                key.style.left = ((i % 4) - 1.5) * 85 + 'px';
-                key.style.top = (Math.floor(i / 4) - 0.5) * 110 + 'px';
-                key.onclick = () => checkKey(i);
-                anchor.appendChild(key);
-                keyElements.push(key);
+                gridPositions.push({
+                    x: (i % 4) * 80,
+                    y: Math.floor(i / 4) * 100
+                });
+            }
+
+            // Create Blocks at spots
+            for (let i = 0; i < 8; i++) {
+                const block = document.createElement('div');
+                block.classList.add('limbo-block');
+                block.style.left = gridPositions[i].x + 'px';
+                block.style.top = gridPositions[i].y + 'px';
+                block.dataset.currentSpot = i;
+                block.onclick = () => checkBlock(i);
+                anchor.appendChild(block);
+                blocks.push(block);
             }
             setTimeout(revealTarget, 1000);
         }
 
         function revealTarget() {
-            keyElements[targetIndex].style.filter = 'grayscale(0) brightness(1.5) drop-shadow(0 0 20px #55ff55)';
-            keyElements[targetIndex].style.backgroundColor = 'rgba(85, 255, 85, 0.15)';
+            // Flash target block Green
+            blocks[targetIndex].style.borderColor = '#55ff55';
+            blocks[targetIndex].style.boxShadow = '0 0 20px #55ff55';
             
             setTimeout(() => {
-                keyElements.forEach(k => {
-                    k.style.filter = 'grayscale(0) sepia(1) saturate(15) hue-rotate(-55deg) brightness(0.15)';
-                    k.style.backgroundColor = 'transparent';
+                // All blocks go Dark Red
+                blocks.forEach(b => {
+                    b.style.borderColor = '#4a0000';
+                    b.style.boxShadow = 'none';
+                    b.style.background = '#1a0000';
                 });
-                scrambleKeys();
-            }, 1200);
+                startSwitching();
+            }, 1000);
         }
 
-        function scrambleKeys() {
-            let moves = 0;
-            const moveInterval = setInterval(() => {
-                keyElements.forEach(k => {
-                    k.style.left = (Math.random() * 500 - 250) + 'px';
-                    k.style.top = (Math.random() * 500 - 250) + 'px';
-                });
-                moves++;
-                if (moves > 15) {
-                    clearInterval(moveInterval);
-                    startCircle();
+        function startSwitching() {
+            let switches = 0;
+            const switchInterval = setInterval(() => {
+                // Pick two random blocks to swap spots
+                let a = Math.floor(Math.random() * 8);
+                let b = Math.floor(Math.random() * 8);
+                while(a === b) b = Math.floor(Math.random() * 8);
+
+                let spotA = blocks[a].dataset.currentSpot;
+                let spotB = blocks[b].dataset.currentSpot;
+
+                // Swap them visually
+                blocks[a].style.left = gridPositions[spotB].x + 'px';
+                blocks[a].style.top = gridPositions[spotB].y + 'px';
+                blocks[b].style.left = gridPositions[spotA].x + 'px';
+                blocks[b].style.top = gridPositions[spotA].y + 'px';
+
+                // Update data
+                blocks[a].dataset.currentSpot = spotB;
+                blocks[b].dataset.currentSpot = spotA;
+
+                switches++;
+                if (switches > 15) {
+                    clearInterval(switchInterval);
+                    finalizePositions();
                 }
-            }, 250);
+            }, 300);
         }
 
-        function startCircle() {
-            circleActive = true;
-            const radius = 140;
-            const circleLoop = setInterval(() => {
-                if(!circleActive) { clearInterval(circleLoop); return; }
-                angle += 0.025;
-                keyElements.forEach((k, i) => {
-                    const offset = (i * (Math.PI * 2)) / 8;
-                    k.style.left = Math.cos(angle + offset) * radius + 'px';
-                    k.style.top = Math.sin(angle + offset) * radius + 'px';
-                });
-                if (angle > 5.5) { 
-                    circleActive = false;
-                    isWaiting = true;
-                }
-            }, 16);
+        function finalizePositions() {
+            const colors = ['#ff5555', '#55ff55', '#5555ff', '#ffff55', '#ff55ff', '#55ffff', '#ffa500', '#ffffff'];
+            blocks.forEach((b, i) => {
+                b.style.borderColor = colors[i];
+                b.style.boxShadow = `0 0 10px ${colors[i]}`;
+                b.style.background = '#222';
+            });
+            isWaiting = true;
         }
 
-        function checkKey(i) {
+        function checkBlock(i) {
             if (!isWaiting) return;
             if (i === targetIndex) {
                 document.body.classList.add('flash-bang');
@@ -198,7 +207,7 @@
                     document.getElementById('nexus-interface').classList.add('active');
                 }, 400);
             } else {
-                initLimbo();
+                initLimbo(); // Restart on fail
             }
         }
 
@@ -217,7 +226,7 @@
 
         function cloak() {
             document.title = "Google Drive";
-            alert("TAB CLOAK ACTIVE");
+            alert("CLOAK ACTIVE");
         }
 
         window.onkeydown = (e) => { if(e.key === '~') window.location.href="https://classroom.google.com"; };
