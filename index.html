@@ -4,260 +4,349 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nexus OS | Commander</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
+        /* --- CORE SYSTEM VARIABLES --- */
         :root {
             --glass: rgba(255, 255, 255, 0.05);
             --glass-border: rgba(255, 255, 255, 0.12);
             --accent: #c3a6ff;
+            --accent-glow: rgba(195, 166, 255, 0.3);
+            --bg-dark: #0a0a0a;
+            --transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+        /* --- GLOBAL RESET & PERFORMANCE --- */
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; }
 
         body {
-            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), 
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), 
                         url('https://images.unsplash.com/photo-1462331940025-496dfbfc7564?q=80&w=2022&auto=format&fit=crop') no-repeat center center fixed;
             background-size: cover;
             color: white;
             height: 100vh;
             display: flex;
             overflow: hidden;
-            animation: bgBreath 15s infinite alternate;
+            animation: bgBreath 25s infinite alternate ease-in-out;
         }
 
         @keyframes bgBreath {
-            0% { background-size: 100% auto; }
-            100% { background-size: 105% auto; }
+            0% { background-size: 100% auto; background-position: center; }
+            100% { background-size: 115% auto; background-position: top; }
         }
 
-        /* --- SIDEBAR --- */
+        /* --- NAVIGATION SIDEBAR --- */
         nav {
-            width: 140px;
+            width: 160px;
             height: 100vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: flex-start;
-            padding-left: 30px;
-            gap: 30px;
-            background: rgba(0, 0, 0, 0.2);
-            backdrop-filter: blur(10px);
+            padding-left: 40px;
+            gap: 35px;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(20px);
             border-right: 1px solid var(--glass-border);
-            z-index: 100;
+            z-index: 1000;
+            transition: var(--transition);
         }
 
         nav a {
-            color: rgba(255, 255, 255, 0.5);
+            color: rgba(255, 255, 255, 0.4);
             text-decoration: none;
-            font-size: 15px;
-            font-weight: 600;
+            font-size: 13px;
+            font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: 0.3s;
+            letter-spacing: 2.5px;
+            transition: var(--transition);
             cursor: pointer;
             position: relative;
         }
 
         nav a:hover, nav a.active {
             color: var(--accent);
-            text-shadow: 0 0 15px var(--accent);
-            transform: translateX(5px);
+            text-shadow: 0 0 20px var(--accent);
+            transform: translateX(10px);
         }
 
         nav a.active::before {
             content: '';
             position: absolute;
-            left: -15px;
+            left: -20px;
             top: 50%;
             transform: translateY(-50%);
-            width: 4px;
-            height: 15px;
+            width: 5px;
+            height: 25px;
             background: var(--accent);
             border-radius: 10px;
+            box-shadow: 0 0 20px var(--accent);
         }
 
-        /* --- MAIN CONTENT --- */
+        /* --- MAIN VIEWPORT --- */
         main {
             flex: 1;
             display: flex;
             justify-content: center;
             align-items: center;
             overflow-y: auto;
+            perspective: 1500px;
+            padding: 40px;
         }
 
         .center-group {
             width: 100%;
-            max-width: 900px;
-            display: flex;
+            max-width: 1100px;
+            display: none;
             flex-direction: column;
             align-items: center;
             text-align: center;
-            padding: 20px;
             opacity: 0;
-            transform: translateY(20px);
-            animation: fadeInUp 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+            transform: translateY(40px) rotateX(10deg);
+            animation: fadeInUp 0.8s cubic-bezier(0.2, 1, 0.2, 1) forwards;
         }
+
+        .active-page { display: flex !important; }
 
         @keyframes fadeInUp {
-            to { opacity: 1; transform: translateY(0); }
+            to { opacity: 1; transform: translateY(0) rotateX(0); }
         }
 
-        .search-wrapper {
-            width: 100%;
-            max-width: 580px;
-            margin-bottom: 40px;
-        }
-
+        /* --- HEADER STYLES --- */
+        .search-wrapper { width: 100%; max-width: 700px; margin-bottom: 60px; }
+        
         .search-wrapper h1 {
-            font-size: 64px;
-            font-weight: 800;
-            margin-bottom: 5px;
-            letter-spacing: -3px;
-            background: linear-gradient(to bottom, #fff, #aaa);
+            font-size: 82px;
+            font-weight: 900;
+            margin-bottom: 10px;
+            letter-spacing: -5px;
+            background: linear-gradient(to bottom, #ffffff 30%, #666666 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 15px 30px rgba(0,0,0,0.8));
         }
 
-        .commander-tag {
-            font-size: 11px;
-            letter-spacing: 5px;
+        .commander-status {
+            font-size: 12px;
+            letter-spacing: 6px;
             color: var(--accent);
-            margin-bottom: 25px;
-            font-weight: 800;
+            margin-bottom: 40px;
+            font-weight: 900;
             text-transform: uppercase;
-            opacity: 0.9;
+            opacity: 0.8;
+            border-top: 1px solid var(--glass-border);
+            padding-top: 10px;
+            display: inline-block;
         }
 
         .search-bar {
             width: 100%;
-            padding: 22px 35px;
-            border-radius: 50px;
+            padding: 28px 45px;
+            border-radius: 100px;
             border: 1px solid var(--glass-border);
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(25px);
+            background: rgba(255, 255, 255, 0.04);
+            backdrop-filter: blur(40px);
             color: white;
-            font-size: 18px;
+            font-size: 20px;
             outline: none;
-            transition: 0.3s;
+            transition: var(--transition);
             text-align: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            box-shadow: 0 25px 60px rgba(0,0,0,0.5);
         }
 
         .search-bar:focus {
             border-color: var(--accent);
-            background: rgba(255, 255, 255, 0.1);
-            box-shadow: 0 0 40px rgba(195, 166, 255, 0.2);
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 60px rgba(195, 166, 255, 0.2);
+            transform: scale(1.02);
         }
 
-        /* FULL APP GRID */
+        /* --- APP & GAME GRID LOGIC --- */
         .app-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 25px;
+            gap: 35px;
             width: 100%;
-            padding-bottom: 50px;
+            padding-bottom: 100px;
         }
 
         .app-card {
             background: var(--glass);
-            backdrop-filter: blur(20px);
+            backdrop-filter: blur(30px);
             border: 1px solid var(--glass-border);
-            border-radius: 24px;
-            padding: 25px 10px;
+            border-radius: 32px;
+            padding: 35px 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
             cursor: pointer;
-            transition: 0.4s cubic-bezier(0.2, 1, 0.2, 1);
+            transition: var(--transition);
             opacity: 0;
-            animation: popIn 0.5s ease forwards;
+            animation: popIn 0.7s cubic-bezier(0.2, 1, 0.2, 1) forwards;
         }
 
-        /* FULL STAGGERED ANIMATION DELAYS */
-        .app-card:nth-child(1) { animation-delay: 0.1s; }
+        /* --- PRECISION STAGGERING --- */
+        .app-card:nth-child(1) { animation-delay: 0.10s; }
         .app-card:nth-child(2) { animation-delay: 0.15s; }
-        .app-card:nth-child(3) { animation-delay: 0.2s; }
+        .app-card:nth-child(3) { animation-delay: 0.20s; }
         .app-card:nth-child(4) { animation-delay: 0.25s; }
-        .app-card:nth-child(5) { animation-delay: 0.3s; }
+        .app-card:nth-child(5) { animation-delay: 0.30s; }
         .app-card:nth-child(6) { animation-delay: 0.35s; }
-        .app-card:nth-child(7) { animation-delay: 0.4s; }
+        .app-card:nth-child(7) { animation-delay: 0.40s; }
         .app-card:nth-child(8) { animation-delay: 0.45s; }
-        .app-card:nth-child(9) { animation-delay: 0.5s; }
+        .app-card:nth-child(9) { animation-delay: 0.50s; }
         .app-card:nth-child(10) { animation-delay: 0.55s; }
-        .app-card:nth-child(11) { animation-delay: 0.6s; }
+        .app-card:nth-child(11) { animation-delay: 0.60s; }
         .app-card:nth-child(12) { animation-delay: 0.65s; }
 
         @keyframes popIn {
-            from { opacity: 0; transform: scale(0.9) translateY(20px); }
+            from { opacity: 0; transform: scale(0.75) translateY(50px); }
             to { opacity: 1; transform: scale(1) translateY(0); }
         }
 
         .app-card:hover {
             background: rgba(255, 255, 255, 0.12);
-            transform: translateY(-12px);
+            transform: translateY(-20px) scale(1.05);
             border-color: var(--accent);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.6);
         }
 
         .app-card img {
-            width: 50px; height: 50px; margin-bottom: 15px; border-radius: 12px;
-            filter: drop-shadow(0 8px 15px rgba(0,0,0,0.4)); transition: 0.3s;
+            width: 60px;
+            height: 60px;
+            margin-bottom: 20px;
+            border-radius: 18px;
+            filter: drop-shadow(0 12px 20px rgba(0,0,0,0.5));
+            transition: var(--transition);
         }
 
-        .app-card:hover img { transform: scale(1.1) rotate(5deg); }
-        .app-card span { font-size: 13px; font-weight: 600; color: rgba(255, 255, 255, 0.8); letter-spacing: 0.5px; }
+        .app-card:hover img { transform: rotate(12deg) scale(1.15); }
 
-        /* Overlay */
-        #overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #000; z-index: 1000; display: none; }
+        .app-card span {
+            font-size: 14px;
+            font-weight: 800;
+            color: rgba(255, 255, 255, 0.9);
+            letter-spacing: 0.8px;
+        }
+
+        /* --- CHAT SYSTEM INTERFACE --- */
+        .chat-portal {
+            width: 100%;
+            max-width: 900px;
+            height: 600px;
+            background: rgba(10, 10, 10, 0.6);
+            border: 1px solid var(--glass-border);
+            border-radius: 40px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            backdrop-filter: blur(50px);
+            box-shadow: 0 40px 100px rgba(0,0,0,0.8);
+        }
+
+        .chat-header {
+            padding: 25px 40px;
+            background: rgba(255,255,255,0.03);
+            border-bottom: 1px solid var(--glass-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-feed {
+            flex: 1;
+            padding: 40px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            scroll-behavior: smooth;
+        }
+
+        .message {
+            padding: 18px 25px;
+            border-radius: 22px;
+            max-width: 70%;
+            font-size: 15px;
+            line-height: 1.5;
+            animation: msgSlide 0.5s ease;
+        }
+
+        @keyframes msgSlide { from { opacity: 0; transform: translateY(10px); } }
+
+        .msg-sys { align-self: center; background: none; color: var(--accent); font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: 3px; }
+        .msg-com { align-self: flex-end; background: var(--accent); color: black; font-weight: 800; box-shadow: 0 10px 20px var(--accent-glow); }
+        .msg-usr { align-self: flex-start; background: rgba(255,255,255,0.08); border: 1px solid var(--glass-border); }
+
+        .chat-dock { padding: 30px; background: rgba(0,0,0,0.4); display: flex; gap: 20px; }
+        .chat-input { flex: 1; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); border-radius: 20px; padding: 18px 30px; color: white; outline: none; }
+        .send-btn { background: var(--accent); border: none; padding: 0 40px; border-radius: 20px; cursor: pointer; font-weight: 900; color: black; transition: 0.3s; }
+        .send-btn:hover { box-shadow: 0 0 30px var(--accent); transform: scale(1.05); }
+
+        /* --- UTILITY OVERLAY --- */
+        #overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #000; z-index: 9999; display: none; }
         #overlay iframe { width: 100%; height: 100%; border: none; }
-        .close-btn { position: fixed; top: 25px; right: 25px; background: rgba(255,255,255,0.15); color: white; border: none; padding: 12px 24px; border-radius: 12px; cursor: pointer; backdrop-filter: blur(10px); font-weight: bold; }
-
-        .page { display: none; width: 100%; }
-        .active-page { display: flex !important; }
-
+        .close-btn { position: fixed; top: 30px; right: 30px; background: rgba(255,255,255,0.2); color: white; border: none; padding: 15px 30px; border-radius: 15px; cursor: pointer; backdrop-filter: blur(15px); font-weight: 900; z-index: 10000; }
     </style>
 </head>
 <body>
 
     <nav>
-        <a onclick="showPage('home')" id="n-home" class="active">Home</a>
-        <a onclick="showPage('games')" id="n-games">Games</a>
-        <a onclick="showPage('settings')" id="n-settings">Settings</a>
-        <a onclick="showPage('about')" id="n-about">About</a>
+        <a onclick="showPage('home')" id="n-home" class="active">Nexus</a>
+        <a onclick="showPage('games')" id="n-games">Arcade</a>
+        <a onclick="showPage('chat')" id="n-chat">Chat Room</a>
+        <a onclick="showPage('settings')" id="n-settings">Config</a>
+        <a onclick="showPage('about')" id="n-about">System</a>
     </nav>
 
     <main>
-        
-        <div id="home" class="center-group page active-page">
+        <div id="home" class="center-group active-page">
             <div class="search-wrapper">
-                <h1>Welcome, Commander</h1>
-                <div class="commander-tag">System Hub • Active</div>
-                <input type="text" class="search-bar" placeholder="Enter URL or Search..." onkeydown="handleSearch(event)">
+                <h1>Nexus OS</h1>
+                <div class="commander-status">Commander Authorized • System Ready</div>
+                <input type="text" class="search-bar" placeholder="Enter Command or Search Query..." onkeydown="handleSearch(event)">
             </div>
 
             <div class="app-grid">
-                <div class="app-card" onclick="window.open('https://www.youtube.com', '_blank')"><img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png"><span>YouTube</span></div>
-                <div class="app-card" onclick="window.open('https://www.tiktok.com', '_blank')"><img src="https://cdn-icons-png.flaticon.com/512/3046/3046121.png"><span>TikTok</span></div>
+                <div class="app-card" onclick="window.open('https://youtube.com', '_blank')"><img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png"><span>YouTube</span></div>
+                <div class="app-card" onclick="window.open('https://tiktok.com', '_blank')"><img src="https://cdn-icons-png.flaticon.com/512/3046/3046121.png"><span>TikTok</span></div>
                 <div class="app-card" onclick="window.open('https://discord.com/app', '_blank')"><img src="https://cdn-icons-png.flaticon.com/512/5968/5968756.png"><span>Discord</span></div>
                 <div class="app-card" onclick="window.open('https://soundcloud.com', '_blank')"><img src="https://cdn-icons-png.flaticon.com/512/145/145850.png"><span>SoundCloud</span></div>
-                <div class="app-card" onclick="window.open('https://www.instagram.com', '_blank')"><img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png"><span>Instagram</span></div>
-                <div class="app-card" onclick="window.open('https://www.twitch.tv', '_blank')"><img src="https://cdn-icons-png.flaticon.com/512/5968/5968819.png"><span>Twitch</span></div>
+                <div class="app-card" onclick="window.open('https://instagram.com', '_blank')"><img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png"><span>Instagram</span></div>
+                <div class="app-card" onclick="window.open('https://twitch.tv', '_blank')"><img src="https://cdn-icons-png.flaticon.com/512/5968/5968819.png"><span>Twitch</span></div>
                 <div class="app-card" onclick="window.open('https://open.spotify.com', '_blank')"><img src="https://cdn-icons-png.flaticon.com/512/174/174872.png"><span>Spotify</span></div>
                 <div class="app-card" onclick="window.open('https://chat.openai.com', '_blank')"><img src="https://cdn-icons-png.flaticon.com/512/12222/12222588.png"><span>ChatGPT</span></div>
             </div>
         </div>
 
-        <div id="games" class="center-group page">
-            <div class="search-wrapper">
-                <h1>Arcade</h1>
+        <div id="chat" class="center-group">
+            <div class="search-wrapper"><h1>Global Comms</h1></div>
+            <div class="chat-portal">
+                <div class="chat-header">
+                    <span style="color:#00ff88; font-weight:900; letter-spacing:2px">● SECURE LINE</span>
+                    <span style="opacity:0.5; font-size:11px">NODE: 7F-COMM-4</span>
+                </div>
+                <div class="chat-feed" id="chatFeed">
+                    <div class="message msg-sys">Connection Secure. Welcome, Commander.</div>
+                    <div class="message msg-usr"><b>Ghost_Operator:</b> All systems are nominal for today's launch.</div>
+                    <div class="message msg-usr"><b>Nova_7:</b> Commander, the arcade latency has been minimized.</div>
+                </div>
+                <div class="chat-dock">
+                    <input type="text" id="chatMsg" class="chat-input" placeholder="Enter transmission..." onkeydown="if(event.key==='Enter') sendMsg()">
+                    <button class="send-btn" onclick="sendMsg()">TRANSMIT</button>
+                </div>
             </div>
+        </div>
+
+        <div id="games" class="center-group">
+            <div class="search-wrapper"><h1>Arcade Deck</h1></div>
             <div class="app-grid">
                 <div class="app-card" onclick="window.open('https://poki.com', '_blank')"><img src="https://upload.wikimedia.org/wikipedia/commons/7/7a/Poki_Logo.png"><span>Poki</span></div>
                 <div class="app-card" onclick="window.open('https://classic.minecraft.net', '_blank')"><img src="https://cdn-icons-png.flaticon.com/512/5968/5968840.png"><span>Minecraft</span></div>
-                <div class="app-card" onclick="window.open('https://krunker.io', '_blank')"><img src="https://cdn-icons-png.flaticon.com/512/3408/3408506.png"><span>Krunker</span></div>
-                <div class="app-card" onclick="window.open('https://shellshock.io', '_blank')"><img src="https://cdn-icons-png.flaticon.com/512/2991/2991606.png"><span>ShellShock</span></div>
                 <div class="app-card" onclick="window.open('https://1v1.lol', '_blank')"><img src="https://cdn-icons-png.flaticon.com/512/15008/15008865.png"><span>1v1.LOL</span></div>
                 <div class="app-card" onclick="window.open('https://slope-game.github.io', '_blank')"><img src="https://cdn-icons-png.flaticon.com/512/5556/5556391.png"><span>Slope</span></div>
+                <div class="app-card" onclick="window.open('https://krunker.io', '_blank')"><img src="https://cdn-icons-png.flaticon.com/512/3408/3408506.png"><span>Krunker</span></div>
+                <div class="app-card" onclick="window.open('https://shellshock.io', '_blank')"><img src="https://cdn-icons-png.flaticon.com/512/2991/2991606.png"><span>ShellShock</span></div>
                 <div class="app-card" onclick="window.open('https://agar.io', '_blank')"><img src="https://cdn-icons-png.flaticon.com/512/5726/5726531.png"><span>Agar.io</span></div>
                 <div class="app-card" onclick="window.open('https://paper-io.com', '_blank')"><img src="https://cdn-icons-png.flaticon.com/512/3663/3663335.png"><span>Paper.io 2</span></div>
                 <div class="app-card" onclick="window.open('https://subwaysurfers.com', '_blank')"><img src="https://cdn-icons-png.flaticon.com/512/3408/3408545.png"><span>Subway Surf</span></div>
@@ -267,40 +356,63 @@
             </div>
         </div>
 
-        <div id="settings" class="center-group page">
+        <div id="settings" class="center-group">
             <div class="search-wrapper">
-                <h1>Settings</h1>
-                <button class="search-bar" style="cursor:pointer" onclick="cloak()">Activate Tab Cloak</button>
-                <p style="margin-top:20px; color:rgba(255,255,255,0.4)">Panic Button: Press <b>~</b> to hide</p>
+                <h1>Configuration</h1>
+                <button class="search-bar" onclick="cloak()">Engage Tab Cloak</button>
             </div>
         </div>
 
-        <div id="about" class="center-group page">
+        <div id="about" class="center-group">
             <div class="search-wrapper">
-                <h1>About</h1>
-                <p style="color:rgba(255,255,255,0.6)">Nexus OS v2.1 • Commander Edition</p>
+                <h1>System Diagnostics</h1>
+                <div class="commander-status">Nexus OS v4.0 | Commander Edition</div>
+                <div style="background:rgba(0,0,0,0.5); padding:30px; border-radius:20px; text-align:left; border:1px solid var(--glass-border)">
+                    <p style="color:var(--accent); font-weight:900">CORE STATUS: STABLE</p>
+                    <p>Uptime: 100%</p>
+                    <p>User Identity: Commander</p>
+                    <p>Encrypted Chat: Enabled</p>
+                </div>
             </div>
         </div>
-
     </main>
 
     <div id="overlay"><button class="close-btn" onclick="exitApp()">X Close</button><iframe id="frame" src=""></iframe></div>
 
     <script>
         function showPage(id) {
-            document.querySelectorAll('.page').forEach(p => { p.classList.remove('active-page'); p.style.animation = 'none'; });
+            document.querySelectorAll('.center-group').forEach(p => { p.classList.remove('active-page'); p.style.animation = 'none'; });
             document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
             const activePage = document.getElementById(id);
             activePage.classList.add('active-page');
             void activePage.offsetWidth; 
-            activePage.style.animation = 'fadeInUp 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards';
+            activePage.style.animation = 'fadeInUp 0.8s cubic-bezier(0.2, 1, 0.2, 1) forwards';
             document.getElementById('n-'+id).classList.add('active');
         }
 
-        function handleSearch(e) { if (e.key === 'Enter') { let val = e.target.value; window.open(val.includes('.') ? 'https://' + val : 'https://www.google.com/search?q=' + val, '_blank'); } }
-        function exitApp() { document.getElementById('overlay').style.display = 'none'; document.getElementById('frame').src = ''; }
-        function cloak() { document.title = "My Drive - Google Drive"; let link = document.querySelector("link[rel*='icon']") || document.createElement('link'); link.href = 'https://ssl.gstatic.com/images/branding/product/1x/drive_2020q4_32dp.png'; document.getElementsByTagName('head')[0].appendChild(link); alert("Cloak Active"); }
+        function sendMsg() {
+            const input = document.getElementById('chatMsg');
+            const feed = document.getElementById('chatFeed');
+            if(!input.value.trim()) return;
+            const m = document.createElement('div');
+            m.className = "message msg-com";
+            m.innerHTML = `<b>Commander:</b> ${input.value}`;
+            feed.appendChild(m);
+            input.value = "";
+            feed.scrollTop = feed.scrollHeight;
+            setTimeout(() => {
+                const r = document.createElement('div');
+                r.className = "message msg-usr";
+                r.innerHTML = `<b>System:</b> Transmission Confirmed.`;
+                feed.appendChild(r);
+                feed.scrollTop = feed.scrollHeight;
+            }, 700);
+        }
+
+        function handleSearch(e) { if(e.key === 'Enter') window.open(e.target.value.includes('.') ? 'https://' + e.target.value : 'https://google.com/search?q=' + e.target.value, '_blank'); }
+        function cloak() { document.title = "My Drive - Google Drive"; let l = document.querySelector("link[rel*='icon']") || document.createElement('link'); l.href = 'https://ssl.gstatic.com/images/branding/product/1x/drive_2020q4_32dp.png'; document.getElementsByTagName('head')[0].appendChild(l); alert("Tab Cloaked."); }
         window.onkeydown = (e) => { if(e.key === '~') window.location.href="https://classroom.google.com"; };
+        function exitApp() { document.getElementById('overlay').style.display = 'none'; document.getElementById('frame').src = ''; }
     </script>
 </body>
 </html>
