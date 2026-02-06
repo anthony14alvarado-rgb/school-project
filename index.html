@@ -3,106 +3,79 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexus OS | Elite Arcade</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;900&family=Orbitron:wght@700&display=swap" rel="stylesheet">
+    <title>NEXUS OS | BOLD EDITION</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@900&family=Orbitron:wght@700&display=swap" rel="stylesheet">
     <style>
         :root { 
             --accent: #c3a6ff; 
-            --bg-dark: #050505;
-            --glass: rgba(255, 255, 255, 0.03);
-            --glass-border: rgba(255, 255, 255, 0.1);
+            --bg-dark: #020202;
+            --glass: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.15);
         }
         
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { background: #000; color: white; height: 100vh; overflow: hidden; font-family: 'Inter', sans-serif; }
 
-        /* --- LIMBO GAME OVERLAY --- */
+        /* --- LIMBO GAME --- */
         #limbo-overlay {
             position: fixed; inset: 0; background: #000;
             z-index: 10000; display: flex; flex-direction: column;
             justify-content: center; align-items: center;
         }
-
-        #status-display {
-            font-family: 'Orbitron'; font-size: 30px; color: #111;
-            letter-spacing: 20px; margin-bottom: 80px; text-transform: uppercase;
-        }
-
-        #game-arena { position: relative; width: 600px; height: 400px; display: flex; justify-content: center; align-items: center; }
-
+        #status-display { font-family: 'Orbitron'; font-size: 35px; color: #111; letter-spacing: 25px; margin-bottom: 80px; }
+        #game-arena { position: relative; width: 600px; height: 400px; }
         .key-unit {
-            position: absolute; width: 75px; height: 75px;
-            background: #080808; border: 3px solid #222; border-radius: 6px;
+            position: absolute; width: 75px; height: 75px; background: #080808; border: 3px solid #222; border-radius: 6px;
             display: flex; justify-content: center; align-items: center; cursor: pointer;
-            transition: left 0.7s cubic-bezier(0.19, 1, 0.22, 1), top 0.7s cubic-bezier(0.19, 1, 0.22, 1), border-color 0.4s, color 0.4s, box-shadow 0.4s;
+            transition: left 0.7s cubic-bezier(0.19, 1, 0.22, 1), top 0.7s cubic-bezier(0.19, 1, 0.22, 1), border-color 0.4s, color 0.4s;
         }
-
         .key-inner { width: 22px; height: 22px; border: 4px solid currentColor; transform: rotate(45deg); }
 
-        /* --- THE NEXUS OS INTERFACE --- */
+        /* --- THE BOLD NEXUS OS --- */
         #nexus-system {
             position: fixed; inset: 0; display: none;
-            opacity: 0; transition: opacity 1.5s; z-index: 1;
-            background-color: var(--bg-dark);
+            opacity: 0; transition: opacity 1s; z-index: 1;
+            background-color: var(--bg-dark); flex-direction: column;
         }
-
         #nexus-system.active { display: flex; opacity: 1; }
 
-        /* Animated Live Wallpaper */
+        /* Animated Moving Background */
         .nexus-wallpaper {
-            position: absolute; inset: 0;
-            background: linear-gradient(0deg, #000 0%, #0a0a0f 100%);
-            z-index: -1; overflow: hidden;
+            position: absolute; inset: 0; z-index: -1;
+            background: radial-gradient(circle at center, #101015 0%, #000 100%);
         }
-
-        .nexus-wallpaper::after {
-            content: ""; position: absolute; inset: -100%;
-            background-image: 
-                linear-gradient(rgba(195, 166, 255, 0.05) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(195, 166, 255, 0.05) 1px, transparent 1px);
-            background-size: 60px 60px;
-            transform: perspective(500px) rotateX(60deg);
-            animation: gridMove 20s linear infinite;
+        .grid-lines {
+            position: absolute; inset: -100%;
+            background-image: linear-gradient(var(--glass-border) 2px, transparent 2px), linear-gradient(90deg, var(--glass-border) 2px, transparent 2px);
+            background-size: 80px 80px; transform: perspective(500px) rotateX(60deg);
+            animation: moveGrid 15s linear infinite;
         }
+        @keyframes moveGrid { from { transform: perspective(500px) rotateX(60deg) translateY(0); } to { transform: perspective(500px) rotateX(60deg) translateY(80px); } }
 
-        @keyframes gridMove {
-            from { transform: perspective(500px) rotateX(60deg) translateY(0); }
-            to { transform: perspective(500px) rotateX(60deg) translateY(60px); }
+        /* HEADER */
+        header { width: 100%; padding: 40px 80px; display: flex; justify-content: space-between; align-items: center; z-index: 10; }
+        .logo { font-family: 'Orbitron'; font-size: 40px; letter-spacing: 15px; color: var(--accent); text-shadow: 0 0 20px var(--accent); }
+        .clock { font-size: 20px; font-weight: 900; opacity: 0.5; letter-spacing: 5px; }
+
+        /* MAIN BIG GRID */
+        main { flex: 1; padding: 0 80px 80px; overflow-y: auto; z-index: 10; }
+        .container { max-width: 1400px; margin: 0 auto; }
+        .section-title { font-size: 14px; letter-spacing: 8px; text-transform: uppercase; color: var(--accent); margin: 40px 0 20px; font-weight: 900; }
+
+        .big-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; }
+
+        .big-card {
+            background: var(--glass); border: 2px solid var(--glass-border); border-radius: 25px;
+            padding: 50px; display: flex; flex-direction: column; align-items: center; justify-content: center;
+            gap: 20px; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            text-decoration: none; color: white; backdrop-filter: blur(10px);
         }
-
-        /* --- SIDEBAR --- */
-        nav { 
-            width: 140px; background: rgba(0,0,0,0.8); border-right: 1px solid var(--glass-border); 
-            display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 45px; 
-            backdrop-filter: blur(20px); z-index: 10;
+        .big-card:hover {
+            transform: scale(1.05); border-color: var(--accent); background: rgba(195, 166, 255, 0.1);
+            box-shadow: 0 0 50px rgba(195, 166, 255, 0.2);
         }
-        
-        nav div { color: #444; font-size: 11px; font-weight: 900; letter-spacing: 3px; text-transform: uppercase; cursor: pointer; }
-        nav .active-tab { color: var(--accent); text-shadow: 0 0 15px var(--accent); }
-
-        /* --- APP GRID --- */
-        main { flex: 1; display: flex; flex-direction: column; padding: 60px; overflow-y: auto; }
-        .os-header { font-family: 'Orbitron'; font-size: 60px; letter-spacing: 20px; color: white; margin-bottom: 40px; text-align: center; }
-        
-        .section-label { color: var(--accent); font-weight: 900; letter-spacing: 5px; font-size: 12px; margin-bottom: 20px; text-transform: uppercase; opacity: 0.7; }
-        
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 25px; margin-bottom: 50px; }
-        
-        .app-card {
-            background: var(--glass); border: 1px solid var(--glass-border); border-radius: 15px;
-            padding: 25px; display: flex; flex-direction: column; align-items: center; gap: 12px;
-            transition: 0.3s cubic-bezier(0.2, 1, 0.2, 1); cursor: pointer; text-decoration: none; color: white;
-        }
-
-        .app-card:hover { 
-            background: rgba(195, 166, 255, 0.1); 
-            border-color: var(--accent); 
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
-
-        .app-card img { width: 45px; height: 45px; object-fit: contain; }
-        .app-card span { font-size: 12px; font-weight: 600; letter-spacing: 1px; }
+        .big-card img { width: 80px; height: 80px; filter: drop-shadow(0 0 10px rgba(255,255,255,0.3)); }
+        .big-card span { font-size: 18px; font-weight: 900; letter-spacing: 3px; text-transform: uppercase; }
     </style>
 </head>
 <body>
@@ -113,53 +86,44 @@
     </div>
 
     <div id="nexus-system">
-        <div class="nexus-wallpaper"></div>
-        <nav>
-            <div class="active-tab">Home</div>
-            <div>Apps</div>
-            <div>Games</div>
-        </nav>
+        <div class="nexus-wallpaper"><div class="grid-lines"></div></div>
+        <header>
+            <div class="logo">NEXUS</div>
+            <div class="clock" id="os-clock">00:00</div>
+        </header>
         <main>
-            <h1 class="os-header">NEXUS</h1>
+            <div class="container">
+                <div class="section-title">Essential Modules</div>
+                <div class="big-grid">
+                    <a href="https://youtube.com" target="_blank" class="big-card">
+                        <img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png">
+                        <span>YouTube</span>
+                    </a>
+                    <a href="https://tiktok.com" target="_blank" class="big-card">
+                        <img src="https://cdn-icons-png.flaticon.com/512/3046/3046121.png">
+                        <span>TikTok</span>
+                    </a>
+                    <a href="https://soundcloud.com" target="_blank" class="big-card">
+                        <img src="https://cdn-icons-png.flaticon.com/512/145/145810.png">
+                        <span>SoundCloud</span>
+                    </a>
+                </div>
 
-            <div class="section-label">Media & Social</div>
-            <div class="grid">
-                <a class="app-card" href="https://youtube.com" target="_blank">
-                    <img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png">
-                    <span>YouTube</span>
-                </a>
-                <a class="app-card" href="https://tiktok.com" target="_blank">
-                    <img src="https://cdn-icons-png.flaticon.com/512/3046/3046121.png">
-                    <span>TikTok</span>
-                </a>
-                <a class="app-card" href="https://soundcloud.com" target="_blank">
-                    <img src="https://cdn-icons-png.flaticon.com/512/145/145810.png">
-                    <span>SoundCloud</span>
-                </a>
-                <a class="app-card" href="https://discord.com" target="_blank">
-                    <img src="https://cdn-icons-png.flaticon.com/512/5968/5968756.png">
-                    <span>Discord</span>
-                </a>
-            </div>
-
-            <div class="section-label">Arcade Terminal</div>
-            <div class="grid">
-                <a class="app-card" href="https://1v1.lol" target="_blank">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR06X-vX4-o56X75x3D39uU975fA2F8EwH9Pw&s">
-                    <span>1v1.LOL</span>
-                </a>
-                <a class="app-card" href="https://classic.minecraft.net" target="_blank">
-                    <img src="https://cdn-icons-png.flaticon.com/512/5968/5968840.png">
-                    <span>Minecraft</span>
-                </a>
-                <a class="app-card" href="https://krunker.io" target="_blank">
-                    <img src="https://cdn-icons-png.flaticon.com/512/3408/3408506.png">
-                    <span>Krunker</span>
-                </a>
-                <a class="app-card" href="https://poki.com" target="_blank">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/7/7a/Poki_Logo.png">
-                    <span>Poki</span>
-                </a>
+                <div class="section-title">Arcade Engine</div>
+                <div class="big-grid">
+                    <a href="https://1v1.lol" target="_blank" class="big-card">
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR06X-vX4-o56X75x3D39uU975fA2F8EwH9Pw&s">
+                        <span>1v1.LOL</span>
+                    </a>
+                    <a href="https://classic.minecraft.net" target="_blank" class="big-card">
+                        <img src="https://cdn-icons-png.flaticon.com/512/5968/5968840.png">
+                        <span>Minecraft</span>
+                    </a>
+                    <a href="https://krunker.io" target="_blank" class="big-card">
+                        <img src="https://cdn-icons-png.flaticon.com/512/3408/3408506.png">
+                        <span>Krunker</span>
+                    </a>
+                </div>
             </div>
         </main>
     </div>
@@ -180,85 +144,74 @@
         ];
 
         function init() {
-            arena.innerHTML = '';
-            keys = [];
+            arena.innerHTML = ''; keys = [];
             targetId = Math.floor(Math.random() * 8);
             canInteract = false;
-            status.innerText = "FOCUS";
-            status.style.color = "#111";
-
             for(let i=0; i<8; i++) {
                 const k = document.createElement('div');
                 k.className = 'key-unit';
                 k.innerHTML = '<div class="key-inner"></div>';
-                k.style.color = "#444";
-                k.style.left = grid[i].x + 'px';
-                k.style.top = grid[i].y + 'px';
+                k.style.left = grid[i].x + 'px'; k.style.top = grid[i].y + 'px';
+                k.style.color = "#333";
                 k.dataset.spot = i;
-                k.onclick = () => { if(canInteract) checkWin(i); };
+                k.onclick = () => { if(canInteract) check(i); };
                 arena.appendChild(k);
                 keys.push(k);
             }
-            setTimeout(flashTarget, 1000);
+            setTimeout(flash, 1000);
         }
 
-        function flashTarget() {
-            keys[targetId].style.color = "#55ff55";
-            keys[targetId].style.borderColor = "#55ff55";
-            keys[targetId].style.boxShadow = "0 0 30px #55ff55";
+        function flash() {
+            keys[targetId].style.color = "#5f5"; keys[targetId].style.borderColor = "#5f5";
             setTimeout(() => {
-                keys.forEach(k => { k.style.color = "#600"; k.style.borderColor = "#300"; k.style.boxShadow = "none"; });
-                runSwaps();
-            }, 1200);
+                keys.forEach(k => { k.style.color = "#600"; k.style.borderColor = "#300"; });
+                let m = 0;
+                const iv = setInterval(() => {
+                    let a = Math.floor(Math.random()*8), b = Math.floor(Math.random()*8);
+                    let sA = keys[a].dataset.spot, sB = keys[b].dataset.spot;
+                    keys[a].style.left = grid[sB].x+'px'; keys[a].style.top = grid[sB].y+'px';
+                    keys[b].style.left = grid[sA].x+'px'; keys[b].style.top = grid[sA].y+'px';
+                    keys[a].dataset.spot = sB; keys[b].dataset.spot = sA;
+                    if(++m > 15) { clearInterval(iv); setTimeout(uplift, 500); }
+                }, 350);
+            }, 1000);
         }
 
-        function runSwaps() {
-            let moves = 0;
-            const interval = setInterval(() => {
-                let a = Math.floor(Math.random() * 8);
-                let b = Math.floor(Math.random() * 8);
-                while(a === b) b = Math.floor(Math.random() * 8);
-                let sA = keys[a].dataset.spot, sB = keys[b].dataset.spot;
-                keys[a].style.left = grid[sB].x + 'px'; keys[a].style.top = grid[sB].y + 'px';
-                keys[b].style.left = grid[sA].x + 'px'; keys[b].style.top = grid[sA].y + 'px';
-                keys[a].dataset.spot = sB; keys[b].dataset.spot = sA;
-                moves++;
-                if(moves >= 15) { clearInterval(interval); setTimeout(upliftSequence, 600); }
-            }, 350);
-        }
-
-        function upliftSequence() {
+        function uplift() {
             const colors = ['#f44', '#4f4', '#44f', '#ff4', '#f4f', '#4ff', '#fa0', '#fff'];
             keys.forEach((k, i) => {
                 setTimeout(() => {
                     k.style.color = colors[i]; k.style.borderColor = colors[i];
-                    const angle = (i * Math.PI * 2) / 8;
-                    k.style.left = (250 + Math.cos(angle) * 160) + 'px';
-                    k.style.top = (150 + Math.sin(angle) * 160) + 'px';
-                    if(i === 7) setTimeout(() => { keys.forEach(key => key.style.transition = "none"); beginSpin(); }, 800);
-                }, i * 180);
+                    const a = (i * Math.PI * 2) / 8;
+                    k.style.left = (250 + Math.cos(a) * 160) + 'px';
+                    k.style.top = (150 + Math.sin(a) * 160) + 'px';
+                    if(i === 7) setTimeout(spin, 800);
+                }, i * 150);
             });
         }
 
-        function beginSpin() {
+        function spin() {
             const start = Date.now();
-            function cycle() {
-                const elapsed = Date.now() - start;
-                const angle = elapsed * 0.009;
+            function cyc() {
+                const el = Date.now() - start;
+                const a = el * 0.009;
                 keys.forEach((k, i) => {
-                    const offset = (i * Math.PI * 2) / 8;
-                    k.style.left = (250 + Math.cos(angle + offset) * 160) + 'px';
-                    k.style.top = (150 + Math.sin(angle + offset) * 160) + 'px';
+                    const o = (i * Math.PI * 2) / 8;
+                    k.style.left = (250 + Math.cos(a+o) * 160) + 'px';
+                    k.style.top = (150 + Math.sin(a+o) * 160) + 'px';
+                    k.style.transition = "none";
                 });
-                if(elapsed < 4000) requestAnimationFrame(cycle);
-                else { canInteract = true; status.innerText = "CHOOSE"; status.style.color = "#fff"; keys.forEach(k => k.style.transition = "all 0.4s"); }
+                if(el < 3500) requestAnimationFrame(cyc);
+                else { canInteract = true; status.innerText = "CHOOSE"; status.style.color="#fff"; }
             }
-            requestAnimationFrame(cycle);
+            requestAnimationFrame(cyc);
         }
 
-        function checkWin(idx) {
-            if(idx === targetId) { overlay.style.display = 'none'; nexus.style.display = 'flex'; setTimeout(() => nexus.classList.add('active'), 100); }
-            else init();
+        function check(idx) {
+            if(idx === targetId) { 
+                overlay.style.display = 'none'; nexus.classList.add('active'); 
+                setInterval(() => { const d = new Date(); document.getElementById('os-clock').innerText = d.getHours().toString().padStart(2,'0') + ":" + d.getMinutes().toString().padStart(2,'0'); }, 1000);
+            } else init();
         }
 
         window.onload = init;
