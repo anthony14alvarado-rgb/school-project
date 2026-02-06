@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NEXUS OS | Z-KIT ELITE FIXED AUDIO</title>
+    <title>NEXUS OS | Z-KIT ELITE RESTORED</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Orbitron:wght@700&family=JetBrains+Mono&display=swap" rel="stylesheet">
     <style>
         :root { 
@@ -11,14 +11,13 @@
             --bg-dark: #050508;
             --glass: rgba(195, 166, 255, 0.03);
             --glass-border: rgba(195, 166, 255, 0.15);
-            --nexus-glow: rgba(195, 166, 255, 0.1);
             --font-mono: 'JetBrains Mono', monospace;
         }
         
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { background: #000; color: white; height: 100vh; overflow: hidden; font-family: 'Inter', sans-serif; }
 
-        /* --- LIMBO OVERLAY --- */
+        /* --- LIMBO OVERLAY (ORIGINAL KEYS) --- */
         #limbo-overlay {
             position: fixed; inset: 0; background: #000;
             z-index: 10000; display: flex; flex-direction: column;
@@ -27,7 +26,6 @@
         #status-display { font-family: 'Orbitron'; font-size: 35px; color: #111; letter-spacing: 25px; margin-bottom: 80px; transition: color 0.5s; }
         #game-arena { position: relative; width: 600px; height: 400px; }
         
-        /* YOUR ORIGINAL KEY DESIGN */
         .key-unit {
             position: absolute; width: 75px; height: 75px; background: #080808; border: 3px solid #222; border-radius: 6px;
             display: flex; justify-content: center; align-items: center; cursor: pointer;
@@ -35,7 +33,7 @@
         }
         .key-inner { width: 22px; height: 22px; border: 4px solid currentColor; transform: rotate(45deg); }
 
-        /* --- NEXUS SYSTEM --- */
+        /* --- NEXUS SYSTEM (Z-KIT STYLE) --- */
         #nexus-system {
             position: fixed; inset: 0; display: none;
             opacity: 0; transition: opacity 1.5s; z-index: 1;
@@ -43,18 +41,12 @@
         }
         #nexus-system.active { display: flex; opacity: 1; }
 
-        .nexus-wallpaper {
-            position: absolute; inset: 0; z-index: -1;
-            background: radial-gradient(circle at 50% 50%, var(--nexus-glow) 0%, transparent 70%), #000;
-        }
-
         header { 
             width: 100%; padding: 30px 80px; display: flex; justify-content: space-between; 
             align-items: center; z-index: 10; border-bottom: 1px solid var(--glass-border);
             backdrop-filter: blur(20px);
         }
         .logo { font-family: 'Orbitron'; font-size: 18px; letter-spacing: 12px; color: #fff; }
-        .os-time { font-family: var(--font-mono); font-size: 12px; color: var(--accent); opacity: 0.6; }
 
         main { flex: 1; padding: 40px 80px; overflow-y: auto; z-index: 10; }
         .big-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
@@ -80,16 +72,19 @@
 </head>
 <body>
 
+    <audio id="bg-music" loop>
+        <source src="https://files.freemusicarchive.org/storage-freemusicarchive-org/music/no_curator/Ketsa/Raising_Frequency/Ketsa_-_08_-_Raising_Frequency.mp3" type="audio/mpeg">
+    </audio>
+
     <div id="limbo-overlay">
-        <div id="status-display">CLICK TO INITIALIZE</div>
+        <div id="status-display">CLICK TO START</div>
         <div id="game-arena"></div>
     </div>
 
     <div id="nexus-system">
-        <div class="nexus-wallpaper"></div>
         <header>
             <div class="logo">NEXUS</div>
-            <div class="os-time" id="os-clock">00:00:00</div>
+            <div id="os-clock" style="font-family:var(--font-mono); color:var(--accent);">00:00:00</div>
         </header>
         <main>
             <div class="big-grid">
@@ -114,35 +109,7 @@
     </div>
 
     <script>
-        // WEB AUDIO API - Creates sound from scratch (No external files needed)
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        let oscillator;
-        let isPlaying = false;
-
-        function playSynth() {
-            if (isPlaying) return;
-            oscillator = audioCtx.createOscillator();
-            const gainNode = audioCtx.createGain();
-            
-            oscillator.type = 'sawtooth';
-            oscillator.frequency.setValueAtTime(110, audioCtx.currentTime); // Deep Bass
-            
-            gainNode.gain.setValueAtTime(0.05, audioCtx.currentTime); // Low volume
-            
-            oscillator.connect(gainNode);
-            gainNode.connect(audioCtx.destination);
-            
-            oscillator.start();
-            isPlaying = true;
-        }
-
-        function stopSynth() {
-            if (oscillator) {
-                oscillator.stop();
-                isPlaying = false;
-            }
-        }
-
+        const music = document.getElementById('bg-music');
         const arena = document.getElementById('game-arena');
         const status = document.getElementById('status-display');
         const overlay = document.getElementById('limbo-overlay');
@@ -152,11 +119,9 @@
         const grid = [{x:100,y:80},{x:200,y:80},{x:300,y:80},{x:400,y:80},{x:100,y:220},{x:200,y:220},{x:300,y:220},{x:400,y:220}];
 
         overlay.onclick = () => {
-            if(status.innerText === "CLICK TO INITIALIZE") {
-                audioCtx.resume().then(() => {
-                    playSynth();
-                    init();
-                });
+            if(status.innerText === "CLICK TO START") {
+                music.play();
+                init();
             }
         };
 
@@ -216,7 +181,8 @@
 
         function check(idx) {
             if(idx === targetId) { 
-                stopSynth();
+                music.pause(); 
+                music.currentTime = 0;
                 overlay.style.display = 'none'; nexus.classList.add('active'); nexus.style.display='flex';
                 setInterval(() => { 
                     const d = new Date(); 
