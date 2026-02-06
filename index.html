@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexus OS - Limbo</title>
+    <title>Nexus OS - Limbo Elite</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;800&family=Orbitron:wght@700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -15,56 +15,57 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
         body { background: #000; color: white; height: 100vh; overflow: hidden; }
 
-        /* --- LIMBO GAME STYLES --- */
+        /* --- LIMBO OVERLAY --- */
         #limbo-overlay {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: #050505; z-index: 5000; display: flex;
+            background: #020202; z-index: 5000; display: flex;
             justify-content: center; align-items: center;
         }
 
-        #key-container {
-            position: relative; width: 300px; height: 300px;
-            display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;
+        #key-anchor {
+            position: relative; width: 1px; height: 1px;
         }
 
         .limbo-key {
-            width: 50px; height: 50px;
-            background: url('https://cdn-icons-png.flaticon.com/512/808/808488.png') no-repeat center center;
-            background-size: contain;
-            filter: grayscale(1) brightness(0.5); /* Start Gray */
-            cursor: pointer; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             position: absolute;
+            width: 55px; height: 55px;
+            background: url('https://i.ibb.co/VWV0p0p/limbo-key-red.png') no-repeat center center;
+            background-size: contain;
+            filter: grayscale(1) brightness(0.2); /* Very Dark Start */
+            cursor: pointer;
+            transition: transform 0.2s, filter 0.4s;
+            margin-left: -27px; margin-top: -27px;
         }
 
-        .flash-bang { animation: flash 0.8s forwards; }
-        @keyframes flash {
+        .flash-bang { animation: flashEffect 0.8s forwards; }
+        @keyframes flashEffect {
             0% { background: transparent; }
             50% { background: white; }
             100% { background: transparent; }
         }
 
-        /* --- OS STYLES --- */
+        /* --- OS UI --- */
         #nexus-interface { opacity: 0; transition: opacity 1.5s; height: 100%; display: flex; pointer-events: none; }
         #nexus-interface.active { opacity: 1; pointer-events: all; }
-        .bg-layer { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1462331940025-496dfbfc7564?q=80&w=2022&auto=format&fit=crop') no-repeat center center fixed; background-size: cover; z-index: -1; }
-        nav { width: 140px; height: 100vh; display: flex; flex-direction: column; justify-content: center; padding-left: 25px; gap: 30px; background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(15px); border-right: 1px solid var(--glass-border); z-index: 100; }
-        nav a { color: rgba(255, 255, 255, 0.5); text-decoration: none; font-size: 14px; font-weight: 800; text-transform: uppercase; cursor: pointer; }
+        .bg-layer { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('https://images.unsplash.com/photo-1462331940025-496dfbfc7564?q=80&w=2022&auto=format&fit=crop') no-repeat center center fixed; background-size: cover; z-index: -1; }
+        nav { width: 120px; height: 100vh; display: flex; flex-direction: column; justify-content: center; padding-left: 20px; gap: 30px; background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(20px); border-right: 1px solid var(--glass-border); z-index: 100; }
+        nav a { color: rgba(255, 255, 255, 0.4); text-decoration: none; font-size: 12px; font-weight: 800; text-transform: uppercase; cursor: pointer; letter-spacing: 1px; }
         nav a.active { color: var(--accent); text-shadow: 0 0 10px var(--accent); }
-        main { flex: 1; display: flex; justify-content: center; align-items: center; overflow-y: auto; }
-        .page { display: none; width: 100%; max-width: 900px; flex-direction: column; align-items: center; text-align: center; }
+        main { flex: 1; display: flex; justify-content: center; align-items: center; }
+        .page { display: none; width: 100%; max-width: 800px; flex-direction: column; align-items: center; }
         .active-page { display: flex; animation: fadeInUp 0.5s forwards; }
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        .search-bar { width: 100%; max-width: 500px; padding: 20px; border-radius: 50px; border: 1px solid var(--glass-border); background: rgba(255,255,255,0.05); color: white; text-align: center; margin-bottom: 40px; outline: none; }
-        .app-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; width: 100%; padding: 20px; }
-        .app-card { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 20px; padding: 20px; transition: 0.3s; cursor: pointer; }
-        .app-card:hover { transform: translateY(-10px); background: rgba(255,255,255,0.1); }
-        .app-card img { width: 45px; height: 45px; margin-bottom: 10px; }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .search-bar { width: 100%; max-width: 400px; padding: 18px; border-radius: 50px; border: 1px solid var(--glass-border); background: rgba(255,255,255,0.03); color: white; text-align: center; margin-bottom: 30px; outline: none; }
+        .app-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; width: 100%; }
+        .app-card { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 15px; padding: 15px; transition: 0.3s; cursor: pointer; text-align: center; }
+        .app-card:hover { transform: scale(1.05); background: rgba(255,255,255,0.1); }
+        .app-card img { width: 35px; height: 35px; margin-bottom: 8px; }
     </style>
 </head>
 <body>
 
     <div id="limbo-overlay">
-        <div id="key-container"></div>
+        <div id="key-anchor"></div>
     </div>
 
     <div class="bg-layer"></div>
@@ -76,8 +77,8 @@
         </nav>
         <main>
             <div id="home" class="page active-page">
-                <h1 style="font-size: 50px; margin-bottom: 20px;">NEXUS</h1>
-                <input type="text" class="search-bar" placeholder="Enter Search..." onkeydown="handleSearch(event)">
+                <h1 style="font-size: 40px; margin-bottom: 20px; font-family: 'Orbitron';">NEXUS</h1>
+                <input type="text" class="search-bar" placeholder="Search Database..." onkeydown="handleSearch(event)">
                 <div class="app-grid">
                     <div class="app-card" onclick="window.open('https://youtube.com','_blank')"><img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png"><div>YouTube</div></div>
                     <div class="app-card" onclick="window.open('https://discord.com','_blank')"><img src="https://cdn-icons-png.flaticon.com/512/5968/5968756.png"><div>Discord</div></div>
@@ -86,7 +87,7 @@
                 </div>
             </div>
             <div id="games" class="page">
-                <h1>ARCADE</h1>
+                <h1 style="font-family: 'Orbitron'; margin-bottom: 20px;">ARCADE</h1>
                 <div class="app-grid">
                     <div class="app-card" onclick="window.open('https://poki.com','_blank')"><img src="https://upload.wikimedia.org/wikipedia/commons/7/7a/Poki_Logo.png"><div>Poki</div></div>
                     <div class="app-card" onclick="window.open('https://classic.minecraft.net','_blank')"><img src="https://cdn-icons-png.flaticon.com/512/5968/5968840.png"><div>Minecraft</div></div>
@@ -95,98 +96,100 @@
                 </div>
             </div>
             <div id="settings" class="page">
-                <h1>SETTINGS</h1>
-                <button class="search-bar" onclick="cloak()">Activate Tab Cloak</button>
+                <h1 style="font-family: 'Orbitron';">SYSTEM</h1>
+                <button class="search-bar" onclick="cloak()">Enable Stealth Mode</button>
             </div>
         </main>
     </div>
 
     <script>
-        const container = document.getElementById('key-container');
-        const colors = ['#ff5555', '#55ff55', '#5555ff', '#ffff55', '#ff55ff', '#55ffff', '#ffa500', '#ffffff'];
+        const anchor = document.getElementById('key-anchor');
         let keyElements = [];
-        let targetIndex = Math.floor(Math.random() * 8);
-        let gameState = 'init';
+        let targetIndex = 0;
+        let isWaiting = false;
+        let angle = 0;
 
         function initLimbo() {
-            container.innerHTML = '';
+            anchor.innerHTML = '';
             keyElements = [];
             targetIndex = Math.floor(Math.random() * 8);
+            isWaiting = false;
 
             for (let i = 0; i < 8; i++) {
                 const key = document.createElement('div');
                 key.classList.add('limbo-key');
-                // Grid layout start
-                key.style.left = (i % 4) * 70 + 'px';
-                key.style.top = Math.floor(i / 4) * 100 + 'px';
-                
-                key.onclick = () => handleKeyClick(i);
-                container.appendChild(key);
+                // Grid start
+                key.style.left = ((i % 4) - 1.5) * 80 + 'px';
+                key.style.top = (Math.floor(i / 4) - 0.5) * 100 + 'px';
+                key.onclick = () => checkKey(i);
+                anchor.appendChild(key);
                 keyElements.push(key);
             }
-
-            // Sequence:
-            setTimeout(revealTarget, 1000);
+            setTimeout(revealTarget, 800);
         }
 
         function revealTarget() {
-            // Flash Green
-            keyElements[targetIndex].style.filter = 'grayscale(0) drop-shadow(0 0 15px #55ff55)';
-            keyElements[targetIndex].style.backgroundColor = '#55ff55';
-            keyElements[targetIndex].style.borderRadius = '50%';
+            // Flash Green briefly
+            keyElements[targetIndex].style.filter = 'grayscale(0) brightness(1.2) drop-shadow(0 0 15px #55ff55)';
+            keyElements[targetIndex].style.backgroundColor = 'rgba(85, 255, 85, 0.2)';
             
-            setTimeout(startShuffle, 1500);
-        }
-
-        function startShuffle() {
-            gameState = 'shuffling';
-            // All keys get random colors
-            keyElements.forEach((key, i) => {
-                key.style.filter = 'grayscale(0) drop-shadow(0 0 10px ' + colors[i] + ')';
-                key.style.backgroundColor = 'transparent';
-            });
-
-            let count = 0;
-            const shuffleInterval = setInterval(() => {
-                keyElements.forEach(key => {
-                    key.style.left = Math.random() * 250 + 'px';
-                    key.style.top = Math.random() * 250 + 'px';
+            setTimeout(() => {
+                // All turn DARK RED and move
+                keyElements.forEach(k => {
+                    k.style.filter = 'grayscale(0) sepia(1) saturate(10) hue-rotate(-50deg) brightness(0.2)';
+                    k.style.backgroundColor = 'transparent';
                 });
-                count++;
-                if (count > 10) {
-                    clearInterval(shuffleInterval);
-                    finishShuffle();
+                scrambleKeys();
+            }, 1000);
+        }
+
+        function scrambleKeys() {
+            let moves = 0;
+            const moveInterval = setInterval(() => {
+                keyElements.forEach(k => {
+                    k.style.left = (Math.random() * 400 - 200) + 'px';
+                    k.style.top = (Math.random() * 400 - 200) + 'px';
+                });
+                moves++;
+                if (moves > 12) {
+                    clearInterval(moveInterval);
+                    startCircle();
                 }
-            }, 400);
+            }, 300);
         }
 
-        function finishShuffle() {
-            // Back to center grid
-            keyElements.forEach((key, i) => {
-                key.style.left = (i % 4) * 70 + 'px';
-                key.style.top = Math.floor(i / 4) * 100 + 'px';
-            });
-            gameState = 'waiting';
+        function startCircle() {
+            const radius = 120;
+            const circleLoop = setInterval(() => {
+                angle += 0.03;
+                keyElements.forEach((k, i) => {
+                    const offset = (i * (Math.PI * 2)) / 8;
+                    k.style.left = Math.cos(angle + offset) * radius + 'px';
+                    k.style.top = Math.sin(angle + offset) * radius + 'px';
+                });
+                if (angle > 6) { // After 1 full circle
+                    clearInterval(circleLoop);
+                    isWaiting = true;
+                    // Keep them in circle but stop moving
+                }
+            }, 20);
         }
 
-        function handleKeyClick(index) {
-            if (gameState !== 'waiting') return;
-
-            if (index === targetIndex) {
+        function checkKey(i) {
+            if (!isWaiting) return;
+            if (i === targetIndex) {
                 document.body.classList.add('flash-bang');
                 setTimeout(() => {
                     document.getElementById('limbo-overlay').style.display = 'none';
                     document.getElementById('nexus-interface').classList.add('active');
-                }, 500);
+                }, 400);
             } else {
-                alert("WRONG KEY - FOCUS!");
-                initLimbo(); // Restart
+                initLimbo();
             }
         }
 
         window.onload = initLimbo;
 
-        /* --- OS LOGIC --- */
         function showPage(id) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
             document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
@@ -195,20 +198,13 @@
         }
 
         function handleSearch(e) {
-            if (e.key === 'Enter') {
-                window.open('https://google.com/search?q=' + e.target.value, '_blank');
-            }
+            if (e.key === 'Enter') window.open('https://google.com/search?q=' + e.target.value, '_blank');
         }
 
         function cloak() {
-            document.title = "My Drive - Google Drive";
-            let link = document.querySelector("link[rel*='icon']") || document.createElement('link');
-            link.href = 'https://ssl.gstatic.com/images/branding/product/1x/drive_2020q4_32dp.png';
-            document.head.appendChild(link);
-            alert("Cloak Active");
+            document.title = "Google Drive";
+            alert("Stealth Active");
         }
-
-        window.onkeydown = (e) => { if(e.key === '~') window.location.href="https://classroom.google.com"; };
     </script>
 </body>
 </html>
