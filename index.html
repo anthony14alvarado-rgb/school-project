@@ -3,237 +3,409 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NEXUS OS | ELITE RESTORED</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@900&family=Orbitron:wght@700&display=swap" rel="stylesheet">
+    <title>Nexus OS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;800&display=swap" rel="stylesheet">
     <style>
-        :root { 
-            --accent: #c3a6ff; 
-            --bg-dark: #050508;
-            --glass: rgba(195, 166, 255, 0.03);
-            --glass-border: rgba(195, 166, 255, 0.15);
-            --nexus-glow: rgba(195, 166, 255, 0.1);
-        }
-        
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { background: #000; color: white; height: 100vh; overflow: hidden; font-family: 'Inter', sans-serif; }
-
-        /* --- LIMBO OVERLAY --- */
-        #limbo-overlay {
-            position: fixed; inset: 0; background: #000;
-            z-index: 10000; display: flex; flex-direction: column;
-            justify-content: center; align-items: center;
-        }
-        #status-display { font-family: 'Orbitron'; font-size: 35px; color: #111; letter-spacing: 25px; margin-bottom: 80px; }
-        #game-arena { position: relative; width: 600px; height: 400px; }
-        .key-unit {
-            position: absolute; width: 75px; height: 75px; background: #080808; border: 3px solid #222; border-radius: 6px;
-            display: flex; justify-content: center; align-items: center; cursor: pointer;
-            transition: left 0.7s cubic-bezier(0.19, 1, 0.22, 1), top 0.7s cubic-bezier(0.19, 1, 0.22, 1), border-color 0.4s, color 0.4s;
-        }
-        .key-inner { width: 22px; height: 22px; border: 4px solid currentColor; transform: rotate(45deg); }
-
-        /* --- THE ELITE NEXUS THEME (Restored) --- */
-        #nexus-system {
-            position: fixed; inset: 0; display: none;
-            opacity: 0; transition: opacity 1.5s; z-index: 1;
-            background-color: var(--bg-dark); flex-direction: column;
-        }
-        #nexus-system.active { display: flex; opacity: 1; }
-
-        /* Original Elite Wallpaper Layer */
-        .nexus-wallpaper {
-            position: absolute; inset: 0; z-index: -1;
-            background: 
-                radial-gradient(circle at 20% 30%, var(--nexus-glow) 0%, transparent 40%),
-                radial-gradient(circle at 80% 70%, var(--nexus-glow) 0%, transparent 40%),
-                linear-gradient(0deg, #000 0%, #0a0a12 100%);
-        }
-        .grid-lines {
-            position: absolute; inset: -100%;
-            background-image: 
-                linear-gradient(rgba(195, 166, 255, 0.05) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(195, 166, 255, 0.05) 1px, transparent 1px);
-            background-size: 50px 50px;
-            transform: perspective(500px) rotateX(60deg);
-            animation: gridMove 20s linear infinite;
-            mask-image: radial-gradient(ellipse at center, black, transparent 80%);
-        }
-        @keyframes gridMove {
-            from { transform: perspective(500px) rotateX(60deg) translateY(0); }
-            to { transform: perspective(500px) rotateX(60deg) translateY(50px); }
+        :root {
+            --glass: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.12);
+            --accent: #c3a6ff;
         }
 
-        header { width: 100%; padding: 50px 100px; display: flex; justify-content: space-between; align-items: center; z-index: 10; }
-        .logo { font-family: 'Orbitron'; font-size: 45px; letter-spacing: 20px; color: #fff; text-shadow: 0 0 30px var(--accent); }
-        .os-time { font-family: 'Orbitron'; font-size: 20px; color: var(--accent); opacity: 0.7; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
 
-        /* DASHBOARD GRID */
-        main { flex: 1; padding: 0 100px 100px; overflow-y: auto; z-index: 10; }
-        .section-label { font-size: 11px; letter-spacing: 10px; text-transform: uppercase; color: var(--accent); margin: 50px 0 25px; font-weight: 900; opacity: 0.6; }
-
-        .big-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; }
-
-        .big-card {
-            background: var(--glass); border: 1px solid var(--glass-border); border-radius: 20px;
-            padding: 60px 40px; display: flex; flex-direction: column; align-items: center; justify-content: center;
-            gap: 25px; transition: 0.4s cubic-bezier(0.19, 1, 0.22, 1);
-            text-decoration: none; color: white; backdrop-filter: blur(15px);
+        body {
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), 
+                        url('https://images.unsplash.com/photo-1462331940025-496dfbfc7564?q=80&w=2022&auto=format&fit=crop') no-repeat center center fixed;
+            background-size: cover;
+            color: white;
+            height: 100vh;
+            display: flex;
+            overflow: hidden;
+            animation: bgBreath 15s infinite alternate;
         }
-        .big-card:hover {
-            transform: translateY(-10px); border-color: var(--accent);
-            background: rgba(195, 166, 255, 0.08);
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-        }
-        .big-card img { width: 85px; height: 85px; filter: drop-shadow(0 0 10px rgba(195, 166, 255, 0.3)); }
-        .big-card span { font-size: 18px; font-weight: 900; letter-spacing: 4px; text-transform: uppercase; }
 
-        /* WINDOW SYSTEM */
-        #app-window {
-            position: fixed; inset: 40px; background: #000; border: 2px solid var(--accent);
-            border-radius: 20px; z-index: 20000; display: none; flex-direction: column; overflow: hidden;
-            box-shadow: 0 0 100px rgba(0,0,0,0.9);
+        /* Background Pulse Animation */
+        @keyframes bgBreath {
+            0% { background-size: 100% auto; }
+            100% { background-size: 105% auto; }
         }
-        .win-bar { background: #111; padding: 15px 30px; display: flex; justify-content: space-between; border-bottom: 1px solid #222; align-items: center; }
-        .win-close { color: #ff5555; cursor: pointer; font-weight: 900; font-size: 22px; }
-        iframe { width: 100%; height: 100%; border: none; }
+
+        /* --- SIDEBAR --- */
+        nav {
+            width: 140px;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            padding-left: 30px;
+            gap: 30px;
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            border-right: 1px solid var(--glass-border);
+            z-index: 100;
+        }
+
+        nav a {
+            color: rgba(255, 255, 255, 0.5);
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: 0.3s;
+            cursor: pointer;
+            position: relative;
+        }
+
+        nav a:hover, nav a.active {
+            color: var(--accent);
+            text-shadow: 0 0 15px var(--accent);
+            transform: translateX(5px);
+        }
+
+        nav a.active::before {
+            content: '';
+            position: absolute;
+            left: -15px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 4px;
+            height: 15px;
+            background: var(--accent);
+            border-radius: 10px;
+        }
+
+        /* --- MAIN CONTENT --- */
+        main {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-y: auto;
+        }
+
+        .center-group {
+            width: 100%;
+            max-width: 900px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        }
+
+        @keyframes fadeInUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .search-wrapper {
+            width: 100%;
+            max-width: 580px;
+            margin-bottom: 40px;
+        }
+
+        .search-wrapper h1 {
+            font-size: 64px;
+            font-weight: 800;
+            margin-bottom: 25px;
+            letter-spacing: -3px;
+            background: linear-gradient(to bottom, #fff, #aaa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .search-bar {
+            width: 100%;
+            padding: 22px 35px;
+            border-radius: 50px;
+            border: 1px solid var(--glass-border);
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(25px);
+            color: white;
+            font-size: 18px;
+            outline: none;
+            transition: 0.3s;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .search-bar:focus {
+            border-color: var(--accent);
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 40px rgba(195, 166, 255, 0.2);
+        }
+
+        /* App Grid */
+        .app-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 25px;
+            width: 100%;
+            padding-bottom: 50px;
+        }
+
+        .app-card {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 25px 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            transition: 0.4s cubic-bezier(0.2, 1, 0.2, 1);
+            opacity: 0;
+            animation: popIn 0.5s ease forwards;
+        }
+
+        /* Staggered Animations */
+        .app-card:nth-child(1) { animation-delay: 0.1s; }
+        .app-card:nth-child(2) { animation-delay: 0.15s; }
+        .app-card:nth-child(3) { animation-delay: 0.2s; }
+        .app-card:nth-child(4) { animation-delay: 0.25s; }
+        .app-card:nth-child(5) { animation-delay: 0.3s; }
+        .app-card:nth-child(6) { animation-delay: 0.35s; }
+        .app-card:nth-child(7) { animation-delay: 0.4s; }
+        .app-card:nth-child(8) { animation-delay: 0.45s; }
+        .app-card:nth-child(9) { animation-delay: 0.5s; }
+        .app-card:nth-child(10) { animation-delay: 0.55s; }
+        .app-card:nth-child(11) { animation-delay: 0.6s; }
+        .app-card:nth-child(12) { animation-delay: 0.65s; }
+
+        @keyframes popIn {
+            from { opacity: 0; transform: scale(0.9) translateY(20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .app-card:hover {
+            background: rgba(255, 255, 255, 0.12);
+            transform: translateY(-12px);
+            border-color: var(--accent);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+        }
+
+        .app-card img {
+            width: 50px;
+            height: 50px;
+            margin-bottom: 15px;
+            border-radius: 12px;
+            filter: drop-shadow(0 8px 15px rgba(0,0,0,0.4));
+            transition: 0.3s;
+        }
+
+        .app-card:hover img { transform: scale(1.1) rotate(5deg); }
+
+        .app-card span {
+            font-size: 13px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.8);
+            letter-spacing: 0.5px;
+        }
+
+        /* Overlay */
+        #overlay {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: #000; z-index: 1000; display: none;
+        }
+        #overlay iframe { width: 100%; height: 100%; border: none; }
+        .close-btn {
+            position: fixed; top: 25px; right: 25px;
+            background: rgba(255,255,255,0.15); color: white; border: none;
+            padding: 12px 24px; border-radius: 12px; cursor: pointer;
+            backdrop-filter: blur(10px); font-weight: bold;
+        }
+
+        .page { display: none; width: 100%; }
+        .active-page { display: flex !important; }
+
     </style>
 </head>
 <body>
 
-    <div id="limbo-overlay">
-        <div id="status-display">FOCUS</div>
-        <div id="game-arena"></div>
-    </div>
+    <nav>
+        <a onclick="showPage('home')" id="n-home" class="active">Home</a>
+        <a onclick="showPage('games')" id="n-games">Games</a>
+        <a onclick="showPage('settings')" id="n-settings">Settings</a>
+        <a onclick="showPage('about')" id="n-about">About</a>
+    </nav>
 
-    <div id="nexus-system">
-        <div class="nexus-wallpaper"><div class="grid-lines"></div></div>
-        <header>
-            <div class="logo">NEXUS</div>
-            <div class="os-time" id="os-clock">00:00</div>
-        </header>
-        <main>
-            <div class="section-label">Media & Social</div>
-            <div class="big-grid">
-                <div class="big-card" onclick="openWin('https://www.youtube.com/embed', 'YOUTUBE')">
+    <main>
+        
+        <div id="home" class="center-group page active-page">
+            <div class="search-wrapper">
+                <h1>Nexus</h1>
+                <input type="text" class="search-bar" placeholder="Enter URL or Search..." onkeydown="handleSearch(event)">
+            </div>
+
+            <div class="app-grid">
+                <div class="app-card" onclick="window.open('https://www.youtube.com', '_blank')">
                     <img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png">
                     <span>YouTube</span>
                 </div>
-                <div class="big-card" onclick="openWin('https://www.tiktok.com', 'TIKTOK')">
+                <div class="app-card" onclick="window.open('https://www.tiktok.com', '_blank')">
                     <img src="https://cdn-icons-png.flaticon.com/512/3046/3046121.png">
                     <span>TikTok</span>
                 </div>
-                <div class="big-card" onclick="openWin('https://soundcloud.com', 'SOUNDCLOUD')">
-                    <img src="https://cdn-icons-png.flaticon.com/512/145/145810.png">
+                <div class="app-card" onclick="window.open('https://discord.com/app', '_blank')">
+                    <img src="https://cdn-icons-png.flaticon.com/512/5968/5968756.png">
+                    <span>Discord</span>
+                </div>
+                <div class="app-card" onclick="window.open('https://soundcloud.com', '_blank')">
+                    <img src="https://cdn-icons-png.flaticon.com/512/145/145850.png">
                     <span>SoundCloud</span>
                 </div>
-            </div>
-
-            <div class="section-label">Arcade Terminal</div>
-            <div class="big-grid">
-                <div class="big-card" onclick="openWin('https://1v1.lol', '1V1.LOL')">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR06X-vX4-o56X75x3D39uU975fA2F8EwH9Pw&s">
-                    <span>1V1.LOL</span>
+                <div class="app-card" onclick="window.open('https://www.instagram.com', '_blank')">
+                    <img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png">
+                    <span>Instagram</span>
                 </div>
-                <div class="big-card" onclick="openWin('https://classic.minecraft.net', 'MINECRAFT')">
+                <div class="app-card" onclick="window.open('https://www.twitch.tv', '_blank')">
+                    <img src="https://cdn-icons-png.flaticon.com/512/5968/5968819.png">
+                    <span>Twitch</span>
+                </div>
+                <div class="app-card" onclick="window.open('https://open.spotify.com', '_blank')">
+                    <img src="https://cdn-icons-png.flaticon.com/512/174/174872.png">
+                    <span>Spotify</span>
+                </div>
+                <div class="app-card" onclick="window.open('https://chat.openai.com', '_blank')">
+                    <img src="https://cdn-icons-png.flaticon.com/512/12222/12222588.png">
+                    <span>ChatGPT</span>
+                </div>
+            </div>
+        </div>
+
+        <div id="games" class="center-group page">
+            <div class="search-wrapper">
+                <h1>Arcade</h1>
+            </div>
+            <div class="app-grid">
+                <div class="app-card" onclick="window.open('https://poki.com', '_blank')">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/7/7a/Poki_Logo.png">
+                    <span>Poki</span>
+                </div>
+                <div class="app-card" onclick="window.open('https://classic.minecraft.net', '_blank')">
                     <img src="https://cdn-icons-png.flaticon.com/512/5968/5968840.png">
                     <span>Minecraft</span>
                 </div>
-                <div class="big-card" onclick="openWin('https://krunker.io', 'KRUNKER')">
+                <div class="app-card" onclick="window.open('https://krunker.io', '_blank')">
                     <img src="https://cdn-icons-png.flaticon.com/512/3408/3408506.png">
                     <span>Krunker</span>
                 </div>
+                <div class="app-card" onclick="window.open('https://shellshock.io', '_blank')">
+                    <img src="https://cdn-icons-png.flaticon.com/512/2991/2991606.png">
+                    <span>ShellShock</span>
+                </div>
+                
+                <div class="app-card" onclick="window.open('https://1v1.lol', '_blank')">
+                    <img src="https://cdn-icons-png.flaticon.com/512/15008/15008865.png">
+                    <span>1v1.LOL</span>
+                </div>
+                <div class="app-card" onclick="window.open('https://slope-game.github.io', '_blank')">
+                    <img src="https://cdn-icons-png.flaticon.com/512/5556/5556391.png">
+                    <span>Slope</span>
+                </div>
+                <div class="app-card" onclick="window.open('https://agar.io', '_blank')">
+                    <img src="https://cdn-icons-png.flaticon.com/512/5726/5726531.png">
+                    <span>Agar.io</span>
+                </div>
+                <div class="app-card" onclick="window.open('https://paper-io.com', '_blank')">
+                    <img src="https://cdn-icons-png.flaticon.com/512/3663/3663335.png">
+                    <span>Paper.io 2</span>
+                </div>
+                <div class="app-card" onclick="window.open('https://subwaysurfers.com', '_blank')">
+                    <img src="https://cdn-icons-png.flaticon.com/512/3408/3408545.png">
+                    <span>Subway Surf</span>
+                </div>
+                <div class="app-card" onclick="window.open('https://play2048.co', '_blank')">
+                    <img src="https://cdn-icons-png.flaticon.com/512/3063/3063822.png">
+                    <span>2048</span>
+                </div>
+                <div class="app-card" onclick="window.open('https://flappybird.io', '_blank')">
+                    <img src="https://cdn-icons-png.flaticon.com/512/826/826955.png">
+                    <span>Flappy Bird</span>
+                </div>
+                <div class="app-card" onclick="window.open('https://www.chess.com', '_blank')">
+                    <img src="https://cdn-icons-png.flaticon.com/512/4603/4603842.png">
+                    <span>Chess</span>
+                </div>
             </div>
-        </main>
-    </div>
-
-    <div id="app-window">
-        <div class="win-bar">
-            <div id="win-title" style="font-family:'Orbitron'; color:var(--accent); letter-spacing:5px; font-size:12px">APP_STREAM</div>
-            <div class="win-close" onclick="closeWin()">×</div>
         </div>
-        <iframe id="app-frame" src=""></iframe>
+
+        <div id="settings" class="center-group page">
+            <div class="search-wrapper">
+                <h1>Settings</h1>
+                <button class="search-bar" style="cursor:pointer" onclick="cloak()">Activate Tab Cloak</button>
+                <p style="margin-top:20px; color:rgba(255,255,255,0.4)">Panic Button: Press <b>~</b> to hide</p>
+            </div>
+        </div>
+
+        <div id="about" class="center-group page">
+            <div class="search-wrapper">
+                <h1>About</h1>
+                <p style="color:rgba(255,255,255,0.6)">Nexus OS v2.1</p>
+            </div>
+        </div>
+
+    </main>
+
+    <div id="overlay">
+        <button class="close-btn" onclick="exitApp()">X Close</button>
+        <iframe id="frame" src=""></iframe>
     </div>
 
     <script>
-        const arena = document.getElementById('game-arena');
-        const status = document.getElementById('status-display');
-        const overlay = document.getElementById('limbo-overlay');
-        const nexus = document.getElementById('nexus-system');
-        
-        let keys = []; let targetId = 0; let canInteract = false;
-        const grid = [{x:100,y:80},{x:200,y:80},{x:300,y:80},{x:400,y:80},{x:100,y:220},{x:200,y:220},{x:300,y:220},{x:400,y:220}];
-
-        function init() {
-            arena.innerHTML = ''; keys = []; targetId = Math.floor(Math.random()*8); canInteract = false;
-            for(let i=0; i<8; i++){
-                const k = document.createElement('div'); k.className = 'key-unit'; k.innerHTML = '<div class="key-inner"></div>';
-                k.style.left = grid[i].x+'px'; k.style.top = grid[i].y+'px'; k.style.color = "#333"; k.dataset.spot = i;
-                k.onclick = () => { if(canInteract) check(i); }; arena.appendChild(k); keys.push(k);
-            }
-            setTimeout(flash, 1000);
-        }
-
-        function flash() {
-            keys[targetId].style.color = "#5f5"; keys[targetId].style.borderColor = "#5f5";
-            setTimeout(() => {
-                keys.forEach(k => { k.style.color = "#600"; k.style.borderColor = "#300"; });
-                let m = 0; const iv = setInterval(() => {
-                    let a = Math.floor(Math.random()*8), b = Math.floor(Math.random()*8);
-                    let sA = keys[a].dataset.spot, sB = keys[b].dataset.spot;
-                    keys[a].style.left = grid[sB].x+'px'; keys[a].style.top = grid[sB].y+'px';
-                    keys[b].style.left = grid[sA].x+'px'; keys[b].style.top = grid[sA].y+'px';
-                    keys[a].dataset.spot = sB; keys[b].dataset.spot = sA;
-                    if(++m > 15){ clearInterval(iv); setTimeout(uplift, 500); }
-                }, 350);
-            }, 1000);
-        }
-
-        function uplift() {
-            const colors = ['#f44', '#4f4', '#44f', '#ff4', '#f4f', '#4ff', '#fa0', '#fff'];
-            keys.forEach((k, i) => {
-                setTimeout(() => {
-                    k.style.color = colors[i]; k.style.borderColor = colors[i];
-                    const a = (i * Math.PI * 2) / 8;
-                    k.style.left = (250 + Math.cos(a) * 160) + 'px'; k.style.top = (150 + Math.sin(a) * 160) + 'px';
-                    if(i === 7) setTimeout(spin, 800);
-                }, i * 150);
+        function showPage(id) {
+            // Reset animations
+            document.querySelectorAll('.page').forEach(p => {
+                p.classList.remove('active-page');
+                p.style.animation = 'none';
             });
+            document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+
+            // Activate new page
+            const activePage = document.getElementById(id);
+            activePage.classList.add('active-page');
+            
+            // Trigger animation reflow
+            void activePage.offsetWidth; 
+            activePage.style.animation = 'fadeInUp 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards';
+
+            document.getElementById('n-'+id).classList.add('active');
         }
 
-        function spin() {
-            const start = Date.now();
-            function cyc() {
-                const el = Date.now() - start; const a = el * 0.009;
-                keys.forEach((k, i) => {
-                    const o = (i * Math.PI * 2) / 8;
-                    k.style.left = (250 + Math.cos(a+o) * 160) + 'px'; k.style.top = (150 + Math.sin(a+o) * 160) + 'px';
-                    k.style.transition = "none";
-                });
-                if(el < 3500) requestAnimationFrame(cyc);
-                else { canInteract = true; status.innerText = "CHOOSE"; status.style.color="#fff"; }
+        function handleSearch(e) {
+            if (e.key === 'Enter') {
+                let val = e.target.value;
+                let url = val.includes('.') ? 'https://' + val : 'https://www.google.com/search?q=' + val;
+                window.open(url, '_blank');
             }
-            requestAnimationFrame(cyc);
         }
 
-        function check(idx) {
-            if(idx === targetId) { 
-                overlay.style.display = 'none'; nexus.classList.add('active'); nexus.style.display='flex';
-                setInterval(() => { const d = new Date(); document.getElementById('os-clock').innerText = d.getHours().toString().padStart(2,'0') + ":" + d.getMinutes().toString().padStart(2,'0'); }, 1000);
-            } else init();
+        // Standard launcher for iframe-compatible sites
+        function launch(url) {
+            document.getElementById('frame').src = url;
+            document.getElementById('overlay').style.display = 'block';
         }
 
-        function openWin(url, title) {
-            document.getElementById('app-frame').src = url;
-            document.getElementById('win-title').innerText = title;
-            document.getElementById('app-window').style.display = 'flex';
+        function exitApp() {
+            document.getElementById('overlay').style.display = 'none';
+            document.getElementById('frame').src = '';
         }
 
-        function closeWin() {
-            document.getElementById('app-window').style.display = 'none';
-            document.getElementById('app-frame').src = "";
+        function cloak() {
+            document.title = "My Drive - Google Drive";
+            let link = document.querySelector("link[rel*='icon']") || document.createElement('link');
+            link.href = 'https://ssl.gstatic.com/images/branding/product/1x/drive_2020q4_32dp.png';
+            document.getElementsByTagName('head')[0].appendChild(link);
+            alert("Cloak Active");
         }
 
-        window.onload = init;
+        window.onkeydown = (e) => { if(e.key === '~') window.location.href="https://classroom.google.com"; };
     </script>
 </body>
 </html>
