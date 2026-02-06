@@ -10,6 +10,7 @@
             --glass: rgba(255, 255, 255, 0.05);
             --glass-border: rgba(255, 255, 255, 0.12);
             --accent: #c3a6ff;
+            --limbo-bg: #020202;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
@@ -18,7 +19,7 @@
         /* --- LIMBO OVERLAY --- */
         #limbo-overlay {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: #020202; z-index: 5000; display: flex;
+            background: var(--limbo-bg); z-index: 5000; display: flex;
             justify-content: center; align-items: center;
         }
 
@@ -28,18 +29,17 @@
 
         .limbo-block {
             position: absolute;
-            width: 60px; height: 60px;
-            background: #222; /* Block Style */
-            border: 2px solid #444;
-            border-radius: 8px;
+            width: 65px; height: 65px;
+            background-color: #1a1a1a;
+            background-image: url('https://i.ibb.co/VWV0p0p/limbo-key-red.png'); /* The Key Image */
+            background-size: 80%;
+            background-repeat: no-repeat;
+            background-position: center;
+            border: 2px solid #333;
+            border-radius: 10px;
             cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            display: flex; justify-content: center; align-items: center;
-            box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
-        }
-
-        .limbo-block::after {
-            content: ''; width: 20px; height: 20px; background: rgba(255,255,255,0.1); border-radius: 2px;
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            filter: grayscale(1) brightness(0.3); /* Initially dark/gray */
         }
 
         .flash-bang { animation: flashEffect 0.8s forwards; }
@@ -49,17 +49,33 @@
             100% { background: transparent; }
         }
 
-        /* --- OS UI --- */
+        /* --- NEXUS INTERFACE --- */
         #nexus-interface { opacity: 0; transition: opacity 1.5s; height: 100%; display: flex; pointer-events: none; }
         #nexus-interface.active { opacity: 1; pointer-events: all; }
-        .bg-layer { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.85)), url('https://images.unsplash.com/photo-1462331940025-496dfbfc7564?q=80&w=2022&auto=format&fit=crop'); background-size: cover; z-index: -1; }
-        nav { width: 130px; height: 100vh; display: flex; flex-direction: column; justify-content: center; padding-left: 25px; gap: 35px; background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(25px); border-right: 1px solid var(--glass-border); z-index: 100; }
+
+        .bg-layer { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.85)), 
+            url('https://images.unsplash.com/photo-1462331940025-496dfbfc7564?q=80&w=2022&auto=format&fit=crop'); 
+            background-size: cover; z-index: -1; 
+        }
+
+        nav { 
+            width: 130px; height: 100vh; display: flex; flex-direction: column; 
+            justify-content: center; padding-left: 25px; gap: 35px; 
+            background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(25px); 
+            border-right: 1px solid var(--glass-border); z-index: 100; 
+        }
+
         nav a { color: rgba(255, 255, 255, 0.3); text-decoration: none; font-size: 13px; font-weight: 800; text-transform: uppercase; cursor: pointer; letter-spacing: 2px; }
         nav a.active { color: var(--accent); text-shadow: 0 0 15px var(--accent); }
+
         main { flex: 1; display: flex; justify-content: center; align-items: center; }
         .page { display: none; width: 100%; max-width: 850px; flex-direction: column; align-items: center; }
         .active-page { display: flex; animation: fadeInUp 0.6s forwards; }
+
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+
         .search-bar { width: 100%; max-width: 450px; padding: 20px; border-radius: 50px; border: 1px solid var(--glass-border); background: rgba(255,255,255,0.04); color: white; text-align: center; margin-bottom: 40px; outline: none; }
         .app-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; width: 100%; }
         .app-card { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 20px; padding: 25px; transition: 0.4s; cursor: pointer; text-align: center; }
@@ -102,14 +118,14 @@
             </div>
             <div id="settings" class="page">
                 <h1 style="font-family: 'Orbitron'; letter-spacing: 5px;">SYSTEM</h1>
-                <button class="search-bar" onclick="cloak()">ENABLE STEALTH</button>
+                <button class="search-bar" onclick="cloak()">ENABLE TAB CLOAK</button>
             </div>
         </main>
     </div>
 
     <script>
         const anchor = document.getElementById('key-anchor');
-        const gridPositions = [];
+        const gridSpots = [];
         let blocks = [];
         let targetIndex = 0;
         let isWaiting = false;
@@ -117,24 +133,24 @@
         function initLimbo() {
             anchor.innerHTML = '';
             blocks = [];
-            gridPositions.length = 0;
+            gridSpots.length = 0;
             targetIndex = Math.floor(Math.random() * 8);
             isWaiting = false;
 
-            // Define 8 fixed spots
+            // Define 8 fixed spots for the blocks to stay in
             for (let i = 0; i < 8; i++) {
-                gridPositions.push({
-                    x: (i % 4) * 80,
-                    y: Math.floor(i / 4) * 100
+                gridSpots.push({
+                    x: (i % 4) * 85,
+                    y: Math.floor(i / 4) * 110
                 });
             }
 
-            // Create Blocks at spots
+            // Create 8 blocks at these spots
             for (let i = 0; i < 8; i++) {
                 const block = document.createElement('div');
                 block.classList.add('limbo-block');
-                block.style.left = gridPositions[i].x + 'px';
-                block.style.top = gridPositions[i].y + 'px';
+                block.style.left = gridSpots[i].x + 'px';
+                block.style.top = gridSpots[i].y + 'px';
                 block.dataset.currentSpot = i;
                 block.onclick = () => checkBlock(i);
                 anchor.appendChild(block);
@@ -144,57 +160,70 @@
         }
 
         function revealTarget() {
-            // Flash target block Green
+            // Flash Green for 1 second
+            blocks[targetIndex].style.filter = 'grayscale(0) brightness(1.2) sepia(1) hue-rotate(70deg) saturate(10)';
             blocks[targetIndex].style.borderColor = '#55ff55';
-            blocks[targetIndex].style.boxShadow = '0 0 20px #55ff55';
             
             setTimeout(() => {
-                // All blocks go Dark Red
+                // All turn dark/hard to see
                 blocks.forEach(b => {
-                    b.style.borderColor = '#4a0000';
-                    b.style.boxShadow = 'none';
-                    b.style.background = '#1a0000';
+                    b.style.filter = 'grayscale(1) brightness(0.15)';
+                    b.style.borderColor = '#222';
                 });
-                startSwitching();
-            }, 1000);
+                startSwapping();
+            }, 1200);
         }
 
-        function startSwitching() {
-            let switches = 0;
-            const switchInterval = setInterval(() => {
-                // Pick two random blocks to swap spots
+        function startSwapping() {
+            let moves = 0;
+            const maxMoves = 18; // How many times they swap
+            
+            const shuffle = setInterval(() => {
+                // Pick 2 random blocks
                 let a = Math.floor(Math.random() * 8);
                 let b = Math.floor(Math.random() * 8);
                 while(a === b) b = Math.floor(Math.random() * 8);
 
+                // Get their current spots
                 let spotA = blocks[a].dataset.currentSpot;
                 let spotB = blocks[b].dataset.currentSpot;
 
-                // Swap them visually
-                blocks[a].style.left = gridPositions[spotB].x + 'px';
-                blocks[a].style.top = gridPositions[spotB].y + 'px';
-                blocks[b].style.left = gridPositions[spotA].x + 'px';
-                blocks[b].style.top = gridPositions[spotA].y + 'px';
+                // Move them to each other's spots
+                blocks[a].style.left = gridSpots[spotB].x + 'px';
+                blocks[a].style.top = gridSpots[spotB].y + 'px';
+                blocks[b].style.left = gridSpots[spotA].x + 'px';
+                blocks[b].style.top = gridSpots[spotA].y + 'px';
 
-                // Update data
+                // Update data tracking
                 blocks[a].dataset.currentSpot = spotB;
                 blocks[b].dataset.currentSpot = spotA;
 
-                switches++;
-                if (switches > 15) {
-                    clearInterval(switchInterval);
-                    finalizePositions();
+                moves++;
+                if (moves >= maxMoves) {
+                    clearInterval(shuffle);
+                    finalizeLimbo();
                 }
-            }, 300);
+            }, 350);
         }
 
-        function finalizePositions() {
-            const colors = ['#ff5555', '#55ff55', '#5555ff', '#ffff55', '#ff55ff', '#55ffff', '#ffa500', '#ffffff'];
+        function finalizeLimbo() {
+            const finalFilters = [
+                'hue-rotate(0deg) brightness(1)',      // Red
+                'hue-rotate(90deg) brightness(1)',     // Green
+                'hue-rotate(200deg) brightness(1)',    // Blue
+                'hue-rotate(50deg) brightness(1.2)',   // Yellow
+                'hue-rotate(280deg) brightness(1)',    // Purple
+                'hue-rotate(150deg) brightness(1.2)',  // Cyan
+                'grayscale(0) brightness(1.5)',        // White
+                'hue-rotate(30deg) brightness(0.8)'    // Orange/Brown
+            ];
+
+            // Change blocks to bright colors at the end
             blocks.forEach((b, i) => {
-                b.style.borderColor = colors[i];
-                b.style.boxShadow = `0 0 10px ${colors[i]}`;
-                b.style.background = '#222';
+                b.style.filter = 'grayscale(0) ' + finalFilters[i];
+                b.style.borderColor = 'rgba(255,255,255,0.2)';
             });
+
             isWaiting = true;
         }
 
@@ -207,12 +236,13 @@
                     document.getElementById('nexus-interface').classList.add('active');
                 }, 400);
             } else {
-                initLimbo(); // Restart on fail
+                initLimbo(); // Restart
             }
         }
 
         window.onload = initLimbo;
 
+        /* OS LOGIC */
         function showPage(id) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
             document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
