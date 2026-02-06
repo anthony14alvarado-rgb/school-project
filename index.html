@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NEXUS OS | Z-KIT ELITE</title>
+    <title>NEXUS OS | Z-KIT AUDIO ELITE</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Orbitron:wght@700&family=JetBrains+Mono&display=swap" rel="stylesheet">
     <style>
         :root { 
@@ -18,7 +18,7 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { background: #000; color: white; height: 100vh; overflow: hidden; font-family: 'Inter', sans-serif; }
 
-        /* --- LIMBO OVERLAY (ORIGINAL KEY STYLE RESTORED) --- */
+        /* --- LIMBO OVERLAY --- */
         #limbo-overlay {
             position: fixed; inset: 0; background: #000;
             z-index: 10000; display: flex; flex-direction: column;
@@ -27,7 +27,6 @@
         #status-display { font-family: 'Orbitron'; font-size: 35px; color: #111; letter-spacing: 25px; margin-bottom: 80px; transition: color 0.5s; }
         #game-arena { position: relative; width: 600px; height: 400px; }
         
-        /* THE ORIGINAL KEY UNIT */
         .key-unit {
             position: absolute; width: 75px; height: 75px; background: #080808; border: 3px solid #222; border-radius: 6px;
             display: flex; justify-content: center; align-items: center; cursor: pointer;
@@ -43,7 +42,6 @@
         }
         #nexus-system.active { display: flex; opacity: 1; }
 
-        /* Original Elite Wallpaper Layer */
         .nexus-wallpaper {
             position: absolute; inset: 0; z-index: -1;
             background: 
@@ -66,7 +64,6 @@
             to { transform: perspective(500px) rotateX(60deg) translateY(50px); }
         }
 
-        /* Z-KIT INSPIRED HEADER */
         header { 
             width: 100%; padding: 30px 80px; display: flex; justify-content: space-between; 
             align-items: center; z-index: 10; border-bottom: 1px solid var(--glass-border);
@@ -75,7 +72,6 @@
         .logo { font-family: 'Orbitron'; font-size: 18px; letter-spacing: 12px; color: #fff; text-shadow: 0 0 20px var(--accent); }
         .os-time { font-family: var(--font-mono); font-size: 12px; color: var(--accent); opacity: 0.6; }
 
-        /* Z-KIT BENTO GRID LAYOUT */
         main { flex: 1; padding: 20px 80px 80px; overflow-y: auto; z-index: 10; }
         .section-label { font-family: var(--font-mono); font-size: 10px; letter-spacing: 8px; text-transform: uppercase; color: var(--accent); margin: 60px 0 25px; opacity: 0.5; }
 
@@ -95,7 +91,6 @@
         .big-card img { width: 40px; height: 40px; filter: drop-shadow(0 0 10px rgba(195, 166, 255, 0.4)); margin-bottom: 20px; }
         .big-card span { font-size: 14px; font-weight: 900; letter-spacing: 4px; text-transform: uppercase; }
 
-        /* WINDOW SYSTEM */
         #app-window {
             position: fixed; inset: 40px; background: #000; border: 1px solid var(--accent);
             border-radius: 16px; z-index: 20000; display: none; flex-direction: column; overflow: hidden;
@@ -108,8 +103,12 @@
 </head>
 <body>
 
+    <audio id="boot-audio" loop>
+        <source src="https://www.soundjay.com/buttons/sounds/button-20.mp3" type="audio/mpeg">
+    </audio>
+
     <div id="limbo-overlay">
-        <div id="status-display">FOCUS</div>
+        <div id="status-display">CLICK TO START</div>
         <div id="game-arena"></div>
     </div>
 
@@ -163,14 +162,22 @@
     </div>
 
     <script>
-        // --- ORIGINAL LOGIC FULLY RESTORED ---
         const arena = document.getElementById('game-arena');
         const status = document.getElementById('status-display');
         const overlay = document.getElementById('limbo-overlay');
         const nexus = document.getElementById('nexus-system');
+        const audio = document.getElementById('boot-audio');
         
         let keys = []; let targetId = 0; let canInteract = false;
         const grid = [{x:100,y:80},{x:200,y:80},{x:300,y:80},{x:400,y:80},{x:100,y:220},{x:200,y:220},{x:300,y:220},{x:400,y:220}];
+
+        // Audio must be triggered by user interaction
+        overlay.onclick = () => {
+            if(status.innerText === "CLICK TO START") {
+                audio.play();
+                init();
+            }
+        };
 
         function init() {
             arena.innerHTML = ''; keys = []; targetId = Math.floor(Math.random()*8); canInteract = false;
@@ -178,7 +185,8 @@
             for(let i=0; i<8; i++){
                 const k = document.createElement('div'); k.className = 'key-unit'; k.innerHTML = '<div class="key-inner"></div>';
                 k.style.left = grid[i].x+'px'; k.style.top = grid[i].y+'px'; k.style.color = "#222"; k.dataset.spot = i;
-                k.onclick = () => { if(canInteract) check(i); }; arena.appendChild(k); keys.push(k);
+                k.onclick = (e) => { e.stopPropagation(); if(canInteract) check(i); }; 
+                arena.appendChild(k); keys.push(k);
             }
             setTimeout(flash, 1000);
         }
@@ -227,12 +235,18 @@
 
         function check(idx) {
             if(idx === targetId) { 
+                audio.pause(); // Stop music when clicked
+                audio.currentTime = 0;
                 overlay.style.display = 'none'; nexus.classList.add('active'); nexus.style.display='flex';
                 setInterval(() => { 
                     const d = new Date(); 
                     document.getElementById('os-clock').innerText = d.getHours().toString().padStart(2,'0') + ":" + d.getMinutes().toString().padStart(2,'0') + ":" + d.getSeconds().toString().padStart(2,'0'); 
                 }, 1000);
-            } else init();
+            } else {
+                audio.pause();
+                audio.currentTime = 0;
+                init();
+            }
         }
 
         function openWin(url, title) {
@@ -245,8 +259,6 @@
             document.getElementById('app-window').style.display = 'none';
             document.getElementById('app-frame').src = "";
         }
-
-        window.onload = init;
     </script>
 </body>
 </html>
