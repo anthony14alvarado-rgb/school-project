@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NEXUS OS | Z-KIT ELITE AUDIO</title>
+    <title>NEXUS OS | Z-KIT ELITE FIXED AUDIO</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Orbitron:wght@700&family=JetBrains+Mono&display=swap" rel="stylesheet">
     <style>
         :root { 
@@ -27,6 +27,7 @@
         #status-display { font-family: 'Orbitron'; font-size: 35px; color: #111; letter-spacing: 25px; margin-bottom: 80px; transition: color 0.5s; }
         #game-arena { position: relative; width: 600px; height: 400px; }
         
+        /* YOUR ORIGINAL KEY DESIGN */
         .key-unit {
             position: absolute; width: 75px; height: 75px; background: #080808; border: 3px solid #222; border-radius: 6px;
             display: flex; justify-content: center; align-items: center; cursor: pointer;
@@ -34,7 +35,7 @@
         }
         .key-inner { width: 22px; height: 22px; border: 4px solid currentColor; transform: rotate(45deg); }
 
-        /* --- THE ELITE NEXUS THEME --- */
+        /* --- NEXUS SYSTEM --- */
         #nexus-system {
             position: fixed; inset: 0; display: none;
             opacity: 0; transition: opacity 1.5s; z-index: 1;
@@ -44,24 +45,7 @@
 
         .nexus-wallpaper {
             position: absolute; inset: 0; z-index: -1;
-            background: 
-                radial-gradient(circle at 20% 30%, var(--nexus-glow) 0%, transparent 40%),
-                radial-gradient(circle at 80% 70%, var(--nexus-glow) 0%, transparent 40%),
-                linear-gradient(0deg, #000 0%, #0a0a12 100%);
-        }
-        .grid-lines {
-            position: absolute; inset: -100%;
-            background-image: 
-                linear-gradient(rgba(195, 166, 255, 0.05) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(195, 166, 255, 0.05) 1px, transparent 1px);
-            background-size: 50px 50px;
-            transform: perspective(500px) rotateX(60deg);
-            animation: gridMove 20s linear infinite;
-            mask-image: radial-gradient(ellipse at center, black, transparent 80%);
-        }
-        @keyframes gridMove {
-            from { transform: perspective(500px) rotateX(60deg) translateY(0); }
-            to { transform: perspective(500px) rotateX(60deg) translateY(50px); }
+            background: radial-gradient(circle at 50% 50%, var(--nexus-glow) 0%, transparent 70%), #000;
         }
 
         header { 
@@ -69,69 +53,53 @@
             align-items: center; z-index: 10; border-bottom: 1px solid var(--glass-border);
             backdrop-filter: blur(20px);
         }
-        .logo { font-family: 'Orbitron'; font-size: 18px; letter-spacing: 12px; color: #fff; text-shadow: 0 0 20px var(--accent); }
+        .logo { font-family: 'Orbitron'; font-size: 18px; letter-spacing: 12px; color: #fff; }
         .os-time { font-family: var(--font-mono); font-size: 12px; color: var(--accent); opacity: 0.6; }
 
-        main { flex: 1; padding: 20px 80px 80px; overflow-y: auto; z-index: 10; }
-        .section-label { font-family: var(--font-mono); font-size: 10px; letter-spacing: 8px; text-transform: uppercase; color: var(--accent); margin: 60px 0 25px; opacity: 0.5; }
-
+        main { flex: 1; padding: 40px 80px; overflow-y: auto; z-index: 10; }
         .big-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
 
         .big-card {
             background: var(--glass); border: 1px solid var(--glass-border); border-radius: 12px;
-            padding: 50px 30px; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-between;
+            padding: 50px 30px; display: flex; flex-direction: column; align-items: flex-start;
             min-height: 200px; transition: 0.4s cubic-bezier(0.19, 1, 0.22, 1);
             text-decoration: none; color: white; backdrop-filter: blur(15px);
         }
-        .big-card:hover {
-            transform: translateY(-8px); border-color: var(--accent);
-            background: rgba(195, 166, 255, 0.08);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-        }
-        .big-card img { width: 40px; height: 40px; filter: drop-shadow(0 0 10px rgba(195, 166, 255, 0.4)); margin-bottom: 20px; }
+        .big-card:hover { transform: translateY(-8px); border-color: var(--accent); background: rgba(195, 166, 255, 0.08); }
+        .big-card img { width: 40px; height: 40px; margin-bottom: 20px; filter: drop-shadow(0 0 10px var(--accent)); }
         .big-card span { font-size: 14px; font-weight: 900; letter-spacing: 4px; text-transform: uppercase; }
 
         #app-window {
             position: fixed; inset: 40px; background: #000; border: 1px solid var(--accent);
             border-radius: 16px; z-index: 20000; display: none; flex-direction: column; overflow: hidden;
-            box-shadow: 0 0 100px rgba(0,0,0,0.9);
         }
         .win-bar { background: #0a0a0a; padding: 15px 30px; display: flex; justify-content: space-between; border-bottom: 1px solid #1a1a1a; align-items: center; }
-        .win-close { color: #ff5555; cursor: pointer; font-family: var(--font-mono); font-size: 12px; letter-spacing: 2px; }
+        .win-close { color: #ff5555; cursor: pointer; font-family: var(--font-mono); font-size: 12px; }
         iframe { width: 100%; height: 100%; border: none; }
     </style>
 </head>
 <body>
 
-    <audio id="boot-audio" loop>
-        <source src="https://assets.mixkit.co/music/preview/mixkit-tech-house-vibes-130.mp3" type="audio/mpeg">
-    </audio>
-
     <div id="limbo-overlay">
-        <div id="status-display">CLICK TO SYNC</div>
+        <div id="status-display">CLICK TO INITIALIZE</div>
         <div id="game-arena"></div>
     </div>
 
     <div id="nexus-system">
-        <div class="nexus-wallpaper"><div class="grid-lines"></div></div>
+        <div class="nexus-wallpaper"></div>
         <header>
             <div class="logo">NEXUS</div>
             <div class="os-time" id="os-clock">00:00:00</div>
         </header>
         <main>
-            <div class="section-label">01 // Multimedia</div>
             <div class="big-grid">
                 <div class="big-card" onclick="openWin('https://www.youtube.com/embed', 'YOUTUBE')">
                     <img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png">
                     <span>YouTube_Stream</span>
                 </div>
-                <div class="big-card" onclick="openWin('https://www.tiktok.com', 'TIKTOK')">
-                    <img src="https://cdn-icons-png.flaticon.com/512/3046/3046121.png">
-                    <span>TikTok_Feed</span>
-                </div>
-                <div class="big-card" onclick="openWin('https://soundcloud.com', 'SOUNDCLOUD')">
-                    <img src="https://cdn-icons-png.flaticon.com/512/145/145810.png">
-                    <span>SoundCloud_Arch</span>
+                <div class="big-card" onclick="openWin('https://krunker.io', 'KRUNKER')">
+                    <img src="https://cdn-icons-png.flaticon.com/512/3408/3408506.png">
+                    <span>Krunker_Net</span>
                 </div>
             </div>
         </main>
@@ -146,26 +114,55 @@
     </div>
 
     <script>
+        // WEB AUDIO API - Creates sound from scratch (No external files needed)
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        let oscillator;
+        let isPlaying = false;
+
+        function playSynth() {
+            if (isPlaying) return;
+            oscillator = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            
+            oscillator.type = 'sawtooth';
+            oscillator.frequency.setValueAtTime(110, audioCtx.currentTime); // Deep Bass
+            
+            gainNode.gain.setValueAtTime(0.05, audioCtx.currentTime); // Low volume
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            
+            oscillator.start();
+            isPlaying = true;
+        }
+
+        function stopSynth() {
+            if (oscillator) {
+                oscillator.stop();
+                isPlaying = false;
+            }
+        }
+
         const arena = document.getElementById('game-arena');
         const status = document.getElementById('status-display');
         const overlay = document.getElementById('limbo-overlay');
         const nexus = document.getElementById('nexus-system');
-        const audio = document.getElementById('boot-audio');
         
         let keys = []; let targetId = 0; let canInteract = false;
         const grid = [{x:100,y:80},{x:200,y:80},{x:300,y:80},{x:400,y:80},{x:100,y:220},{x:200,y:220},{x:300,y:220},{x:400,y:220}];
 
         overlay.onclick = () => {
-            if(status.innerText === "CLICK TO SYNC") {
-                audio.volume = 0.4;
-                audio.play();
-                init();
+            if(status.innerText === "CLICK TO INITIALIZE") {
+                audioCtx.resume().then(() => {
+                    playSynth();
+                    init();
+                });
             }
         };
 
         function init() {
             arena.innerHTML = ''; keys = []; targetId = Math.floor(Math.random()*8); canInteract = false;
-            status.innerText = "FOCUS"; status.style.color = "#111";
+            status.innerText = "FOCUS";
             for(let i=0; i<8; i++){
                 const k = document.createElement('div'); k.className = 'key-unit'; k.innerHTML = '<div class="key-inner"></div>';
                 k.style.left = grid[i].x+'px'; k.style.top = grid[i].y+'px'; k.style.color = "#222"; k.dataset.spot = i;
@@ -219,7 +216,7 @@
 
         function check(idx) {
             if(idx === targetId) { 
-                audio.pause(); 
+                stopSynth();
                 overlay.style.display = 'none'; nexus.classList.add('active'); nexus.style.display='flex';
                 setInterval(() => { 
                     const d = new Date(); 
@@ -232,7 +229,6 @@
 
         function openWin(url, title) {
             document.getElementById('app-frame').src = url;
-            document.getElementById('win-title').innerText = title;
             document.getElementById('app-window').style.display = 'flex';
         }
 
