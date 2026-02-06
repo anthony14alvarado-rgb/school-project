@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexus OS | Extreme Edition</title>
+    <title>Nexus OS | Limbo Protocol</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;900&family=Orbitron:wght@700&display=swap" rel="stylesheet">
     <style>
         :root {
             --accent: #c3a6ff;
-            --limbo-dark: #020202;
+            --limbo-dark: #010101;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -18,12 +18,12 @@
         #limbo-overlay {
             position: fixed; inset: 0; background: var(--limbo-dark);
             z-index: 10000; display: flex; flex-direction: column;
-            justify-content: center; align-items: center; transition: opacity 0.8s ease-out;
+            justify-content: center; align-items: center;
         }
 
         #status-display {
-            font-family: 'Orbitron'; font-size: 32px; color: #111;
-            letter-spacing: 25px; margin-bottom: 100px; transition: color 0.5s;
+            font-family: 'Orbitron'; font-size: 32px; color: #151515;
+            letter-spacing: 20px; margin-bottom: 80px; text-transform: uppercase;
         }
 
         #game-arena {
@@ -33,45 +33,40 @@
 
         .key-unit {
             position: absolute; width: 75px; height: 75px;
-            background: #080808; border: 3px solid #222; border-radius: 4px;
+            background: #080808; border: 3px solid #222; border-radius: 6px;
             display: flex; justify-content: center; align-items: center;
             cursor: pointer; transform-origin: center;
-            transition: border-color 0.4s, color 0.4s, box-shadow 0.4s, opacity 0.5s;
-            /* Using transform for movement to ensure smooth circular paths */
-            will-change: transform; 
+            transition: border-color 0.4s, color 0.4s, box-shadow 0.4s, left 0.35s cubic-bezier(0.4, 0, 0.2, 1), top 0.35s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .key-inner { width: 22px; height: 22px; border: 4px solid currentColor; transform: rotate(45deg); }
 
-        /* --- THE NEXUS INTERFACE (FIXED VISIBILITY) --- */
+        /* --- THE NEXUS INTERFACE --- */
         #nexus-system {
-            position: relative; width: 100%; height: 100vh;
-            display: flex; opacity: 0; visibility: hidden;
-            transition: opacity 1s ease-in; z-index: 1;
+            position: fixed; inset: 0; display: none;
+            opacity: 0; transition: opacity 1s; z-index: 1;
         }
 
-        #nexus-system.active { opacity: 1; visibility: visible; }
+        #nexus-system.active { display: flex; opacity: 1; }
 
         .wallpaper {
             position: absolute; inset: 0;
-            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.8)), 
-                        url('https://images.unsplash.com/photo-1614850523296-d8c1af93d400?q=80&w=2070&auto=format&fit=crop');
-            background-size: cover; background-position: center;
+            background: radial-gradient(circle at center, #1a1a1a 0%, #000 100%);
             z-index: -1;
         }
 
         nav {
-            width: 120px; background: rgba(0,0,0,0.85); backdrop-filter: blur(20px);
+            width: 130px; background: rgba(0,0,0,0.9);
             border-right: 1px solid rgba(255,255,255,0.1);
             display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 40px;
         }
 
-        nav div { color: #555; font-size: 11px; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; }
+        nav div { color: #444; font-size: 10px; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; }
         nav .active-nav { color: var(--accent); text-shadow: 0 0 15px var(--accent); }
 
         main { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; }
-        .os-title { font-family: 'Orbitron'; font-size: 80px; letter-spacing: 30px; margin-bottom: 20px; text-shadow: 0 0 30px rgba(195, 166, 255, 0.3); }
-        .search-box { width: 450px; padding: 20px; border-radius: 100px; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.05); color: #fff; text-align: center; font-size: 14px; outline: none; }
+        .os-title { font-family: 'Orbitron'; font-size: 85px; letter-spacing: 25px; margin-bottom: 20px; }
+        .search-box { width: 400px; padding: 18px; border-radius: 50px; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.04); color: #fff; text-align: center; outline: none; }
     </style>
 </head>
 <body>
@@ -85,13 +80,13 @@
         <div class="wallpaper"></div>
         <nav>
             <div class="active-nav">Home</div>
-            <div>Apps</div>
-            <div>Terminal</div>
-            <div>Config</div>
+            <div>Games</div>
+            <div>Files</div>
+            <div>Settings</div>
         </nav>
         <main>
             <h1 class="os-title">NEXUS</h1>
-            <input type="text" class="search-box" placeholder="ACCESS GRANTED. COMMAND SYSTEM...">
+            <input type="text" class="search-box" placeholder="SYSTEM ENCRYPTED...">
         </main>
     </div>
 
@@ -103,30 +98,30 @@
         
         let keys = [];
         let targetId = 0;
-        let gameState = 'IDLE'; // IDLE, REVEAL, SWAP, ORBIT, SPREAD
-        let orbitAngle = 0;
+        let canInteract = false;
 
-        const gridCoords = [
-            {x: -150, y: -70}, {x: -50, y: -70}, {x: 50, y: -70}, {x: 150, y: -70},
-            {x: -150, y: 70}, {x: -50, y: 70}, {x: 50, y: 70}, {x: 150, y: 70}
+        // Grid positions for the "Key-to-Key" swapping phase
+        const grid = [
+            {x: 100, y: 80}, {x: 200, y: 80}, {x: 300, y: 80}, {x: 400, y: 80},
+            {x: 100, y: 220}, {x: 200, y: 220}, {x: 300, y: 220}, {x: 400, y: 220}
         ];
 
-        function initGame() {
+        function init() {
             arena.innerHTML = '';
             keys = [];
             targetId = Math.floor(Math.random() * 8);
-            gameState = 'IDLE';
+            canInteract = false;
             status.innerText = "FOCUS";
-            status.style.color = "#111";
+            status.style.color = "#151515";
 
             for(let i=0; i<8; i++) {
                 const k = document.createElement('div');
                 k.className = 'key-unit';
                 k.innerHTML = '<div class="key-inner"></div>';
                 k.style.color = "#444";
-                // Set initial position
-                k.style.transform = `translate(${gridCoords[i].x}px, ${gridCoords[i].y}px)`;
-                k.dataset.spotIndex = i;
+                k.style.left = grid[i].x + 'px';
+                k.style.top = grid[i].y + 'px';
+                k.dataset.spot = i;
                 k.onclick = () => selectKey(i);
                 arena.appendChild(k);
                 keys.push(k);
@@ -135,119 +130,105 @@
         }
 
         function revealTarget() {
-            gameState = 'REVEAL';
             keys[targetId].style.color = "#55ff55";
             keys[targetId].style.borderColor = "#55ff55";
             keys[targetId].style.boxShadow = "0 0 30px #55ff55";
 
             setTimeout(() => {
                 keys.forEach(k => {
-                    k.style.color = "#600"; // Dark Red Phase
+                    k.style.color = "#600"; // Red Phase
                     k.style.borderColor = "#300";
                     k.style.boxShadow = "none";
                 });
-                startGridSwaps();
-            }, 1500);
+                runSwaps();
+            }, 1200);
         }
 
-        function startGridSwaps() {
-            gameState = 'SWAP';
-            let swaps = 0;
-            const maxSwaps = 12;
-
-            const swapInterval = setInterval(() => {
+        // --- PHASE 1: KEY-TO-KEY SWAPPING ---
+        function runSwaps() {
+            let count = 0;
+            const max = 15;
+            const interval = setInterval(() => {
                 let a = Math.floor(Math.random() * 8);
                 let b = Math.floor(Math.random() * 8);
                 while(a === b) b = Math.floor(Math.random() * 8);
 
-                let spotA = keys[a].dataset.spotIndex;
-                let spotB = keys[b].dataset.spotIndex;
+                let spotA = keys[a].dataset.spot;
+                let spotB = keys[b].dataset.spot;
 
-                keys[a].style.transform = `translate(${gridCoords[spotB].x}px, ${gridCoords[spotB].y}px)`;
-                keys[b].style.transform = `translate(${gridCoords[spotA].x}px, ${gridCoords[spotA].y}px)`;
+                // Physical move to new grid spot
+                keys[a].style.left = grid[spotB].x + 'px';
+                keys[a].style.top = grid[spotB].y + 'px';
+                keys[b].style.left = grid[spotA].x + 'px';
+                keys[b].style.top = grid[spotA].y + 'px';
 
-                keys[a].dataset.spotIndex = spotB;
-                keys[b].dataset.spotIndex = spotA;
+                keys[a].dataset.spot = spotB;
+                keys[b].dataset.spot = spotA;
 
-                swaps++;
-                if(swaps >= maxSwaps) {
-                    clearInterval(swapInterval);
-                    setTimeout(startPerfectOrbit, 600);
+                count++;
+                if(count >= max) {
+                    clearInterval(interval);
+                    setTimeout(runOrbit, 600);
                 }
-            }, 400);
+            }, 300);
         }
 
-        function startPerfectOrbit() {
-            gameState = 'ORBIT';
-            const colors = ['#ff4444', '#44ff44', '#4444ff', '#ffff44', '#ff44ff', '#44ffff', '#ff8800', '#ffffff'];
-            
-            // Turn on colors
+        // --- PHASE 2: COLORED CIRCLE ---
+        function runOrbit() {
+            const colors = ['#f44', '#4f4', '#44f', '#ff4', '#f4f', '#4ff', '#fa0', '#fff'];
             keys.forEach((k, i) => {
                 k.style.color = colors[i];
                 k.style.borderColor = colors[i];
                 k.style.boxShadow = `0 0 15px ${colors[i]}`;
+                // Disable transitions for smooth orbital animation
+                k.style.transition = "none";
             });
 
-            const radius = 180;
-            let startTime = Date.now();
+            let angle = 0;
+            const radius = 160;
+            const start = Date.now();
 
-            function animateOrbit() {
-                if(gameState !== 'ORBIT') return;
-                
-                let elapsed = Date.now() - startTime;
-                orbitAngle = elapsed * 0.005; // Speed adjustment
+            function orbit() {
+                const now = Date.now();
+                const elapsed = now - start;
+                angle = elapsed * 0.006; 
 
                 keys.forEach((k, i) => {
-                    const angleOffset = (i * Math.PI * 2) / 8;
-                    const curAngle = orbitAngle + angleOffset;
-                    const x = Math.cos(curAngle) * radius;
-                    const y = Math.sin(curAngle) * radius;
-                    k.style.transform = `translate(${x}px, ${y}px)`;
+                    const offset = (i * Math.PI * 2) / 8;
+                    const x = 250 + Math.cos(angle + offset) * radius;
+                    const y = 150 + Math.sin(angle + offset) * radius;
+                    k.style.left = x + 'px';
+                    k.style.top = y + 'px';
                 });
 
                 if(elapsed < 4000) {
-                    requestAnimationFrame(animateOrbit);
+                    requestAnimationFrame(orbit);
                 } else {
-                    startFinalSpread();
+                    finalize();
                 }
             }
-            requestAnimationFrame(animateOrbit);
+            requestAnimationFrame(orbit);
         }
 
-        function startFinalSpread() {
-            gameState = 'SPREAD';
-            const spreadRadius = 240;
-
-            keys.forEach((k, i) => {
-                const angleOffset = (i * Math.PI * 2) / 8;
-                const finalAngle = orbitAngle + angleOffset;
-                const x = Math.cos(finalAngle) * spreadRadius;
-                const y = Math.sin(finalAngle) * spreadRadius;
-                k.style.transform = `translate(${x}px, ${y}px)`;
-            });
-
-            setTimeout(() => {
-                status.innerText = "CHOOSE";
-                status.style.color = "#fff";
-                status.style.textShadow = "0 0 20px #fff";
-            }, 500);
+        function finalize() {
+            keys.forEach(k => k.style.transition = "all 0.5s ease-out");
+            status.innerText = "CHOOSE";
+            status.style.color = "#fff";
+            canInteract = true;
         }
 
         function selectKey(idx) {
-            if(gameState !== 'SPREAD') return;
-            
+            if(!canInteract) return;
             if(idx === targetId) {
-                overlay.style.opacity = '0';
-                setTimeout(() => {
-                    overlay.style.display = 'none';
-                    nexus.classList.add('active');
-                }, 800);
+                overlay.style.display = 'none';
+                nexus.style.display = 'flex';
+                setTimeout(() => nexus.classList.add('active'), 50);
             } else {
-                initGame(); // Reset on fail
+                init();
             }
         }
 
-        window.onload = initGame;
+        window.onload = init;
     </script>
 </body>
 </html>
