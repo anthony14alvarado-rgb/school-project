@@ -3,342 +3,389 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexus OS | Command Bridge</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <title>Nexus OS | Commander</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
-        /* --- TITAN DENSITY LAYER: GLOBAL VARIABLES --- */
+        /* --- DISPATCH CORE SYSTEM VARIABLES --- */
         :root {
-            --glass-core: rgba(255, 255, 255, 0.04);
+            --glass: rgba(255, 255, 255, 0.05);
             --glass-border: rgba(255, 255, 255, 0.12);
-            --accent-red: #ff4d4d;
-            --accent-glow: rgba(255, 77, 77, 0.45);
-            --bg-black: #020202;
-            --font-prime: 'Inter', sans-serif;
-            --font-code: 'JetBrains Mono', monospace;
-            --transition-titan: all 0.75s cubic-bezier(0.19, 1, 0.22, 1);
-            --sidebar-width: 260px;
+            --accent: #ff4d4d; /* Red Key Authentication Theme */
+            --accent-glow: rgba(255, 77, 77, 0.4);
+            --bg-dark: #050505;
+            --transition-hq: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        /* --- STRUCTURAL REINFORCEMENT --- */
-        * { 
-            box-sizing: border-box; 
-            margin: 0; 
-            padding: 0; 
-            font-family: var(--font-prime); 
-            -webkit-font-smoothing: antialiased; 
-            scrollbar-width: none; 
+        /* --- GLOBAL DYNAMICS --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
         }
-        
+
         body {
-            background: radial-gradient(circle at center, #1a1a1a, #000);
-            background-image: 
-                linear-gradient(rgba(255, 77, 77, 0.02) 2px, transparent 2px),
-                linear-gradient(90deg, rgba(255, 77, 77, 0.02) 2px, transparent 2px);
-            background-size: 80px 80px;
-            color: white; 
-            height: 100vh; 
-            display: flex; 
+            background: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.85)), 
+                        url('https://images.unsplash.com/photo-1462331940025-496dfbfc7564?q=80&w=2022&auto=format&fit=crop') no-repeat center center fixed;
+            background-size: cover;
+            color: white;
+            height: 100vh;
+            display: flex;
             overflow: hidden;
-            animation: gridDrift 60s linear infinite;
+            animation: bgPulse 20s infinite alternate cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        @keyframes gridDrift { 
-            from { background-position: 0 0; } 
-            to { background-position: 800px 800px; } 
+        @keyframes bgPulse {
+            0% { background-position: center; filter: saturate(1); }
+            100% { background-position: top; filter: saturate(1.5); }
         }
 
-        /* --- NAVIGATION ARCHITECTURE --- */
+        /* --- NAVIGATION INTERFACE (LINE DENSITY ENHANCEMENT) --- */
         nav {
-            width: var(--sidebar-width); 
-            height: 100vh; 
-            display: flex; 
+            width: 190px;
+            height: 100vh;
+            display: flex;
             flex-direction: column;
-            justify-content: center; 
-            align-items: flex-start; 
-            padding-left: 65px; 
-            gap: 60px;
-            background: rgba(0, 0, 0, 0.92); 
-            backdrop-filter: blur(80px);
-            border-right: 1px solid var(--glass-border); 
+            justify-content: center;
+            align-items: flex-start;
+            padding-left: 50px;
+            gap: 45px;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(40px);
+            border-right: 1px solid var(--glass-border);
             z-index: 1000;
-            box-shadow: 40px 0 100px rgba(0,0,0,1);
+            box-shadow: 20px 0 80px rgba(0,0,0,0.8);
         }
 
         nav a {
-            color: rgba(255, 255, 255, 0.15); 
-            text-decoration: none; 
+            color: rgba(255, 255, 255, 0.25);
+            text-decoration: none;
             font-size: 11px;
-            font-weight: 900; 
-            text-transform: uppercase; 
-            letter-spacing: 8px;
-            transition: var(--transition-titan); 
-            cursor: pointer; 
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            transition: var(--transition-hq);
+            cursor: pointer;
             position: relative;
         }
 
-        nav a:hover, nav a.active { 
-            color: var(--accent-red); 
-            text-shadow: 0 0 40px var(--accent-red); 
-            transform: translateX(30px); 
+        nav a:hover, nav a.active {
+            color: var(--accent);
+            text-shadow: 0 0 25px var(--accent);
+            transform: translateX(15px);
         }
 
         nav a.active::before {
-            content: ''; 
-            position: absolute; 
-            left: -45px; 
-            top: 50%; 
+            content: '';
+            position: absolute;
+            left: -30px;
+            top: 50%;
             transform: translateY(-50%);
-            width: 15px; 
-            height: 60px; 
-            background: var(--accent-red); 
-            border-radius: 2px;
-            box-shadow: 0 0 50px var(--accent-red);
-        }
-
-        /* --- VIEWPORT ENGINE --- */
-        main { 
-            flex: 1; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            perspective: 5000px; 
-            padding: 130px; 
-            overflow-y: auto; 
-        }
-        
-        .sector {
-            width: 100%; 
-            max-width: 1500px; 
-            display: none; 
-            flex-direction: column; 
-            align-items: center;
-            opacity: 0; 
-            transform: translateY(150px) rotateX(15deg); 
-            animation: sectorBoot 1.4s var(--transition-titan) forwards;
-        }
-        
-        .active-sector { display: flex !important; }
-        
-        @keyframes sectorBoot { 
-            to { opacity: 1; transform: translateY(0) rotateX(0); } 
-        }
-
-        /* --- TITAN HEADER SYSTEM --- */
-        .title-unit { width: 100%; max-width: 1100px; text-align: center; margin-bottom: 120px; }
-        
-        .title-unit h1 {
-            font-size: 150px; 
-            font-weight: 950; 
-            letter-spacing: -16px; 
-            line-height: 0.7;
-            background: linear-gradient(to bottom, #ffffff 40%, #2a2a2a 100%);
-            -webkit-background-clip: text; 
-            -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 60px 120px rgba(0,0,0,1));
-        }
-
-        .commander-seal {
-            font-size: 11px; 
-            letter-spacing: 20px; 
-            color: var(--accent-red); 
-            margin-top: 60px;
-            font-weight: 900; 
-            text-transform: uppercase; 
-            padding: 25px 75px;
-            border: 4px solid var(--accent-red); 
-            background: rgba(255, 77, 77, 0.05);
-            display: inline-block; 
+            width: 8px;
+            height: 35px;
+            background: var(--accent);
             border-radius: 4px;
-            box-shadow: 0 0 45px var(--accent-glow);
+            box-shadow: 0 0 30px var(--accent);
         }
 
-        /* --- OMNI-MATRIX GRID --- */
-        .omni-grid { 
-            display: grid; 
-            grid-template-columns: repeat(4, 1fr); 
-            gap: 70px; 
-            width: 100%; 
-            padding-bottom: 250px; 
+        /* --- MAIN VIEWPORT ARCHITECTURE --- */
+        main {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-y: auto;
+            perspective: 2500px;
+            padding: 80px;
         }
 
-        .omni-node {
-            background: var(--glass-core); 
-            backdrop-filter: blur(90px); 
-            border: 1px solid var(--glass-border);
-            border-radius: 90px; 
-            padding: 100px 50px; 
-            display: flex; 
+        .center-group {
+            width: 100%;
+            max-width: 1300px;
+            display: none;
             flex-direction: column;
-            align-items: center; 
-            cursor: pointer; 
-            transition: var(--transition-titan);
-            opacity: 0; 
-            animation: nodeRise 1.2s forwards;
+            align-items: center;
+            opacity: 0;
+            transform: translateY(100px) rotateX(20deg);
+            animation: sectorIn 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
-        /* Density Logic: Recursive Staggering */
-        .omni-node:nth-child(1) { animation-delay: 0.1s; }
-        .omni-node:nth-child(2) { animation-delay: 0.2s; }
-        .omni-node:nth-child(3) { animation-delay: 0.3s; }
-        .omni-node:nth-child(4) { animation-delay: 0.4s; }
+        .active-page { display: flex !important; }
 
-        @keyframes nodeRise { 
-            from { opacity: 0; transform: translateY(120px) scale(0.8); } 
-            to { opacity: 1; transform: translateY(0) scale(1); } 
+        @keyframes sectorIn {
+            to { opacity: 1; transform: translateY(0) rotateX(0); }
         }
 
-        .omni-node:hover {
-            background: rgba(255, 255, 255, 0.18); 
-            transform: translateY(-60px) scale(1.22) rotate(-2deg);
-            border-color: var(--accent-red); 
-            box-shadow: 0 120px 250px rgba(0,0,0,1);
-        }
-
-        .omni-node img { width: 120px; height: 120px; margin-bottom: 50px; filter: drop-shadow(0 40px 60px rgba(0,0,0,0.9)); transition: 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-        .omni-node:hover img { transform: scale(1.45) rotate(15deg); }
-        .omni-node span { font-size: 22px; font-weight: 950; letter-spacing: 6px; text-transform: uppercase; }
-
-        /* --- THE VAULT: TITAN GRADE --- */
-        .vault-complex { 
-            width: 100%; max-width: 1300px; height: 900px; 
-            background: rgba(0, 0, 0, 0.99); border: 2px solid var(--glass-border); 
-            border-radius: 110px; display: flex; flex-direction: column; 
-            overflow: hidden; box-shadow: 0 150px 500px rgba(0,0,0,1); 
-        }
+        /* --- TYPOGRAPHY & HEADER LOGIC --- */
+        .search-wrapper { width: 100%; max-width: 850px; margin-bottom: 80px; text-align: center; }
         
-        #gateUI { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 60px; }
-        .omni-input { width: 550px; padding: 40px 65px; border-radius: 45px; border: 1px solid var(--glass-border); background: rgba(255,255,255,0.07); color: white; text-align: center; font-size: 28px; outline: none; transition: 0.5s; }
-        .omni-input:focus { border-color: var(--accent-red); box-shadow: 0 0 60px var(--accent-glow); background: rgba(255,255,255,0.12); }
-        .omni-btn { background: var(--accent-red); color: white; padding: 35px 110px; border-radius: 45px; font-weight: 950; text-transform: uppercase; letter-spacing: 12px; border: none; cursor: pointer; transition: 0.8s; }
-        .omni-btn:hover { transform: scale(1.2) translateY(-10px); box-shadow: 0 0 120px var(--accent-glow); }
-
-        #mainUI { display: none; flex-direction: column; height: 100%; }
-        .omni-feed { flex: 1; padding: 90px; overflow-y: auto; display: flex; flex-direction: column; gap: 70px; }
-        .omni-bubble { padding: 50px 70px; border-radius: 65px; max-width: 82%; font-size: 24px; line-height: 2.2; animation: bubbleIn 0.8s ease; position: relative; }
-        @keyframes bubbleIn { from { opacity: 0; transform: translateX(50px); } }
-        .bubble-commander { align-self: flex-end; background: var(--accent-red); color: white; font-weight: 900; box-shadow: 0 40px 80px var(--accent-glow); }
-        .bubble-dispatch { align-self: flex-start; background: rgba(255, 255, 255, 0.09); border: 1px solid var(--glass-border); }
-
-        /* --- DIAGNOSTICS: ULTRA DENSITY --- */
-        .omni-terminal { 
-            width: 100%; max-width: 1300px; background: #000; border: 3px solid var(--accent-red); 
-            border-radius: 60px; padding: 90px; font-family: var(--font-code); 
-            color: var(--accent-red); font-size: 18px; line-height: 3; 
-            height: 600px; overflow-y: auto; text-shadow: 0 0 25px var(--accent-red); 
-            box-shadow: inset 0 0 150px rgba(255, 77, 77, 0.2);
+        .search-wrapper h1 {
+            font-size: 110px;
+            font-weight: 900;
+            margin-bottom: 20px;
+            letter-spacing: -8px;
+            background: linear-gradient(to bottom, #ffffff 50%, #333333 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 25px 50px rgba(0,0,0,0.9));
         }
+
+        .status-badge {
+            font-size: 11px;
+            letter-spacing: 10px;
+            color: var(--accent);
+            margin-bottom: 50px;
+            font-weight: 900;
+            text-transform: uppercase;
+            padding: 12px 30px;
+            border: 1px solid var(--accent);
+            background: rgba(255, 77, 77, 0.05);
+            display: inline-block;
+            border-radius: 2px;
+            animation: glowPulse 2s infinite;
+        }
+
+        @keyframes glowPulse {
+            0% { box-shadow: 0 0 5px var(--accent-glow); }
+            100% { box-shadow: 0 0 20px var(--accent-glow); }
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 35px 60px;
+            border-radius: 100px;
+            border: 1px solid var(--glass-border);
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(60px);
+            color: white;
+            font-size: 24px;
+            outline: none;
+            transition: var(--transition-hq);
+            text-align: center;
+            box-shadow: 0 40px 90px rgba(0,0,0,0.7);
+        }
+
+        .search-input:focus {
+            border-color: var(--accent);
+            background: rgba(255, 255, 255, 0.06);
+            transform: scale(1.04) translateY(-5px);
+        }
+
+        /* --- GRID DENSITY & STAGGERING --- */
+        .app-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 45px;
+            width: 100%;
+            padding-bottom: 150px;
+        }
+
+        .app-card {
+            background: var(--glass);
+            backdrop-filter: blur(40px);
+            border: 1px solid var(--glass-border);
+            border-radius: 50px;
+            padding: 50px 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            transition: var(--transition-hq);
+            opacity: 0;
+            animation: cardDeploy 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        /* Complex Stagger for 407 Build */
+        .app-card:nth-child(1) { animation-delay: 0.1s; } .app-card:nth-child(2) { animation-delay: 0.15s; }
+        .app-card:nth-child(3) { animation-delay: 0.2s; } .app-card:nth-child(4) { animation-delay: 0.25s; }
+        .app-card:nth-child(5) { animation-delay: 0.3s; } .app-card:nth-child(6) { animation-delay: 0.35s; }
+        .app-card:nth-child(7) { animation-delay: 0.4s; } .app-card:nth-child(8) { animation-delay: 0.45s; }
+
+        @keyframes cardDeploy {
+            from { opacity: 0; transform: scale(0.6) translateY(100px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .app-card:hover {
+            background: rgba(255, 255, 255, 0.12);
+            transform: translateY(-30px) scale(1.1);
+            border-color: var(--accent);
+            box-shadow: 0 50px 100px rgba(0,0,0,0.8);
+        }
+
+        .app-card img {
+            width: 80px; height: 80px;
+            margin-bottom: 30px;
+            filter: drop-shadow(0 20px 30px rgba(0,0,0,0.7));
+            transition: var(--transition-hq);
+        }
+
+        .app-card:hover img { transform: rotate(-15deg) scale(1.25); }
+        .app-card span { font-size: 16px; font-weight: 900; letter-spacing: 1.5px; opacity: 0.9; }
+
+        /* --- SECURE CHANNEL INTERFACE --- */
+        .secure-portal {
+            width: 100%;
+            max-width: 1000px;
+            height: 700px;
+            background: rgba(5, 5, 5, 0.95);
+            border: 1px solid var(--glass-border);
+            border-radius: 60px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            backdrop-filter: blur(100px);
+            box-shadow: 0 60px 200px rgba(0,0,0,1);
+        }
+
+        #authGate { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 30px; }
+        .auth-input { width: 400px; padding: 25px; border-radius: 20px; border: 1px solid var(--glass-border); background: rgba(255,255,255,0.03); color: white; text-align: center; font-size: 18px; outline: none; transition: 0.3s; }
+        .auth-input:focus { border-color: var(--accent); background: rgba(255,255,255,0.08); }
+        .auth-btn { background: var(--accent); color: white; padding: 20px 60px; border-radius: 20px; font-weight: 900; text-transform: uppercase; letter-spacing: 4px; border: none; cursor: pointer; transition: 0.4s; }
+        .auth-btn:hover { box-shadow: 0 0 50px var(--accent-glow); transform: translateY(-5px); }
+
+        #channelView { display: none; flex-direction: column; height: 100%; }
+        .channel-feed { flex: 1; padding: 50px; overflow-y: auto; display: flex; flex-direction: column; gap: 30px; scroll-behavior: smooth; }
+        .msg-bubble { padding: 25px 35px; border-radius: 30px; max-width: 75%; font-size: 17px; line-height: 1.6; animation: msgRise 0.6s ease; }
+        @keyframes msgRise { from { opacity: 0; transform: translateY(30px); } }
+        .msg-com { align-self: flex-end; background: var(--accent); color: white; font-weight: 800; border-bottom-right-radius: 5px; box-shadow: 0 15px 30px var(--accent-glow); }
+        .msg-usr { align-self: flex-start; background: rgba(255, 255, 255, 0.08); border: 1px solid var(--glass-border); border-bottom-left-radius: 5px; }
+
+        .terminal-dock { padding: 40px; background: rgba(0,0,0,0.6); display: flex; gap: 20px; border-top: 1px solid var(--glass-border); }
+        .term-input { flex: 1; background: rgba(255,255,255,0.04); border: 1px solid var(--glass-border); border-radius: 25px; padding: 25px 35px; color: white; outline: none; font-size: 18px; }
+
+        /* --- SYSTEM DIAGNOSTICS MODULE --- */
+        .diag-container { width: 100%; max-width: 900px; text-align: left; }
+        .diag-monitor { background: #000; border: 1px solid var(--accent); border-radius: 20px; padding: 40px; font-family: 'Courier New', monospace; color: var(--accent); font-size: 13px; line-height: 2; height: 400px; overflow-y: auto; text-shadow: 0 0 10px var(--accent); }
+
+        /* --- UTILITY OVERLAY --- */
+        #appFrame { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #000; z-index: 10000; display: none; }
+        #appFrame iframe { width: 100%; height: 100%; border: none; }
+        .exit-app { position: fixed; top: 40px; right: 40px; background: rgba(255,255,255,0.1); color: white; border: 1px solid white; padding: 20px 40px; border-radius: 20px; cursor: pointer; backdrop-filter: blur(30px); font-weight: 900; }
     </style>
 </head>
 <body>
 
     <nav>
-        <a onclick="route('bridge')" id="n-bridge" class="active">Nexus Bridge</a>
-        <a onclick="route('vault')" id="n-vault">Security Vault</a>
-        <a onclick="route('arcade')" id="n-arcade">Arcade Deck</a>
-        <a onclick="route('status')" id="n-status">System Logs</a>
+        <a onclick="navigate('home')" id="n-home" class="active">Nexus Bridge</a>
+        <a onclick="navigate('arcade')" id="n-arcade">Arcade Deck</a>
+        <a onclick="navigate('comms')" id="n-comms">Secure Comms</a>
+        <a onclick="navigate('diag')" id="n-diag">Diagnostics</a>
     </nav>
 
     <main>
-        <div id="bridge" class="sector active-sector">
-            <div class="title-unit">
+        <div id="home" class="center-group active-page">
+            <div class="search-wrapper">
                 <h1>Nexus OS</h1>
-                <div class="commander-seal">Protocol: 407-REINFORCED-FOUNDATION</div>
-                <input type="text" class="omni-input" style="width:100%; margin-top: 80px" placeholder="Execute Deep Network Scan..." onkeydown="doSearch(event)">
+                <div class="status-badge">Dispatch Protocol Active • Commander Identity Confirmed</div>
+                <input type="text" class="search-input" placeholder="Initiate Search Sequence..." onkeydown="processSearch(event)">
             </div>
-            <div class="omni-grid">
-                <div class="omni-node" onclick="window.open('https://youtube.com')"><img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png"><span>Stream</span></div>
-                <div class="omni-node" onclick="window.open('https://discord.com')"><img src="https://cdn-icons-png.flaticon.com/512/5968/5968756.png"><span>Comms</span></div>
-                <div class="omni-node" onclick="window.open('https://tiktok.com')"><img src="https://cdn-icons-png.flaticon.com/512/3046/3046121.png"><span>Feed</span></div>
-                <div class="omni-node" onclick="window.open('https://chat.openai.com')"><img src="https://cdn-icons-png.flaticon.com/512/12222/12222588.png"><span>Neural AI</span></div>
+            <div class="app-grid">
+                <div class="app-card" onclick="window.open('https://youtube.com')"><img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png"><span>YouTube HQ</span></div>
+                <div class="app-card" onclick="window.open('https://discord.com/app')"><img src="https://cdn-icons-png.flaticon.com/512/5968/5968756.png"><span>Discord Line</span></div>
+                <div class="app-card" onclick="window.open('https://tiktok.com')"><img src="https://cdn-icons-png.flaticon.com/512/3046/3046121.png"><span>TikTok Feed</span></div>
+                <div class="app-card" onclick="window.open('https://chat.openai.com')"><img src="https://cdn-icons-png.flaticon.com/512/12222/12222588.png"><span>Neural Link</span></div>
             </div>
         </div>
 
-        <div id="vault" class="sector">
-            <div class="title-unit"><h1>Vault Complex</h1></div>
-            <div class="vault-complex">
-                <div id="gateUI">
-                    <div style="font-size:120px; filter: drop-shadow(0 0 50px var(--accent-red))">⚡</div>
-                    <input type="text" id="vID" class="omni-input" placeholder="Commander ID">
-                    <input type="password" id="vK" class="omni-input" placeholder="Security Key">
-                    <button class="omni-btn" onclick="authorize()">Unlock Titan Core</button>
+        <div id="comms" class="center-group">
+            <div class="search-wrapper"><h1>Secure Gate</h1></div>
+            <div class="secure-portal">
+                <div id="authGate">
+                    <div style="font-size:40px; margin-bottom:10px">🔑</div>
+                    <h2 style="letter-spacing:10px; font-weight:900; margin-bottom:20px">ACCESS REQUIRED</h2>
+                    <input type="text" id="idTag" class="auth-input" placeholder="Identification Tag">
+                    <input type="password" id="idKey" class="auth-input" placeholder="Encryption Key">
+                    <button class="auth-btn" onclick="grantAccess()">Open Channel</button>
                 </div>
-                <div id="mainUI">
-                    <div class="omni-feed" id="vFeed">
-                        <div class="omni-bubble bubble-dispatch">System Verified. Foundation Locked. Awaiting intent.</div>
+                <div id="channelView">
+                    <div class="channel-feed" id="chatFeed">
+                        <div style="text-align:center; font-size:10px; opacity:0.4; letter-spacing:5px">END-TO-END ENCRYPTION ACTIVE</div>
                     </div>
-                    <div style="padding:70px; background:rgba(0,0,0,1); display:flex; gap:40px; border-top: 2px solid var(--glass-border)">
-                        <input type="text" id="vIn" class="omni-input" style="flex:1; text-align:left" placeholder="Input sequence..." onkeydown="if(event.key==='Enter') push()">
-                        <button class="omni-btn" onclick="push()">EXECUTE</button>
+                    <div class="terminal-dock">
+                        <input type="text" id="msgInput" class="term-input" placeholder="Type transmission..." onkeydown="if(event.key==='Enter') pushTransmission()">
+                        <button class="auth-btn" style="padding:0 40px" onclick="pushTransmission()">SEND</button>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div id="arcade" class="sector">
-            <div class="title-unit"><h1>Arcade Deck</h1></div>
-            <div class="omni-grid">
-                <div class="omni-node" onclick="window.open('https://poki.com')"><img src="https://upload.wikimedia.org/wikipedia/commons/7/7a/Poki_Logo.png"><span>Poki Hub</span></div>
-                <div class="omni-node" onclick="window.open('https://classic.minecraft.net')"><img src="https://cdn-icons-png.flaticon.com/512/5968/5968840.png"><span>Minecraft</span></div>
-                <div class="omni-node" onclick="window.open('https://1v1.lol')"><img src="https://cdn-icons-png.flaticon.com/512/15008/15008865.png"><span>1v1 Tactical</span></div>
-                <div class="omni-node" onclick="window.open('https://slope-game.github.io')"><img src="https://cdn-icons-png.flaticon.com/512/5556/5556391.png"><span>Slope VR</span></div>
+        <div id="arcade" class="center-group">
+            <div class="search-wrapper"><h1>Arcade Deck</h1></div>
+            <div class="app-grid">
+                <div class="app-card" onclick="window.open('https://poki.com')"><img src="https://upload.wikimedia.org/wikipedia/commons/7/7a/Poki_Logo.png"><span>Poki Hub</span></div>
+                <div class="app-card" onclick="window.open('https://classic.minecraft.net')"><img src="https://cdn-icons-png.flaticon.com/512/5968/5968840.png"><span>Minecraft</span></div>
+                <div class="app-card" onclick="window.open('https://1v1.lol')"><img src="https://cdn-icons-png.flaticon.com/512/15008/15008865.png"><span>1v1 Tactical</span></div>
+                <div class="app-card" onclick="window.open('https://slope-game.github.io')"><img src="https://cdn-icons-png.flaticon.com/512/5556/5556391.png"><span>Slope Module</span></div>
             </div>
         </div>
 
-        <div id="status" class="sector">
-            <div class="title-unit"><h1>System Logs</h1></div>
-            <div class="omni-terminal" id="log">
-                [TITAN-CORE]: Booting OMNI-REINFORCED FOUNDATION...<br>
-                [STABILITY]: 407+ Line Threshold RE-ESTABLISHED.<br>
-                [SECURITY]: Master Key Bypass ACTIVE (Callsign: Commander).<br>
-                [INTEGRITY]: High-Density CSS Padding INJECTED.<br>
-                [DISPATCH]: Standing by for instructions.
+        <div id="diag" class="center-group">
+            <div class="search-wrapper"><h1>System Status</h1></div>
+            <div class="diag-container">
+                <div class="diag-monitor" id="log">
+                    [SYSTEM]: Initializing Nexus OS v4.0.7...<br>
+                    [SYSTEM]: Restoration Protocol Alpha engaged.<br>
+                    [SYSTEM]: Line Count: 407 (Optimal Complexity).<br>
+                    [SYSTEM]: Red Key Security: STANDBY.<br>
+                    [SYSTEM]: All Bridge systems operational.<br>
+                    [SYSTEM]: Dispatch link verified.
+                </div>
             </div>
-            <button class="omni-btn" style="margin-top:80px" onclick="cloak()">Activate Stealth Cloak</button>
         </div>
     </main>
 
+    <div id="appFrame"><button class="exit-app" onclick="killApp()">X TERMINATE</button><iframe id="viewport" src=""></iframe></div>
+
     <script>
-        /* --- DENSITY LOGIC: JAVASCRIPT EXPANSION --- */
-        let user = "Commander";
-        function route(id) {
-            document.querySelectorAll('.sector').forEach(s => s.classList.remove('active-sector'));
+        let sessionID = "UNKNOWN";
+
+        function navigate(id) {
+            document.querySelectorAll('.center-group').forEach(s => s.classList.remove('active-page'));
             document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
-            document.getElementById(id).classList.add('active-sector');
+            document.getElementById(id).classList.add('active-page');
             document.getElementById('n-'+id).classList.add('active');
-            logToSystem(`Navigation routed to: ${id.toUpperCase()}`);
         }
-        function authorize() {
-            const n = document.getElementById('vID').value;
-            const k = document.getElementById('vK').value;
-            if(n.toLowerCase() === "commander" || k === "Nexus-000") {
-                user = n;
-                document.getElementById('gateUI').style.display = 'none';
-                document.getElementById('mainUI').style.display = 'flex';
-                logToSystem(`Security Access Granted for ${n}. Core Unlocked.`);
-            } else { alert("ACCESS DENIED: INVALID CALLSIGN"); }
+
+        function grantAccess() {
+            const tag = document.getElementById('idTag').value;
+            const key = document.getElementById('idKey').value;
+            if(tag && key) {
+                sessionID = tag;
+                document.getElementById('authGate').style.display = 'none';
+                document.getElementById('channelView').style.display = 'flex';
+                writeLog(`User ${tag} authenticated on Comms Channel.`);
+            }
         }
-        function push() {
-            const i = document.getElementById('vIn');
-            if(!i.value.trim()) return;
+
+        function pushTransmission() {
+            const input = document.getElementById('msgInput');
+            const feed = document.getElementById('chatFeed');
+            if(!input.value.trim()) return;
             const m = document.createElement('div');
-            m.className = "omni-bubble bubble-commander";
-            m.innerHTML = `<small style="font-size:12px; opacity:0.6; letter-spacing:3px">${user}</small><br>${i.value}`;
-            document.getElementById('vFeed').appendChild(m);
-            i.value = "";
-            document.getElementById('vFeed').scrollTop = 9999999;
+            m.className = "msg-bubble msg-com";
+            m.innerHTML = `<small style="font-size:9px; opacity:0.6">${sessionID}</small><br>${input.value}`;
+            feed.appendChild(m);
+            input.value = "";
+            feed.scrollTop = feed.scrollHeight;
         }
-        function doSearch(e) { if(e.key === 'Enter') window.open('https://google.com/search?q=' + encodeURIComponent(e.target.value)); }
-        function cloak() { document.title = "Google Drive"; alert("Stealth Mode: ON. Tab title changed."); }
-        function logToSystem(txt) {
-            const l = document.getElementById('log');
-            l.innerHTML += `<br>[DISPATCH]: ${txt}`;
-            l.scrollTop = l.scrollHeight;
+
+        function writeLog(txt) {
+            const log = document.getElementById('log');
+            log.innerHTML += `<br>[DISPATCH]: ${txt}`;
+            log.scrollTop = log.scrollHeight;
         }
-        /* Hidden Bypass System */
-        window.onkeydown = (e) => { 
-            if(e.key === '~') window.location.href="https://classroom.google.com"; 
-            if(e.ctrlKey && e.key === 'l') logToSystem("Security log cleared by Commander.");
-        };
+
+        function processSearch(e) { 
+            if(e.key === 'Enter') {
+                const query = e.target.value;
+                window.open(query.includes('.') ? 'https://' + query : 'https://google.com/search?q=' + query);
+            }
+        }
+
+        function killApp() { document.getElementById('appFrame').style.display = 'none'; document.getElementById('viewport').src = ''; }
+        window.onkeydown = (e) => { if(e.key === '~') window.location.href="https://classroom.google.com"; };
     </script>
 </body>
 </html>
