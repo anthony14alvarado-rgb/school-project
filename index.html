@@ -3,132 +3,148 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NEXUS OS | Z-KIT EDITION</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <title>NEXUS OS | Z-KIT ELITE</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Orbitron:wght@700&family=JetBrains+Mono&display=swap" rel="stylesheet">
     <style>
         :root { 
-            --accent: #ffffff; 
-            --bg-dark: #080808;
-            --glass: rgba(255, 255, 255, 0.02);
-            --glass-border: rgba(255, 255, 255, 0.08);
-            --card-hover: rgba(255, 255, 255, 0.06);
+            --accent: #c3a6ff; 
+            --bg-dark: #050508;
+            --glass: rgba(195, 166, 255, 0.03);
+            --glass-border: rgba(195, 166, 255, 0.15);
+            --nexus-glow: rgba(195, 166, 255, 0.1);
             --font-mono: 'JetBrains Mono', monospace;
         }
         
-        * { box-sizing: border-box; margin: 0; padding: 0; cursor: crosshair; }
-        body { background: var(--bg-dark); color: white; height: 100vh; overflow: hidden; font-family: 'Inter', sans-serif; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background: #000; color: white; height: 100vh; overflow: hidden; font-family: 'Inter', sans-serif; }
 
-        /* --- LIMBO OVERLAY (Visual Update Only) --- */
+        /* --- LIMBO OVERLAY (ORIGINAL KEY STYLE RESTORED) --- */
         #limbo-overlay {
             position: fixed; inset: 0; background: #000;
             z-index: 10000; display: flex; flex-direction: column;
             justify-content: center; align-items: center;
         }
-        #status-display { font-family: var(--font-mono); font-size: 12px; color: #444; letter-spacing: 12px; margin-bottom: 80px; text-transform: uppercase; }
+        #status-display { font-family: 'Orbitron'; font-size: 35px; color: #111; letter-spacing: 25px; margin-bottom: 80px; transition: color 0.5s; }
         #game-arena { position: relative; width: 600px; height: 400px; }
+        
+        /* THE ORIGINAL KEY UNIT */
         .key-unit {
-            position: absolute; width: 65px; height: 65px; background: var(--glass); border: 1px solid var(--glass-border); border-radius: 8px;
+            position: absolute; width: 75px; height: 75px; background: #080808; border: 3px solid #222; border-radius: 6px;
             display: flex; justify-content: center; align-items: center; cursor: pointer;
             transition: left 0.7s cubic-bezier(0.19, 1, 0.22, 1), top 0.7s cubic-bezier(0.19, 1, 0.22, 1), border-color 0.4s, color 0.4s;
         }
-        .key-inner { width: 4px; height: 4px; background: currentColor; border-radius: 50%; }
+        .key-inner { width: 22px; height: 22px; border: 4px solid currentColor; transform: rotate(45deg); }
 
-        /* --- THE NEXUS INTERFACE (Z-KIT LAYOUT) --- */
+        /* --- THE ELITE NEXUS THEME --- */
         #nexus-system {
             position: fixed; inset: 0; display: none;
-            opacity: 0; transition: opacity 1s; z-index: 1;
+            opacity: 0; transition: opacity 1.5s; z-index: 1;
             background-color: var(--bg-dark); flex-direction: column;
         }
         #nexus-system.active { display: flex; opacity: 1; }
 
-        /* Subtle Noise Texture */
-        #nexus-system::before {
-            content: ""; position: absolute; inset: 0; opacity: 0.03; pointer-events: none;
-            background-image: url('https://grainy-gradients.vercel.app/noise.svg');
+        /* Original Elite Wallpaper Layer */
+        .nexus-wallpaper {
+            position: absolute; inset: 0; z-index: -1;
+            background: 
+                radial-gradient(circle at 20% 30%, var(--nexus-glow) 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, var(--nexus-glow) 0%, transparent 40%),
+                linear-gradient(0deg, #000 0%, #0a0a12 100%);
+        }
+        .grid-lines {
+            position: absolute; inset: -100%;
+            background-image: 
+                linear-gradient(rgba(195, 166, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(195, 166, 255, 0.05) 1px, transparent 1px);
+            background-size: 50px 50px;
+            transform: perspective(500px) rotateX(60deg);
+            animation: gridMove 20s linear infinite;
+            mask-image: radial-gradient(ellipse at center, black, transparent 80%);
+        }
+        @keyframes gridMove {
+            from { transform: perspective(500px) rotateX(60deg) translateY(0); }
+            to { transform: perspective(500px) rotateX(60deg) translateY(50px); }
         }
 
+        /* Z-KIT INSPIRED HEADER */
         header { 
-            width: 100%; padding: 30px 60px; display: flex; justify-content: space-between; 
+            width: 100%; padding: 30px 80px; display: flex; justify-content: space-between; 
             align-items: center; z-index: 10; border-bottom: 1px solid var(--glass-border);
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(20px);
         }
-        .logo { font-weight: 900; font-size: 14px; letter-spacing: 8px; color: #fff; }
-        .os-time { font-family: var(--font-mono); font-size: 12px; color: #666; }
+        .logo { font-family: 'Orbitron'; font-size: 18px; letter-spacing: 12px; color: #fff; text-shadow: 0 0 20px var(--accent); }
+        .os-time { font-family: var(--font-mono); font-size: 12px; color: var(--accent); opacity: 0.6; }
 
-        /* Z-KIT BENTO GRID */
-        main { flex: 1; padding: 40px 60px; overflow-y: auto; z-index: 10; max-width: 1400px; margin: 0 auto; width: 100%; }
-        .section-label { font-family: var(--font-mono); font-size: 10px; letter-spacing: 4px; text-transform: uppercase; color: #444; margin: 40px 0 20px; }
+        /* Z-KIT BENTO GRID LAYOUT */
+        main { flex: 1; padding: 20px 80px 80px; overflow-y: auto; z-index: 10; }
+        .section-label { font-family: var(--font-mono); font-size: 10px; letter-spacing: 8px; text-transform: uppercase; color: var(--accent); margin: 60px 0 25px; opacity: 0.5; }
 
-        .big-grid { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); 
-            gap: 15px; 
-        }
+        .big-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
 
         .big-card {
             background: var(--glass); border: 1px solid var(--glass-border); border-radius: 12px;
-            padding: 40px; display: flex; flex-direction: column; align-items: flex-start; justify-content: flex-end;
-            min-height: 180px; gap: 15px; transition: all 0.3s ease;
-            text-decoration: none; color: white; backdrop-filter: blur(20px);
+            padding: 50px 30px; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-between;
+            min-height: 200px; transition: 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+            text-decoration: none; color: white; backdrop-filter: blur(15px);
         }
         .big-card:hover {
-            background: var(--card-hover); border-color: rgba(255,255,255,0.2);
-            transform: translateY(-4px);
+            transform: translateY(-8px); border-color: var(--accent);
+            background: rgba(195, 166, 255, 0.08);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
         }
-        /* Icon styling to match Z-Kit minimalist look */
-        .big-card img { width: 32px; height: 32px; filter: brightness(0) invert(1); opacity: 0.8; margin-bottom: auto; }
-        .big-card span { font-size: 14px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+        .big-card img { width: 40px; height: 40px; filter: drop-shadow(0 0 10px rgba(195, 166, 255, 0.4)); margin-bottom: 20px; }
+        .big-card span { font-size: 14px; font-weight: 900; letter-spacing: 4px; text-transform: uppercase; }
 
         /* WINDOW SYSTEM */
         #app-window {
-            position: fixed; inset: 40px; background: #000; border: 1px solid var(--glass-border);
-            border-radius: 12px; z-index: 20000; display: none; flex-direction: column; overflow: hidden;
-            box-shadow: 0 40px 100px rgba(0,0,0,0.8);
+            position: fixed; inset: 40px; background: #000; border: 1px solid var(--accent);
+            border-radius: 16px; z-index: 20000; display: none; flex-direction: column; overflow: hidden;
+            box-shadow: 0 0 100px rgba(0,0,0,0.9);
         }
-        .win-bar { background: #0a0a0a; padding: 12px 20px; display: flex; justify-content: space-between; border-bottom: 1px solid var(--glass-border); align-items: center; }
-        .win-close { color: #444; cursor: pointer; font-size: 18px; transition: color 0.2s; }
-        .win-close:hover { color: #fff; }
-        iframe { width: 100%; height: 100%; border: none; background: #000; }
+        .win-bar { background: #0a0a0a; padding: 15px 30px; display: flex; justify-content: space-between; border-bottom: 1px solid #1a1a1a; align-items: center; }
+        .win-close { color: #ff5555; cursor: pointer; font-family: var(--font-mono); font-size: 12px; letter-spacing: 2px; }
+        iframe { width: 100%; height: 100%; border: none; }
     </style>
 </head>
 <body>
 
     <div id="limbo-overlay">
-        <div id="status-display">INITIALIZING_CORE</div>
+        <div id="status-display">FOCUS</div>
         <div id="game-arena"></div>
     </div>
 
     <div id="nexus-system">
+        <div class="nexus-wallpaper"><div class="grid-lines"></div></div>
         <header>
-            <div class="logo">NEXUS_OS</div>
+            <div class="logo">NEXUS</div>
             <div class="os-time" id="os-clock">00:00:00</div>
         </header>
         <main>
-            <div class="section-label">01 // Multimedia Hub</div>
+            <div class="section-label">01 // Multimedia</div>
             <div class="big-grid">
                 <div class="big-card" onclick="openWin('https://www.youtube.com/embed', 'YOUTUBE')">
                     <img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png">
-                    <span>YouTube</span>
+                    <span>YouTube_Stream</span>
                 </div>
                 <div class="big-card" onclick="openWin('https://www.tiktok.com', 'TIKTOK')">
                     <img src="https://cdn-icons-png.flaticon.com/512/3046/3046121.png">
-                    <span>TikTok</span>
+                    <span>TikTok_Feed</span>
                 </div>
                 <div class="big-card" onclick="openWin('https://soundcloud.com', 'SOUNDCLOUD')">
                     <img src="https://cdn-icons-png.flaticon.com/512/145/145810.png">
-                    <span>SoundCloud</span>
+                    <span>SoundCloud_Arch</span>
                 </div>
             </div>
 
-            <div class="section-label">02 // Simulation Terminal</div>
+            <div class="section-label">02 // Simulation</div>
             <div class="big-grid">
                 <div class="big-card" onclick="openWin('https://1v1.lol', '1V1.LOL')">
                     <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR06X-vX4-o56X75x3D39uU975fA2F8EwH9Pw&s">
-                    <span>1V1_LOL</span>
+                    <span>1V1_LOL_Protocol</span>
                 </div>
                 <div class="big-card" onclick="openWin('https://classic.minecraft.net', 'MINECRAFT')">
                     <img src="https://cdn-icons-png.flaticon.com/512/5968/5968840.png">
-                    <span>Minecraft_Env</span>
+                    <span>Minecraft_Legacy</span>
                 </div>
                 <div class="big-card" onclick="openWin('https://krunker.io', 'KRUNKER')">
                     <img src="https://cdn-icons-png.flaticon.com/512/3408/3408506.png">
@@ -140,14 +156,14 @@
 
     <div id="app-window">
         <div class="win-bar">
-            <div id="win-title" style="font-family:var(--font-mono); color:#666; letter-spacing:2px; font-size:10px">SYSTEM_TASK</div>
-            <div class="win-close" onclick="closeWin()">CLOSE</div>
+            <div id="win-title" style="font-family:'Orbitron'; color:var(--accent); letter-spacing:5px; font-size:10px">SYSTEM_ACTIVE</div>
+            <div class="win-close" onclick="closeWin()">[ TERMINATE ]</div>
         </div>
         <iframe id="app-frame" src=""></iframe>
     </div>
 
     <script>
-        // --- ALL ORIGINAL LOGIC PRESERVED ---
+        // --- ORIGINAL LOGIC FULLY RESTORED ---
         const arena = document.getElementById('game-arena');
         const status = document.getElementById('status-display');
         const overlay = document.getElementById('limbo-overlay');
@@ -158,6 +174,7 @@
 
         function init() {
             arena.innerHTML = ''; keys = []; targetId = Math.floor(Math.random()*8); canInteract = false;
+            status.innerText = "FOCUS"; status.style.color = "#111";
             for(let i=0; i<8; i++){
                 const k = document.createElement('div'); k.className = 'key-unit'; k.innerHTML = '<div class="key-inner"></div>';
                 k.style.left = grid[i].x+'px'; k.style.top = grid[i].y+'px'; k.style.color = "#222"; k.dataset.spot = i;
@@ -167,9 +184,9 @@
         }
 
         function flash() {
-            keys[targetId].style.color = "#fff"; keys[targetId].style.borderColor = "#fff";
+            keys[targetId].style.color = "#5f5"; keys[targetId].style.borderColor = "#5f5";
             setTimeout(() => {
-                keys.forEach(k => { k.style.color = "#1a1a1a"; k.style.borderColor = "#1a1a1a"; });
+                keys.forEach(k => { k.style.color = "#600"; k.style.borderColor = "#300"; });
                 let m = 0; const iv = setInterval(() => {
                     let a = Math.floor(Math.random()*8), b = Math.floor(Math.random()*8);
                     let sA = keys[a].dataset.spot, sB = keys[b].dataset.spot;
@@ -182,9 +199,10 @@
         }
 
         function uplift() {
+            const colors = ['#f44', '#4f4', '#44f', '#ff4', '#f4f', '#4ff', '#fa0', '#fff'];
             keys.forEach((k, i) => {
                 setTimeout(() => {
-                    k.style.color = "#444"; k.style.borderColor = "var(--glass-border)";
+                    k.style.color = colors[i]; k.style.borderColor = colors[i];
                     const a = (i * Math.PI * 2) / 8;
                     k.style.left = (250 + Math.cos(a) * 160) + 'px'; k.style.top = (150 + Math.sin(a) * 160) + 'px';
                     if(i === 7) setTimeout(spin, 800);
@@ -202,7 +220,7 @@
                     k.style.transition = "none";
                 });
                 if(el < 3500) requestAnimationFrame(cyc);
-                else { canInteract = true; status.innerText = "VERIFY_ANCHOR"; status.style.color="#fff"; }
+                else { canInteract = true; status.innerText = "CHOOSE"; status.style.color="#fff"; }
             }
             requestAnimationFrame(cyc);
         }
@@ -219,7 +237,7 @@
 
         function openWin(url, title) {
             document.getElementById('app-frame').src = url;
-            document.getElementById('win-title').innerText = title.toUpperCase();
+            document.getElementById('win-title').innerText = title;
             document.getElementById('app-window').style.display = 'flex';
         }
 
