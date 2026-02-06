@@ -22,16 +22,23 @@
             height: 100vh;
             display: flex;
             overflow: hidden;
+            animation: bgBreath 15s infinite alternate;
         }
 
-        /* --- SIDEBAR (Left Side, Horizontal Text) --- */
+        /* Background Pulse Animation */
+        @keyframes bgBreath {
+            0% { background-size: 100% auto; }
+            100% { background-size: 105% auto; }
+        }
+
+        /* --- SIDEBAR --- */
         nav {
-            width: 140px; /* Slightly wider to fit horizontal text */
+            width: 140px;
             height: 100vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
-            align-items: flex-start; /* Align text to the left of the sidebar */
+            align-items: flex-start;
             padding-left: 30px;
             gap: 30px;
             background: rgba(0, 0, 0, 0.2);
@@ -47,7 +54,6 @@
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 1px;
-            /* UNFLIPPED: Removed writing-mode and transform */
             transition: 0.3s;
             cursor: pointer;
             position: relative;
@@ -56,9 +62,9 @@
         nav a:hover, nav a.active {
             color: var(--accent);
             text-shadow: 0 0 15px var(--accent);
+            transform: translateX(5px);
         }
 
-        /* Line indicator for active page */
         nav a.active::before {
             content: '';
             position: absolute;
@@ -71,29 +77,36 @@
             border-radius: 10px;
         }
 
-        /* --- MAIN CONTENT (Middle) --- */
+        /* --- MAIN CONTENT --- */
         main {
             flex: 1;
             display: flex;
             justify-content: center;
             align-items: center;
+            overflow-y: auto;
         }
 
         .center-group {
             width: 100%;
-            max-width: 800px;
+            max-width: 900px;
             display: flex;
             flex-direction: column;
             align-items: center;
             text-align: center;
             padding: 20px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
         }
 
-        /* Search Section */
+        @keyframes fadeInUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         .search-wrapper {
             width: 100%;
             max-width: 580px;
-            margin-bottom: 50px;
+            margin-bottom: 40px;
         }
 
         .search-wrapper h1 {
@@ -133,6 +146,7 @@
             grid-template-columns: repeat(4, 1fr);
             gap: 25px;
             width: 100%;
+            padding-bottom: 50px;
         }
 
         .app-card {
@@ -140,12 +154,33 @@
             backdrop-filter: blur(20px);
             border: 1px solid var(--glass-border);
             border-radius: 24px;
-            padding: 30px 15px;
+            padding: 25px 10px;
             display: flex;
             flex-direction: column;
             align-items: center;
             cursor: pointer;
             transition: 0.4s cubic-bezier(0.2, 1, 0.2, 1);
+            opacity: 0;
+            animation: popIn 0.5s ease forwards;
+        }
+
+        /* Staggered Animations */
+        .app-card:nth-child(1) { animation-delay: 0.1s; }
+        .app-card:nth-child(2) { animation-delay: 0.15s; }
+        .app-card:nth-child(3) { animation-delay: 0.2s; }
+        .app-card:nth-child(4) { animation-delay: 0.25s; }
+        .app-card:nth-child(5) { animation-delay: 0.3s; }
+        .app-card:nth-child(6) { animation-delay: 0.35s; }
+        .app-card:nth-child(7) { animation-delay: 0.4s; }
+        .app-card:nth-child(8) { animation-delay: 0.45s; }
+        .app-card:nth-child(9) { animation-delay: 0.5s; }
+        .app-card:nth-child(10) { animation-delay: 0.55s; }
+        .app-card:nth-child(11) { animation-delay: 0.6s; }
+        .app-card:nth-child(12) { animation-delay: 0.65s; }
+
+        @keyframes popIn {
+            from { opacity: 0; transform: scale(0.9) translateY(20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
         }
 
         .app-card:hover {
@@ -159,9 +194,12 @@
             width: 50px;
             height: 50px;
             margin-bottom: 15px;
+            border-radius: 12px;
             filter: drop-shadow(0 8px 15px rgba(0,0,0,0.4));
-            border-radius: 12px; /* Smoothes the game icon corners */
+            transition: 0.3s;
         }
+
+        .app-card:hover img { transform: scale(1.1) rotate(5deg); }
 
         .app-card span {
             font-size: 13px;
@@ -170,7 +208,7 @@
             letter-spacing: 0.5px;
         }
 
-        /* Fullscreen App Overlay */
+        /* Overlay */
         #overlay {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background: #000; z-index: 1000; display: none;
@@ -214,13 +252,29 @@
                     <img src="https://cdn-icons-png.flaticon.com/512/3046/3046121.png">
                     <span>TikTok</span>
                 </div>
+                <div class="app-card" onclick="window.open('https://discord.com/app', '_blank')">
+                    <img src="https://cdn-icons-png.flaticon.com/512/5968/5968756.png">
+                    <span>Discord</span>
+                </div>
                 <div class="app-card" onclick="window.open('https://soundcloud.com', '_blank')">
                     <img src="https://cdn-icons-png.flaticon.com/512/145/145850.png">
                     <span>SoundCloud</span>
                 </div>
-                <div class="app-card" onclick="window.open('https://discord.com', '_blank')">
-                    <img src="https://cdn-icons-png.flaticon.com/512/5968/5968756.png">
-                    <span>Discord</span>
+                <div class="app-card" onclick="window.open('https://www.instagram.com', '_blank')">
+                    <img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png">
+                    <span>Instagram</span>
+                </div>
+                <div class="app-card" onclick="window.open('https://www.twitch.tv', '_blank')">
+                    <img src="https://cdn-icons-png.flaticon.com/512/5968/5968819.png">
+                    <span>Twitch</span>
+                </div>
+                <div class="app-card" onclick="window.open('https://open.spotify.com', '_blank')">
+                    <img src="https://cdn-icons-png.flaticon.com/512/174/174872.png">
+                    <span>Spotify</span>
+                </div>
+                <div class="app-card" onclick="window.open('https://chat.openai.com', '_blank')">
+                    <img src="https://cdn-icons-png.flaticon.com/512/12222/12222588.png">
+                    <span>ChatGPT</span>
                 </div>
             </div>
         </div>
@@ -230,21 +284,54 @@
                 <h1>Arcade</h1>
             </div>
             <div class="app-grid">
-                <div class="app-card" onclick="launch('https://poki.com')">
-                    <img src="https://img.utdstc.com/icon/883/781/88378170c97893047f038f4569567954316d80c090623a63799616035f29f032:200">
+                <div class="app-card" onclick="window.open('https://poki.com', '_blank')">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/7/7a/Poki_Logo.png">
                     <span>Poki</span>
                 </div>
-                <div class="app-card" onclick="launch('https://classic.minecraft.net')">
-                    <img src="https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/minecraft-icon.png">
+                <div class="app-card" onclick="window.open('https://classic.minecraft.net', '_blank')">
+                    <img src="https://cdn-icons-png.flaticon.com/512/5968/5968840.png">
                     <span>Minecraft</span>
                 </div>
-                <div class="app-card" onclick="launch('https://krunker.io')">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSfI3n4U7iB56vU65Gk67k5f1Y99t9x99t9x9">
+                <div class="app-card" onclick="window.open('https://krunker.io', '_blank')">
+                    <img src="https://cdn-icons-png.flaticon.com/512/3408/3408506.png">
                     <span>Krunker</span>
                 </div>
-                <div class="app-card" onclick="launch('https://shellshock.io')">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR6A5N_H5Gk67k5f1Y99t9x99t9x9">
+                <div class="app-card" onclick="window.open('https://shellshock.io', '_blank')">
+                    <img src="https://cdn-icons-png.flaticon.com/512/2991/2991606.png">
                     <span>ShellShock</span>
+                </div>
+                
+                <div class="app-card" onclick="window.open('https://1v1.lol', '_blank')">
+                    <img src="https://cdn-icons-png.flaticon.com/512/15008/15008865.png">
+                    <span>1v1.LOL</span>
+                </div>
+                <div class="app-card" onclick="window.open('https://slope-game.github.io', '_blank')">
+                    <img src="https://cdn-icons-png.flaticon.com/512/5556/5556391.png">
+                    <span>Slope</span>
+                </div>
+                <div class="app-card" onclick="window.open('https://agar.io', '_blank')">
+                    <img src="https://cdn-icons-png.flaticon.com/512/5726/5726531.png">
+                    <span>Agar.io</span>
+                </div>
+                <div class="app-card" onclick="window.open('https://paper-io.com', '_blank')">
+                    <img src="https://cdn-icons-png.flaticon.com/512/3663/3663335.png">
+                    <span>Paper.io 2</span>
+                </div>
+                <div class="app-card" onclick="window.open('https://subwaysurfers.com', '_blank')">
+                    <img src="https://cdn-icons-png.flaticon.com/512/3408/3408545.png">
+                    <span>Subway Surf</span>
+                </div>
+                <div class="app-card" onclick="window.open('https://play2048.co', '_blank')">
+                    <img src="https://cdn-icons-png.flaticon.com/512/3063/3063822.png">
+                    <span>2048</span>
+                </div>
+                <div class="app-card" onclick="window.open('https://flappybird.io', '_blank')">
+                    <img src="https://cdn-icons-png.flaticon.com/512/826/826955.png">
+                    <span>Flappy Bird</span>
+                </div>
+                <div class="app-card" onclick="window.open('https://www.chess.com', '_blank')">
+                    <img src="https://cdn-icons-png.flaticon.com/512/4603/4603842.png">
+                    <span>Chess</span>
                 </div>
             </div>
         </div>
@@ -257,6 +344,13 @@
             </div>
         </div>
 
+        <div id="about" class="center-group page">
+            <div class="search-wrapper">
+                <h1>About</h1>
+                <p style="color:rgba(255,255,255,0.6)">Nexus OS v2.1</p>
+            </div>
+        </div>
+
     </main>
 
     <div id="overlay">
@@ -266,9 +360,21 @@
 
     <script>
         function showPage(id) {
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
+            // Reset animations
+            document.querySelectorAll('.page').forEach(p => {
+                p.classList.remove('active-page');
+                p.style.animation = 'none';
+            });
             document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
-            document.getElementById(id).classList.add('active-page');
+
+            // Activate new page
+            const activePage = document.getElementById(id);
+            activePage.classList.add('active-page');
+            
+            // Trigger animation reflow
+            void activePage.offsetWidth; 
+            activePage.style.animation = 'fadeInUp 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards';
+
             document.getElementById('n-'+id).classList.add('active');
         }
 
@@ -276,11 +382,11 @@
             if (e.key === 'Enter') {
                 let val = e.target.value;
                 let url = val.includes('.') ? 'https://' + val : 'https://www.google.com/search?q=' + val;
-                // Using window.open for general search/urls as Google/others block iframes
                 window.open(url, '_blank');
             }
         }
 
+        // Standard launcher for iframe-compatible sites
         function launch(url) {
             document.getElementById('frame').src = url;
             document.getElementById('overlay').style.display = 'block';
