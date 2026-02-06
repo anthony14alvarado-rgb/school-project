@@ -10,91 +10,61 @@
             --glass: rgba(255, 255, 255, 0.05);
             --glass-border: rgba(255, 255, 255, 0.12);
             --accent: #c3a6ff;
-            --limbo-blue: #55ffff;
-            --limbo-red: #ff5555;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
-
         body { background: #000; color: white; height: 100vh; overflow: hidden; }
 
+        /* --- LIMBO GAME STYLES --- */
         #limbo-overlay {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background: #050505; z-index: 5000; display: flex;
-            justify-content: center; align-items: center; flex-direction: column;
-            transition: opacity 1.5s ease-in-out;
+            justify-content: center; align-items: center;
         }
 
-        .limbo-text {
-            font-family: 'Orbitron', sans-serif; font-size: 2rem;
-            color: rgba(255,255,255,0.3); letter-spacing: 5px;
-            text-transform: uppercase; animation: pulseText 2s infinite;
-            pointer-events: none; user-select: none;
+        #key-container {
+            position: relative; width: 300px; height: 300px;
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;
         }
 
         .limbo-key {
-            position: absolute; width: 45px; height: 45px;
+            width: 50px; height: 50px;
             background: url('https://cdn-icons-png.flaticon.com/512/808/808488.png') no-repeat center center;
-            background-size: contain; filter: invert(1) drop-shadow(0 0 10px var(--limbo-blue));
-            cursor: pointer; transition: top 0.6s ease, left 0.6s ease, transform 0.2s;
+            background-size: contain;
+            filter: grayscale(1) brightness(0.5); /* Start Gray */
+            cursor: pointer; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: absolute;
         }
 
-        @keyframes pulseText {
-            0%, 100% { opacity: 0.3; }
-            50% { opacity: 0.8; text-shadow: 0 0 20px var(--limbo-blue); }
-        }
-
-        .flash-bang { animation: flash 1s forwards; }
-
+        .flash-bang { animation: flash 0.8s forwards; }
         @keyframes flash {
-            0% { background: #050505; }
+            0% { background: transparent; }
             50% { background: white; }
-            100% { background: transparent; opacity: 0; pointer-events: none; }
+            100% { background: transparent; }
         }
 
-        #nexus-interface { opacity: 0; transition: opacity 2s ease; height: 100%; display: flex; pointer-events: none; }
+        /* --- OS STYLES --- */
+        #nexus-interface { opacity: 0; transition: opacity 1.5s; height: 100%; display: flex; pointer-events: none; }
         #nexus-interface.active { opacity: 1; pointer-events: all; }
-
-        .bg-layer {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), 
-                        url('https://images.unsplash.com/photo-1462331940025-496dfbfc7564?q=80&w=2022&auto=format&fit=crop') no-repeat center center fixed;
-            background-size: cover; z-index: -1;
-        }
-
-        nav {
-            width: 140px; height: 100vh; display: flex; flex-direction: column;
-            justify-content: center; align-items: flex-start; padding-left: 30px;
-            gap: 30px; background: rgba(0, 0, 0, 0.2); backdrop-filter: blur(10px);
-            border-right: 1px solid var(--glass-border); z-index: 100;
-        }
-
-        nav a { color: rgba(255, 255, 255, 0.5); text-decoration: none; font-size: 15px; font-weight: 600; text-transform: uppercase; cursor: pointer; }
-        nav a.active { color: var(--accent); text-shadow: 0 0 15px var(--accent); }
-
+        .bg-layer { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1462331940025-496dfbfc7564?q=80&w=2022&auto=format&fit=crop') no-repeat center center fixed; background-size: cover; z-index: -1; }
+        nav { width: 140px; height: 100vh; display: flex; flex-direction: column; justify-content: center; padding-left: 25px; gap: 30px; background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(15px); border-right: 1px solid var(--glass-border); z-index: 100; }
+        nav a { color: rgba(255, 255, 255, 0.5); text-decoration: none; font-size: 14px; font-weight: 800; text-transform: uppercase; cursor: pointer; }
+        nav a.active { color: var(--accent); text-shadow: 0 0 10px var(--accent); }
         main { flex: 1; display: flex; justify-content: center; align-items: center; overflow-y: auto; }
-        .center-group { width: 100%; max-width: 900px; display: flex; flex-direction: column; align-items: center; text-align: center; padding: 20px; }
-        .page { display: none; }
-        .active-page { display: flex !important; animation: fadeInUp 0.6s forwards; }
-
+        .page { display: none; width: 100%; max-width: 900px; flex-direction: column; align-items: center; text-align: center; }
+        .active-page { display: flex; animation: fadeInUp 0.5s forwards; }
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-
-        .search-bar { width: 100%; max-width: 500px; padding: 20px; border-radius: 50px; border: 1px solid var(--glass-border); background: rgba(255,255,255,0.05); color: white; text-align: center; margin-bottom: 30px; }
-        
-        .app-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; width: 100%; }
-        .app-card { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 20px; padding: 20px; cursor: pointer; transition: 0.3s; }
-        .app-card:hover { transform: translateY(-10px); border-color: var(--accent); }
-        .app-card img { width: 40px; height: 40px; margin-bottom: 10px; border-radius: 8px; }
-
-        #overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #000; z-index: 6000; display: none; }
-        #overlay iframe { width: 100%; height: 100%; border: none; }
-        .close-btn { position: fixed; top: 20px; right: 20px; padding: 10px 20px; background: rgba(255,255,255,0.2); color: white; border: none; border-radius: 10px; cursor: pointer; }
+        .search-bar { width: 100%; max-width: 500px; padding: 20px; border-radius: 50px; border: 1px solid var(--glass-border); background: rgba(255,255,255,0.05); color: white; text-align: center; margin-bottom: 40px; outline: none; }
+        .app-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; width: 100%; padding: 20px; }
+        .app-card { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 20px; padding: 20px; transition: 0.3s; cursor: pointer; }
+        .app-card:hover { transform: translateY(-10px); background: rgba(255,255,255,0.1); }
+        .app-card img { width: 45px; height: 45px; margin-bottom: 10px; }
     </style>
 </head>
 <body>
 
     <div id="limbo-overlay">
-        <h1 class="limbo-text" id="limbo-msg">PROVE YOUR WORTH</h1>
+        <div id="key-container"></div>
     </div>
 
     <div class="bg-layer"></div>
@@ -104,77 +74,119 @@
             <a onclick="showPage('games')" id="n-games">Games</a>
             <a onclick="showPage('settings')" id="n-settings">Settings</a>
         </nav>
-
         <main>
-            <div id="home" class="center-group page active-page">
-                <h1>Nexus</h1>
-                <input type="text" class="search-bar" placeholder="Search..." onkeydown="handleSearch(event)">
+            <div id="home" class="page active-page">
+                <h1 style="font-size: 50px; margin-bottom: 20px;">NEXUS</h1>
+                <input type="text" class="search-bar" placeholder="Enter Search..." onkeydown="handleSearch(event)">
                 <div class="app-grid">
-                    <div class="app-card" onclick="window.open('https://youtube.com', '_blank')"><img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png"><span>YouTube</span></div>
-                    <div class="app-card" onclick="window.open('https://discord.com', '_blank')"><img src="https://cdn-icons-png.flaticon.com/512/5968/5968756.png"><span>Discord</span></div>
-                    <div class="app-card" onclick="window.open('https://chatgpt.com', '_blank')"><img src="https://cdn-icons-png.flaticon.com/512/12222/12222588.png"><span>ChatGPT</span></div>
-                    <div class="app-card" onclick="window.open('https://twitch.tv', '_blank')"><img src="https://cdn-icons-png.flaticon.com/512/5968/5968819.png"><span>Twitch</span></div>
+                    <div class="app-card" onclick="window.open('https://youtube.com','_blank')"><img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png"><div>YouTube</div></div>
+                    <div class="app-card" onclick="window.open('https://discord.com','_blank')"><img src="https://cdn-icons-png.flaticon.com/512/5968/5968756.png"><div>Discord</div></div>
+                    <div class="app-card" onclick="window.open('https://chatgpt.com','_blank')"><img src="https://cdn-icons-png.flaticon.com/512/12222/12222588.png"><div>ChatGPT</div></div>
+                    <div class="app-card" onclick="window.open('https://twitch.tv','_blank')"><img src="https://cdn-icons-png.flaticon.com/512/5968/5968819.png"><div>Twitch</div></div>
                 </div>
             </div>
-
-            <div id="games" class="center-group page">
-                <h1>Arcade</h1>
+            <div id="games" class="page">
+                <h1>ARCADE</h1>
                 <div class="app-grid">
-                    <div class="app-card" onclick="window.open('https://poki.com', '_blank')"><img src="https://upload.wikimedia.org/wikipedia/commons/7/7a/Poki_Logo.png"><span>Poki</span></div>
-                    <div class="app-card" onclick="window.open('https://classic.minecraft.net', '_blank')"><img src="https://cdn-icons-png.flaticon.com/512/5968/5968840.png"><span>Minecraft</span></div>
-                    <div class="app-card" onclick="window.open('https://krunker.io', '_blank')"><img src="https://cdn-icons-png.flaticon.com/512/3408/3408506.png"><span>Krunker</span></div>
-                    <div class="app-card" onclick="window.open('https://1v1.lol', '_blank')"><img src="https://cdn-icons-png.flaticon.com/512/15008/15008865.png"><span>1v1.LOL</span></div>
+                    <div class="app-card" onclick="window.open('https://poki.com','_blank')"><img src="https://upload.wikimedia.org/wikipedia/commons/7/7a/Poki_Logo.png"><div>Poki</div></div>
+                    <div class="app-card" onclick="window.open('https://classic.minecraft.net','_blank')"><img src="https://cdn-icons-png.flaticon.com/512/5968/5968840.png"><div>Minecraft</div></div>
+                    <div class="app-card" onclick="window.open('https://krunker.io','_blank')"><img src="https://cdn-icons-png.flaticon.com/512/3408/3408506.png"><div>Krunker</div></div>
+                    <div class="app-card" onclick="window.open('https://1v1.lol','_blank')"><img src="https://cdn-icons-png.flaticon.com/512/15008/15008865.png"><div>1v1.LOL</div></div>
                 </div>
             </div>
-
-            <div id="settings" class="center-group page">
-                <h1>Settings</h1>
+            <div id="settings" class="page">
+                <h1>SETTINGS</h1>
                 <button class="search-bar" onclick="cloak()">Activate Tab Cloak</button>
             </div>
         </main>
     </div>
 
-    <div id="overlay">
-        <button class="close-btn" onclick="exitApp()">X Close</button>
-        <iframe id="frame" src=""></iframe>
-    </div>
-
     <script>
-        const limboOverlay = document.getElementById('limbo-overlay');
-        const limboMsg = document.getElementById('limbo-msg');
-        let keys = [];
-        let isUnlocked = false;
+        const container = document.getElementById('key-container');
+        const colors = ['#ff5555', '#55ff55', '#5555ff', '#ffff55', '#ff55ff', '#55ffff', '#ffa500', '#ffffff'];
+        let keyElements = [];
+        let targetIndex = Math.floor(Math.random() * 8);
+        let gameState = 'init';
 
-        window.onload = () => {
-            for(let i = 0; i < 8; i++) {
-                let key = document.createElement('div');
+        function initLimbo() {
+            container.innerHTML = '';
+            keyElements = [];
+            targetIndex = Math.floor(Math.random() * 8);
+
+            for (let i = 0; i < 8; i++) {
+                const key = document.createElement('div');
                 key.classList.add('limbo-key');
-                key.style.top = Math.random() * 80 + '%';
-                key.style.left = Math.random() * 80 + '%';
-                key.onclick = () => { if(!isUnlocked) unlockNexus(); };
-                limboOverlay.appendChild(key);
-                keys.push(key);
+                // Grid layout start
+                key.style.left = (i % 4) * 70 + 'px';
+                key.style.top = Math.floor(i / 4) * 100 + 'px';
+                
+                key.onclick = () => handleKeyClick(i);
+                container.appendChild(key);
+                keyElements.push(key);
             }
-            setInterval(() => {
-                if(!isUnlocked) keys.forEach(k => {
-                    k.style.top = Math.random() * 80 + '%';
-                    k.style.left = Math.random() * 80 + '%';
-                });
-            }, 800);
-        };
 
-        function unlockNexus() {
-            isUnlocked = true;
-            limboMsg.innerText = "FOCUS";
-            limboMsg.style.color = "white";
-            keys.forEach(k => k.remove());
-            limboOverlay.classList.add('flash-bang');
-            setTimeout(() => {
-                document.getElementById('nexus-interface').classList.add('active');
-                limboOverlay.style.display = 'none';
-            }, 1000);
+            // Sequence:
+            setTimeout(revealTarget, 1000);
         }
 
+        function revealTarget() {
+            // Flash Green
+            keyElements[targetIndex].style.filter = 'grayscale(0) drop-shadow(0 0 15px #55ff55)';
+            keyElements[targetIndex].style.backgroundColor = '#55ff55';
+            keyElements[targetIndex].style.borderRadius = '50%';
+            
+            setTimeout(startShuffle, 1500);
+        }
+
+        function startShuffle() {
+            gameState = 'shuffling';
+            // All keys get random colors
+            keyElements.forEach((key, i) => {
+                key.style.filter = 'grayscale(0) drop-shadow(0 0 10px ' + colors[i] + ')';
+                key.style.backgroundColor = 'transparent';
+            });
+
+            let count = 0;
+            const shuffleInterval = setInterval(() => {
+                keyElements.forEach(key => {
+                    key.style.left = Math.random() * 250 + 'px';
+                    key.style.top = Math.random() * 250 + 'px';
+                });
+                count++;
+                if (count > 10) {
+                    clearInterval(shuffleInterval);
+                    finishShuffle();
+                }
+            }, 400);
+        }
+
+        function finishShuffle() {
+            // Back to center grid
+            keyElements.forEach((key, i) => {
+                key.style.left = (i % 4) * 70 + 'px';
+                key.style.top = Math.floor(i / 4) * 100 + 'px';
+            });
+            gameState = 'waiting';
+        }
+
+        function handleKeyClick(index) {
+            if (gameState !== 'waiting') return;
+
+            if (index === targetIndex) {
+                document.body.classList.add('flash-bang');
+                setTimeout(() => {
+                    document.getElementById('limbo-overlay').style.display = 'none';
+                    document.getElementById('nexus-interface').classList.add('active');
+                }, 500);
+            } else {
+                alert("WRONG KEY - FOCUS!");
+                initLimbo(); // Restart
+            }
+        }
+
+        window.onload = initLimbo;
+
+        /* --- OS LOGIC --- */
         function showPage(id) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
             document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
@@ -184,9 +196,7 @@
 
         function handleSearch(e) {
             if (e.key === 'Enter') {
-                let val = e.target.value;
-                let url = val.includes('.') ? 'https://' + val : 'https://google.com/search?q=' + val;
-                window.open(url, '_blank');
+                window.open('https://google.com/search?q=' + e.target.value, '_blank');
             }
         }
 
@@ -197,8 +207,6 @@
             document.head.appendChild(link);
             alert("Cloak Active");
         }
-
-        function exitApp() { document.getElementById('overlay').style.display = 'none'; document.getElementById('frame').src = ''; }
 
         window.onkeydown = (e) => { if(e.key === '~') window.location.href="https://classroom.google.com"; };
     </script>
