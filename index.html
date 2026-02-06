@@ -15,7 +15,7 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
 
         body {
-            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), 
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), 
                         url('https://images.unsplash.com/photo-1462331940025-496dfbfc7564?q=80&w=2022&auto=format&fit=crop') no-repeat center center fixed;
             background-size: cover;
             color: white;
@@ -24,18 +24,18 @@
             overflow: hidden;
         }
 
-        /* --- SIDEBAR --- */
+        /* --- SIDEBAR (Left Side, Horizontal Text) --- */
         nav {
-            width: 140px;
+            width: 140px; /* Slightly wider to fit horizontal text */
             height: 100vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
-            align-items: flex-start;
+            align-items: flex-start; /* Align text to the left of the sidebar */
             padding-left: 30px;
             gap: 30px;
-            background: rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(15px);
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
             border-right: 1px solid var(--glass-border);
             z-index: 100;
         }
@@ -47,6 +47,7 @@
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 1px;
+            /* UNFLIPPED: Removed writing-mode and transform */
             transition: 0.3s;
             cursor: pointer;
             position: relative;
@@ -57,6 +58,7 @@
             text-shadow: 0 0 15px var(--accent);
         }
 
+        /* Line indicator for active page */
         nav a.active::before {
             content: '';
             position: absolute;
@@ -69,22 +71,29 @@
             border-radius: 10px;
         }
 
-        /* --- MAIN CONTENT --- */
+        /* --- MAIN CONTENT (Middle) --- */
         main {
             flex: 1;
             display: flex;
             justify-content: center;
             align-items: center;
-            overflow-y: auto;
         }
 
         .center-group {
             width: 100%;
-            max-width: 900px;
+            max-width: 800px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 40px 20px;
+            text-align: center;
+            padding: 20px;
+        }
+
+        /* Search Section */
+        .search-wrapper {
+            width: 100%;
+            max-width: 580px;
+            margin-bottom: 50px;
         }
 
         .search-wrapper h1 {
@@ -97,72 +106,81 @@
             -webkit-text-fill-color: transparent;
         }
 
+        .search-bar {
+            width: 100%;
+            padding: 22px 35px;
+            border-radius: 50px;
+            border: 1px solid var(--glass-border);
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(25px);
+            color: white;
+            font-size: 18px;
+            outline: none;
+            transition: 0.3s;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .search-bar:focus {
+            border-color: var(--accent);
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 40px rgba(195, 166, 255, 0.2);
+        }
+
+        /* App Grid */
         .app-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 20px;
+            gap: 25px;
             width: 100%;
         }
 
-        /* App Card Animation */
         .app-card {
             background: var(--glass);
             backdrop-filter: blur(20px);
             border: 1px solid var(--glass-border);
-            border-radius: 20px;
-            padding: 20px 10px;
+            border-radius: 24px;
+            padding: 30px 15px;
             display: flex;
             flex-direction: column;
             align-items: center;
             cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            opacity: 0;
-            transform: translateY(30px);
+            transition: 0.4s cubic-bezier(0.2, 1, 0.2, 1);
         }
-
-        /* Staggered load animation */
-        .active-page .app-card {
-            animation: cardSlideUp 0.5s ease forwards;
-        }
-
-        @keyframes cardSlideUp {
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Individual Delays */
-        .app-card:nth-child(1) { animation-delay: 0.1s; }
-        .app-card:nth-child(2) { animation-delay: 0.15s; }
-        .app-card:nth-child(3) { animation-delay: 0.2s; }
-        .app-card:nth-child(4) { animation-delay: 0.25s; }
-        .app-card:nth-child(5) { animation-delay: 0.3s; }
-        .app-card:nth-child(6) { animation-delay: 0.35s; }
-        .app-card:nth-child(7) { animation-delay: 0.4s; }
-        .app-card:nth-child(8) { animation-delay: 0.45s; }
 
         .app-card:hover {
-            background: rgba(255, 255, 255, 0.15);
-            transform: scale(1.05) translateY(-5px);
+            background: rgba(255, 255, 255, 0.12);
+            transform: translateY(-12px);
             border-color: var(--accent);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
         }
 
         .app-card img {
-            width: 60px;
-            height: 60px;
-            border-radius: 12px;
-            margin-bottom: 12px;
-            object-fit: cover;
-            transition: 0.3s;
-        }
-
-        .app-card:hover img {
-            transform: rotate(5deg);
+            width: 50px;
+            height: 50px;
+            margin-bottom: 15px;
+            filter: drop-shadow(0 8px 15px rgba(0,0,0,0.4));
+            border-radius: 12px; /* Smoothes the game icon corners */
         }
 
         .app-card span {
-            font-size: 12px;
+            font-size: 13px;
             font-weight: 600;
-            color: rgba(255,255,255,0.8);
+            color: rgba(255, 255, 255, 0.8);
+            letter-spacing: 0.5px;
+        }
+
+        /* Fullscreen App Overlay */
+        #overlay {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: #000; z-index: 1000; display: none;
+        }
+        #overlay iframe { width: 100%; height: 100%; border: none; }
+        .close-btn {
+            position: fixed; top: 25px; right: 25px;
+            background: rgba(255,255,255,0.15); color: white; border: none;
+            padding: 12px 24px; border-radius: 12px; cursor: pointer;
+            backdrop-filter: blur(10px); font-weight: bold;
         }
 
         .page { display: none; width: 100%; }
@@ -176,65 +194,57 @@
         <a onclick="showPage('home')" id="n-home" class="active">Home</a>
         <a onclick="showPage('games')" id="n-games">Games</a>
         <a onclick="showPage('settings')" id="n-settings">Settings</a>
+        <a onclick="showPage('about')" id="n-about">About</a>
     </nav>
 
     <main>
+        
         <div id="home" class="center-group page active-page">
-            <div class="search-wrapper"><h1>Nexus</h1></div>
+            <div class="search-wrapper">
+                <h1>Nexus</h1>
+                <input type="text" class="search-bar" placeholder="Enter URL or Search..." onkeydown="handleSearch(event)">
+            </div>
+
             <div class="app-grid">
-                <div class="app-card" onclick="window.open('https://youtube.com', '_blank')">
+                <div class="app-card" onclick="window.open('https://www.youtube.com', '_blank')">
                     <img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png">
                     <span>YouTube</span>
                 </div>
-                <div class="app-card" onclick="window.open('https://tiktok.com', '_blank')">
+                <div class="app-card" onclick="window.open('https://www.tiktok.com', '_blank')">
                     <img src="https://cdn-icons-png.flaticon.com/512/3046/3046121.png">
                     <span>TikTok</span>
-                </div>
-                <div class="app-card" onclick="window.open('https://discord.com', '_blank')">
-                    <img src="https://cdn-icons-png.flaticon.com/512/5968/5968756.png">
-                    <span>Discord</span>
                 </div>
                 <div class="app-card" onclick="window.open('https://soundcloud.com', '_blank')">
                     <img src="https://cdn-icons-png.flaticon.com/512/145/145850.png">
                     <span>SoundCloud</span>
                 </div>
+                <div class="app-card" onclick="window.open('https://discord.com', '_blank')">
+                    <img src="https://cdn-icons-png.flaticon.com/512/5968/5968756.png">
+                    <span>Discord</span>
+                </div>
             </div>
         </div>
 
         <div id="games" class="center-group page">
-            <div class="search-wrapper"><h1>Arcade</h1></div>
+            <div class="search-wrapper">
+                <h1>Arcade</h1>
+            </div>
             <div class="app-grid">
-                <div class="app-card" onclick="window.open('https://poki.com', '_blank')">
+                <div class="app-card" onclick="launch('https://poki.com')">
                     <img src="https://img.utdstc.com/icon/883/781/88378170c97893047f038f4569567954316d80c090623a63799616035f29f032:200">
                     <span>Poki</span>
                 </div>
-                <div class="app-card" onclick="window.open('https://classic.minecraft.net', '_blank')">
+                <div class="app-card" onclick="launch('https://classic.minecraft.net')">
                     <img src="https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/minecraft-icon.png">
                     <span>Minecraft</span>
                 </div>
-                <div class="app-card" onclick="window.open('https://krunker.io', '_blank')">
+                <div class="app-card" onclick="launch('https://krunker.io')">
                     <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSfI3n4U7iB56vU65Gk67k5f1Y99t9x99t9x9">
                     <span>Krunker</span>
                 </div>
-                <div class="app-card" onclick="window.open('https://1v1.lol', '_blank')">
-                    <img src="https://play-lh.googleusercontent.com/6Xy15lY8E_H6GvV_Wk2z9-0X6Y5V4W8l9m1U1m1U1m1U">
-                    <span>1v1.LOL</span>
-                </div>
-                <div class="app-card" onclick="window.open('https://slope-game.github.io', '_blank')">
+                <div class="app-card" onclick="launch('https://shellshock.io')">
                     <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR6A5N_H5Gk67k5f1Y99t9x99t9x9">
-                    <span>Slope</span>
-                </div>
-                <div class="app-card" onclick="window.open('https://paper-io.com', '_blank')">
-                    <img src="https://play-lh.googleusercontent.com/L_Y-m1U1m1U1m1U1m1U1m1U1m1U">
-                    <span>Paper.io</span>
-                </div>
-                <div class="app-card" onclick="window.open('https://chess.com', '_blank')">
-                    <img src="https://images.chesscomfiles.com/uploads/v1/user/2.6b4618e7.200x200o.e4f9b87a8264.png">
-                    <span>Chess</span>
-                </div>
-                <div class="app-card" onclick="window.open('https://agar.io', '_blank')">
-                    <img src="https://play-lh.googleusercontent.com/9f7lR6E_H6GvV_Wk2z9-0X6Y5V4W8l9m1U1m1U1m1U">
-                    <span>Agar.io</span>
+                    <span>ShellShock</span>
                 </div>
             </div>
         </div>
@@ -242,18 +252,51 @@
         <div id="settings" class="center-group page">
             <div class="search-wrapper">
                 <h1>Settings</h1>
-                <p style="color:rgba(255,255,255,0.4)">Press <b>~</b> to hide instantly</p>
+                <button class="search-bar" style="cursor:pointer" onclick="cloak()">Activate Tab Cloak</button>
+                <p style="margin-top:20px; color:rgba(255,255,255,0.4)">Panic Button: Press <b>~</b> to hide</p>
             </div>
         </div>
+
     </main>
+
+    <div id="overlay">
+        <button class="close-btn" onclick="exitApp()">X Close</button>
+        <iframe id="frame" src=""></iframe>
+    </div>
 
     <script>
         function showPage(id) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
             document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
-            const target = document.getElementById(id);
-            target.classList.add('active-page');
+            document.getElementById(id).classList.add('active-page');
             document.getElementById('n-'+id).classList.add('active');
+        }
+
+        function handleSearch(e) {
+            if (e.key === 'Enter') {
+                let val = e.target.value;
+                let url = val.includes('.') ? 'https://' + val : 'https://www.google.com/search?q=' + val;
+                // Using window.open for general search/urls as Google/others block iframes
+                window.open(url, '_blank');
+            }
+        }
+
+        function launch(url) {
+            document.getElementById('frame').src = url;
+            document.getElementById('overlay').style.display = 'block';
+        }
+
+        function exitApp() {
+            document.getElementById('overlay').style.display = 'none';
+            document.getElementById('frame').src = '';
+        }
+
+        function cloak() {
+            document.title = "My Drive - Google Drive";
+            let link = document.querySelector("link[rel*='icon']") || document.createElement('link');
+            link.href = 'https://ssl.gstatic.com/images/branding/product/1x/drive_2020q4_32dp.png';
+            document.getElementsByTagName('head')[0].appendChild(link);
+            alert("Cloak Active");
         }
 
         window.onkeydown = (e) => { if(e.key === '~') window.location.href="https://classroom.google.com"; };
