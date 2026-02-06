@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,63 +16,35 @@
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
 
-        body {
-            background: #000;
-            color: white;
-            height: 100vh;
-            overflow: hidden;
-        }
+        body { background: #000; color: white; height: 100vh; overflow: hidden; }
 
-        /* --- LIMBO INTRO STYLES --- */
         #limbo-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            background: #050505;
-            z-index: 5000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: #050505; z-index: 5000; display: flex;
+            justify-content: center; align-items: center; flex-direction: column;
             transition: opacity 1.5s ease-in-out;
         }
 
         .limbo-text {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 2rem;
-            color: rgba(255,255,255,0.3);
-            letter-spacing: 5px;
-            text-transform: uppercase;
-            animation: pulseText 2s infinite;
-            pointer-events: none;
-            user-select: none;
+            font-family: 'Orbitron', sans-serif; font-size: 2rem;
+            color: rgba(255,255,255,0.3); letter-spacing: 5px;
+            text-transform: uppercase; animation: pulseText 2s infinite;
+            pointer-events: none; user-select: none;
         }
 
         .limbo-key {
-            position: absolute;
-            width: 40px;
-            height: 40px;
+            position: absolute; width: 45px; height: 45px;
             background: url('https://cdn-icons-png.flaticon.com/512/808/808488.png') no-repeat center center;
-            background-size: contain;
-            filter: invert(1) drop-shadow(0 0 10px var(--limbo-blue));
-            cursor: crosshair;
-            transition: top 0.5s ease, left 0.5s ease, transform 0.2s;
-        }
-
-        .limbo-key:hover {
-            filter: invert(1) drop-shadow(0 0 20px var(--limbo-red));
-            transform: scale(1.2);
-        }
-
-        /* Effect when unlocked */
-        .flash-bang {
-            animation: flash 1s forwards;
+            background-size: contain; filter: invert(1) drop-shadow(0 0 10px var(--limbo-blue));
+            cursor: pointer; transition: top 0.6s ease, left 0.6s ease, transform 0.2s;
         }
 
         @keyframes pulseText {
-            0% { opacity: 0.3; }
+            0%, 100% { opacity: 0.3; }
             50% { opacity: 0.8; text-shadow: 0 0 20px var(--limbo-blue); }
-            100% { opacity: 0.3; }
         }
+
+        .flash-bang { animation: flash 1s forwards; }
 
         @keyframes flash {
             0% { background: #050505; }
@@ -81,228 +52,43 @@
             100% { background: transparent; opacity: 0; pointer-events: none; }
         }
 
-        /* --- NEXUS OS CONTAINER (Hidden Initially) --- */
-        #nexus-interface {
-            opacity: 0;
-            transition: opacity 2s ease;
-            height: 100%;
-            display: flex;
-            pointer-events: none; /* Disabled until unlocked */
-        }
+        #nexus-interface { opacity: 0; transition: opacity 2s ease; height: 100%; display: flex; pointer-events: none; }
+        #nexus-interface.active { opacity: 1; pointer-events: all; }
 
-        #nexus-interface.active {
-            opacity: 1;
-            pointer-events: all;
-        }
-
-        /* --- ORIGINAL BACKGROUND --- */
         .bg-layer {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), 
                         url('https://images.unsplash.com/photo-1462331940025-496dfbfc7564?q=80&w=2022&auto=format&fit=crop') no-repeat center center fixed;
-            background-size: cover;
-            animation: bgBreath 15s infinite alternate;
-            z-index: -1;
+            background-size: cover; z-index: -1;
         }
 
-        @keyframes bgBreath {
-            0% { background-size: 100% auto; }
-            100% { background-size: 105% auto; }
-        }
-
-        /* --- SIDEBAR --- */
         nav {
-            width: 140px;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: flex-start;
-            padding-left: 30px;
-            gap: 30px;
-            background: rgba(0, 0, 0, 0.2);
-            backdrop-filter: blur(10px);
-            border-right: 1px solid var(--glass-border);
-            z-index: 100;
+            width: 140px; height: 100vh; display: flex; flex-direction: column;
+            justify-content: center; align-items: flex-start; padding-left: 30px;
+            gap: 30px; background: rgba(0, 0, 0, 0.2); backdrop-filter: blur(10px);
+            border-right: 1px solid var(--glass-border); z-index: 100;
         }
 
-        nav a {
-            color: rgba(255, 255, 255, 0.5);
-            text-decoration: none;
-            font-size: 15px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: 0.3s;
-            cursor: pointer;
-            position: relative;
-        }
+        nav a { color: rgba(255, 255, 255, 0.5); text-decoration: none; font-size: 15px; font-weight: 600; text-transform: uppercase; cursor: pointer; }
+        nav a.active { color: var(--accent); text-shadow: 0 0 15px var(--accent); }
 
-        nav a:hover, nav a.active {
-            color: var(--accent);
-            text-shadow: 0 0 15px var(--accent);
-            transform: translateX(5px);
-        }
+        main { flex: 1; display: flex; justify-content: center; align-items: center; overflow-y: auto; }
+        .center-group { width: 100%; max-width: 900px; display: flex; flex-direction: column; align-items: center; text-align: center; padding: 20px; }
+        .page { display: none; }
+        .active-page { display: flex !important; animation: fadeInUp 0.6s forwards; }
 
-        nav a.active::before {
-            content: '';
-            position: absolute;
-            left: -15px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 4px;
-            height: 15px;
-            background: var(--accent);
-            border-radius: 10px;
-        }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* --- MAIN CONTENT --- */
-        main {
-            flex: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow-y: auto;
-        }
+        .search-bar { width: 100%; max-width: 500px; padding: 20px; border-radius: 50px; border: 1px solid var(--glass-border); background: rgba(255,255,255,0.05); color: white; text-align: center; margin-bottom: 30px; }
+        
+        .app-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; width: 100%; }
+        .app-card { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 20px; padding: 20px; cursor: pointer; transition: 0.3s; }
+        .app-card:hover { transform: translateY(-10px); border-color: var(--accent); }
+        .app-card img { width: 40px; height: 40px; margin-bottom: 10px; border-radius: 8px; }
 
-        .center-group {
-            width: 100%;
-            max-width: 900px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            padding: 20px;
-            opacity: 0;
-            transform: translateY(20px);
-            animation: fadeInUp 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
-        }
-
-        @keyframes fadeInUp {
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .search-wrapper {
-            width: 100%;
-            max-width: 580px;
-            margin-bottom: 40px;
-        }
-
-        .search-wrapper h1 {
-            font-size: 64px;
-            font-weight: 800;
-            margin-bottom: 25px;
-            letter-spacing: -3px;
-            background: linear-gradient(to bottom, #fff, #aaa);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .search-bar {
-            width: 100%;
-            padding: 22px 35px;
-            border-radius: 50px;
-            border: 1px solid var(--glass-border);
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(25px);
-            color: white;
-            font-size: 18px;
-            outline: none;
-            transition: 0.3s;
-            text-align: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-        }
-
-        .search-bar:focus {
-            border-color: var(--accent);
-            background: rgba(255, 255, 255, 0.1);
-            box-shadow: 0 0 40px rgba(195, 166, 255, 0.2);
-        }
-
-        /* App Grid */
-        .app-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 25px;
-            width: 100%;
-            padding-bottom: 50px;
-        }
-
-        .app-card {
-            background: var(--glass);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            border-radius: 24px;
-            padding: 25px 10px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            cursor: pointer;
-            transition: 0.4s cubic-bezier(0.2, 1, 0.2, 1);
-            opacity: 0;
-            animation: popIn 0.5s ease forwards;
-        }
-
-        /* Staggered Animations */
-        .app-card:nth-child(1) { animation-delay: 0.1s; }
-        .app-card:nth-child(2) { animation-delay: 0.15s; }
-        .app-card:nth-child(3) { animation-delay: 0.2s; }
-        .app-card:nth-child(4) { animation-delay: 0.25s; }
-        .app-card:nth-child(5) { animation-delay: 0.3s; }
-        .app-card:nth-child(6) { animation-delay: 0.35s; }
-        .app-card:nth-child(7) { animation-delay: 0.4s; }
-        .app-card:nth-child(8) { animation-delay: 0.45s; }
-        .app-card:nth-child(9) { animation-delay: 0.5s; }
-        .app-card:nth-child(10) { animation-delay: 0.55s; }
-        .app-card:nth-child(11) { animation-delay: 0.6s; }
-        .app-card:nth-child(12) { animation-delay: 0.65s; }
-
-        @keyframes popIn {
-            from { opacity: 0; transform: scale(0.9) translateY(20px); }
-            to { opacity: 1; transform: scale(1) translateY(0); }
-        }
-
-        .app-card:hover {
-            background: rgba(255, 255, 255, 0.12);
-            transform: translateY(-12px);
-            border-color: var(--accent);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
-        }
-
-        .app-card img {
-            width: 50px;
-            height: 50px;
-            margin-bottom: 15px;
-            border-radius: 12px;
-            filter: drop-shadow(0 8px 15px rgba(0,0,0,0.4));
-            transition: 0.3s;
-        }
-
-        .app-card:hover img { transform: scale(1.1) rotate(5deg); }
-
-        .app-card span {
-            font-size: 13px;
-            font-weight: 600;
-            color: rgba(255, 255, 255, 0.8);
-            letter-spacing: 0.5px;
-        }
-
-        /* Overlay */
-        #overlay {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: #000; z-index: 1000; display: none;
-        }
+        #overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #000; z-index: 6000; display: none; }
         #overlay iframe { width: 100%; height: 100%; border: none; }
-        .close-btn {
-            position: fixed; top: 25px; right: 25px;
-            background: rgba(255,255,255,0.15); color: white; border: none;
-            padding: 12px 24px; border-radius: 12px; cursor: pointer;
-            backdrop-filter: blur(10px); font-weight: bold;
-        }
-
-        .page { display: none; width: 100%; }
-        .active-page { display: flex !important; }
-
+        .close-btn { position: fixed; top: 20px; right: 20px; padding: 10px 20px; background: rgba(255,255,255,0.2); color: white; border: none; border-radius: 10px; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -317,125 +103,34 @@
             <a onclick="showPage('home')" id="n-home" class="active">Home</a>
             <a onclick="showPage('games')" id="n-games">Games</a>
             <a onclick="showPage('settings')" id="n-settings">Settings</a>
-            <a onclick="showPage('about')" id="n-about">About</a>
         </nav>
 
         <main>
-            
             <div id="home" class="center-group page active-page">
-                <div class="search-wrapper">
-                    <h1>Nexus</h1>
-                    <input type="text" class="search-bar" placeholder="Enter URL or Search..." onkeydown="handleSearch(event)">
-                </div>
-
+                <h1>Nexus</h1>
+                <input type="text" class="search-bar" placeholder="Search..." onkeydown="handleSearch(event)">
                 <div class="app-grid">
-                    <div class="app-card" onclick="window.open('https://www.youtube.com', '_blank')">
-                        <img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png">
-                        <span>YouTube</span>
-                    </div>
-                    <div class="app-card" onclick="window.open('https://www.tiktok.com', '_blank')">
-                        <img src="https://cdn-icons-png.flaticon.com/512/3046/3046121.png">
-                        <span>TikTok</span>
-                    </div>
-                    <div class="app-card" onclick="window.open('https://discord.com/app', '_blank')">
-                        <img src="https://cdn-icons-png.flaticon.com/512/5968/5968756.png">
-                        <span>Discord</span>
-                    </div>
-                    <div class="app-card" onclick="window.open('https://soundcloud.com', '_blank')">
-                        <img src="https://cdn-icons-png.flaticon.com/512/145/145850.png">
-                        <span>SoundCloud</span>
-                    </div>
-                    <div class="app-card" onclick="window.open('https://www.instagram.com', '_blank')">
-                        <img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png">
-                        <span>Instagram</span>
-                    </div>
-                    <div class="app-card" onclick="window.open('https://www.twitch.tv', '_blank')">
-                        <img src="https://cdn-icons-png.flaticon.com/512/5968/5968819.png">
-                        <span>Twitch</span>
-                    </div>
-                    <div class="app-card" onclick="window.open('https://open.spotify.com', '_blank')">
-                        <img src="https://cdn-icons-png.flaticon.com/512/174/174872.png">
-                        <span>Spotify</span>
-                    </div>
-                    <div class="app-card" onclick="window.open('https://chat.openai.com', '_blank')">
-                        <img src="https://cdn-icons-png.flaticon.com/512/12222/12222588.png">
-                        <span>ChatGPT</span>
-                    </div>
+                    <div class="app-card" onclick="window.open('https://youtube.com', '_blank')"><img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png"><span>YouTube</span></div>
+                    <div class="app-card" onclick="window.open('https://discord.com', '_blank')"><img src="https://cdn-icons-png.flaticon.com/512/5968/5968756.png"><span>Discord</span></div>
+                    <div class="app-card" onclick="window.open('https://chatgpt.com', '_blank')"><img src="https://cdn-icons-png.flaticon.com/512/12222/12222588.png"><span>ChatGPT</span></div>
+                    <div class="app-card" onclick="window.open('https://twitch.tv', '_blank')"><img src="https://cdn-icons-png.flaticon.com/512/5968/5968819.png"><span>Twitch</span></div>
                 </div>
             </div>
 
             <div id="games" class="center-group page">
-                <div class="search-wrapper">
-                    <h1>Arcade</h1>
-                </div>
+                <h1>Arcade</h1>
                 <div class="app-grid">
-                    <div class="app-card" onclick="window.open('https://poki.com', '_blank')">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/7/7a/Poki_Logo.png">
-                        <span>Poki</span>
-                    </div>
-                    <div class="app-card" onclick="window.open('https://classic.minecraft.net', '_blank')">
-                        <img src="https://cdn-icons-png.flaticon.com/512/5968/5968840.png">
-                        <span>Minecraft</span>
-                    </div>
-                    <div class="app-card" onclick="window.open('https://krunker.io', '_blank')">
-                        <img src="https://cdn-icons-png.flaticon.com/512/3408/3408506.png">
-                        <span>Krunker</span>
-                    </div>
-                    <div class="app-card" onclick="window.open('https://shellshock.io', '_blank')">
-                        <img src="https://cdn-icons-png.flaticon.com/512/2991/2991606.png">
-                        <span>ShellShock</span>
-                    </div>
-                    
-                    <div class="app-card" onclick="window.open('https://1v1.lol', '_blank')">
-                        <img src="https://cdn-icons-png.flaticon.com/512/15008/15008865.png">
-                        <span>1v1.LOL</span>
-                    </div>
-                    <div class="app-card" onclick="window.open('https://slope-game.github.io', '_blank')">
-                        <img src="https://cdn-icons-png.flaticon.com/512/5556/5556391.png">
-                        <span>Slope</span>
-                    </div>
-                    <div class="app-card" onclick="window.open('https://agar.io', '_blank')">
-                        <img src="https://cdn-icons-png.flaticon.com/512/5726/5726531.png">
-                        <span>Agar.io</span>
-                    </div>
-                    <div class="app-card" onclick="window.open('https://paper-io.com', '_blank')">
-                        <img src="https://cdn-icons-png.flaticon.com/512/3663/3663335.png">
-                        <span>Paper.io 2</span>
-                    </div>
-                    <div class="app-card" onclick="window.open('https://subwaysurfers.com', '_blank')">
-                        <img src="https://cdn-icons-png.flaticon.com/512/3408/3408545.png">
-                        <span>Subway Surf</span>
-                    </div>
-                    <div class="app-card" onclick="window.open('https://play2048.co', '_blank')">
-                        <img src="https://cdn-icons-png.flaticon.com/512/3063/3063822.png">
-                        <span>2048</span>
-                    </div>
-                    <div class="app-card" onclick="window.open('https://flappybird.io', '_blank')">
-                        <img src="https://cdn-icons-png.flaticon.com/512/826/826955.png">
-                        <span>Flappy Bird</span>
-                    </div>
-                    <div class="app-card" onclick="window.open('https://www.chess.com', '_blank')">
-                        <img src="https://cdn-icons-png.flaticon.com/512/4603/4603842.png">
-                        <span>Chess</span>
-                    </div>
+                    <div class="app-card" onclick="window.open('https://poki.com', '_blank')"><img src="https://upload.wikimedia.org/wikipedia/commons/7/7a/Poki_Logo.png"><span>Poki</span></div>
+                    <div class="app-card" onclick="window.open('https://classic.minecraft.net', '_blank')"><img src="https://cdn-icons-png.flaticon.com/512/5968/5968840.png"><span>Minecraft</span></div>
+                    <div class="app-card" onclick="window.open('https://krunker.io', '_blank')"><img src="https://cdn-icons-png.flaticon.com/512/3408/3408506.png"><span>Krunker</span></div>
+                    <div class="app-card" onclick="window.open('https://1v1.lol', '_blank')"><img src="https://cdn-icons-png.flaticon.com/512/15008/15008865.png"><span>1v1.LOL</span></div>
                 </div>
             </div>
 
             <div id="settings" class="center-group page">
-                <div class="search-wrapper">
-                    <h1>Settings</h1>
-                    <button class="search-bar" style="cursor:pointer" onclick="cloak()">Activate Tab Cloak</button>
-                    <p style="margin-top:20px; color:rgba(255,255,255,0.4)">Panic Button: Press <b>~</b> to hide</p>
-                </div>
+                <h1>Settings</h1>
+                <button class="search-bar" onclick="cloak()">Activate Tab Cloak</button>
             </div>
-
-            <div id="about" class="center-group page">
-                <div class="search-wrapper">
-                    <h1>About</h1>
-                    <p style="color:rgba(255,255,255,0.6)">Nexus OS v2.1 (Limbo Edition)</p>
-                </div>
-            </div>
-
         </main>
     </div>
 
@@ -445,112 +140,65 @@
     </div>
 
     <script>
-        /* --- LIMBO LOGIC --- */
         const limboOverlay = document.getElementById('limbo-overlay');
         const limboMsg = document.getElementById('limbo-msg');
         let keys = [];
         let isUnlocked = false;
 
-        function initLimbo() {
-            // Spawn 8 keys
+        window.onload = () => {
             for(let i = 0; i < 8; i++) {
                 let key = document.createElement('div');
                 key.classList.add('limbo-key');
-                // Random Start Pos
-                key.style.top = Math.random() * 90 + '%';
-                key.style.left = Math.random() * 90 + '%';
-                
-                // Add click event
-                key.onclick = function() {
-                    if(!isUnlocked) unlockNexus();
-                };
-
+                key.style.top = Math.random() * 80 + '%';
+                key.style.left = Math.random() * 80 + '%';
+                key.onclick = () => { if(!isUnlocked) unlockNexus(); };
                 limboOverlay.appendChild(key);
                 keys.push(key);
             }
-            // Start movement loop
-            setInterval(moveKeys, 800);
-        }
-
-        function moveKeys() {
-            if(isUnlocked) return;
-            keys.forEach(key => {
-                const randomX = Math.floor(Math.random() * 90);
-                const randomY = Math.floor(Math.random() * 90);
-                key.style.left = randomX + '%';
-                key.style.top = randomY + '%';
-            });
-        }
+            setInterval(() => {
+                if(!isUnlocked) keys.forEach(k => {
+                    k.style.top = Math.random() * 80 + '%';
+                    k.style.left = Math.random() * 80 + '%';
+                });
+            }, 800);
+        };
 
         function unlockNexus() {
             isUnlocked = true;
             limboMsg.innerText = "FOCUS";
             limboMsg.style.color = "white";
-            limboMsg.style.textShadow = "0 0 30px white";
-            
-            // Remove Keys
             keys.forEach(k => k.remove());
-
-            // Flash effect
             limboOverlay.classList.add('flash-bang');
-
-            // Wait for flash then reveal OS
             setTimeout(() => {
                 document.getElementById('nexus-interface').classList.add('active');
-            }, 1000);
-
-            setTimeout(() => {
                 limboOverlay.style.display = 'none';
-            }, 2000);
+            }, 1000);
         }
 
-        // Initialize Limbo on Load
-        window.onload = initLimbo;
-
-
-        /* --- EXISTING OS LOGIC --- */
         function showPage(id) {
-            document.querySelectorAll('.page').forEach(p => {
-                p.classList.remove('active-page');
-                p.style.animation = 'none';
-            });
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
             document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
-
-            const activePage = document.getElementById(id);
-            activePage.class            activePage.classList.add('active-page');
-            
-            // Trigger animation reflow
-            void activePage.offsetWidth; 
-            activePage.style.animation = 'fadeInUp 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards';
-
+            document.getElementById(id).classList.add('active-page');
             document.getElementById('n-'+id).classList.add('active');
         }
 
         function handleSearch(e) {
             if (e.key === 'Enter') {
                 let val = e.target.value;
-                let url = val.includes('.') ? 'https://' + val : 'https://www.google.com/search?q=' + val;
+                let url = val.includes('.') ? 'https://' + val : 'https://google.com/search?q=' + val;
                 window.open(url, '_blank');
             }
-        }
-
-        function launch(url) {
-            document.getElementById('frame').src = url;
-            document.getElementById('overlay').style.display = 'block';
-        }
-
-        function exitApp() {
-            document.getElementById('overlay').style.display = 'none';
-            document.getElementById('frame').src = '';
         }
 
         function cloak() {
             document.title = "My Drive - Google Drive";
             let link = document.querySelector("link[rel*='icon']") || document.createElement('link');
             link.href = 'https://ssl.gstatic.com/images/branding/product/1x/drive_2020q4_32dp.png';
-            document.getElementsByTagName('head')[0].appendChild(link);
+            document.head.appendChild(link);
             alert("Cloak Active");
         }
+
+        function exitApp() { document.getElementById('overlay').style.display = 'none'; document.getElementById('frame').src = ''; }
 
         window.onkeydown = (e) => { if(e.key === '~') window.location.href="https://classroom.google.com"; };
     </script>
