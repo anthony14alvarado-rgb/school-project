@@ -3,26 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexus OS | Limbo Protocol</title>
+    <title>Nexus OS | Cinematic Limbo</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;900&family=Orbitron:wght@700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --accent: #c3a6ff;
-            --limbo-dark: #010101;
-        }
-
+        :root { --accent: #c3a6ff; --bg: #010101; }
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { background: #000; color: white; height: 100vh; overflow: hidden; font-family: 'Inter', sans-serif; }
 
-        /* --- THE LIMBO STAGE --- */
         #limbo-overlay {
-            position: fixed; inset: 0; background: var(--limbo-dark);
+            position: fixed; inset: 0; background: var(--bg);
             z-index: 10000; display: flex; flex-direction: column;
             justify-content: center; align-items: center;
         }
 
         #status-display {
-            font-family: 'Orbitron'; font-size: 32px; color: #151515;
+            font-family: 'Orbitron'; font-size: 30px; color: #111;
             letter-spacing: 20px; margin-bottom: 80px; text-transform: uppercase;
         }
 
@@ -35,38 +30,25 @@
             position: absolute; width: 75px; height: 75px;
             background: #080808; border: 3px solid #222; border-radius: 6px;
             display: flex; justify-content: center; align-items: center;
-            cursor: pointer; transform-origin: center;
-            transition: border-color 0.4s, color 0.4s, box-shadow 0.4s, left 0.35s cubic-bezier(0.4, 0, 0.2, 1), top 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            /* Smooth transitions for the one-by-one phase */
+            transition: left 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), 
+                        top 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), 
+                        border-color 0.4s, color 0.4s, box-shadow 0.4s;
         }
 
         .key-inner { width: 22px; height: 22px; border: 4px solid currentColor; transform: rotate(45deg); }
 
-        /* --- THE NEXUS INTERFACE --- */
         #nexus-system {
             position: fixed; inset: 0; display: none;
             opacity: 0; transition: opacity 1s; z-index: 1;
         }
-
         #nexus-system.active { display: flex; opacity: 1; }
-
-        .wallpaper {
-            position: absolute; inset: 0;
-            background: radial-gradient(circle at center, #1a1a1a 0%, #000 100%);
-            z-index: -1;
-        }
-
-        nav {
-            width: 130px; background: rgba(0,0,0,0.9);
-            border-right: 1px solid rgba(255,255,255,0.1);
-            display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 40px;
-        }
-
-        nav div { color: #444; font-size: 10px; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; }
-        nav .active-nav { color: var(--accent); text-shadow: 0 0 15px var(--accent); }
-
+        .wallpaper { position: absolute; inset: 0; background: radial-gradient(circle, #1a1a1a 0%, #000 100%); z-index: -1; }
+        nav { width: 130px; background: rgba(0,0,0,0.9); border-right: 1px solid rgba(255,255,255,0.1); display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 40px; }
+        nav div { color: #444; font-size: 10px; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; }
         main { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; }
-        .os-title { font-family: 'Orbitron'; font-size: 85px; letter-spacing: 25px; margin-bottom: 20px; }
-        .search-box { width: 400px; padding: 18px; border-radius: 50px; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.04); color: #fff; text-align: center; outline: none; }
+        .os-title { font-family: 'Orbitron'; font-size: 85px; letter-spacing: 25px; }
     </style>
 </head>
 <body>
@@ -78,16 +60,8 @@
 
     <div id="nexus-system">
         <div class="wallpaper"></div>
-        <nav>
-            <div class="active-nav">Home</div>
-            <div>Games</div>
-            <div>Files</div>
-            <div>Settings</div>
-        </nav>
-        <main>
-            <h1 class="os-title">NEXUS</h1>
-            <input type="text" class="search-box" placeholder="SYSTEM ENCRYPTED...">
-        </main>
+        <nav><div style="color:var(--accent)">Home</div><div>Apps</div><div>Settings</div></nav>
+        <main><h1 class="os-title">NEXUS</h1></main>
     </div>
 
     <script>
@@ -99,8 +73,8 @@
         let keys = [];
         let targetId = 0;
         let canInteract = false;
+        let orbitActive = false;
 
-        // Grid positions for the "Key-to-Key" swapping phase
         const grid = [
             {x: 100, y: 80}, {x: 200, y: 80}, {x: 300, y: 80}, {x: 400, y: 80},
             {x: 100, y: 220}, {x: 200, y: 220}, {x: 300, y: 220}, {x: 400, y: 220}
@@ -111,8 +85,9 @@
             keys = [];
             targetId = Math.floor(Math.random() * 8);
             canInteract = false;
+            orbitActive = false;
             status.innerText = "FOCUS";
-            status.style.color = "#151515";
+            status.style.color = "#111";
 
             for(let i=0; i<8; i++) {
                 const k = document.createElement('div');
@@ -122,7 +97,7 @@
                 k.style.left = grid[i].x + 'px';
                 k.style.top = grid[i].y + 'px';
                 k.dataset.spot = i;
-                k.onclick = () => selectKey(i);
+                k.onclick = () => { if(canInteract) selectKey(i); };
                 arena.appendChild(k);
                 keys.push(k);
             }
@@ -136,7 +111,7 @@
 
             setTimeout(() => {
                 keys.forEach(k => {
-                    k.style.color = "#600"; // Red Phase
+                    k.style.color = "#600";
                     k.style.borderColor = "#300";
                     k.style.boxShadow = "none";
                 });
@@ -144,10 +119,8 @@
             }, 1200);
         }
 
-        // --- PHASE 1: KEY-TO-KEY SWAPPING ---
         function runSwaps() {
             let count = 0;
-            const max = 15;
             const interval = setInterval(() => {
                 let a = Math.floor(Math.random() * 8);
                 let b = Math.floor(Math.random() * 8);
@@ -156,7 +129,6 @@
                 let spotA = keys[a].dataset.spot;
                 let spotB = keys[b].dataset.spot;
 
-                // Physical move to new grid spot
                 keys[a].style.left = grid[spotB].x + 'px';
                 keys[a].style.top = grid[spotB].y + 'px';
                 keys[b].style.left = grid[spotA].x + 'px';
@@ -166,32 +138,55 @@
                 keys[b].dataset.spot = spotA;
 
                 count++;
-                if(count >= max) {
+                if(count >= 12) {
                     clearInterval(interval);
-                    setTimeout(runOrbit, 600);
+                    setTimeout(transitionToOneByOne, 600);
                 }
-            }, 300);
+            }, 350);
         }
 
-        // --- PHASE 2: COLORED CIRCLE ---
-        function runOrbit() {
+        // PHASE: ONE-BY-ONE UPLIFT
+        function transitionToOneByOne() {
             const colors = ['#f44', '#4f4', '#44f', '#ff4', '#f4f', '#4ff', '#fa0', '#fff'];
-            keys.forEach((k, i) => {
-                k.style.color = colors[i];
-                k.style.borderColor = colors[i];
-                k.style.boxShadow = `0 0 15px ${colors[i]}`;
-                // Disable transitions for smooth orbital animation
-                k.style.transition = "none";
-            });
-
-            let angle = 0;
             const radius = 160;
-            const start = Date.now();
+            const centerX = 250;
+            const centerY = 150;
 
-            function orbit() {
-                const now = Date.now();
-                const elapsed = now - start;
-                angle = elapsed * 0.006; 
+            keys.forEach((k, i) => {
+                setTimeout(() => {
+                    // Turn on color
+                    k.style.color = colors[i];
+                    k.style.borderColor = colors[i];
+                    k.style.boxShadow = `0 0 15px ${colors[i]}`;
+                    
+                    // Move to circular start position
+                    const offset = (i * Math.PI * 2) / 8;
+                    const x = centerX + Math.cos(offset) * radius;
+                    const y = centerY + Math.sin(offset) * radius;
+                    
+                    k.style.left = x + 'px';
+                    k.style.top = y + 'px';
+
+                    // If it's the last key, start the spin
+                    if(i === 7) {
+                        setTimeout(() => {
+                            keys.forEach(key => key.style.transition = "none");
+                            startSpin();
+                        }, 800);
+                    }
+                }, i * 150); // The "one-by-one" delay
+            });
+        }
+
+        function startSpin() {
+            orbitActive = true;
+            const start = Date.now();
+            const radius = 160;
+
+            function loop() {
+                if(!orbitActive) return;
+                const elapsed = Date.now() - start;
+                const angle = elapsed * 0.008;
 
                 keys.forEach((k, i) => {
                     const offset = (i * Math.PI * 2) / 8;
@@ -201,13 +196,14 @@
                     k.style.top = y + 'px';
                 });
 
-                if(elapsed < 4000) {
-                    requestAnimationFrame(orbit);
+                if(elapsed < 3500) {
+                    requestAnimationFrame(loop);
                 } else {
+                    orbitActive = false;
                     finalize();
                 }
             }
-            requestAnimationFrame(orbit);
+            requestAnimationFrame(loop);
         }
 
         function finalize() {
@@ -218,7 +214,6 @@
         }
 
         function selectKey(idx) {
-            if(!canInteract) return;
             if(idx === targetId) {
                 overlay.style.display = 'none';
                 nexus.style.display = 'flex';
