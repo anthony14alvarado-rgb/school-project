@@ -3,38 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexus OS - Limbo Elite</title>
+    <title>Nexus OS - Limbo Final</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;800&family=Orbitron:wght@700&display=swap" rel="stylesheet">
     <style>
         :root {
             --glass: rgba(255, 255, 255, 0.05);
             --glass-border: rgba(255, 255, 255, 0.12);
             --accent: #c3a6ff;
+            --limbo-red: #4a0000;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
         body { background: #000; color: white; height: 100vh; overflow: hidden; }
 
-        /* --- LIMBO OVERLAY --- */
+        /* --- LIMBO GAME --- */
         #limbo-overlay {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background: #020202; z-index: 5000; display: flex;
             justify-content: center; align-items: center;
         }
 
-        #key-anchor {
-            position: relative; width: 1px; height: 1px;
-        }
+        #key-anchor { position: relative; width: 1px; height: 1px; }
 
         .limbo-key {
-            position: absolute;
-            width: 55px; height: 55px;
+            position: absolute; width: 60px; height: 60px;
             background: url('https://i.ibb.co/VWV0p0p/limbo-key-red.png') no-repeat center center;
-            background-size: contain;
-            filter: grayscale(1) brightness(0.2); /* Very Dark Start */
-            cursor: pointer;
-            transition: transform 0.2s, filter 0.4s;
-            margin-left: -27px; margin-top: -27px;
+            background-size: contain; filter: grayscale(1) brightness(0.2);
+            cursor: pointer; transition: transform 0.2s, filter 0.5s, left 0.4s, top 0.4s;
+            margin-left: -30px; margin-top: -30px;
         }
 
         .flash-bang { animation: flashEffect 0.8s forwards; }
@@ -44,22 +40,39 @@
             100% { background: transparent; }
         }
 
-        /* --- OS UI --- */
+        /* --- NEXUS OS INTERFACE --- */
         #nexus-interface { opacity: 0; transition: opacity 1.5s; height: 100%; display: flex; pointer-events: none; }
         #nexus-interface.active { opacity: 1; pointer-events: all; }
-        .bg-layer { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('https://images.unsplash.com/photo-1462331940025-496dfbfc7564?q=80&w=2022&auto=format&fit=crop') no-repeat center center fixed; background-size: cover; z-index: -1; }
-        nav { width: 120px; height: 100vh; display: flex; flex-direction: column; justify-content: center; padding-left: 20px; gap: 30px; background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(20px); border-right: 1px solid var(--glass-border); z-index: 100; }
-        nav a { color: rgba(255, 255, 255, 0.4); text-decoration: none; font-size: 12px; font-weight: 800; text-transform: uppercase; cursor: pointer; letter-spacing: 1px; }
-        nav a.active { color: var(--accent); text-shadow: 0 0 10px var(--accent); }
+
+        .bg-layer { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.85)), 
+            url('https://images.unsplash.com/photo-1462331940025-496dfbfc7564?q=80&w=2022&auto=format&fit=crop'); 
+            background-size: cover; z-index: -1; 
+        }
+
+        nav { 
+            width: 130px; height: 100vh; display: flex; flex-direction: column; 
+            justify-content: center; padding-left: 25px; gap: 35px; 
+            background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(25px); 
+            border-right: 1px solid var(--glass-border); z-index: 100; 
+        }
+
+        nav a { color: rgba(255, 255, 255, 0.3); text-decoration: none; font-size: 13px; font-weight: 800; text-transform: uppercase; cursor: pointer; letter-spacing: 2px; transition: 0.3s; }
+        nav a.active { color: var(--accent); text-shadow: 0 0 15px var(--accent); }
+
         main { flex: 1; display: flex; justify-content: center; align-items: center; }
-        .page { display: none; width: 100%; max-width: 800px; flex-direction: column; align-items: center; }
-        .active-page { display: flex; animation: fadeInUp 0.5s forwards; }
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .search-bar { width: 100%; max-width: 400px; padding: 18px; border-radius: 50px; border: 1px solid var(--glass-border); background: rgba(255,255,255,0.03); color: white; text-align: center; margin-bottom: 30px; outline: none; }
-        .app-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; width: 100%; }
-        .app-card { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 15px; padding: 15px; transition: 0.3s; cursor: pointer; text-align: center; }
-        .app-card:hover { transform: scale(1.05); background: rgba(255,255,255,0.1); }
-        .app-card img { width: 35px; height: 35px; margin-bottom: 8px; }
+        .page { display: none; width: 100%; max-width: 850px; flex-direction: column; align-items: center; }
+        .active-page { display: flex; animation: fadeInUp 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
+
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+
+        .search-bar { width: 100%; max-width: 450px; padding: 20px; border-radius: 50px; border: 1px solid var(--glass-border); background: rgba(255,255,255,0.04); color: white; text-align: center; margin-bottom: 40px; outline: none; font-size: 16px; }
+        
+        .app-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; width: 100%; }
+        .app-card { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 20px; padding: 25px; transition: 0.4s; cursor: pointer; text-align: center; }
+        .app-card:hover { transform: translateY(-10px); background: rgba(255,255,255,0.08); border-color: var(--accent); }
+        .app-card img { width: 40px; height: 40px; margin-bottom: 12px; }
     </style>
 </head>
 <body>
@@ -77,8 +90,8 @@
         </nav>
         <main>
             <div id="home" class="page active-page">
-                <h1 style="font-size: 40px; margin-bottom: 20px; font-family: 'Orbitron';">NEXUS</h1>
-                <input type="text" class="search-bar" placeholder="Search Database..." onkeydown="handleSearch(event)">
+                <h1 style="font-size: 50px; margin-bottom: 25px; font-family: 'Orbitron'; letter-spacing: 8px;">NEXUS</h1>
+                <input type="text" class="search-bar" placeholder="SEARCH SYSTEM..." onkeydown="handleSearch(event)">
                 <div class="app-grid">
                     <div class="app-card" onclick="window.open('https://youtube.com','_blank')"><img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png"><div>YouTube</div></div>
                     <div class="app-card" onclick="window.open('https://discord.com','_blank')"><img src="https://cdn-icons-png.flaticon.com/512/5968/5968756.png"><div>Discord</div></div>
@@ -87,7 +100,7 @@
                 </div>
             </div>
             <div id="games" class="page">
-                <h1 style="font-family: 'Orbitron'; margin-bottom: 20px;">ARCADE</h1>
+                <h1 style="font-family: 'Orbitron'; margin-bottom: 25px; letter-spacing: 5px;">ARCADE</h1>
                 <div class="app-grid">
                     <div class="app-card" onclick="window.open('https://poki.com','_blank')"><img src="https://upload.wikimedia.org/wikipedia/commons/7/7a/Poki_Logo.png"><div>Poki</div></div>
                     <div class="app-card" onclick="window.open('https://classic.minecraft.net','_blank')"><img src="https://cdn-icons-png.flaticon.com/512/5968/5968840.png"><div>Minecraft</div></div>
@@ -96,8 +109,8 @@
                 </div>
             </div>
             <div id="settings" class="page">
-                <h1 style="font-family: 'Orbitron';">SYSTEM</h1>
-                <button class="search-bar" onclick="cloak()">Enable Stealth Mode</button>
+                <h1 style="font-family: 'Orbitron'; letter-spacing: 5px;">SYSTEM</h1>
+                <button class="search-bar" onclick="cloak()">ENABLE STEALTH</button>
             </div>
         </main>
     </div>
@@ -108,71 +121,72 @@
         let targetIndex = 0;
         let isWaiting = false;
         let angle = 0;
+        let circleActive = false;
 
         function initLimbo() {
             anchor.innerHTML = '';
             keyElements = [];
             targetIndex = Math.floor(Math.random() * 8);
             isWaiting = false;
+            circleActive = false;
+            angle = 0;
 
             for (let i = 0; i < 8; i++) {
                 const key = document.createElement('div');
                 key.classList.add('limbo-key');
-                // Grid start
-                key.style.left = ((i % 4) - 1.5) * 80 + 'px';
-                key.style.top = (Math.floor(i / 4) - 0.5) * 100 + 'px';
+                key.style.left = ((i % 4) - 1.5) * 85 + 'px';
+                key.style.top = (Math.floor(i / 4) - 0.5) * 110 + 'px';
                 key.onclick = () => checkKey(i);
                 anchor.appendChild(key);
                 keyElements.push(key);
             }
-            setTimeout(revealTarget, 800);
+            setTimeout(revealTarget, 1000);
         }
 
         function revealTarget() {
-            // Flash Green briefly
-            keyElements[targetIndex].style.filter = 'grayscale(0) brightness(1.2) drop-shadow(0 0 15px #55ff55)';
-            keyElements[targetIndex].style.backgroundColor = 'rgba(85, 255, 85, 0.2)';
+            keyElements[targetIndex].style.filter = 'grayscale(0) brightness(1.5) drop-shadow(0 0 20px #55ff55)';
+            keyElements[targetIndex].style.backgroundColor = 'rgba(85, 255, 85, 0.15)';
             
             setTimeout(() => {
-                // All turn DARK RED and move
                 keyElements.forEach(k => {
-                    k.style.filter = 'grayscale(0) sepia(1) saturate(10) hue-rotate(-50deg) brightness(0.2)';
+                    k.style.filter = 'grayscale(0) sepia(1) saturate(15) hue-rotate(-55deg) brightness(0.15)';
                     k.style.backgroundColor = 'transparent';
                 });
                 scrambleKeys();
-            }, 1000);
+            }, 1200);
         }
 
         function scrambleKeys() {
             let moves = 0;
             const moveInterval = setInterval(() => {
                 keyElements.forEach(k => {
-                    k.style.left = (Math.random() * 400 - 200) + 'px';
-                    k.style.top = (Math.random() * 400 - 200) + 'px';
+                    k.style.left = (Math.random() * 500 - 250) + 'px';
+                    k.style.top = (Math.random() * 500 - 250) + 'px';
                 });
                 moves++;
-                if (moves > 12) {
+                if (moves > 15) {
                     clearInterval(moveInterval);
                     startCircle();
                 }
-            }, 300);
+            }, 250);
         }
 
         function startCircle() {
-            const radius = 120;
+            circleActive = true;
+            const radius = 140;
             const circleLoop = setInterval(() => {
-                angle += 0.03;
+                if(!circleActive) { clearInterval(circleLoop); return; }
+                angle += 0.025;
                 keyElements.forEach((k, i) => {
                     const offset = (i * (Math.PI * 2)) / 8;
                     k.style.left = Math.cos(angle + offset) * radius + 'px';
                     k.style.top = Math.sin(angle + offset) * radius + 'px';
                 });
-                if (angle > 6) { // After 1 full circle
-                    clearInterval(circleLoop);
+                if (angle > 5.5) { 
+                    circleActive = false;
                     isWaiting = true;
-                    // Keep them in circle but stop moving
                 }
-            }, 20);
+            }, 16);
         }
 
         function checkKey(i) {
@@ -203,8 +217,10 @@
 
         function cloak() {
             document.title = "Google Drive";
-            alert("Stealth Active");
+            alert("TAB CLOAK ACTIVE");
         }
+
+        window.onkeydown = (e) => { if(e.key === '~') window.location.href="https://classroom.google.com"; };
     </script>
 </body>
 </html>
