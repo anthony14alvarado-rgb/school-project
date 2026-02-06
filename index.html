@@ -1,31 +1,110 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexus OS</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;800&display=swap" rel="stylesheet">
+    <title>Nexus OS - Limbo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;800&family=Orbitron:wght@700&display=swap" rel="stylesheet">
     <style>
         :root {
             --glass: rgba(255, 255, 255, 0.05);
             --glass-border: rgba(255, 255, 255, 0.12);
             --accent: #c3a6ff;
+            --limbo-blue: #55ffff;
+            --limbo-red: #ff5555;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
 
         body {
+            background: #000;
+            color: white;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* --- LIMBO INTRO STYLES --- */
+        #limbo-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: #050505;
+            z-index: 5000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            transition: opacity 1.5s ease-in-out;
+        }
+
+        .limbo-text {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            color: rgba(255,255,255,0.3);
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            animation: pulseText 2s infinite;
+            pointer-events: none;
+            user-select: none;
+        }
+
+        .limbo-key {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background: url('https://cdn-icons-png.flaticon.com/512/808/808488.png') no-repeat center center;
+            background-size: contain;
+            filter: invert(1) drop-shadow(0 0 10px var(--limbo-blue));
+            cursor: crosshair;
+            transition: top 0.5s ease, left 0.5s ease, transform 0.2s;
+        }
+
+        .limbo-key:hover {
+            filter: invert(1) drop-shadow(0 0 20px var(--limbo-red));
+            transform: scale(1.2);
+        }
+
+        /* Effect when unlocked */
+        .flash-bang {
+            animation: flash 1s forwards;
+        }
+
+        @keyframes pulseText {
+            0% { opacity: 0.3; }
+            50% { opacity: 0.8; text-shadow: 0 0 20px var(--limbo-blue); }
+            100% { opacity: 0.3; }
+        }
+
+        @keyframes flash {
+            0% { background: #050505; }
+            50% { background: white; }
+            100% { background: transparent; opacity: 0; pointer-events: none; }
+        }
+
+        /* --- NEXUS OS CONTAINER (Hidden Initially) --- */
+        #nexus-interface {
+            opacity: 0;
+            transition: opacity 2s ease;
+            height: 100%;
+            display: flex;
+            pointer-events: none; /* Disabled until unlocked */
+        }
+
+        #nexus-interface.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        /* --- ORIGINAL BACKGROUND --- */
+        .bg-layer {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), 
                         url('https://images.unsplash.com/photo-1462331940025-496dfbfc7564?q=80&w=2022&auto=format&fit=crop') no-repeat center center fixed;
             background-size: cover;
-            color: white;
-            height: 100vh;
-            display: flex;
-            overflow: hidden;
             animation: bgBreath 15s infinite alternate;
+            z-index: -1;
         }
 
-        /* Background Pulse Animation */
         @keyframes bgBreath {
             0% { background-size: 100% auto; }
             100% { background-size: 105% auto; }
@@ -228,130 +307,137 @@
 </head>
 <body>
 
-    <nav>
-        <a onclick="showPage('home')" id="n-home" class="active">Home</a>
-        <a onclick="showPage('games')" id="n-games">Games</a>
-        <a onclick="showPage('settings')" id="n-settings">Settings</a>
-        <a onclick="showPage('about')" id="n-about">About</a>
-    </nav>
+    <div id="limbo-overlay">
+        <h1 class="limbo-text" id="limbo-msg">PROVE YOUR WORTH</h1>
+    </div>
 
-    <main>
-        
-        <div id="home" class="center-group page active-page">
-            <div class="search-wrapper">
-                <h1>Nexus</h1>
-                <input type="text" class="search-bar" placeholder="Enter URL or Search..." onkeydown="handleSearch(event)">
+    <div class="bg-layer"></div>
+    <div id="nexus-interface">
+        <nav>
+            <a onclick="showPage('home')" id="n-home" class="active">Home</a>
+            <a onclick="showPage('games')" id="n-games">Games</a>
+            <a onclick="showPage('settings')" id="n-settings">Settings</a>
+            <a onclick="showPage('about')" id="n-about">About</a>
+        </nav>
+
+        <main>
+            
+            <div id="home" class="center-group page active-page">
+                <div class="search-wrapper">
+                    <h1>Nexus</h1>
+                    <input type="text" class="search-bar" placeholder="Enter URL or Search..." onkeydown="handleSearch(event)">
+                </div>
+
+                <div class="app-grid">
+                    <div class="app-card" onclick="window.open('https://www.youtube.com', '_blank')">
+                        <img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png">
+                        <span>YouTube</span>
+                    </div>
+                    <div class="app-card" onclick="window.open('https://www.tiktok.com', '_blank')">
+                        <img src="https://cdn-icons-png.flaticon.com/512/3046/3046121.png">
+                        <span>TikTok</span>
+                    </div>
+                    <div class="app-card" onclick="window.open('https://discord.com/app', '_blank')">
+                        <img src="https://cdn-icons-png.flaticon.com/512/5968/5968756.png">
+                        <span>Discord</span>
+                    </div>
+                    <div class="app-card" onclick="window.open('https://soundcloud.com', '_blank')">
+                        <img src="https://cdn-icons-png.flaticon.com/512/145/145850.png">
+                        <span>SoundCloud</span>
+                    </div>
+                    <div class="app-card" onclick="window.open('https://www.instagram.com', '_blank')">
+                        <img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png">
+                        <span>Instagram</span>
+                    </div>
+                    <div class="app-card" onclick="window.open('https://www.twitch.tv', '_blank')">
+                        <img src="https://cdn-icons-png.flaticon.com/512/5968/5968819.png">
+                        <span>Twitch</span>
+                    </div>
+                    <div class="app-card" onclick="window.open('https://open.spotify.com', '_blank')">
+                        <img src="https://cdn-icons-png.flaticon.com/512/174/174872.png">
+                        <span>Spotify</span>
+                    </div>
+                    <div class="app-card" onclick="window.open('https://chat.openai.com', '_blank')">
+                        <img src="https://cdn-icons-png.flaticon.com/512/12222/12222588.png">
+                        <span>ChatGPT</span>
+                    </div>
+                </div>
             </div>
 
-            <div class="app-grid">
-                <div class="app-card" onclick="window.open('https://www.youtube.com', '_blank')">
-                    <img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png">
-                    <span>YouTube</span>
+            <div id="games" class="center-group page">
+                <div class="search-wrapper">
+                    <h1>Arcade</h1>
                 </div>
-                <div class="app-card" onclick="window.open('https://www.tiktok.com', '_blank')">
-                    <img src="https://cdn-icons-png.flaticon.com/512/3046/3046121.png">
-                    <span>TikTok</span>
-                </div>
-                <div class="app-card" onclick="window.open('https://discord.com/app', '_blank')">
-                    <img src="https://cdn-icons-png.flaticon.com/512/5968/5968756.png">
-                    <span>Discord</span>
-                </div>
-                <div class="app-card" onclick="window.open('https://soundcloud.com', '_blank')">
-                    <img src="https://cdn-icons-png.flaticon.com/512/145/145850.png">
-                    <span>SoundCloud</span>
-                </div>
-                <div class="app-card" onclick="window.open('https://www.instagram.com', '_blank')">
-                    <img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png">
-                    <span>Instagram</span>
-                </div>
-                <div class="app-card" onclick="window.open('https://www.twitch.tv', '_blank')">
-                    <img src="https://cdn-icons-png.flaticon.com/512/5968/5968819.png">
-                    <span>Twitch</span>
-                </div>
-                <div class="app-card" onclick="window.open('https://open.spotify.com', '_blank')">
-                    <img src="https://cdn-icons-png.flaticon.com/512/174/174872.png">
-                    <span>Spotify</span>
-                </div>
-                <div class="app-card" onclick="window.open('https://chat.openai.com', '_blank')">
-                    <img src="https://cdn-icons-png.flaticon.com/512/12222/12222588.png">
-                    <span>ChatGPT</span>
+                <div class="app-grid">
+                    <div class="app-card" onclick="window.open('https://poki.com', '_blank')">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/7/7a/Poki_Logo.png">
+                        <span>Poki</span>
+                    </div>
+                    <div class="app-card" onclick="window.open('https://classic.minecraft.net', '_blank')">
+                        <img src="https://cdn-icons-png.flaticon.com/512/5968/5968840.png">
+                        <span>Minecraft</span>
+                    </div>
+                    <div class="app-card" onclick="window.open('https://krunker.io', '_blank')">
+                        <img src="https://cdn-icons-png.flaticon.com/512/3408/3408506.png">
+                        <span>Krunker</span>
+                    </div>
+                    <div class="app-card" onclick="window.open('https://shellshock.io', '_blank')">
+                        <img src="https://cdn-icons-png.flaticon.com/512/2991/2991606.png">
+                        <span>ShellShock</span>
+                    </div>
+                    
+                    <div class="app-card" onclick="window.open('https://1v1.lol', '_blank')">
+                        <img src="https://cdn-icons-png.flaticon.com/512/15008/15008865.png">
+                        <span>1v1.LOL</span>
+                    </div>
+                    <div class="app-card" onclick="window.open('https://slope-game.github.io', '_blank')">
+                        <img src="https://cdn-icons-png.flaticon.com/512/5556/5556391.png">
+                        <span>Slope</span>
+                    </div>
+                    <div class="app-card" onclick="window.open('https://agar.io', '_blank')">
+                        <img src="https://cdn-icons-png.flaticon.com/512/5726/5726531.png">
+                        <span>Agar.io</span>
+                    </div>
+                    <div class="app-card" onclick="window.open('https://paper-io.com', '_blank')">
+                        <img src="https://cdn-icons-png.flaticon.com/512/3663/3663335.png">
+                        <span>Paper.io 2</span>
+                    </div>
+                    <div class="app-card" onclick="window.open('https://subwaysurfers.com', '_blank')">
+                        <img src="https://cdn-icons-png.flaticon.com/512/3408/3408545.png">
+                        <span>Subway Surf</span>
+                    </div>
+                    <div class="app-card" onclick="window.open('https://play2048.co', '_blank')">
+                        <img src="https://cdn-icons-png.flaticon.com/512/3063/3063822.png">
+                        <span>2048</span>
+                    </div>
+                    <div class="app-card" onclick="window.open('https://flappybird.io', '_blank')">
+                        <img src="https://cdn-icons-png.flaticon.com/512/826/826955.png">
+                        <span>Flappy Bird</span>
+                    </div>
+                    <div class="app-card" onclick="window.open('https://www.chess.com', '_blank')">
+                        <img src="https://cdn-icons-png.flaticon.com/512/4603/4603842.png">
+                        <span>Chess</span>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div id="games" class="center-group page">
-            <div class="search-wrapper">
-                <h1>Arcade</h1>
-            </div>
-            <div class="app-grid">
-                <div class="app-card" onclick="window.open('https://poki.com', '_blank')">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/7/7a/Poki_Logo.png">
-                    <span>Poki</span>
-                </div>
-                <div class="app-card" onclick="window.open('https://classic.minecraft.net', '_blank')">
-                    <img src="https://cdn-icons-png.flaticon.com/512/5968/5968840.png">
-                    <span>Minecraft</span>
-                </div>
-                <div class="app-card" onclick="window.open('https://krunker.io', '_blank')">
-                    <img src="https://cdn-icons-png.flaticon.com/512/3408/3408506.png">
-                    <span>Krunker</span>
-                </div>
-                <div class="app-card" onclick="window.open('https://shellshock.io', '_blank')">
-                    <img src="https://cdn-icons-png.flaticon.com/512/2991/2991606.png">
-                    <span>ShellShock</span>
-                </div>
-                
-                <div class="app-card" onclick="window.open('https://1v1.lol', '_blank')">
-                    <img src="https://cdn-icons-png.flaticon.com/512/15008/15008865.png">
-                    <span>1v1.LOL</span>
-                </div>
-                <div class="app-card" onclick="window.open('https://slope-game.github.io', '_blank')">
-                    <img src="https://cdn-icons-png.flaticon.com/512/5556/5556391.png">
-                    <span>Slope</span>
-                </div>
-                <div class="app-card" onclick="window.open('https://agar.io', '_blank')">
-                    <img src="https://cdn-icons-png.flaticon.com/512/5726/5726531.png">
-                    <span>Agar.io</span>
-                </div>
-                <div class="app-card" onclick="window.open('https://paper-io.com', '_blank')">
-                    <img src="https://cdn-icons-png.flaticon.com/512/3663/3663335.png">
-                    <span>Paper.io 2</span>
-                </div>
-                <div class="app-card" onclick="window.open('https://subwaysurfers.com', '_blank')">
-                    <img src="https://cdn-icons-png.flaticon.com/512/3408/3408545.png">
-                    <span>Subway Surf</span>
-                </div>
-                <div class="app-card" onclick="window.open('https://play2048.co', '_blank')">
-                    <img src="https://cdn-icons-png.flaticon.com/512/3063/3063822.png">
-                    <span>2048</span>
-                </div>
-                <div class="app-card" onclick="window.open('https://flappybird.io', '_blank')">
-                    <img src="https://cdn-icons-png.flaticon.com/512/826/826955.png">
-                    <span>Flappy Bird</span>
-                </div>
-                <div class="app-card" onclick="window.open('https://www.chess.com', '_blank')">
-                    <img src="https://cdn-icons-png.flaticon.com/512/4603/4603842.png">
-                    <span>Chess</span>
+            <div id="settings" class="center-group page">
+                <div class="search-wrapper">
+                    <h1>Settings</h1>
+                    <button class="search-bar" style="cursor:pointer" onclick="cloak()">Activate Tab Cloak</button>
+                    <p style="margin-top:20px; color:rgba(255,255,255,0.4)">Panic Button: Press <b>~</b> to hide</p>
                 </div>
             </div>
-        </div>
 
-        <div id="settings" class="center-group page">
-            <div class="search-wrapper">
-                <h1>Settings</h1>
-                <button class="search-bar" style="cursor:pointer" onclick="cloak()">Activate Tab Cloak</button>
-                <p style="margin-top:20px; color:rgba(255,255,255,0.4)">Panic Button: Press <b>~</b> to hide</p>
+            <div id="about" class="center-group page">
+                <div class="search-wrapper">
+                    <h1>About</h1>
+                    <p style="color:rgba(255,255,255,0.6)">Nexus OS v2.1 (Limbo Edition)</p>
+                </div>
             </div>
-        </div>
 
-        <div id="about" class="center-group page">
-            <div class="search-wrapper">
-                <h1>About</h1>
-                <p style="color:rgba(255,255,255,0.6)">Nexus OS v2.1</p>
-            </div>
-        </div>
-
-    </main>
+        </main>
+    </div>
 
     <div id="overlay">
         <button class="close-btn" onclick="exitApp()">X Close</button>
@@ -359,17 +445,79 @@
     </div>
 
     <script>
+        /* --- LIMBO LOGIC --- */
+        const limboOverlay = document.getElementById('limbo-overlay');
+        const limboMsg = document.getElementById('limbo-msg');
+        let keys = [];
+        let isUnlocked = false;
+
+        function initLimbo() {
+            // Spawn 8 keys
+            for(let i = 0; i < 8; i++) {
+                let key = document.createElement('div');
+                key.classList.add('limbo-key');
+                // Random Start Pos
+                key.style.top = Math.random() * 90 + '%';
+                key.style.left = Math.random() * 90 + '%';
+                
+                // Add click event
+                key.onclick = function() {
+                    if(!isUnlocked) unlockNexus();
+                };
+
+                limboOverlay.appendChild(key);
+                keys.push(key);
+            }
+            // Start movement loop
+            setInterval(moveKeys, 800);
+        }
+
+        function moveKeys() {
+            if(isUnlocked) return;
+            keys.forEach(key => {
+                const randomX = Math.floor(Math.random() * 90);
+                const randomY = Math.floor(Math.random() * 90);
+                key.style.left = randomX + '%';
+                key.style.top = randomY + '%';
+            });
+        }
+
+        function unlockNexus() {
+            isUnlocked = true;
+            limboMsg.innerText = "FOCUS";
+            limboMsg.style.color = "white";
+            limboMsg.style.textShadow = "0 0 30px white";
+            
+            // Remove Keys
+            keys.forEach(k => k.remove());
+
+            // Flash effect
+            limboOverlay.classList.add('flash-bang');
+
+            // Wait for flash then reveal OS
+            setTimeout(() => {
+                document.getElementById('nexus-interface').classList.add('active');
+            }, 1000);
+
+            setTimeout(() => {
+                limboOverlay.style.display = 'none';
+            }, 2000);
+        }
+
+        // Initialize Limbo on Load
+        window.onload = initLimbo;
+
+
+        /* --- EXISTING OS LOGIC --- */
         function showPage(id) {
-            // Reset animations
             document.querySelectorAll('.page').forEach(p => {
                 p.classList.remove('active-page');
                 p.style.animation = 'none';
             });
             document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
 
-            // Activate new page
             const activePage = document.getElementById(id);
-            activePage.classList.add('active-page');
+            activePage.class            activePage.classList.add('active-page');
             
             // Trigger animation reflow
             void activePage.offsetWidth; 
@@ -386,7 +534,6 @@
             }
         }
 
-        // Standard launcher for iframe-compatible sites
         function launch(url) {
             document.getElementById('frame').src = url;
             document.getElementById('overlay').style.display = 'block';
