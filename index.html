@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexus OS</title>
+    <title>Nexus OS | Commander</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;800&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -111,11 +111,21 @@
         .search-wrapper h1 {
             font-size: 64px;
             font-weight: 800;
-            margin-bottom: 25px;
+            margin-bottom: 5px;
             letter-spacing: -3px;
             background: linear-gradient(to bottom, #fff, #aaa);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+        }
+
+        .commander-tag {
+            font-size: 11px;
+            letter-spacing: 5px;
+            color: var(--accent);
+            margin-bottom: 25px;
+            font-weight: 800;
+            text-transform: uppercase;
+            opacity: 0.9;
         }
 
         .search-bar {
@@ -139,7 +149,7 @@
             box-shadow: 0 0 40px rgba(195, 166, 255, 0.2);
         }
 
-        /* App Grid */
+        /* FULL APP GRID */
         .app-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -163,6 +173,7 @@
             animation: popIn 0.5s ease forwards;
         }
 
+        /* FULL STAGGERED ANIMATION DELAYS */
         .app-card:nth-child(1) { animation-delay: 0.1s; }
         .app-card:nth-child(2) { animation-delay: 0.15s; }
         .app-card:nth-child(3) { animation-delay: 0.2s; }
@@ -171,6 +182,10 @@
         .app-card:nth-child(6) { animation-delay: 0.35s; }
         .app-card:nth-child(7) { animation-delay: 0.4s; }
         .app-card:nth-child(8) { animation-delay: 0.45s; }
+        .app-card:nth-child(9) { animation-delay: 0.5s; }
+        .app-card:nth-child(10) { animation-delay: 0.55s; }
+        .app-card:nth-child(11) { animation-delay: 0.6s; }
+        .app-card:nth-child(12) { animation-delay: 0.65s; }
 
         @keyframes popIn {
             from { opacity: 0; transform: scale(0.9) translateY(20px); }
@@ -185,35 +200,17 @@
         }
 
         .app-card img {
-            width: 50px;
-            height: 50px;
-            margin-bottom: 15px;
-            border-radius: 12px;
-            filter: drop-shadow(0 8px 15px rgba(0,0,0,0.4));
-            transition: 0.3s;
+            width: 50px; height: 50px; margin-bottom: 15px; border-radius: 12px;
+            filter: drop-shadow(0 8px 15px rgba(0,0,0,0.4)); transition: 0.3s;
         }
 
         .app-card:hover img { transform: scale(1.1) rotate(5deg); }
-
-        .app-card span {
-            font-size: 13px;
-            font-weight: 600;
-            color: rgba(255, 255, 255, 0.8);
-            letter-spacing: 0.5px;
-        }
+        .app-card span { font-size: 13px; font-weight: 600; color: rgba(255, 255, 255, 0.8); letter-spacing: 0.5px; }
 
         /* Overlay */
-        #overlay {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: #000; z-index: 1000; display: none;
-        }
+        #overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #000; z-index: 1000; display: none; }
         #overlay iframe { width: 100%; height: 100%; border: none; }
-        .close-btn {
-            position: fixed; top: 25px; right: 25px;
-            background: rgba(255,255,255,0.15); color: white; border: none;
-            padding: 12px 24px; border-radius: 12px; cursor: pointer;
-            backdrop-filter: blur(10px); font-weight: bold;
-        }
+        .close-btn { position: fixed; top: 25px; right: 25px; background: rgba(255,255,255,0.15); color: white; border: none; padding: 12px 24px; border-radius: 12px; cursor: pointer; backdrop-filter: blur(10px); font-weight: bold; }
 
         .page { display: none; width: 100%; }
         .active-page { display: flex !important; }
@@ -226,48 +223,27 @@
         <a onclick="showPage('home')" id="n-home" class="active">Home</a>
         <a onclick="showPage('games')" id="n-games">Games</a>
         <a onclick="showPage('settings')" id="n-settings">Settings</a>
+        <a onclick="showPage('about')" id="n-about">About</a>
     </nav>
 
     <main>
+        
         <div id="home" class="center-group page active-page">
             <div class="search-wrapper">
-                <h1>Nexus</h1>
+                <h1>Welcome, Commander</h1>
+                <div class="commander-tag">System Hub • Active</div>
                 <input type="text" class="search-bar" placeholder="Enter URL or Search..." onkeydown="handleSearch(event)">
             </div>
 
             <div class="app-grid">
-                <div class="app-card" onclick="window.open('https://www.youtube.com', '_blank')">
-                    <img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png">
-                    <span>YouTube</span>
-                </div>
-                <div class="app-card" onclick="window.open('https://www.tiktok.com', '_blank')">
-                    <img src="https://cdn-icons-png.flaticon.com/512/3046/3046121.png">
-                    <span>TikTok</span>
-                </div>
-                <div class="app-card" onclick="window.open('https://discord.com/app', '_blank')">
-                    <img src="https://cdn-icons-png.flaticon.com/512/5968/5968756.png">
-                    <span>Discord</span>
-                </div>
-                <div class="app-card" onclick="window.open('https://soundcloud.com', '_blank')">
-                    <img src="https://cdn-icons-png.flaticon.com/512/145/145850.png">
-                    <span>SoundCloud</span>
-                </div>
-                <div class="app-card" onclick="window.open('https://www.instagram.com', '_blank')">
-                    <img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png">
-                    <span>Instagram</span>
-                </div>
-                <div class="app-card" onclick="window.open('https://www.twitch.tv', '_blank')">
-                    <img src="https://cdn-icons-png.flaticon.com/512/5968/5968819.png">
-                    <span>Twitch</span>
-                </div>
-                <div class="app-card" onclick="window.open('https://open.spotify.com', '_blank')">
-                    <img src="https://cdn-icons-png.flaticon.com/512/174/174872.png">
-                    <span>Spotify</span>
-                </div>
-                <div class="app-card" onclick="window.open('https://chat.openai.com', '_blank')">
-                    <img src="https://cdn-icons-png.flaticon.com/512/12222/12222588.png">
-                    <span>ChatGPT</span>
-                </div>
+                <div class="app-card" onclick="window.open('https://www.youtube.com', '_blank')"><img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png"><span>YouTube</span></div>
+                <div class="app-card" onclick="window.open('https://www.tiktok.com', '_blank')"><img src="https://cdn-icons-png.flaticon.com/512/3046/3046121.png"><span>TikTok</span></div>
+                <div class="app-card" onclick="window.open('https://discord.com/app', '_blank')"><img src="https://cdn-icons-png.flaticon.com/512/5968/5968756.png"><span>Discord</span></div>
+                <div class="app-card" onclick="window.open('https://soundcloud.com', '_blank')"><img src="https://cdn-icons-png.flaticon.com/512/145/145850.png"><span>SoundCloud</span></div>
+                <div class="app-card" onclick="window.open('https://www.instagram.com', '_blank')"><img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png"><span>Instagram</span></div>
+                <div class="app-card" onclick="window.open('https://www.twitch.tv', '_blank')"><img src="https://cdn-icons-png.flaticon.com/512/5968/5968819.png"><span>Twitch</span></div>
+                <div class="app-card" onclick="window.open('https://open.spotify.com', '_blank')"><img src="https://cdn-icons-png.flaticon.com/512/174/174872.png"><span>Spotify</span></div>
+                <div class="app-card" onclick="window.open('https://chat.openai.com', '_blank')"><img src="https://cdn-icons-png.flaticon.com/512/12222/12222588.png"><span>ChatGPT</span></div>
             </div>
         </div>
 
@@ -276,38 +252,18 @@
                 <h1>Arcade</h1>
             </div>
             <div class="app-grid">
-                <div class="app-card" onclick="window.open('https://poki.com', '_blank')">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/7/7a/Poki_Logo.png">
-                    <span>Poki</span>
-                </div>
-                <div class="app-card" onclick="window.open('https://classic.minecraft.net', '_blank')">
-                    <img src="https://cdn-icons-png.flaticon.com/512/5968/5968840.png">
-                    <span>Minecraft</span>
-                </div>
-                <div class="app-card" onclick="window.open('https://krunker.io', '_blank')">
-                    <img src="https://cdn-icons-png.flaticon.com/512/3408/3408506.png">
-                    <span>Krunker</span>
-                </div>
-                <div class="app-card" onclick="window.open('https://1v1.lol', '_blank')">
-                    <img src="https://cdn-icons-png.flaticon.com/512/15008/15008865.png">
-                    <span>1v1.LOL</span>
-                </div>
-                <div class="app-card" onclick="window.open('https://slope-game.github.io', '_blank')">
-                    <img src="https://cdn-icons-png.flaticon.com/512/5556/5556391.png">
-                    <span>Slope</span>
-                </div>
-                <div class="app-card" onclick="window.open('https://agar.io', '_blank')">
-                    <img src="https://cdn-icons-png.flaticon.com/512/5726/5726531.png">
-                    <span>Agar.io</span>
-                </div>
-                <div class="app-card" onclick="window.open('https://paper-io.com', '_blank')">
-                    <img src="https://cdn-icons-png.flaticon.com/512/3663/3663335.png">
-                    <span>Paper.io 2</span>
-                </div>
-                <div class="app-card" onclick="window.open('https://www.chess.com', '_blank')">
-                    <img src="https://cdn-icons-png.flaticon.com/512/4603/4603842.png">
-                    <span>Chess</span>
-                </div>
+                <div class="app-card" onclick="window.open('https://poki.com', '_blank')"><img src="https://upload.wikimedia.org/wikipedia/commons/7/7a/Poki_Logo.png"><span>Poki</span></div>
+                <div class="app-card" onclick="window.open('https://classic.minecraft.net', '_blank')"><img src="https://cdn-icons-png.flaticon.com/512/5968/5968840.png"><span>Minecraft</span></div>
+                <div class="app-card" onclick="window.open('https://krunker.io', '_blank')"><img src="https://cdn-icons-png.flaticon.com/512/3408/3408506.png"><span>Krunker</span></div>
+                <div class="app-card" onclick="window.open('https://shellshock.io', '_blank')"><img src="https://cdn-icons-png.flaticon.com/512/2991/2991606.png"><span>ShellShock</span></div>
+                <div class="app-card" onclick="window.open('https://1v1.lol', '_blank')"><img src="https://cdn-icons-png.flaticon.com/512/15008/15008865.png"><span>1v1.LOL</span></div>
+                <div class="app-card" onclick="window.open('https://slope-game.github.io', '_blank')"><img src="https://cdn-icons-png.flaticon.com/512/5556/5556391.png"><span>Slope</span></div>
+                <div class="app-card" onclick="window.open('https://agar.io', '_blank')"><img src="https://cdn-icons-png.flaticon.com/512/5726/5726531.png"><span>Agar.io</span></div>
+                <div class="app-card" onclick="window.open('https://paper-io.com', '_blank')"><img src="https://cdn-icons-png.flaticon.com/512/3663/3663335.png"><span>Paper.io 2</span></div>
+                <div class="app-card" onclick="window.open('https://subwaysurfers.com', '_blank')"><img src="https://cdn-icons-png.flaticon.com/512/3408/3408545.png"><span>Subway Surf</span></div>
+                <div class="app-card" onclick="window.open('https://play2048.co', '_blank')"><img src="https://cdn-icons-png.flaticon.com/512/3063/3063822.png"><span>2048</span></div>
+                <div class="app-card" onclick="window.open('https://flappybird.io', '_blank')"><img src="https://cdn-icons-png.flaticon.com/512/826/826955.png"><span>Flappy Bird</span></div>
+                <div class="app-card" onclick="window.open('https://www.chess.com', '_blank')"><img src="https://cdn-icons-png.flaticon.com/512/4603/4603842.png"><span>Chess</span></div>
             </div>
         </div>
 
@@ -319,51 +275,31 @@
             </div>
         </div>
 
+        <div id="about" class="center-group page">
+            <div class="search-wrapper">
+                <h1>About</h1>
+                <p style="color:rgba(255,255,255,0.6)">Nexus OS v2.1 • Commander Edition</p>
+            </div>
+        </div>
+
     </main>
 
-    <div id="overlay">
-        <button class="close-btn" onclick="exitApp()">X Close</button>
-        <iframe id="frame" src=""></iframe>
-    </div>
+    <div id="overlay"><button class="close-btn" onclick="exitApp()">X Close</button><iframe id="frame" src=""></iframe></div>
 
     <script>
         function showPage(id) {
-            document.querySelectorAll('.page').forEach(p => {
-                p.classList.remove('active-page');
-                p.style.animation = 'none';
-            });
+            document.querySelectorAll('.page').forEach(p => { p.classList.remove('active-page'); p.style.animation = 'none'; });
             document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
-
             const activePage = document.getElementById(id);
             activePage.classList.add('active-page');
-            
             void activePage.offsetWidth; 
             activePage.style.animation = 'fadeInUp 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards';
-
             document.getElementById('n-'+id).classList.add('active');
         }
 
-        function handleSearch(e) {
-            if (e.key === 'Enter') {
-                let val = e.target.value;
-                let url = val.includes('.') ? 'https://' + val : 'https://www.google.com/search?q=' + val;
-                window.open(url, '_blank');
-            }
-        }
-
-        function exitApp() {
-            document.getElementById('overlay').style.display = 'none';
-            document.getElementById('frame').src = '';
-        }
-
-        function cloak() {
-            document.title = "My Drive - Google Drive";
-            let link = document.querySelector("link[rel*='icon']") || document.createElement('link');
-            link.href = 'https://ssl.gstatic.com/images/branding/product/1x/drive_2020q4_32dp.png';
-            document.getElementsByTagName('head')[0].appendChild(link);
-            alert("Cloak Active");
-        }
-
+        function handleSearch(e) { if (e.key === 'Enter') { let val = e.target.value; window.open(val.includes('.') ? 'https://' + val : 'https://www.google.com/search?q=' + val, '_blank'); } }
+        function exitApp() { document.getElementById('overlay').style.display = 'none'; document.getElementById('frame').src = ''; }
+        function cloak() { document.title = "My Drive - Google Drive"; let link = document.querySelector("link[rel*='icon']") || document.createElement('link'); link.href = 'https://ssl.gstatic.com/images/branding/product/1x/drive_2020q4_32dp.png'; document.getElementsByTagName('head')[0].appendChild(link); alert("Cloak Active"); }
         window.onkeydown = (e) => { if(e.key === '~') window.location.href="https://classroom.google.com"; };
     </script>
 </body>
