@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexus OS - Limbo Master</title>
+    <title>Nexus OS - Limbo Focus</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;800&family=Orbitron:wght@700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -15,33 +15,34 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
         body { background: #000; color: white; height: 100vh; overflow: hidden; }
 
-        /* --- LIMBO GAME --- */
+        /* --- LIMBO GAME OVERLAY --- */
         #limbo-overlay {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background: #020202; z-index: 5000; display: flex;
-            justify-content: center; align-items: center;
+            flex-direction: column; justify-content: center; align-items: center;
         }
 
-        #key-anchor { position: relative; width: 1px; height: 1px; }
+        #limbo-msg {
+            font-family: 'Orbitron'; font-size: 24px; color: #333; margin-bottom: 40px; letter-spacing: 5px;
+        }
 
-        .limbo-block {
-            position: absolute;
-            width: 70px; height: 70px;
-            background: #111;
-            border: 2px solid #333;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: transform 0.2s, filter 0.4s, border-color 0.4s;
+        #key-anchor {
+            position: relative; width: 340px; height: 220px;
+        }
+
+        .limbo-key {
+            position: absolute; width: 70px; height: 70px;
+            background: #1a1a1a; border: 2px solid #333; border-radius: 12px;
+            cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex; justify-content: center; align-items: center;
-            margin-left: -35px; margin-top: -35px;
-            overflow: hidden;
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.8);
         }
 
-        .limbo-block img {
-            width: 80%; height: 80%;
-            object-fit: contain;
-            filter: grayscale(1) brightness(0.2); /* Red/Dark state */
-            transition: filter 0.4s;
+        /* The "Key" inside the block */
+        .limbo-key::after {
+            content: ''; width: 25px; height: 25px; 
+            border: 4px solid currentColor; border-radius: 50%;
+            display: block; opacity: 0.5;
         }
 
         .flash-bang { animation: flashEffect 0.8s forwards; }
@@ -72,6 +73,7 @@
 <body>
 
     <div id="limbo-overlay">
+        <div id="limbo-msg">FOCUS</div>
         <div id="key-anchor"></div>
     </div>
 
@@ -111,85 +113,104 @@
 
     <script>
         const anchor = document.getElementById('key-anchor');
+        const limboMsg = document.getElementById('limbo-msg');
+        const gridSpots = [];
         let blocks = [];
         let targetIndex = 0;
         let isWaiting = false;
-        let angle = 0;
-        let shuffleMode = false;
 
         function initLimbo() {
             anchor.innerHTML = '';
             blocks = [];
+            gridSpots.length = 0;
             targetIndex = Math.floor(Math.random() * 8);
             isWaiting = false;
-            shuffleMode = false;
-            angle = 0;
+            limboMsg.innerText = "FOCUS";
+            limboMsg.style.color = "#333";
 
+            // Define 8 fixed grid spots
             for (let i = 0; i < 8; i++) {
-                const block = document.createElement('div');
-                block.classList.add('limbo-block');
-                const img = document.createElement('img');
-                img.src = 'https://raw.githubusercontent.com/MindCap/Limbo-Keys/main/key_red.png';
-                // Fallback image if github one fails
-                img.onerror = () => { img.src = 'https://cdn-icons-png.flaticon.com/512/808/808488.png'; };
-                
-                block.appendChild(img);
-                block.style.left = ((i % 4) - 1.5) * 90 + 'px';
-                block.style.top = (Math.floor(i / 4) - 0.5) * 110 + 'px';
-                block.onclick = () => checkBlock(i);
-                anchor.appendChild(block);
-                blocks.push(block);
+                gridSpots.push({
+                    x: (i % 4) * 90,
+                    y: Math.floor(i / 4) * 110
+                });
+            }
+
+            // Spawn Blocks (Keys) at those spots
+            for (let i = 0; i < 8; i++) {
+                const b = document.createElement('div');
+                b.classList.add('limbo-key');
+                b.style.left = gridSpots[i].x + 'px';
+                b.style.top = gridSpots[i].y + 'px';
+                b.style.color = "#555"; // Gray state
+                b.dataset.currentSpot = i;
+                b.onclick = () => checkBlock(i);
+                anchor.appendChild(b);
+                blocks.push(b);
             }
             setTimeout(revealTarget, 1000);
         }
 
         function revealTarget() {
-            // Flash Green
-            blocks[targetIndex].style.borderColor = '#55ff55';
-            blocks[targetIndex].querySelector('img').style.filter = 'grayscale(0) sepia(1) hue-rotate(70deg) brightness(1.2) saturate(10)';
+            // Flash ONLY the right one Green
+            blocks[targetIndex].style.color = "#55ff55";
+            blocks[targetIndex].style.borderColor = "#55ff55";
+            blocks[targetIndex].style.boxShadow = "0 0 20px #55ff55";
             
             setTimeout(() => {
-                // All turn DARK RED/Hard to see
+                // All turn DARK RED for the shuffle
                 blocks.forEach(b => {
-                    b.style.borderColor = '#300';
-                    b.querySelector('img').style.filter = 'grayscale(0) sepia(1) hue-rotate(-50deg) brightness(0.15) saturate(5)';
+                    b.style.color = "#4a0000";
+                    b.style.borderColor = "#4a0000";
+                    b.style.boxShadow = "none";
                 });
-                startOrbitalShuffle();
+                startSwapping();
             }, 1200);
         }
 
-        function startOrbitalShuffle() {
-            shuffleMode = true;
-            const radius = 150;
-            let speed = 0.02;
-            
-            const loop = setInterval(() => {
-                if (!shuffleMode) { clearInterval(loop); return; }
-                angle += speed;
-                blocks.forEach((b, i) => {
-                    const offset = (i * Math.PI * 2) / 8;
-                    b.style.left = Math.cos(angle + offset) * radius + 'px';
-                    b.style.top = Math.sin(angle + offset) * radius + 'px';
-                });
-                
-                if (angle > 7) { // roughly 1.5 circles
-                    shuffleMode = false;
-                    finalizeColors();
+        function startSwapping() {
+            let swapCount = 0;
+            const maxSwaps = 20;
+
+            const shuffle = setInterval(() => {
+                // Pick 2 random blocks to swap spots
+                let idx1 = Math.floor(Math.random() * 8);
+                let idx2 = Math.floor(Math.random() * 8);
+                while(idx1 === idx2) idx2 = Math.floor(Math.random() * 8);
+
+                let spot1 = blocks[idx1].dataset.currentSpot;
+                let spot2 = blocks[idx2].dataset.currentSpot;
+
+                // Animate them switching to each other's grid positions
+                blocks[idx1].style.left = gridSpots[spot2].x + 'px';
+                blocks[idx1].style.top = gridSpots[spot2].y + 'px';
+                blocks[idx2].style.left = gridSpots[spot1].x + 'px';
+                blocks[idx2].style.top = gridSpots[spot1].y + 'px';
+
+                // Update their stored position
+                blocks[idx1].dataset.currentSpot = spot2;
+                blocks[idx2].dataset.currentSpot = spot1;
+
+                swapCount++;
+                if (swapCount >= maxSwaps) {
+                    clearInterval(shuffle);
+                    setTimeout(finishLimbo, 500);
                 }
-            }, 16);
+            }, 300);
         }
 
-        function finalizeColors() {
-            const filters = [
-                'hue-rotate(0deg)', 'hue-rotate(90deg)', 'hue-rotate(180deg)', 
-                'hue-rotate(270deg)', 'hue-rotate(45deg)', 'hue-rotate(210deg)', 
-                'grayscale(0) brightness(1.5)', 'hue-rotate(320deg)'
-            ];
+        function finishLimbo() {
+            const rainbow = ['#ff5555', '#55ff55', '#5555ff', '#ffff55', '#ff55ff', '#55ffff', '#ffa500', '#ffffff'];
             
+            // All blocks turn different colors at the end
             blocks.forEach((b, i) => {
-                b.querySelector('img').style.filter = 'grayscale(0) ' + filters[i] + ' brightness(1)';
-                b.style.borderColor = 'rgba(255,255,255,0.3)';
+                b.style.color = rainbow[i];
+                b.style.borderColor = rainbow[i];
+                b.style.boxShadow = `0 0 10px ${rainbow[i]}`;
             });
+
+            limboMsg.innerText = "CHOOSE";
+            limboMsg.style.color = "#fff";
             isWaiting = true;
         }
 
@@ -202,7 +223,9 @@
                     document.getElementById('nexus-interface').classList.add('active');
                 }, 400);
             } else {
-                initLimbo();
+                limboMsg.innerText = "RETRYING...";
+                limboMsg.style.color = "red";
+                setTimeout(initLimbo, 1000);
             }
         }
 
@@ -215,8 +238,15 @@
             document.getElementById('n-'+id).classList.add('active');
         }
 
-        function handleSearch(e) { if (e.key === 'Enter') window.open('https://google.com/search?q=' + e.target.value, '_blank'); }
-        function cloak() { document.title = "Google Drive"; alert("CLOAK ACTIVE"); }
+        function handleSearch(e) {
+            if (e.key === 'Enter') window.open('https://google.com/search?q=' + e.target.value, '_blank');
+        }
+
+        function cloak() {
+            document.title = "Google Drive";
+            alert("CLOAK ACTIVE");
+        }
+
         window.onkeydown = (e) => { if(e.key === '~') window.location.href="https://classroom.google.com"; };
     </script>
 </body>
