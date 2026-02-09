@@ -1,739 +1,347 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Z-Kit | Nexus Official</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <script src="https://cdn.scaledrone.com/scaledrone.min.js"></script>
-    <style>
-        :root {
-            --zk-bg: #09090b;
-            --zk-surface: #121214;
-            --zk-nav: #000000;
-            --zk-border: #27272a;
-            --zk-text: #ffffff;
-            --zk-dim: #a1a1aa;
-            --zk-accent: #ffffff;
-            --zk-glow: rgba(255, 255, 255, 0.1);
-            --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        body {
-            background-color: var(--zk-bg);
-            color: var(--zk-text);
-            font-family: 'Inter', sans-serif;
-            line-height: 1.5;
-            overflow-x: hidden;
-            animation: pageEntry 0.6s ease-out;
-        }
-
-        @keyframes pageEntry {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        nav {
-            position: fixed;
-            top: 50%;
-            left: 30px;
-            transform: translateY(-50%);
-            display: flex;
-            flex-direction: column;
-            z-index: 2000;
-        }
-
-        .zk-brand {
-            font-weight: 900;
-            font-size: 26px;
-            margin-bottom: 28px;
-            background: linear-gradient(to right, #fff, #666);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .zk-menu {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .zk-link {
-            color: var(--zk-dim);
-            text-decoration: none;
-            font-size: 18px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-            padding: 6px 0;
-            position: relative;
-        }
-
-        .zk-link:hover,
-        .zk-link.active {
-            color: var(--zk-text);
-        }
-
-        .zk-link.active::after {
-            content: '';
-            position: absolute;
-            left: -12px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 4px;
-            height: 22px;
-            border-radius: 999px;
-            background: #fff;
-        }
-
-        .zk-hero {
-            padding: 140px 40px 100px 190px;
-            text-align: left;
-            background: radial-gradient(circle at center, #18181b 0%, #09090b 100%);
-        }
-
-        .zk-hero h1 {
-            font-size: 72px;
-            font-weight: 800;
-            letter-spacing: -2px;
-            margin-bottom: 12px;
-        }
-
-        .zk-hero p {
-            color: var(--zk-dim);
-            font-size: 18px;
-        }
-
-        .zk-search-box {
-            max-width: 600px;
-            margin-top: 35px;
-            position: relative;
-        }
-
-        .zk-main-input {
-            width: 100%;
-            padding: 16px 26px;
-            border-radius: 10px;
-            background: var(--zk-surface);
-            border: 1px solid var(--zk-border);
-            color: #fff;
-            font-size: 16px;
-            outline: none;
-            transition: 0.3s;
-        }
-
-        .zk-main-input:focus {
-            border-color: #52525b;
-            box-shadow: 0 0 24px rgba(255,255,255,0.06);
-        }
-
-        .zk-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 30px 40px 90px 190px;
-        }
-
-        .zk-section-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 30px;
-            border-bottom: 1px solid var(--zk-border);
-            padding-bottom: 10px;
-        }
-
-        .zk-section-header h2 {
-            font-size: 15px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: var(--zk-dim);
-        }
-
-        .zk-app-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
-            gap: 24px;
-            margin-bottom: 80px;
-        }
-
-        .zk-app-card {
-            background: var(--zk-surface);
-            border: 1px solid var(--zk-border);
-            border-radius: 14px;
-            padding: 28px;
-            text-decoration: none;
-            color: #fff;
-            display: flex;
-            flex-direction: column;
-            gap: 18px;
-            cursor: pointer;
-            transition: var(--transition);
-            box-shadow: 0 0 0 1px transparent;
-        }
-
-        .zk-app-card img {
-            width: 60px;
-            height: 60px;
-        }
-
-        .zk-app-card h3 {
-            font-size: 20px;
-        }
-
-        .zk-app-card:hover {
-            transform: translateY(-3px);
-            border-color: #fff;
-            box-shadow: 0 0 30px var(--zk-glow);
-        }
-
-        .zk-game-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 28px;
-        }
-
-        .zk-game-item {
-            border-radius: 14px;
-            overflow: hidden;
-            position: relative;
-            aspect-ratio: 16/9;
-            border: 1px solid var(--zk-border);
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .zk-game-item img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: 0.5s;
-        }
-
-        .zk-game-item:hover {
-            transform: scale(1.02);
-            border-color: #fff;
-        }
-
-        .zk-game-item:hover img {
-            filter: brightness(0.7);
-        }
-
-        .zk-game-meta {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            padding: 16px;
-            background: linear-gradient(transparent, rgba(0,0,0,0.9));
-            color: #fff;
-            font-weight: 700;
-            font-size: 18px;
-        }
-
-        #chat-drawer {
-            position: fixed;
-            right: -400px;
-            top: 0;
-            width: 360px;
-            height: 100vh;
-            background: #000;
-            border-left: 1px solid var(--zk-border);
-            transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            z-index: 1500;
-            display: flex;
-            flex-direction: column;
-        }
-
-        #chat-drawer.open {
-            right: 0;
-        }
-
-        .chat-view {
-            flex: 1;
-            padding: 22px;
-            overflow-y: auto;
-        }
-
-        .chat-input-row {
-            padding: 20px;
-            border-top: 1px solid var(--zk-border);
-            background: #0a0a0a;
-        }
-
-        .zk-btn {
-            width: 100%;
-            margin-top: 10px;
-            padding: 13px;
-            background: #fff;
-            color: #000;
-            border: none;
-            border-radius: 10px;
-            font-weight: 800;
-            cursor: pointer;
-            font-size: 14px;
-        }
-
-        .zk-btn:hover {
-            background: #e5e5e5;
-        }
-
-        .zk-dim {
-            color: var(--zk-dim);
-        }
-
-        #settings-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.9);
-            z-index: 3000;
-            display: none;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .settings-card {
-            background: var(--zk-surface);
-            border: 1px solid var(--zk-border);
-            width: 480px;
-            padding: 40px;
-            border-radius: 18px;
-        }
-
-        .settings-card h2 {
-            margin-bottom: 25px;
-            font-size: 22px;
-        }
-
-        .setting-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 22px;
-            font-size: 15px;
-        }
-
-        #music-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.96);
-            z-index: 3500;
-            display: none;
-            flex-direction: column;
-            padding: 30px 40px;
-        }
-
-        .music-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 25px;
-        }
-
-        .music-title {
-            font-size: 22px;
-            font-weight: 800;
-        }
-
-        .music-search-wrap {
-            position: relative;
-            width: 320px;
-        }
-
-        #music-search {
-            width: 100%;
-            padding: 10px 14px;
-            border-radius: 999px;
-            border: 1px solid var(--zk-border);
-            background: #050509;
-            color: #fff;
-            outline: none;
-            font-size: 14px;
-        }
-
-        #music-results {
-            position: absolute;
-            top: 110%;
-            right: 0;
-            width: 100%;
-            background: #050509;
-            border: 1px solid var(--zk-border);
-            border-radius: 12px;
-            max-height: 260px;
-            overflow-y: auto;
-            display: none;
-            z-index: 10;
-        }
-
-        .music-result-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 8px 10px;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .music-result-item:hover {
-            background: #111827;
-        }
-
-        .music-result-item img {
-            width: 40px;
-            height: 40px;
-            border-radius: 8px;
-            object-fit: cover;
-        }
-
-        .music-result-text {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .music-result-title {
-            font-size: 14px;
-        }
-
-        .music-result-artist {
-            font-size: 12px;
-            color: var(--zk-dim);
-        }
-
-        .music-body {
-            display: flex;
-            gap: 30px;
-            margin-top: 10px;
-            flex: 1;
-        }
-
-        .music-main-card {
-            flex: 1;
-            display: flex;
-            gap: 24px;
-            align-items: flex-start;
-        }
-
-        .music-main-card img {
-            width: 260px;
-            height: 260px;
-            border-radius: 18px;
-            object-fit: cover;
-            border: 1px solid var(--zk-border);
-        }
-
-        .music-main-info {
-            display: flex;
-            flex-direction: column;
-            gap: 14px;
-        }
-
-        .music-main-title {
-            font-size: 24px;
-            font-weight: 800;
-        }
-
-        .music-main-artist {
-            font-size: 16px;
-            color: var(--zk-dim);
-        }
-
-        .music-controls {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .music-lyrics-toggle {
-            padding: 8px 14px;
-            border-radius: 999px;
-            border: 1px solid var(--zk-border);
-            background: #050509;
-            color: #fff;
-            cursor: pointer;
-            font-size: 13px;
-        }
-
-        .music-lyrics-toggle:hover {
-            background: #111827;
-        }
-
-        #music-lyrics {
-            margin-top: 10px;
-            max-height: 220px;
-            overflow-y: auto;
-            font-size: 14px;
-            line-height: 1.6;
-            white-space: pre-wrap;
-            border-top: 1px solid var(--zk-border);
-            padding-top: 10px;
-        }
-
-        .music-close {
-            cursor: pointer;
-            font-size: 14px;
-            color: var(--zk-dim);
-        }
-
-        @media (max-width: 900px) {
-            nav {
-                top: 10px;
-                left: 10px;
-                transform: none;
-                flex-direction: row;
-                align-items: center;
-                gap: 16px;
-                background: rgba(0,0,0,0.7);
-                padding: 10px 14px;
-                border-radius: 999px;
-            }
-
-            .zk-brand {
-                margin-bottom: 0;
-                margin-right: 10px;
-                font-size: 20px;
-            }
-
-            .zk-menu {
-                flex-direction: row;
-                gap: 12px;
-            }
-
-            .zk-link.active::after {
-                display: none;
-            }
-
-            .zk-hero {
-                padding: 100px 16px 50px 16px;
-                text-align: left;
-            }
-
-            .zk-container {
-                padding: 20px 16px 70px 16px;
-            }
-
-            #chat-drawer {
-                width: 100%;
-            }
-
-            #music-overlay {
-                padding: 20px 16px;
-            }
-
-            .music-body {
-                flex-direction: column;
-            }
-
-            .music-main-card {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .music-main-card img {
-                width: 220px;
-                height: 220px;
-            }
-
-            .music-main-info {
-                align-items: center;
-                text-align: center;
-            }
-
-            .music-search-wrap {
-                width: 220px;
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nexus Z‑Kit</title>
+
+<style>
+/* ---------------------------------------------------
+   GLOBAL THEME
+--------------------------------------------------- */
+:root {
+    --bg: #0d0d0f;
+    --card: #151518;
+    --accent: #4f7dff;
+    --text: #e6e6e6;
+    --dim: #8a8a8a;
+    --border: #1f1f22;
+    --radius: 14px;
+    --shadow: 0 0 25px rgba(0,0,0,0.35);
+    --transition: 0.25s ease;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Inter", sans-serif;
+}
+
+body {
+    background: var(--bg);
+    color: var(--text);
+    overflow-x: hidden;
+}
+
+/* ---------------------------------------------------
+   SIDEBAR
+--------------------------------------------------- */
+#sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 78px;
+    height: 100vh;
+    background: #111114;
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 25px;
+    gap: 25px;
+}
+
+.side-btn {
+    width: 52px;
+    height: 52px;
+    background: var(--card);
+    border-radius: var(--radius);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.side-btn:hover {
+    background: #1d1d21;
+}
+
+/* ---------------------------------------------------
+   HERO SECTION
+--------------------------------------------------- */
+#hero {
+    margin-left: 110px;
+    padding: 80px 40px;
+}
+
+#hero h1 {
+    font-size: 42px;
+    font-weight: 700;
+}
+
+#hero p {
+    margin-top: 10px;
+    font-size: 18px;
+    color: var(--dim);
+}
+
+/* ---------------------------------------------------
+   APP GRID
+--------------------------------------------------- */
+#apps {
+    margin-left: 110px;
+    padding: 20px 40px 80px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 25px;
+}
+
+.app-card {
+    background: var(--card);
+    padding: 25px;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.app-card:hover {
+    transform: translateY(-4px);
+    background: #1b1b1f;
+}
+
+/* ---------------------------------------------------
+   CHAT DRAWER
+--------------------------------------------------- */
+#chat-drawer {
+    position: fixed;
+    right: -350px;
+    top: 0;
+    width: 350px;
+    height: 100vh;
+    background: #111114;
+    border-left: 1px solid var(--border);
+    transition: var(--transition);
+    display: flex;
+    flex-direction: column;
+}
+
+#chat-drawer.open {
+    right: 0;
+}
+
+#cv {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+}
+
+#msg {
+    width: 100%;
+    padding: 15px;
+    border: none;
+    outline: none;
+    background: var(--card);
+    color: var(--text);
+}
+
+/* ---------------------------------------------------
+   SETTINGS OVERLAY
+--------------------------------------------------- */
+#settings-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.65);
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+.settings-box {
+    background: var(--card);
+    padding: 35px;
+    border-radius: var(--radius);
+    width: 350px;
+    box-shadow: var(--shadow);
+}
+
+/* ---------------------------------------------------
+   MUSIC OVERLAY
+--------------------------------------------------- */
+#music-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.65);
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+.music-box {
+    background: var(--card);
+    width: 380px;
+    padding: 30px;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+}
+
+#music-results {
+    background: #1a1a1d;
+    margin-top: 10px;
+    border-radius: var(--radius);
+    display: none;
+}
+
+.music-result-item {
+    display: flex;
+    padding: 10px;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.music-result-item:hover {
+    background: #222226;
+}
+
+.music-result-item img {
+    width: 48px;
+    height: 48px;
+    border-radius: 8px;
+    margin-right: 10px;
+}
+
+#music-lyrics {
+    margin-top: 15px;
+    padding: 10px;
+    background: #1a1a1d;
+    border-radius: var(--radius);
+    display: none;
+    white-space: pre-wrap;
+}
+</style>
 </head>
+
 <body>
 
-    <nav>
-        <div class="zk-brand">NEXUS</div>
-        <div class="zk-menu">
-            <a class="zk-link active" href="#">Home</a>
-            <a class="zk-link" onclick="toggleChat()">Community</a>
-            <a class="zk-link" href="games.html" target="_blank">Games</a>
-            <a class="zk-link" href="https://discord.com" target="_blank">Discord</a>
-            <a class="zk-link" onclick="toggleSettings()">Settings</a>
-            <a class="zk-link" onclick="toggleMusic()">Music</a>
-        </div>
-    </nav>
+<!-- ---------------------------------------------------
+     SIDEBAR
+--------------------------------------------------- -->
+<div id="sidebar">
+    <div class="side-btn" onclick="toggleChat()">💬</div>
+    <div class="side-btn" onclick="toggleMusic()">🎵</div>
+    <div class="side-btn" onclick="toggleSettings()">⚙️</div>
+</div>
 
-    <div class="zk-hero">
-        <h1>Z-Kit Framework</h1>
-        <p>The absolute standard in unblocked exploration.</p>
-        <div class="zk-search-box">
-            <input
-                type="text"
-                class="zk-main-input"
-                placeholder="Search applications or game titles..."
-                onkeydown="if(event.key==='Enter') window.open('https://google.com/search?q='+this.value)"
-            >
-        </div>
+<!-- ---------------------------------------------------
+     HERO
+--------------------------------------------------- -->
+<section id="hero">
+    <h1>Nexus Z‑Kit</h1>
+    <p>Your personal command center — rebuilt, refined, and upgraded.</p>
+</section>
+
+<!-- ---------------------------------------------------
+     APPS
+--------------------------------------------------- -->
+<section id="apps">
+    <div class="app-card">Community Chat</div>
+    <div class="app-card">Music Player</div>
+    <div class="app-card">Settings</div>
+    <div class="app-card">Games Hub</div>
+</section>
+
+<!-- ---------------------------------------------------
+     CHAT DRAWER
+--------------------------------------------------- -->
+<div id="chat-drawer">
+    <div id="cv"></div>
+    <input id="msg" placeholder="Type a message..." onkeydown="if(event.key==='Enter') send()">
+</div>
+
+<!-- ---------------------------------------------------
+     SETTINGS OVERLAY
+--------------------------------------------------- -->
+<div id="settings-overlay">
+    <div class="settings-box">
+        <h2>Settings</h2>
+        <p style="color:var(--dim); margin-top:10px;">More settings coming soon.</p>
     </div>
+</div>
 
-    <div class="zk-container" id="home-sector">
-        <div class="zk-section-header"><h2>Verified Applications</h2></div>
-        <div class="zk-app-grid">
-            <a class="zk-app-card" href="https://youtube.com" target="_blank">
-                <img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png">
-                <h3>YouTube</h3>
-            </a>
-            <a class="zk-app-card" href="https://tiktok.com" target="_blank">
-                <img src="https://cdn-icons-png.flaticon.com/512/3046/3046121.png">
-                <h3>TikTok</h3>
-            </a>
-            <a class="zk-app-card" href="https://soundcloud.com" target="_blank">
-                <img src="https://cdn-icons-png.flaticon.com/512/145/145809.png">
-                <h3>SoundCloud</h3>
-            </a>
-            <a class="zk-app-card" href="https://twitch.tv" target="_blank">
-                <img src="https://cdn-icons-png.flaticon.com/512/5968/5968819.png">
-                <h3>Twitch</h3>
-            </a>
-        </div>
+<!-- ---------------------------------------------------
+     MUSIC OVERLAY
+--------------------------------------------------- -->
+<div id="music-overlay">
+    <div class="music-box">
+        <h2>Music Player</h2>
+
+        <input id="music-search" placeholder="Search songs..." 
+               style="width:100%; padding:12px; margin-top:15px; background:#1a1a1d; border:none; border-radius:var(--radius); color:var(--text);"
+               oninput="searchMusic()">
+
+        <div id="music-results"></div>
+
+        <img id="music-image" src="" style="width:100%; margin-top:20px; border-radius:var(--radius); display:none;">
+        <h3 id="music-title" style="margin-top:10px;"></h3>
+        <p id="music-artist" style="color:var(--dim);"></p>
+
+        <audio id="music-player" controls style="width:100%; margin-top:15px;">
+            <source id="music-source" src="">
+        </audio>
+
+        <button onclick="toggleLyrics()" style="margin-top:15px; width:100%; padding:12px; background:var(--accent); border:none; border-radius:var(--radius); color:white; cursor:pointer;">
+            Toggle Lyrics
+        </button>
+
+        <div id="music-lyrics"></div>
     </div>
+</div>
 
-    <div id="chat-drawer">
-        <div class="chat-view" id="cv">
-            <div id="auth">
-                <p style="margin-bottom:15px; font-size:12px;" class="zk-dim">
-                    Identify yourself to join the comms.
-                </p>
-                <input type="text" id="uname" class="zk-main-input" placeholder="Callsign...">
-                <button onclick="start()" class="zk-btn">Connect</button>
-            </div>
-            <div id="log"></div>
-        </div>
-        <div class="chat-input-row">
-            <input
-                type="text"
-                id="msg"
-                class="zk-main-input"
-                placeholder="Transmission..."
-                onkeydown="if(event.key==='Enter') send()"
-            >
-        </div>
-    </div>
+<!-- ---------------------------------------------------
+     SCRIPT
+--------------------------------------------------- -->
+<script>
+/* CHAT */
+let drone, room;
 
-    <div id="settings-overlay" onclick="toggleSettings()">
-        <div class="settings-card" onclick="event.stopPropagation()">
-            <h2>System Config</h2>
-            <div class="setting-row">
-                <span>Stealth Mode (Panic Key: ~)</span>
-                <input type="checkbox" checked>
-            </div>
-            <div class="setting-row">
-                <span>HD Rendering</span>
-                <input type="checkbox" checked>
-            </div>
-            <button onclick="toggleSettings()" class="zk-btn">Close</button>
-        </div>
-    </div>
+function toggleChat() {
+    document.getElementById('chat-drawer').classList.toggle('open');
+}
 
-    <div id="music-overlay">
-        <div class="music-header">
-            <div class="music-title">Music Control Center</div>
-            <div style="display:flex; align-items:center; gap:16px;">
-                <div class="music-search-wrap">
-                    <input 
-                        id="music-search" 
-                        type="text" 
-                        placeholder="Search music..." 
-                        oninput="searchMusic()" 
-                        onkeydown="blockMobileSearch(event)"
-                    >
-                    <div id="music-results"></div>
-                </div>
-                <span class="music-close" onclick="toggleMusic()">Close</span>
-            </div>
-        </div>
-
-        <div class="music-body">
-            <div class="music-main-card">
-                <img id="music-image" src="https://via.placeholder.com/260x260?text=Music" alt="Album">
-                <div class="music-main-info">
-                    <div id="music-title" class="music-main-title">Select a track</div>
-                    <div id="music-artist" class="music-main-artist">Use the search to pick a song.</div>
-                    <div class="music-controls">
-                        <audio id="music-player" controls style="width:260px;">
-                            <source id="music-source" src="" type="audio/mpeg">
-                            Your browser does not support audio.
-                        </audio>
-                        <button class="music-lyrics-toggle" onclick="toggleLyrics()">Show Lyrics</button>
-                    </div>
-                    <div id="music-lyrics" style="display:none;"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script>
-    let drone, room;
-
-    function toggleChat() {
-        document.getElementById('chat-drawer').classList.toggle('open');
+function send() {
+    const i = document.getElementById('msg');
+    if (i.value.trim()) {
+        const div = document.createElement('div');
+        div.style.marginBottom = "15px";
+        div.innerHTML = `<span style="color:var(--dim); font-size:11px;">You</span><br>${i.value}`;
+        document.getElementById('cv').appendChild(div);
+        i.value = "";
     }
+}
 
-    function start() {
-        const n = document.getElementById('uname').value || "Commander";
-        document.getElementById('auth').style.display = 'none';
-
-        drone = new ScaleDrone('yiS12sYPLP793Q0A', { data: { name: n } });
-
-        drone.on('open', error => {
-            if (error) return console.error(error);
-
-            room = drone.subscribe('observable-nexus-bridge');
-            room.on('data', (d, m) => {
-                const div = document.createElement('div');
-                div.style.marginBottom = "15px";
-                div.innerHTML = `
-                    <span style="color:var(--zk-dim); font-size:11px;">
-                        ${m.authData.name}
-                    </span><br>${d}
-                `;
-                document.getElementById('log').appendChild(div);
-
-                const cv = document.getElementById('cv');
-                cv.scrollTop = cv.scrollHeight;
-            });
-        });
-    }
-
-    function send() {
-        const i = document.getElementById('msg');
-        if (i.value.trim() && drone) {
-            drone.publish({
-                room: 'observable-nexus-bridge',
-                message: i.value
-            });
-            i.value = "";
-        }
-    }
-
+/* SETTINGS */
 function toggleSettings() {
     const s = document.getElementById('settings-overlay');
     s.style.display = s.style.display === 'flex' ? 'none' : 'flex';
 }
 
-/* ------------------------------
-   MUSIC SYSTEM
------------------------------- */
-
+/* MUSIC */
 const songs = [
     {
         title: "Lucid Dreams",
         artist: "Juice WRLD",
         image: "lucid.jpg",
         file: "lucid.mp3",
-        lyrics: "I still see your shadows in my room...\n(put full lyrics here)"
+        lyrics: "I still see your shadows in my room..."
     },
     {
         title: "Example Track",
         artist: "Nexus",
         image: "example.jpg",
         file: "example.mp3",
-        lyrics: "This is an example song.\nAdd your own lyrics here."
+        lyrics: "This is an example song."
     }
 ];
 
@@ -743,78 +351,54 @@ let lyricsVisible = false;
 function toggleMusic() {
     const m = document.getElementById('music-overlay');
     m.style.display = m.style.display === 'flex' ? 'none' : 'flex';
-
-    if (m.style.display === 'flex') {
-        document.getElementById('music-search').value = "";
-        document.getElementById('music-results').style.display = "none";
-    }
-}
-
-/* MOBILE-SAFE SEARCH FIX */
-function blockMobileSearch(event) {
-    event.preventDefault();
-    event.stopPropagation();
-    searchMusic();
 }
 
 function searchMusic() {
-    const query = document.getElementById('music-search').value.toLowerCase().trim();
-    const resultsBox = document.getElementById('music-results');
+    const q = document.getElementById('music-search').value.toLowerCase().trim();
+    const box = document.getElementById('music-results');
 
-    if (!query) {
-        resultsBox.style.display = "none";
-        resultsBox.innerHTML = "";
+    if (!q) {
+        box.style.display = "none";
+        box.innerHTML = "";
         return;
     }
 
     const filtered = songs.filter(s =>
-        s.title.toLowerCase().includes(query) ||
-        s.artist.toLowerCase().includes(query)
+        s.title.toLowerCase().includes(q) ||
+        s.artist.toLowerCase().includes(q)
     );
 
     if (!filtered.length) {
-        resultsBox.style.display = "none";
-        resultsBox.innerHTML = "";
+        box.style.display = "none";
+        box.innerHTML = "";
         return;
     }
 
-    resultsBox.innerHTML = "";
+    box.innerHTML = "";
     filtered.forEach(song => {
         const div = document.createElement('div');
         div.className = "music-result-item";
         div.onclick = () => selectSong(song);
 
-        const img = document.createElement('img');
-        img.src = song.image;
+        div.innerHTML = `
+            <img src="${song.image}">
+            <div>
+                <div>${song.title}</div>
+                <div style="color:var(--dim); font-size:13px;">${song.artist}</div>
+            </div>
+        `;
 
-        const textWrap = document.createElement('div');
-        textWrap.className = "music-result-text";
-
-        const t = document.createElement('div');
-        t.className = "music-result-title";
-        t.textContent = song.title;
-
-        const a = document.createElement('div');
-        a.className = "music-result-artist";
-        a.textContent = song.artist;
-
-        textWrap.appendChild(t);
-        textWrap.appendChild(a);
-
-        div.appendChild(img);
-        div.appendChild(textWrap);
-
-        resultsBox.appendChild(div);
+        box.appendChild(div);
     });
 
-    resultsBox.style.display = "block";
+    box.style.display = "block";
 }
 
 function selectSong(song) {
     currentSong = song;
-    lyricsVisible = false;
 
     document.getElementById('music-image').src = song.image;
+    document.getElementById('music-image').style.display = "block";
     document.getElementById('music-title').textContent = song.title;
     document.getElementById('music-artist').textContent = song.artist;
 
@@ -822,7 +406,7 @@ function selectSong(song) {
     const source = document.getElementById('music-source');
     source.src = song.file;
     player.load();
-    player.play().catch(() => {});
+    player.play().catch(()=>{});
 
     const lyricsBox = document.getElementById('music-lyrics');
     lyricsBox.style.display = "none";
@@ -838,12 +422,11 @@ function toggleLyrics() {
     box.style.display = lyricsVisible ? "block" : "none";
 }
 
-/* ------------------------------
-   PANIC KEY
------------------------------- */
+/* PANIC KEY */
 window.onkeydown = (e) => {
     if (e.key === '~') window.location.href = "https://google.com";
-};           
+};
 </script>
+
 </body>
 </html>
