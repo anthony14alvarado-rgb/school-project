@@ -40,7 +40,7 @@
         nav {
             position: fixed;
             top: 50%;
-            left: 20px;
+            left: 30px;
             transform: translateY(-50%);
             display: flex;
             flex-direction: column;
@@ -49,8 +49,8 @@
 
         .zk-brand {
             font-weight: 900;
-            font-size: 22px;
-            margin-bottom: 24px;
+            font-size: 26px;
+            margin-bottom: 28px;
             background: linear-gradient(to right, #fff, #666);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -59,13 +59,13 @@
         .zk-menu {
             display: flex;
             flex-direction: column;
-            gap: 18px;
+            gap: 20px;
         }
 
         .zk-link {
             color: var(--zk-dim);
             text-decoration: none;
-            font-size: 15px;
+            font-size: 18px;
             font-weight: 600;
             cursor: pointer;
             transition: var(--transition);
@@ -81,60 +81,61 @@
         .zk-link.active::after {
             content: '';
             position: absolute;
-            left: -10px;
+            left: -12px;
             top: 50%;
             transform: translateY(-50%);
             width: 4px;
-            height: 18px;
+            height: 22px;
             border-radius: 999px;
             background: #fff;
         }
 
         /* --- HERO SEARCH SECTION --- */
         .zk-hero {
-            padding: 80px 20px 60px 120px;
+            padding: 140px 40px 100px 190px;
             text-align: left;
             background: radial-gradient(circle at center, #18181b 0%, #09090b 100%);
         }
 
         .zk-hero h1 {
-            font-size: 56px;
+            font-size: 72px;
             font-weight: 800;
             letter-spacing: -2px;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
         }
 
         .zk-hero p {
             color: var(--zk-dim);
+            font-size: 18px;
         }
 
         .zk-search-box {
-            max-width: 550px;
-            margin-top: 30px;
+            max-width: 600px;
+            margin-top: 35px;
             position: relative;
         }
 
         .zk-main-input {
             width: 100%;
-            padding: 14px 25px;
-            border-radius: 8px;
+            padding: 16px 26px;
+            border-radius: 10px;
             background: var(--zk-surface);
             border: 1px solid var(--zk-border);
             color: #fff;
-            font-size: 15px;
+            font-size: 16px;
             outline: none;
             transition: 0.3s;
         }
 
         .zk-main-input:focus {
             border-color: #52525b;
-            box-shadow: 0 0 20px rgba(255,255,255,0.05);
+            box-shadow: 0 0 24px rgba(255,255,255,0.06);
         }
 
         .zk-container {
-            max-width: 1300px;
+            max-width: 1400px;
             margin: 0 auto;
-            padding: 20px 20px 80px 120px;
+            padding: 30px 40px 90px 190px;
         }
 
         .zk-section-header {
@@ -147,7 +148,7 @@
         }
 
         .zk-section-header h2 {
-            font-size: 14px;
+            font-size: 15px;
             text-transform: uppercase;
             letter-spacing: 2px;
             color: var(--zk-dim);
@@ -156,53 +157,53 @@
         /* --- THE APPS GRID --- */
         .zk-app-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+            gap: 24px;
             margin-bottom: 80px;
         }
 
         .zk-app-card {
             background: var(--zk-surface);
             border: 1px solid var(--zk-border);
-            border-radius: 12px;
-            padding: 18px;
+            border-radius: 14px;
+            padding: 28px;
             text-decoration: none;
             color: #fff;
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 18px;
             cursor: pointer;
             transition: var(--transition);
             box-shadow: 0 0 0 1px transparent;
         }
 
         .zk-app-card img {
-            width: 40px;
-            height: 40px;
+            width: 60px;
+            height: 60px;
         }
 
         .zk-app-card h3 {
-            font-size: 16px;
+            font-size: 20px;
         }
 
         .zk-app-card:hover {
-            transform: translateY(-2px);
+            transform: translateY(-3px);
             border-color: #fff;
-            box-shadow: 0 0 25px var(--zk-glow);
+            box-shadow: 0 0 30px var(--zk-glow);
         }
 
         /* --- THE GAMES GRID (RESTORATION) --- */
         .zk-game-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 25px;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 28px;
         }
 
         .zk-game-item {
-            border-radius: 12px;
+            border-radius: 14px;
             overflow: hidden;
             position: relative;
-            aspect-ratio: 16/10;
+            aspect-ratio: 16/9;
             border: 1px solid var(--zk-border);
             cursor: pointer;
             transition: var(--transition);
@@ -229,11 +230,11 @@
             bottom: 0;
             left: 0;
             width: 100%;
-            padding: 15px;
+            padding: 16px;
             background: linear-gradient(transparent, rgba(0,0,0,0.9));
             color: #fff;
             font-weight: 700;
-            font-size: 16px;
+            font-size: 18px;
         }
 
         /* --- GLOBAL CHAT DRAWER --- */
@@ -241,7 +242,7 @@
             position: fixed;
             right: -400px;
             top: 0;
-            width: 350px;
+            width: 360px;
             height: 100vh;
             background: #000;
             border-left: 1px solid var(--zk-border);
@@ -257,7 +258,7 @@
 
         .chat-view {
             flex: 1;
-            padding: 20px;
+            padding: 22px;
             overflow-y: auto;
         }
 
@@ -270,13 +271,14 @@
         .zk-btn {
             width: 100%;
             margin-top: 10px;
-            padding: 12px;
+            padding: 13px;
             background: #fff;
             color: #000;
             border: none;
-            border-radius: 8px;
+            border-radius: 10px;
             font-weight: 800;
             cursor: pointer;
+            font-size: 14px;
         }
 
         .zk-btn:hover {
@@ -297,19 +299,21 @@
         .settings-card {
             background: var(--zk-surface);
             border: 1px solid var(--zk-border);
-            width: 450px;
+            width: 480px;
             padding: 40px;
-            border-radius: 16px;
+            border-radius: 18px;
         }
 
         .settings-card h2 {
             margin-bottom: 25px;
+            font-size: 22px;
         }
 
         .setting-row {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 20px;
+            margin-bottom: 22px;
+            font-size: 15px;
         }
 
         .zk-dim {
@@ -317,7 +321,7 @@
         }
 
         /* --- RESPONSIVE --- */
-        @media (max-width: 800px) {
+        @media (max-width: 900px) {
             nav {
                 top: 10px;
                 left: 10px;
@@ -333,7 +337,7 @@
             .zk-brand {
                 margin-bottom: 0;
                 margin-right: 10px;
-                font-size: 18px;
+                font-size: 20px;
             }
 
             .zk-menu {
@@ -346,12 +350,12 @@
             }
 
             .zk-hero {
-                padding: 90px 16px 40px 16px;
+                padding: 100px 16px 50px 16px;
                 text-align: left;
             }
 
             .zk-container {
-                padding: 10px 16px 60px 16px;
+                padding: 20px 16px 70px 16px;
             }
 
             #chat-drawer {
@@ -385,6 +389,14 @@
                 onkeydown="if(event.key==='Enter') window.open('https://google.com/search?q='+this.value)"
             >
         </div>
+    </div>
+
+    <!-- MUSIC PLAYER (LOCAL FILE: music.mp3) -->
+    <div style="padding-left:190px; margin-top:10px; margin-bottom:10px;">
+        <audio id="bgm" controls style="width:320px;">
+            <source src="music.mp3" type="audio/mpeg">
+            Your browser does not support audio.
+        </audio>
     </div>
 
     <div class="zk-container" id="home-sector">
