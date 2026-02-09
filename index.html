@@ -3,325 +3,228 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Z-Kit | Official Framework</title>
+    <title>Z-Kit | Official Nexus</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://cdn.scaledrone.com/scaledrone.min.js"></script>
     <style>
-        /* --- CORE DESIGN SYSTEM --- */
+        /* --- Z-KIT OFFICIAL DISCORD THEME --- */
         :root {
-            --bg-rail: #1e1f22;
-            --bg-side: #2b2d31;
-            --bg-main: #313338;
-            --bg-card: #232428;
-            --text-bright: #ffffff;
-            --text-dim: #949ba4;
-            --accent: #5865f2;
-            --border: rgba(255,255,255,0.05);
-            --radius: 8px;
+            --zk-rail: #1e1f22;
+            --zk-sidebar: #2b2d31;
+            --zk-main: #313338;
+            --zk-card: #232428;
+            --text-white: #ffffff;
+            --text-gray: #949ba4;
+            --accent-blue: #5865f2;
+            --border-light: rgba(255,255,255,0.06);
         }
 
+        /* --- LAYOUT ENGINE --- */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Inter', sans-serif;
-            background-color: var(--bg-main);
-            color: var(--text-dim);
+            background-color: var(--zk-main);
+            color: var(--text-gray);
             height: 100vh;
             display: flex;
             overflow: hidden;
         }
 
-        /* --- FAR LEFT: APP RAIL --- */
-        .app-rail {
-            width: 72px;
-            background: var(--bg-rail);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 12px 0;
-            gap: 8px;
-            flex-shrink: 0;
-        }
-
-        .rail-icon {
-            width: 48px;
-            height: 48px;
-            background: var(--bg-main);
-            border-radius: 50%;
-            cursor: pointer;
-            transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background-size: 60%;
-            background-repeat: no-repeat;
-            background-position: center;
-        }
-
-        .rail-icon:hover, .rail-icon.active { border-radius: 16px; background-color: var(--accent); }
-        .rail-sep { width: 32px; height: 2px; background: #35363c; margin: 4px 0; }
-
-        /* --- MIDDLE LEFT: DISCORD SIDEBAR --- */
-        .zk-sidebar {
+        /* --- LEFT SIDEBAR (MAPPED FROM IMAGE) --- */
+        .discord-sidebar {
             width: 240px;
-            background: var(--bg-side);
+            background-color: var(--zk-sidebar);
             display: flex;
             flex-direction: column;
             flex-shrink: 0;
         }
 
-        .side-header {
+        .server-info {
             height: 48px;
-            padding: 0 16px;
-            display: flex;
-            align-items: center;
-            font-weight: 800;
-            color: var(--text-bright);
-            box-shadow: 0 1px 2px rgba(0,0,0,0.2);
-            font-size: 15px;
-        }
-
-        .side-content { flex: 1; overflow-y: auto; padding: 12px 8px; }
-
-        .side-cat {
-            font-size: 12px;
-            font-weight: 700;
-            color: var(--text-dim);
-            text-transform: uppercase;
-            padding: 18px 8px 4px 8px;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .side-item {
-            padding: 8px 10px;
-            margin: 2px 0;
-            border-radius: 4px;
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-            font-weight: 500;
-            transition: 0.1s;
-        }
-
-        .side-item:hover { background: #35373c; color: var(--text-bright); }
-        .side-item.active { background: #3f4147; color: var(--text-bright); }
-        .side-item span { margin-right: 8px; font-family: monospace; font-size: 18px; opacity: 0.5; }
-
-        /* --- MAIN CONTENT AREA --- */
-        .viewport {
-            flex: 1;
+            padding: 12px 16px;
             display: flex;
             flex-direction: column;
-            overflow-y: auto;
-            position: relative;
+            justify-content: center;
+            box-shadow: 0 1px 0 rgba(0,0,0,0.2);
         }
 
-        .view-header {
-            height: 48px;
-            padding: 0 24px;
-            display: flex;
-            align-items: center;
-            background: var(--bg-main);
-            border-bottom: 1px solid var(--border);
-            font-weight: 600;
-            color: var(--text-bright);
-            position: sticky; top: 0; z-index: 10;
+        .server-name { color: var(--text-white); font-weight: 800; font-size: 15px; }
+        .member-count { font-size: 11px; font-weight: 600; color: var(--text-gray); }
+
+        .channel-container { flex: 1; overflow-y: auto; padding: 10px 8px; }
+        
+        .cat-label {
+            font-size: 12px; font-weight: 700; text-transform: uppercase;
+            color: var(--text-gray); padding: 16px 8px 4px 8px;
+            display: flex; align-items: center; gap: 4px;
         }
 
-        .hero-banner {
-            padding: 80px 40px 40px 40px;
-            text-align: center;
-            background: linear-gradient(to bottom, #2b2d31, var(--bg-main));
+        .channel-link {
+            padding: 8px 12px; border-radius: 4px; margin-bottom: 2px;
+            display: flex; align-items: center; cursor: pointer;
+            transition: 0.1s; font-weight: 500; color: var(--text-gray);
         }
 
-        .hero-banner h1 { font-size: 48px; font-weight: 900; color: #fff; letter-spacing: -2px; }
-        .hero-banner p { margin: 10px 0 30px 0; font-size: 16px; }
+        .channel-link:hover { background-color: #35373c; color: var(--text-white); }
+        .channel-link.active { background-color: #3f4147; color: var(--text-white); }
+        .channel-link span { margin-right: 8px; font-family: monospace; font-size: 18px; opacity: 0.6; }
 
-        .search-wrap { max-width: 600px; margin: 0 auto; width: 100%; }
-        .zk-search {
-            width: 100%; background: #1e1f22; border: none; padding: 12px 20px;
-            border-radius: 4px; color: #fff; outline: none; font-size: 14px;
+        /* --- MAIN VIEWPORT (Z-KIT FRAMEWORK) --- */
+        .nexus-viewport {
+            flex: 1; overflow-y: auto; display: flex; flex-direction: column;
         }
 
-        /* --- GAME ENGINE GRID --- */
-        .section-container { padding: 40px; max-width: 1200px; width: 100%; align-self: center; }
-        .section-title { font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 20px; color: var(--text-dim); }
+        .top-search-bar {
+            height: 48px; width: 100%; background: var(--zk-main);
+            border-bottom: 1px solid var(--border-light);
+            display: flex; align-items: center; padding: 0 16px; position: sticky; top: 0; z-index: 10;
+        }
 
+        .zk-search-input {
+            background: #1e1f22; border: none; padding: 6px 12px;
+            border-radius: 4px; color: #fff; width: 240px; font-size: 13px; outline: none;
+        }
+
+        /* --- HERO & GRID CONTENT --- */
+        .hero-section {
+            padding: 60px 40px; text-align: center;
+            background: linear-gradient(180deg, #2b2d31 0%, #313338 100%);
+        }
+
+        .hero-section h1 { font-size: 44px; font-weight: 900; color: #fff; letter-spacing: -2px; }
+        .hero-section p { font-size: 14px; margin-top: 8px; color: var(--text-gray); }
+
+        .content-container { padding: 40px; max-width: 1200px; width: 100%; align-self: center; }
+        .grid-header { font-size: 12px; font-weight: 800; color: var(--text-gray); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 20px; border-bottom: 1px solid var(--border-light); padding-bottom: 10px; }
+
+        /* APP GRID */
+        .app-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 16px; margin-bottom: 50px;
+        }
+
+        .app-card {
+            background: var(--zk-card); border: 1px solid transparent; border-radius: 8px;
+            padding: 24px; text-align: center; cursor: pointer; transition: 0.2s;
+        }
+        .app-card:hover { border-color: var(--accent-blue); transform: translateY(-3px); }
+        .app-card img { width: 40px; height: 40px; margin-bottom: 12px; }
+        .app-card h3 { color: #fff; font-size: 16px; }
+
+        /* GAME GRID (MAPPED FROM SCREENSHOT) */
         .game-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 20px;
         }
 
-        .game-card {
-            background: var(--bg-card);
-            border-radius: 8px;
-            overflow: hidden;
-            cursor: pointer;
-            transition: 0.2s;
-            border: 1px solid transparent;
+        .game-tile {
+            position: relative; aspect-ratio: 16/10; border-radius: 8px;
+            overflow: hidden; border: 1px solid var(--border-light); cursor: pointer; transition: 0.3s;
+        }
+        .game-tile:hover { transform: scale(1.02); border-color: #fff; }
+        .game-tile img { width: 100%; height: 100%; object-fit: cover; }
+        .game-meta {
+            position: absolute; bottom: 0; width: 100%; padding: 15px;
+            background: linear-gradient(0deg, rgba(0,0,0,0.9) 0%, transparent 100%);
+            color: #fff; font-weight: 700; font-size: 14px;
         }
 
-        .game-card:hover { transform: translateY(-4px); border-color: var(--accent); }
-        .game-card img { width: 100%; height: 160px; object-fit: cover; filter: brightness(0.8); transition: 0.3s; }
-        .game-card:hover img { filter: brightness(1); }
-        .game-info { padding: 12px; font-weight: 700; color: #fff; font-size: 14px; }
-
-        /* --- GLOBAL CHAT INTEGRATION --- */
-        .chat-view {
-            flex: 1; display: none; flex-direction: column; padding: 20px;
-        }
-        .chat-view.active { display: flex; }
-        .msg { display: flex; gap: 16px; margin-bottom: 20px; }
-        .avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
-        .msg-body { display: flex; flex-direction: column; }
-        .msg-user { font-weight: 700; color: #fff; font-size: 15px; }
-        .msg-text { color: #dbdee1; font-size: 15px; margin-top: 4px; }
-
-        .chat-input-area { padding: 24px; }
-        .chat-input-box { background: #383a40; border-radius: 8px; padding: 10px 16px; }
-        .chat-input-box input { background: transparent; border: none; outline: none; color: #fff; width: 100%; }
-
-        /* SECTOR TOGGLES */
-        .page-node { display: none; }
-        .page-node.active { display: block; }
+        /* --- DENSITY LOGIC (MODALS & CHAT) --- */
+        .sector-view { display: none; }
+        .sector-view.active { display: block; }
     </style>
 </head>
 <body>
 
-    <div class="app-rail">
-        <div class="rail-icon active" onclick="location.reload()" style="background-image: url('https://cdn-icons-png.flaticon.com/512/3670/3670147.png')"></div>
-        <div class="rail-sep"></div>
-        <div class="rail-icon" onclick="window.open('https://youtube.com')" style="background-image: url('https://cdn-icons-png.flaticon.com/512/1384/1384060.png')"></div>
-        <div class="rail-icon" onclick="window.open('https://tiktok.com')" style="background-image: url('https://cdn-icons-png.flaticon.com/512/3046/3046121.png')"></div>
-        <div class="rail-icon" onclick="window.open('https://soundcloud.com')" style="background-image: url('https://cdn-icons-png.flaticon.com/512/145/145809.png')"></div>
-    </div>
+    <div class="discord-sidebar">
+        <div class="server-info">
+            <div class="server-name">ZK • Z-Kit 🌸</div>
+            <div class="member-count">387 Members • Community</div>
+        </div>
 
-    <div class="zk-sidebar">
-        <div class="side-header">Z-Kit Framework 🛡️</div>
-        <div class="side-content">
-            <div class="side-cat">▼ Core</div>
-            <div class="side-item active" onclick="nav('home', this)"><span>#</span> overview</div>
-            <div class="side-item" onclick="nav('chat', this)"><span>#</span> community-links</div>
+        <div class="channel-container">
+            <div class="cat-label">▼ Forums</div>
+            <div class="channel-link active" onclick="nav('home', this)"><span>#</span> home-overview</div>
+            <div class="channel-link" onclick="nav('games', this)"><span>#</span> games</div>
             
-            <div class="side-cat">▼ Game Engine</div>
-            <div class="side-item" onclick="nav('games', this)"><span>#</span> games</div>
-            <div class="side-item" onclick="window.open('https://discord.com')"><span>#</span> official-discord</div>
+            <div class="cat-label">▼ Links</div>
+            <div class="channel-link" onclick="window.open('https://discord.com')"><span>#</span> community-links</div>
+            <div class="channel-link" onclick="nav('chat', this)"><span>#</span> global-chat</div>
             
-            <div class="side-cat">▼ Config</div>
-            <div class="side-item" onclick="toggleSettings()"><span>#</span> settings</div>
+            <div class="cat-label">▼ System</div>
+            <div class="channel-link" onclick="toggleSettings()"><span>#</span> settings</div>
         </div>
     </div>
 
-    <div class="viewport">
-        <div class="view-header" id="header-text"># overview</div>
+    <div class="nexus-viewport">
+        <div class="top-search-bar">
+            <input type="text" class="zk-search-input" placeholder="Search apps or game titles..." onkeydown="if(event.key==='Enter') window.open('https://google.com/search?q='+this.value)">
+        </div>
 
-        <div id="home-sec" class="page-node active">
-            <div class="hero-banner">
+        <div id="home-sector" class="sector-view active">
+            <div class="hero-section">
                 <h1>Z-Kit Framework</h1>
-                <p>Advanced unblocked ecosystem for verified commanders.</p>
-                <div class="search-wrap">
-                    <input type="text" class="zk-search" placeholder="Search apps or documentation..." onkeydown="if(event.key==='Enter') window.open('https://google.com/search?q='+this.value)">
-                </div>
+                <p>The absolute standard in unblocked exploration.</p>
             </div>
-            
-            <div class="section-container">
-                <div class="section-title">Verified Applications</div>
+
+            <div class="content-container">
+                <div class="grid-header">Verified Applications</div>
+                <div class="app-grid">
+                    <div class="app-card" onclick="window.open('https://youtube.com')">
+                        <img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png">
+                        <h3>YouTube</h3>
+                    </div>
+                    <div class="app-card" onclick="window.open('https://tiktok.com')">
+                        <img src="https://cdn-icons-png.flaticon.com/512/3046/3046121.png">
+                        <h3>TikTok</h3>
+                    </div>
+                    <div class="app-card" onclick="window.open('https://soundcloud.com')">
+                        <img src="https://cdn-icons-png.flaticon.com/512/145/145809.png">
+                        <h3>SoundCloud</h3>
+                    </div>
+                    <div class="app-card" onclick="window.open('https://twitch.tv')">
+                        <img src="https://cdn-icons-png.flaticon.com/512/5968/5968819.png">
+                        <h3>Twitch</h3>
+                    </div>
+                </div>
+
+                <div class="grid-header" id="game-anchor">Game Engine</div>
                 <div class="game-grid">
-                    <div class="game-card" onclick="window.open('https://youtube.com')">
-                        <img src="https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?q=80&w=400">
-                        <div class="game-info">YouTube Station</div>
+                    <div class="game-tile" onclick="window.open('https://poki.com')">
+                        <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=600">
+                        <div class="game-meta">Poki Arcade</div>
                     </div>
-                    <div class="game-card" onclick="window.open('https://twitch.tv')">
-                        <img src="https://images.unsplash.com/photo-1614680376593-902f74cf0d41?q=80&w=400">
-                        <div class="game-info">Twitch Live</div>
+                    <div class="game-tile" onclick="window.open('https://1v1.lol')">
+                        <img src="https://images.unsplash.com/photo-1552820728-8b83bb6b773f?q=80&w=600">
+                        <div class="game-meta">1v1.LOL Tactical</div>
                     </div>
-                </div>
-            </div>
-        </div>
-
-        <div id="games-sec" class="page-node">
-            <div class="section-container" style="padding-top: 60px;">
-                <div class="section-title">Game Engine Grid</div>
-                <div class="game-grid">
-                    <div class="game-card" onclick="window.open('https://poki.com')">
-                        <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=400">
-                        <div class="game-info">Poki Unblocked</div>
+                    <div class="game-tile" onclick="window.open('https://krunker.io')">
+                        <img src="https://images.unsplash.com/photo-1538481199705-c710c4e965fc?q=80&w=600">
+                        <div class="game-meta">Krunker FPS</div>
                     </div>
-                    <div class="game-card" onclick="window.open('https://1v1.lol')">
-                        <img src="https://images.unsplash.com/photo-1552820728-8b83bb6b773f?q=80&w=400">
-                        <div class="game-info">1v1.LOL</div>
-                    </div>
-                    <div class="game-card" onclick="window.open('https://krunker.io')">
-                        <img src="https://images.unsplash.com/photo-1538481199705-c710c4e965fc?q=80&w=400">
-                        <div class="game-info">Krunker.io</div>
-                    </div>
-                    <div class="game-card" onclick="window.open('https://classic.minecraft.net')">
-                        <img src="https://images.unsplash.com/photo-1627398242454-45a1465c2479?q=80&w=400">
-                        <div class="game-info">Minecraft</div>
+                    <div class="game-tile" onclick="window.open('https://classic.minecraft.net')">
+                        <img src="https://images.unsplash.com/photo-1627398242454-45a1465c2479?q=80&w=600">
+                        <div class="game-meta">Minecraft Classic</div>
                     </div>
                 </div>
             </div>
         </div>
-
-        <div id="chat-sec" class="page-node">
-            <div class="chat-view active" id="chat-feed">
-                <div class="msg">
-                    <div class="avatar"></div>
-                    <div class="msg-body">
-                        <div class="msg-user">System BOT</div>
-                        <div class="msg-text">Uplink established. Transmissions are now live.</div>
-                    </div>
-                </div>
-            </div>
-            <div class="chat-input-area">
-                <div class="chat-input-box">
-                    <input type="text" id="chat-input" placeholder="Message #community-links" onkeydown="if(event.key==='Enter') send()">
-                </div>
-            </div>
-        </div>
-
     </div>
 
     <script>
-        let drone, room;
-
         function nav(id, el) {
-            document.querySelectorAll('.page-node').forEach(p => p.classList.remove('active'));
-            document.querySelectorAll('.side-item').forEach(i => i.classList.remove('active'));
-            
+            document.querySelectorAll('.channel-link').forEach(l => l.classList.remove('active'));
             el.classList.add('active');
-            document.getElementById(`${id}-sec`).classList.add('active');
-            document.getElementById('header-text').innerText = `# ${el.innerText.trim().replace('# ', '')}`;
             
-            if(id === 'chat' && !drone) initChat();
+            if(id === 'games') {
+                document.getElementById('game-anchor').scrollIntoView({ behavior: 'smooth' });
+            } else {
+                document.querySelector('.nexus-viewport').scrollTop = 0;
+            }
         }
 
-        function initChat() {
-            drone = new ScaleDrone('yiS12sYPLP793Q0A', { data: { name: "Commander" } });
-            drone.on('open', error => {
-                room = drone.subscribe('observable-nexus-bridge');
-                room.on('data', (d, m) => {
-                    const f = document.getElementById('chat-feed');
-                    const div = document.createElement('div');
-                    div.className = 'msg';
-                    div.innerHTML = `
-                        <div class="avatar" style="background:${m.id === drone.clientId ? '#5865f2' : '#eb459e'}"></div>
-                        <div class="msg-body">
-                            <div class="msg-user">${m.authData.name}</div>
-                            <div class="msg-text">${d}</div>
-                        </div>
-                    `;
-                    f.appendChild(div);
-                    f.scrollTop = f.scrollHeight;
-                });
-            });
-        }
-
-        function send() {
-            const i = document.getElementById('chat-input');
-            if(i.value.trim()) { drone.publish({room: 'observable-nexus-bridge', message: i.value}); i.value=""; }
+        function toggleSettings() {
+            alert("Settings Framework Online. Panic Key: [~]");
         }
 
         window.onkeydown = (e) => { if(e.key === '~') window.location.href="https://google.com"; };
