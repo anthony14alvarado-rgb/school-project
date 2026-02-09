@@ -192,7 +192,7 @@
             box-shadow: 0 0 30px var(--zk-glow);
         }
 
-        /* --- THE GAMES GRID (RESTORATION) --- */
+        /* --- THE GAMES GRID (if you use it later) --- */
         .zk-game-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -285,6 +285,10 @@
             background: #e5e5e5;
         }
 
+        .zk-dim {
+            color: var(--zk-dim);
+        }
+
         /* --- SETTINGS MODAL --- */
         #settings-overlay {
             position: fixed;
@@ -316,7 +320,165 @@
             font-size: 15px;
         }
 
-        .zk-dim {
+        /* --- MUSIC MODAL (FULL SCREEN) --- */
+        #music-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.96);
+            z-index: 3500;
+            display: none;
+            flex-direction: column;
+            padding: 30px 40px;
+        }
+
+        .music-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 25px;
+        }
+
+        .music-title {
+            font-size: 22px;
+            font-weight: 800;
+        }
+
+        .music-search-wrap {
+            position: relative;
+            width: 320px;
+        }
+
+        #music-search {
+            width: 100%;
+            padding: 10px 14px;
+            border-radius: 999px;
+            border: 1px solid var(--zk-border);
+            background: #050509;
+            color: #fff;
+            outline: none;
+            font-size: 14px;
+        }
+
+        #music-results {
+            position: absolute;
+            top: 110%;
+            right: 0;
+            width: 100%;
+            background: #050509;
+            border: 1px solid var(--zk-border);
+            border-radius: 12px;
+            max-height: 260px;
+            overflow-y: auto;
+            display: none;
+            z-index: 10;
+        }
+
+        .music-result-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 10px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .music-result-item:hover {
+            background: #111827;
+        }
+
+        .music-result-item img {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+
+        .music-result-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .music-result-title {
+            font-size: 14px;
+        }
+
+        .music-result-artist {
+            font-size: 12px;
+            color: var(--zk-dim);
+        }
+
+        .music-body {
+            display: flex;
+            gap: 30px;
+            margin-top: 10px;
+            flex: 1;
+        }
+
+        .music-main-card {
+            flex: 1;
+            display: flex;
+            gap: 24px;
+            align-items: flex-start;
+        }
+
+        .music-main-card img {
+            width: 260px;
+            height: 260px;
+            border-radius: 18px;
+            object-fit: cover;
+            border: 1px solid var(--zk-border);
+        }
+
+        .music-main-info {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .music-main-title {
+            font-size: 24px;
+            font-weight: 800;
+        }
+
+        .music-main-artist {
+            font-size: 16px;
+            color: var(--zk-dim);
+        }
+
+        .music-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .music-lyrics-toggle {
+            padding: 8px 14px;
+            border-radius: 999px;
+            border: 1px solid var(--zk-border);
+            background: #050509;
+            color: #fff;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        .music-lyrics-toggle:hover {
+            background: #111827;
+        }
+
+        #music-lyrics {
+            margin-top: 10px;
+            max-height: 220px;
+            overflow-y: auto;
+            font-size: 14px;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            border-top: 1px solid var(--zk-border);
+            padding-top: 10px;
+        }
+
+        .music-close {
+            cursor: pointer;
+            font-size: 14px;
             color: var(--zk-dim);
         }
 
@@ -361,6 +523,33 @@
             #chat-drawer {
                 width: 100%;
             }
+
+            #music-overlay {
+                padding: 20px 16px;
+            }
+
+            .music-body {
+                flex-direction: column;
+            }
+
+            .music-main-card {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .music-main-card img {
+                width: 220px;
+                height: 220px;
+            }
+
+            .music-main-info {
+                align-items: center;
+                text-align: center;
+            }
+
+            .music-search-wrap {
+                width: 220px;
+            }
         }
     </style>
 </head>
@@ -371,10 +560,10 @@
         <div class="zk-menu">
             <a class="zk-link active" href="#">Home</a>
             <a class="zk-link" onclick="toggleChat()">Community</a>
-            <!-- Games opens in a new tab / task -->
             <a class="zk-link" href="games.html" target="_blank">Games</a>
             <a class="zk-link" href="https://discord.com" target="_blank">Discord</a>
             <a class="zk-link" onclick="toggleSettings()">Settings</a>
+            <a class="zk-link" onclick="toggleMusic()">Music</a>
         </div>
     </nav>
 
@@ -389,14 +578,6 @@
                 onkeydown="if(event.key==='Enter') window.open('https://google.com/search?q='+this.value)"
             >
         </div>
-    </div>
-
-    <!-- MUSIC PLAYER (LOCAL FILE: music.mp3) -->
-    <div style="padding-left:190px; margin-top:10px; margin-bottom:10px;">
-        <audio id="bgm" controls style="width:320px;">
-            <source src="music.mp3" type="audio/mpeg">
-            Your browser does not support audio.
-        </audio>
     </div>
 
     <div class="zk-container" id="home-sector">
@@ -460,16 +641,44 @@
         </div>
     </div>
 
+    <!-- MUSIC OVERLAY -->
+    <div id="music-overlay">
+        <div class="music-header">
+            <div class="music-title">Music Control Center</div>
+            <div style="display:flex; align-items:center; gap:16px;">
+                <div class="music-search-wrap">
+                    <input id="music-search" type="text" placeholder="Search music..." oninput="searchMusic()">
+                    <div id="music-results"></div>
+                </div>
+                <span class="music-close" onclick="toggleMusic()">Close</span>
+            </div>
+        </div>
+
+        <div class="music-body">
+            <div class="music-main-card">
+                <img id="music-image" src="https://via.placeholder.com/260x260?text=Music" alt="Album">
+                <div class="music-main-info">
+                    <div id="music-title" class="music-main-title">Select a track</div>
+                    <div id="music-artist" class="music-main-artist">Use the search to pick a song.</div>
+                    <div class="music-controls">
+                        <audio id="music-player" controls style="width:260px;">
+                            <source id="music-source" src="" type="audio/mpeg">
+                            Your browser does not support audio.
+                        </audio>
+                        <button class="music-lyrics-toggle" onclick="toggleLyrics()">Show Lyrics</button>
+                    </div>
+                    <div id="music-lyrics" style="display:none;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         let drone, room;
 
+        /* --- CHAT --- */
         function toggleChat() {
             document.getElementById('chat-drawer').classList.toggle('open');
-        }
-
-        function toggleSettings() {
-            const s = document.getElementById('settings-overlay');
-            s.style.display = s.style.display === 'flex' ? 'none' : 'flex';
         }
 
         function start() {
@@ -493,26 +702,4 @@
                         </span><br>${d}
                     `;
                     document.getElementById('log').appendChild(div);
-                    const cv = document.getElementById('cv');
-                    cv.scrollTop = cv.scrollHeight;
-                });
-            });
-        }
-
-        function send() {
-            const i = document.getElementById('msg');
-            if (i.value.trim() && drone) {
-                drone.publish({
-                    room: 'observable-nexus-bridge',
-                    message: i.value
-                });
-                i.value = "";
-            }
-        }
-
-        window.onkeydown = (e) => {
-            if (e.key === '~') window.location.href = "https://google.com";
-        };
-    </script>
-</body>
-</html>
+  
