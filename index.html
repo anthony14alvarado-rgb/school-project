@@ -7,7 +7,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://cdn.scaledrone.com/scaledrone.min.js"></script>
     <style>
-        /* --- Z-KIT OFFICIAL THEME ENGINE --- */
         :root {
             --zk-bg: #09090b;
             --zk-surface: #121214;
@@ -36,7 +35,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* --- LEFT-SIDE NAVIGATION (MIDDLE LEFT) --- */
         nav {
             position: fixed;
             top: 50%;
@@ -90,7 +88,6 @@
             background: #fff;
         }
 
-        /* --- HERO SEARCH SECTION --- */
         .zk-hero {
             padding: 140px 40px 100px 190px;
             text-align: left;
@@ -154,7 +151,6 @@
             color: var(--zk-dim);
         }
 
-        /* --- THE APPS GRID --- */
         .zk-app-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
@@ -192,7 +188,6 @@
             box-shadow: 0 0 30px var(--zk-glow);
         }
 
-        /* --- THE GAMES GRID (if you use it later) --- */
         .zk-game-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -237,7 +232,6 @@
             font-size: 18px;
         }
 
-        /* --- GLOBAL CHAT DRAWER --- */
         #chat-drawer {
             position: fixed;
             right: -400px;
@@ -289,7 +283,6 @@
             color: var(--zk-dim);
         }
 
-        /* --- SETTINGS MODAL --- */
         #settings-overlay {
             position: fixed;
             inset: 0;
@@ -320,7 +313,6 @@
             font-size: 15px;
         }
 
-        /* --- MUSIC MODAL (FULL SCREEN) --- */
         #music-overlay {
             position: fixed;
             inset: 0;
@@ -482,7 +474,6 @@
             color: var(--zk-dim);
         }
 
-        /* --- RESPONSIVE --- */
         @media (max-width: 900px) {
             nav {
                 top: 10px;
@@ -602,7 +593,6 @@
         </div>
     </div>
 
-    <!-- CHAT DRAWER -->
     <div id="chat-drawer">
         <div class="chat-view" id="cv">
             <div id="auth">
@@ -625,7 +615,6 @@
         </div>
     </div>
 
-    <!-- SETTINGS OVERLAY -->
     <div id="settings-overlay" onclick="toggleSettings()">
         <div class="settings-card" onclick="event.stopPropagation()">
             <h2>System Config</h2>
@@ -641,13 +630,18 @@
         </div>
     </div>
 
-    <!-- MUSIC OVERLAY -->
     <div id="music-overlay">
         <div class="music-header">
             <div class="music-title">Music Control Center</div>
             <div style="display:flex; align-items:center; gap:16px;">
                 <div class="music-search-wrap">
-                    <input id="music-search" type="text" placeholder="Search music..." oninput="searchMusic()">
+                    <input 
+                        id="music-search" 
+                        type="text" 
+                        placeholder="Search music..." 
+                        oninput="searchMusic()" 
+                        onkeydown="blockMobileSearch(event)"
+                    >
                     <div id="music-results"></div>
                 </div>
                 <span class="music-close" onclick="toggleMusic()">Close</span>
@@ -674,32 +668,184 @@
     </div>
 
     <script>
-        let drone, room;
+    let drone, room;
 
-        /* --- CHAT --- */
-        function toggleChat() {
-            document.getElementById('chat-drawer').classList.toggle('open');
+    function toggleChat() {
+        document.getElementById('chat-drawer').classList.toggle('open');
+    }
+
+    function start() {
+        const n = document.getElementById('uname').value || "Commander";
+        document.getElementById('auth').style.display = 'none';
+
+        drone = new ScaleDrone('yiS12sYPLP793Q0A', { data: { name: n } });
+
+        drone.on('open', error => {
+            if (error) return console.error(error);
+
+            room = drone.subscribe('observable-nexus-bridge');
+            room.on('data', (d, m) => {
+                const div = document.createElement('div');
+                div.style.marginBottom = "15px";
+                div.innerHTML = `
+                    <span style="color:var(--zk-dim); font-size:11px;">
+                        ${m.authData.name}
+                    </span><br>${d}
+                `;
+                document.getElementById('log').appendChild(div);
+
+                const cv = document.getElementById('cv');
+                cv.scrollTop = cv.scrollHeight;
+            });
+        });
+    }
+
+    function send() {
+        const i = document.getElementById('msg');
+        if (i.value.trim() && drone) {
+            drone.publish({
+                room: 'observable-nexus-bridge',
+                message: i.value
+            });
+            i.value = "";
         }
+    }
 
-        function start() {
-            const n = document.getElementById('uname').value || "Commander";
-            document.getElementById('auth').style.display = 'none';
+function toggleSettings() {
+    const s = document.getElementById('settings-overlay');
+    s.style.display = s.style.display === 'flex' ? 'none' : 'flex';
+}
 
-            drone = new ScaleDrone('yiS12sYPLP793Q0A', { data: { name: n } });
+/* ------------------------------
+   MUSIC SYSTEM
+------------------------------ */
 
-            drone.on('open', error => {
-                if (error) {
-                    console.error(error);
-                    return;
-                }
-                room = drone.subscribe('observable-nexus-bridge');
-                room.on('data', (d, m) => {
-                    const div = document.createElement('div');
-                    div.style.marginBottom = "15px";
-                    div.innerHTML = `
-                        <span style="color:var(--zk-dim); font-size:11px;">
-                            ${m.authData.name}
-                        </span><br>${d}
-                    `;
-                    document.getElementById('log').appendChild(div);
-  
+const songs = [
+    {
+        title: "Lucid Dreams",
+        artist: "Juice WRLD",
+        image: "lucid.jpg",
+        file: "lucid.mp3",
+        lyrics: "I still see your shadows in my room...\n(put full lyrics here)"
+    },
+    {
+        title: "Example Track",
+        artist: "Nexus",
+        image: "example.jpg",
+        file: "example.mp3",
+        lyrics: "This is an example song.\nAdd your own lyrics here."
+    }
+];
+
+let currentSong = null;
+let lyricsVisible = false;
+
+function toggleMusic() {
+    const m = document.getElementById('music-overlay');
+    m.style.display = m.style.display === 'flex' ? 'none' : 'flex';
+
+    if (m.style.display === 'flex') {
+        document.getElementById('music-search').value = "";
+        document.getElementById('music-results').style.display = "none";
+    }
+}
+
+/* MOBILE-SAFE SEARCH FIX */
+function blockMobileSearch(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    searchMusic();
+}
+
+function searchMusic() {
+    const query = document.getElementById('music-search').value.toLowerCase().trim();
+    const resultsBox = document.getElementById('music-results');
+
+    if (!query) {
+        resultsBox.style.display = "none";
+        resultsBox.innerHTML = "";
+        return;
+    }
+
+    const filtered = songs.filter(s =>
+        s.title.toLowerCase().includes(query) ||
+        s.artist.toLowerCase().includes(query)
+    );
+
+    if (!filtered.length) {
+        resultsBox.style.display = "none";
+        resultsBox.innerHTML = "";
+        return;
+    }
+
+    resultsBox.innerHTML = "";
+    filtered.forEach(song => {
+        const div = document.createElement('div');
+        div.className = "music-result-item";
+        div.onclick = () => selectSong(song);
+
+        const img = document.createElement('img');
+        img.src = song.image;
+
+        const textWrap = document.createElement('div');
+        textWrap.className = "music-result-text";
+
+        const t = document.createElement('div');
+        t.className = "music-result-title";
+        t.textContent = song.title;
+
+        const a = document.createElement('div');
+        a.className = "music-result-artist";
+        a.textContent = song.artist;
+
+        textWrap.appendChild(t);
+        textWrap.appendChild(a);
+
+        div.appendChild(img);
+        div.appendChild(textWrap);
+
+        resultsBox.appendChild(div);
+    });
+
+    resultsBox.style.display = "block";
+}
+
+function selectSong(song) {
+    currentSong = song;
+    lyricsVisible = false;
+
+    document.getElementById('music-image').src = song.image;
+    document.getElementById('music-title').textContent = song.title;
+    document.getElementById('music-artist').textContent = song.artist;
+
+    const player = document.getElementById('music-player');
+    const source = document.getElementById('music-source');
+    source.src = song.file;
+    player.load();
+    player.play().catch(() => {});
+
+    const lyricsBox = document.getElementById('music-lyrics');
+    lyricsBox.style.display = "none";
+    lyricsBox.textContent = song.lyrics || "No lyrics available.";
+
+    document.getElementById('music-results').style.display = "none";
+}
+
+function toggleLyrics() {
+    if (!currentSong) return;
+    const box = document.getElementById('music-lyrics');
+    lyricsVisible = !lyricsVisible;
+    box.style.display = lyricsVisible ? "block" : "none";
+}
+
+/* ------------------------------
+   PANIC KEY
+------------------------------ */
+window.onkeydown = (e) => {
+    if (e.key === '~') window.location.href = "https://google.com";
+};           
+</script>
+</body>
+</html>
+
+        
