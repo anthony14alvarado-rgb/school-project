@@ -12,21 +12,17 @@
     --card: #11111c;
     --card-soft: #181824;
     --accent: #5f8dff;
-    --accent-soft: rgba(95,141,255,0.18);
     --accent-strong: #8b5dff;
     --text: #f5f5f7;
     --dim: #9a9aa5;
     --border: #232334;
     --radius-lg: 22px;
     --radius-md: 16px;
-    --radius-sm: 10px;
     --shadow-soft: 0 0 40px rgba(0,0,0,0.55);
     --shadow-subtle: 0 0 18px rgba(0,0,0,0.35);
-    --blur: 18px;
-    --transition-fast: 0.18s ease;
-    --transition-med: 0.25s ease;
 }
 
+/* RESET */
 * {
     margin: 0;
     padding: 0;
@@ -46,7 +42,7 @@ body {
     padding: 32px 10px;
 }
 
-/* MAIN SHELL */
+/* MAIN SHELL (HOME) */
 .shell {
     width: 100%;
     max-width: 980px;
@@ -55,7 +51,7 @@ body {
     border: 1px solid rgba(255,255,255,0.03);
     box-shadow: var(--shadow-soft);
     padding: 22px 24px 24px;
-    backdrop-filter: blur(var(--blur));
+    backdrop-filter: blur(18px);
 }
 
 /* TOP ROW */
@@ -77,7 +73,6 @@ body {
     font-weight: 800;
     font-size: 22px;
     color: #fff;
-    box-shadow: 0 0 18px rgba(95,141,255,0.6);
 }
 
 .brand-text {
@@ -115,10 +110,9 @@ body {
     height: 7px;
     border-radius: 50%;
     background: #3ddc84;
-    box-shadow: 0 0 8px rgba(61,220,132,0.8);
 }
 
-/* NAV BAR */
+/* NAV */
 nav {
     margin-bottom: 18px;
     border-radius: 999px;
@@ -139,23 +133,8 @@ nav a {
     border-radius: 999px;
     color: var(--dim);
     text-decoration: none;
-    transition: var(--transition-fast);
+    transition: 0.18s ease;
     white-space: nowrap;
-    position: relative;
-    overflow: hidden;
-}
-
-nav a::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(circle at top, rgba(255,255,255,0.12), transparent 55%);
-    opacity: 0;
-    transition: var(--transition-fast);
-}
-
-nav a:hover::before {
-    opacity: 1;
 }
 
 nav a:hover {
@@ -166,7 +145,6 @@ nav a:hover {
 nav a.active {
     background: linear-gradient(135deg, var(--accent), var(--accent-strong));
     color: #fff;
-    box-shadow: 0 0 14px rgba(95,141,255,0.7);
 }
 
 /* MAIN LAYOUT */
@@ -178,11 +156,9 @@ nav a.active {
 
 /* HERO */
 .hero {
-    background: radial-gradient(circle at top left, rgba(95,141,255,0.18), transparent 55%),
-                radial-gradient(circle at bottom right, rgba(139,93,255,0.18), transparent 55%),
-                var(--bg-soft);
+    background: var(--bg-soft);
     border-radius: var(--radius-lg);
-    padding: 18px 18px 16px;
+    padding: 18px;
     border: 1px solid var(--border);
     box-shadow: var(--shadow-subtle);
     display: flex;
@@ -197,9 +173,6 @@ nav a.active {
 
 .hero-heading span {
     font-weight: 800;
-    background: linear-gradient(135deg, #ffffff, #c7d4ff);
-    -webkit-background-clip: text;
-    color: transparent;
 }
 
 .hero-sub {
@@ -213,7 +186,6 @@ nav a.active {
     border-radius: 18px;
     overflow: hidden;
     background: #181824;
-    border: 1px solid rgba(255,255,255,0.03);
 }
 
 .hero-image-wrap img {
@@ -221,28 +193,11 @@ nav a.active {
     display: block;
 }
 
-/* LOADING + STATUS */
 .loading-line {
     font-size: 13px;
     color: var(--dim);
     font-style: italic;
     margin-top: 6px;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-}
-
-.loading-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    border: 2px solid rgba(95,141,255,0.4);
-    border-top-color: var(--accent);
-    animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-    to { transform: rotate(360deg); }
 }
 
 .status-bar {
@@ -297,11 +252,11 @@ nav a.active {
     width: 100%;
 }
 
-/* APP GRID PANEL */
+/* APPS PANEL */
 .panel {
     background: var(--bg-soft);
     border-radius: var(--radius-lg);
-    padding: 16px 16px 14px;
+    padding: 16px;
     border: 1px solid var(--border);
     box-shadow: var(--shadow-subtle);
     display: flex;
@@ -331,25 +286,10 @@ nav a.active {
 .app-card {
     background: var(--card);
     border-radius: var(--radius-md);
-    padding: 10px 10px 9px;
+    padding: 10px;
     border: 1px solid rgba(255,255,255,0.02);
     cursor: pointer;
-    transition: var(--transition-med);
-    position: relative;
-    overflow: hidden;
-}
-
-.app-card::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(circle at top left, rgba(95,141,255,0.18), transparent 55%);
-    opacity: 0;
-    transition: var(--transition-med);
-}
-
-.app-card:hover::before {
-    opacity: 1;
+    transition: 0.2s ease;
 }
 
 .app-card:hover {
@@ -368,345 +308,95 @@ nav a.active {
     margin-top: 2px;
 }
 
-/* FOOTER LINE */
 .footer-line {
     margin-top: 12px;
     font-size: 11px;
     color: var(--dim);
     text-align: center;
-    opacity: 0.8;
 }
 
-/* OVERLAYS (MUSIC, SETTINGS, CHAT) */
-.overlay-backdrop {
+/* FULLSCREEN MUSIC PAGE */
+.music-page {
     position: fixed;
     inset: 0;
-    background: rgba(0,0,0,0.65);
+    background: #05050a;
+    color: white;
     display: none;
-    justify-content: center;
-    align-items: center;
-    z-index: 20;
-    backdrop-filter: blur(12px);
-}
-
-.overlay-backdrop.active {
-    display: flex;
-}
-
-/* MUSIC PANEL */
-.music-box {
-    width: 380px;
-    max-width: 92vw;
-    background: var(--card-soft);
-    border-radius: 22px;
-    border: 1px solid var(--border);
-    box-shadow: var(--shadow-soft);
-    padding: 20px 18px 18px;
+    flex-direction: column;
+    padding: 20px;
+    z-index: 9999;
 }
 
 .music-header {
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    gap: 12px;
+}
+
+.back-btn {
+    background: #1a1a1f;
+    border: none;
+    color: white;
+    font-size: 22px;
+    padding: 8px 14px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.music-search-bar {
+    flex: 1;
+    padding: 12px 14px;
+    border-radius: 12px;
+    border: none;
+    background: #1a1a1f;
+    color: white;
+    font-size: 16px;
+}
+
+.now-playing {
+    margin-top: 25px;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+.now-playing-icon {
+    font-size: 70px;
+}
+
+.now-playing-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.np-artist {
+    color: #9a9a9a;
     font-size: 14px;
 }
 
-.music-header span {
-    font-weight: 500;
-}
-
-.music-close {
-    cursor: pointer;
-    font-size: 18px;
-    color: var(--dim);
-    transition: var(--transition-fast);
-}
-
-.music-close:hover {
-    color: var(--text);
-}
-
-.music-search {
-    width: 100%;
-    padding: 10px 11px;
-    margin-top: 12px;
-    border-radius: 999px;
-    border: 1px solid var(--border);
-    background: #151525;
-    color: var(--text);
-    font-size: 13px;
-    outline: none;
-}
-
-.music-results {
-    background: #151525;
-    margin-top: 8px;
-    border-radius: 16px;
-    display: none;
-    max-height: 180px;
+.music-results-list {
+    margin-top: 25px;
     overflow-y: auto;
+    flex: 1;
 }
 
 .music-result-item {
-    display: flex;
-    padding: 8px 9px;
+    padding: 14px;
+    border-bottom: 1px solid #1f1f25;
     cursor: pointer;
-    transition: var(--transition-fast);
-    align-items: center;
 }
 
 .music-result-item:hover {
-    background: #1d1d2a;
+    background: #15151c;
 }
 
-.music-result-item img {
-    width: 42px;
-    height: 42px;
-    border-radius: 10px;
-    margin-right: 8px;
-    object-fit: cover;
+.music-title {
+    font-size: 16px;
 }
 
-.music-meta {
-    display: flex;
-    flex-direction: column;
-}
-
-.music-meta-title {
+.music-artist {
     font-size: 13px;
-}
-
-.music-meta-artist {
-    font-size: 11px;
-    color: var(--dim);
-}
-
-.music-cover {
-    width: 100%;
-    margin-top: 14px;
-    border-radius: 18px;
-    display: none;
-    object-fit: cover;
-}
-
-.music-title-main {
-    margin-top: 8px;
-    font-size: 15px;
-    font-weight: 500;
-}
-
-.music-artist-main {
-    font-size: 12px;
-    color: var(--dim);
-}
-
-.music-player {
-    width: 100%;
-    margin-top: 10px;
-}
-
-.music-lyrics-toggle {
-    margin-top: 10px;
-    width: 100%;
-    padding: 9px 10px;
-    border-radius: 999px;
-    border: none;
-    background: linear-gradient(135deg, var(--accent), var(--accent-strong));
-    color: #fff;
-    font-size: 13px;
-    cursor: pointer;
-    transition: var(--transition-fast);
-}
-
-.music-lyrics-toggle:hover {
-    filter: brightness(1.05);
-}
-
-.music-lyrics-box {
-    margin-top: 8px;
-    padding: 8px 9px;
-    background: #151525;
-    border-radius: 14px;
-    font-size: 12px;
-    color: var(--dim);
-    white-space: pre-wrap;
-    max-height: 160px;
-    overflow-y: auto;
-    display: none;
-}
-
-/* SETTINGS PANEL */
-.settings-box {
-    width: 320px;
-    max-width: 92vw;
-    background: var(--card-soft);
-    border-radius: 22px;
-    border: 1px solid var(--border);
-    box-shadow: var(--shadow-soft);
-    padding: 20px 18px 18px;
-    font-size: 13px;
-}
-
-.settings-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.settings-header span {
-    font-weight: 500;
-}
-
-.settings-close {
-    cursor: pointer;
-    font-size: 18px;
-    color: var(--dim);
-    transition: var(--transition-fast);
-}
-
-.settings-close:hover {
-    color: var(--text);
-}
-
-.settings-section {
-    margin-top: 12px;
-    padding-top: 8px;
-    border-top: 1px solid var(--border);
-}
-
-.settings-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 8px;
-}
-
-.settings-label {
-    color: var(--dim);
-    font-size: 12px;
-}
-
-.settings-toggle {
-    width: 34px;
-    height: 18px;
-    border-radius: 999px;
-    background: #222235;
-    position: relative;
-    cursor: pointer;
-}
-
-.settings-toggle-knob {
-    position: absolute;
-    top: 2px;
-    left: 2px;
-    width: 14px;
-    height: 14px;
-    border-radius: 50%;
-    background: #f5f5f7;
-    transition: var(--transition-fast);
-}
-
-/* CHAT DRAWER */
-.chat-drawer {
-    position: fixed;
-    right: -340px;
-    top: 0;
-    width: 340px;
-    height: 100vh;
-    background: rgba(8,8,16,0.98);
-    border-left: 1px solid var(--border);
-    box-shadow: -10px 0 30px rgba(0,0,0,0.7);
-    display: flex;
-    flex-direction: column;
-    transition: var(--transition-med);
-    z-index: 18;
-    backdrop-filter: blur(14px);
-}
-
-.chat-drawer.open {
-    right: 0;
-}
-
-.chat-header {
-    padding: 12px 14px;
-    border-bottom: 1px solid var(--border);
-    font-size: 13px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.chat-header span:first-child {
-    font-weight: 500;
-}
-
-.chat-close {
-    cursor: pointer;
-    color: var(--dim);
-    font-size: 18px;
-    transition: var(--transition-fast);
-}
-
-.chat-close:hover {
-    color: var(--text);
-}
-
-.chat-view {
-    flex: 1;
-    padding: 12px 14px;
-    overflow-y: auto;
-    font-size: 13px;
-}
-
-.chat-input-wrap {
-    padding: 10px 12px;
-    border-top: 1px solid var(--border);
-    display: flex;
-    gap: 6px;
-}
-
-.chat-input {
-    flex: 1;
-    padding: 9px 10px;
-    border-radius: 999px;
-    border: 1px solid var(--border);
-    background: #151525;
-    color: var(--text);
-    font-size: 13px;
-    outline: none;
-}
-
-.chat-send {
-    padding: 9px 12px;
-    border-radius: 999px;
-    border: none;
-    background: var(--accent);
-    color: #fff;
-    font-size: 13px;
-    cursor: pointer;
-    transition: var(--transition-fast);
-}
-
-.chat-send:hover {
-    filter: brightness(1.05);
-}
-
-/* CHAT BUBBLES */
-.chat-bubble {
-    margin-bottom: 10px;
-    max-width: 90%;
-}
-
-.chat-label {
-    font-size: 11px;
-    color: var(--dim);
-    margin-bottom: 2px;
-}
-
-.chat-text {
-    padding: 7px 9px;
-    border-radius: 12px;
-    background: #151525;
+    color: #9a9a9a;
 }
 
 /* RESPONSIVE */
@@ -718,16 +408,13 @@ nav a.active {
     .main-row {
         grid-template-columns: minmax(0, 1fr);
     }
-    nav {
-        border-radius: 18px;
-    }
 }
 </style>
 </head>
 <body>
 
-<div class="shell">
-    <!-- TOP BAR -->
+<!-- HOME SHELL -->
+<div class="shell" id="homeShell">
     <div class="top-row">
         <div class="logo">N</div>
         <div class="brand-text">
@@ -740,42 +427,27 @@ nav a.active {
         </div>
     </div>
 
-    <!-- NAV -->
     <nav id="nav">
-        <a href="#" data-section="home" class="active">Home</a>
-        <a href="#" data-section="browser">Browser</a>
-        <a href="#" data-section="games">Games</a>
-        <a href="#" data-section="apps">Apps</a>
-        <a href="#" data-section="watch">Watch</a>
-        <a href="#" data-section="music">Music</a>
-        <a href="#" data-section="assistant">Assistant</a>
-        <a href="#" data-section="chat">Chat</a>
-        <a href="#" data-section="settings">Settings</a>
+        <a href="#" class="active">Home</a>
+        <a href="#" onclick="openMusicPage()">Music</a>
+        <a href="#">Games</a>
+        <a href="#">Apps</a>
+        <a href="#">Settings</a>
     </nav>
 
-    <!-- MAIN CONTENT -->
     <div class="main-row">
-        <!-- HERO SIDE -->
         <section class="hero">
-            <div>
-                <div class="hero-heading">
-                    Welcome to <span>Nexus Z‑Kit</span>
-                </div>
-                <div class="hero-sub">
-                    A focused space for your tools, music, and experiments.  
-                    Built to feel like your own mini‑OS in the browser.
-                </div>
+            <div class="hero-heading">Welcome to <span>Nexus Z‑Kit</span></div>
+            <div class="hero-sub">
+                A focused space for your tools, music, and experiments.  
+                Built to feel like your own mini‑OS in the browser.
             </div>
 
             <div class="hero-image-wrap">
-                <!-- Replace with your own image -->
                 <img src="dog.webp" alt="Mascot">
             </div>
 
-            <div class="loading-line">
-                <div class="loading-dot"></div>
-                <span>Loading environment... please wait</span>
-            </div>
+            <div class="loading-line">Loading environment... please wait</div>
 
             <div class="status-bar">
                 <div class="status-left">
@@ -792,7 +464,6 @@ nav a.active {
             </div>
         </section>
 
-        <!-- APPS PANEL -->
         <section class="panel">
             <div class="panel-header">
                 <span>Quick Launch</span>
@@ -800,21 +471,21 @@ nav a.active {
             </div>
 
             <div class="app-grid">
-                <div class="app-card" onclick="openMusic()">
+                <div class="app-card" onclick="openMusicPage()">
                     <div class="app-title">Music</div>
-                    <div class="app-sub">Play tracks, view lyrics</div>
+                    <div class="app-sub">Full music dashboard</div>
                 </div>
-                <div class="app-card" onclick="openChat()">
+                <div class="app-card">
                     <div class="app-title">Chat</div>
-                    <div class="app-sub">Side drawer messages</div>
+                    <div class="app-sub">Future side drawer</div>
                 </div>
-                <div class="app-card" onclick="openSettings()">
+                <div class="app-card">
                     <div class="app-title">Settings</div>
-                    <div class="app-sub">Theme & behavior</div>
+                    <div class="app-sub">Visual tweaks</div>
                 </div>
-                <div class="app-card" onclick="window.location.href='games.html'">
+                <div class="app-card">
                     <div class="app-title">Games Hub</div>
-                    <div class="app-sub">External or future page</div>
+                    <div class="app-sub">Coming soon</div>
                 </div>
             </div>
         </section>
@@ -825,292 +496,96 @@ nav a.active {
     </div>
 </div>
 
-<!-- MUSIC OVERLAY -->
-<div class="overlay-backdrop" id="music-overlay">
-    <div class="music-box">
-        <div class="music-header">
-            <span>Music Player</span>
-            <span class="music-close" onclick="closeMusic()">×</span>
-        </div>
-
-        <input id="music-search" class="music-search" placeholder="Search your songs..." oninput="searchMusic()">
-
-        <div id="music-results" class="music-results"></div>
-
-        <img id="music-image" class="music-cover" src="" alt="Cover">
-
-        <div class="music-title-main" id="music-title"></div>
-        <div class="music-artist-main" id="music-artist"></div>
-
-        <audio id="music-player" class="music-player" controls>
-            <source id="music-source" src="">
-        </audio>
-
-        <button class="music-lyrics-toggle" onclick="toggleLyrics()">Toggle Lyrics</button>
-        <div id="music-lyrics" class="music-lyrics-box"></div>
+<!-- FULLSCREEN MUSIC PAGE -->
+<div id="musicPage" class="music-page">
+    <div class="music-header">
+        <button class="back-btn" onclick="closeMusicPage()">←</button>
+        <input type="text" id="musicSearchInput" class="music-search-bar" placeholder="Search music..." oninput="searchMusicPage()">
     </div>
-</div>
 
-<!-- SETTINGS OVERLAY -->
-<div class="overlay-backdrop" id="settings-overlay">
-    <div class="settings-box">
-        <div class="settings-header">
-            <span>Settings</span>
-            <span class="settings-close" onclick="closeSettings()">×</span>
-        </div>
-
-        <div class="settings-section">
-            <div class="settings-row">
-                <div class="settings-label">Compact mode (visual only)</div>
-                <div class="settings-toggle" onclick="toggleDummy(this)">
-                    <div class="settings-toggle-knob"></div>
-                </div>
-            </div>
-            <div class="settings-row">
-                <div class="settings-label">Show loading indicator</div>
-                <div class="settings-toggle" onclick="toggleDummy(this)">
-                    <div class="settings-toggle-knob"></div>
-                </div>
-            </div>
-        </div>
-
-        <div class="settings-section">
-            <div class="settings-row">
-                <div class="settings-label">Future: theme presets</div>
-            </div>
-            <div class="settings-row">
-                <div class="settings-label">Future: account sync</div>
-            </div>
+    <div class="now-playing">
+        <div class="now-playing-icon">🎵</div>
+        <div class="now-playing-info">
+            <div id="npTitle">Not Playing</div>
+            <div id="npArtist" class="np-artist">The passenger of the night</div>
         </div>
     </div>
-</div>
 
-<!-- CHAT DRAWER -->
-<div class="chat-drawer" id="chat-drawer">
-    <div class="chat-header">
-        <span>Chat</span>
-        <span class="chat-close" onclick="closeChat()">×</span>
-    </div>
-    <div class="chat-view" id="cv"></div>
-    <div class="chat-input-wrap">
-        <input id="msg" class="chat-input" placeholder="Type a message..." onkeydown="if(event.key==='Enter'){sendMessage();}">
-        <button class="chat-send" onclick="sendMessage()">Send</button>
-    </div>
+    <div id="musicResultsList" class="music-results-list"></div>
 </div>
 
 <script>
-// =========================
 // STATUS (TIME, TEMP, BATTERY)
-// =========================
 function updateStatus() {
     const t = new Date();
     let h = t.getHours();
     const m = t.getMinutes().toString().padStart(2, "0");
     const ampm = h >= 12 ? "PM" : "AM";
     h = h % 12 || 12;
-
     document.getElementById("status-time").textContent = `${h}:${m} ${ampm}`;
-
-    // Fake temperature for aesthetic
     document.getElementById("status-temp").textContent = "72°F";
-
-    // Fake battery (static for now)
     const batteryFill = document.getElementById("battery-fill");
     const batteryText = document.getElementById("status-battery-text");
     const level = 100;
     batteryFill.style.width = level + "%";
     batteryText.textContent = level + "%";
 }
-
 updateStatus();
 setInterval(updateStatus, 30000);
 
-// =========================
-// NAV HANDLING
-// =========================
-document.getElementById("nav").addEventListener("click", (e) => {
-    if (e.target.tagName.toLowerCase() === "a") {
-        e.preventDefault();
+// FULLSCREEN MUSIC PAGE
+function openMusicPage() {
+    document.getElementById("musicPage").style.display = "flex";
+    document.getElementById("homeShell").style.display = "none";
+    searchMusicPage(); // show list immediately
+}
 
-        const links = document.querySelectorAll("#nav a");
-        links.forEach(l => l.classList.remove("active"));
-        e.target.classList.add("active");
+function closeMusicPage() {
+    document.getElementById("musicPage").style.display = "none";
+    document.getElementById("homeShell").style.display = "block";
+}
 
-        const section = e.target.dataset.section;
-
-        if (section === "music") openMusic();
-        if (section === "chat") openChat();
-        if (section === "settings") openSettings();
-    }
-});
-
-// =========================
-// MUSIC SYSTEM
-// =========================
-const songs = [
-    {
-        title: "Lucid Dreams",
-        artist: "Juice WRLD",
-        image: "lucid.jpg",
-        file: "lucid.mp3",
-        lyrics: "I still see your shadows in my room..."
-    },
-    {
-        title: "Nexus Theme",
-        artist: "Z‑Kit",
-        image: "nexus-theme.jpg",
-        file: "nexus-theme.mp3",
-        lyrics: "Welcome to the Nexus, where the lights never fade..."
-    },
-    {
-        title: "Midnight Drive",
-        artist: "Anthony",
-        image: "midnight.jpg",
-        file: "midnight.mp3",
-        lyrics: "City lights and open roads, thoughts louder than the radio..."
-    }
+// LOCAL SONG LIST (you can edit these)
+const musicDatabase = [
+    { title: "Loco Contigo", artist: "DJ Snake, J Balvin, Tyga" },
+    { title: "Otro Loco", artist: "Don Omar" },
+    { title: "Loco", artist: "Justin Quiles, Chimbala, Zion" },
+    { title: "Loco", artist: "Beéle, Natti Natasha" },
+    { title: "Un Poco Loco", artist: "Anthony Gonzalez, Gael García" },
+    { title: "Loco", artist: "Enrique Iglesias, Romeo Santos" },
+    { title: "Altered Love Theme", artist: "Kill Loco" }
 ];
 
-let currentSong = null;
-let lyricsVisible = false;
+// SEARCH + RENDER
+function searchMusicPage() {
+    const q = document.getElementById("musicSearchInput").value.toLowerCase();
+    const list = document.getElementById("musicResultsList");
+    list.innerHTML = "";
 
-function openMusic() {
-    document.getElementById("music-overlay").classList.add("active");
-    document.getElementById("music-search").focus();
-}
-
-function closeMusic() {
-    document.getElementById("music-overlay").classList.remove("active");
-}
-
-function searchMusic() {
-    const q = document.getElementById("music-search").value.toLowerCase().trim();
-    const box = document.getElementById("music-results");
-
-    if (!q) {
-        box.style.display = "none";
-        box.innerHTML = "";
-        return;
-    }
-
-    const filtered = songs.filter(s =>
-        s.title.toLowerCase().includes(q) ||
-        s.artist.toLowerCase().includes(q)
+    const results = musicDatabase.filter(song =>
+        song.title.toLowerCase().includes(q) ||
+        song.artist.toLowerCase().includes(q)
     );
 
-    if (!filtered.length) {
-        box.style.display = "none";
-        box.innerHTML = "";
-        return;
-    }
-
-    box.innerHTML = "";
-    filtered.forEach(song => {
+    results.forEach(song => {
         const div = document.createElement("div");
         div.className = "music-result-item";
-        div.onclick = () => selectSong(song);
-
         div.innerHTML = `
-            <img src="${song.image}">
-            <div class="music-meta">
-                <div class="music-meta-title">${song.title}</div>
-                <div class="music-meta-artist">${song.artist}</div>
-            </div>
+            <div class="music-title">${song.title}</div>
+            <div class="music-artist">${song.artist}</div>
         `;
-
-        box.appendChild(div);
+        div.onclick = () => playSong(song);
+        list.appendChild(div);
     });
-
-    box.style.display = "block";
 }
 
-function selectSong(song) {
-    currentSong = song;
-
-    const img = document.getElementById("music-image");
-    img.src = song.image;
-    img.style.display = "block";
-
-    document.getElementById("music-title").textContent = song.title;
-    document.getElementById("music-artist").textContent = song.artist;
-
-    const player = document.getElementById("music-player");
-    const source = document.getElementById("music-source");
-    source.src = song.file;
-    player.load();
-    player.play().catch(()=>{});
-
-    const lyricsBox = document.getElementById("music-lyrics");
-    lyricsBox.style.display = "none";
-    lyricsBox.textContent = song.lyrics || "No lyrics available.";
-    lyricsVisible = false;
-
-    document.getElementById("music-results").style.display = "none";
+// UPDATE NOW PLAYING
+function playSong(song) {
+    document.getElementById("npTitle").textContent = song.title;
+    document.getElementById("npArtist").textContent = song.artist;
 }
 
-function toggleLyrics() {
-    if (!currentSong) return;
-    const box = document.getElementById("music-lyrics");
-    lyricsVisible = !lyricsVisible;
-    box.style.display = lyricsVisible ? "block" : "none";
-}
-
-// =========================
-// SETTINGS
-// =========================
-function openSettings() {
-    document.getElementById("settings-overlay").classList.add("active");
-}
-
-function closeSettings() {
-    document.getElementById("settings-overlay").classList.remove("active");
-}
-
-function toggleDummy(el) {
-    const knob = el.querySelector(".settings-toggle-knob");
-    const isOn = knob.style.transform === "translateX(16px)";
-    if (isOn) {
-        knob.style.transform = "translateX(0)";
-        el.style.background = "#222235";
-    } else {
-        knob.style.transform = "translateX(16px)";
-        el.style.background = "linear-gradient(135deg, var(--accent), var(--accent-strong))";
-    }
-}
-
-// =========================
-// CHAT
-// =========================
-function openChat() {
-    document.getElementById("chat-drawer").classList.add("open");
-}
-
-function closeChat() {
-    document.getElementById("chat-drawer").classList.remove("open");
-}
-
-function sendMessage() {
-    const input = document.getElementById("msg");
-    const text = input.value.trim();
-    if (!text) return;
-
-    const cv = document.getElementById("cv");
-
-    const wrap = document.createElement("div");
-    wrap.className = "chat-bubble";
-    wrap.innerHTML = `
-        <div class="chat-label">You</div>
-        <div class="chat-text">${text}</div>
-    `;
-    cv.appendChild(wrap);
-    cv.scrollTop = cv.scrollHeight;
-
-    input.value = "";
-}
-
-// =========================
 // PANIC KEY
-// =========================
 window.addEventListener("keydown", (e) => {
     if (e.key === "~") {
         window.location.href = "https://google.com";
