@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nexus Z‑Kit (HTML Only)</title>
+<title>Nexus Z‑Kit Music</title>
 
 <style>
 :root {
@@ -400,6 +400,7 @@ nav a.active {
     padding: 10px 12px;
     border-radius: 10px;
     font-size: 16px;
+    cursor: pointer;
 }
 
 /* RIGHT SIDE */
@@ -419,6 +420,11 @@ nav a.active {
 .result-item {
     padding: 14px 0;
     border-bottom: 1px solid #1f1f25;
+    cursor: pointer;
+}
+
+.result-item:hover {
+    background: #15151c;
 }
 
 .song-title {
@@ -484,7 +490,9 @@ nav a.active {
                 <img src="dog.webp" alt="Mascot">
             </div>
 
-            <div class="loading-line">Environment loaded (HTML‑only mode)</div>
+            <div class="loading-line">
+                If you can't find your song, tell me and I'll add it.
+            </div>
 
             <div class="status-bar">
                 <div class="status-left">
@@ -504,13 +512,13 @@ nav a.active {
         <section class="panel">
             <div class="panel-header">
                 <span>Quick Launch</span>
-                <span style="font-size:11px; color:var(--dim);">HTML‑only mode</span>
+                <span style="font-size:11px; color:var(--dim);">YouTube playlist mode</span>
             </div>
 
             <div class="app-grid">
                 <div class="app-card">
                     <div class="app-title">Music</div>
-                    <div class="app-sub">Static dashboard layout</div>
+                    <div class="app-sub">Full songs via YouTube</div>
                 </div>
                 <div class="app-card">
                     <div class="app-title">Chat</div>
@@ -534,50 +542,161 @@ nav a.active {
             <input
                 type="text"
                 class="music-search-bar"
-                placeholder="Search any song"
+                placeholder="Search any song (visual only)"
             >
 
             <div class="now-playing-box">
-                <div class="big-music-icon">🎵</div>
-                <div class="np-title">Not Playing</div>
-                <div class="np-artist">Try searching on the right</div>
+                <div class="big-music-icon" id="npIcon">🎵</div>
+                <div class="np-title" id="npTitle">Not Playing</div>
+                <div class="np-artist" id="npArtist">Try selecting a song on the right</div>
 
                 <div class="visualizer">
                     <span></span><span></span><span></span><span></span><span></span>
                 </div>
 
                 <div class="np-controls">
-                    <button class="np-btn">⏮</button>
-                    <button class="np-btn">⏯</button>
-                    <button class="np-btn">⏭</button>
-                    <button class="np-btn">★</button>
+                    <button class="np-btn" onclick="prevSong()">⏮</button>
+                    <button class="np-btn" onclick="togglePlay()">⏯</button>
+                    <button class="np-btn" onclick="nextSong()">⏭</button>
                 </div>
             </div>
         </div>
 
         <!-- RIGHT SIDE -->
         <div class="music-right">
-            <div class="results-list">
-                <div class="result-item">
-                    <div class="song-title">Example Song 1</div>
-                    <div class="song-artist">Artist Name</div>
+            <div class="results-list" id="resultsList">
+                <!-- Bad Bunny + other songs -->
+                <div class="result-item" data-video-id="W2J7f4K1KQQ" data-title="Tití Me Preguntó" data-artist="Bad Bunny">
+                    <div class="song-title">Tití Me Preguntó</div>
+                    <div class="song-artist">Bad Bunny</div>
                 </div>
-                <div class="result-item">
-                    <div class="song-title">Example Song 2</div>
-                    <div class="song-artist">Artist Name</div>
+                <div class="result-item" data-video-id="4I25nV9hXGA" data-title="Me Porto Bonito" data-artist="Bad Bunny ft. Chencho Corleone">
+                    <div class="song-title">Me Porto Bonito</div>
+                    <div class="song-artist">Bad Bunny ft. Chencho Corleone</div>
                 </div>
-                <div class="result-item">
-                    <div class="song-title">Example Song 3</div>
-                    <div class="song-artist">Artist Name</div>
+                <div class="result-item" data-video-id="adLGHcj_fmA" data-title="Moscow Mule" data-artist="Bad Bunny">
+                    <div class="song-title">Moscow Mule</div>
+                    <div class="song-artist">Bad Bunny</div>
+                </div>
+                <div class="result-item" data-video-id="fHI8X4OXluQ" data-title="Blinding Lights" data-artist="The Weeknd">
+                    <div class="song-title">Blinding Lights</div>
+                    <div class="song-artist">The Weeknd</div>
+                </div>
+                <div class="result-item" data-video-id="TUVcZfQe-Kw" data-title="Levitating" data-artist="Dua Lipa">
+                    <div class="song-title">Levitating</div>
+                    <div class="song-artist">Dua Lipa</div>
+                </div>
+                <div class="result-item" data-video-id="wXhTHyIgQ_U" data-title="Circles" data-artist="Post Malone">
+                    <div class="song-title">Circles</div>
+                    <div class="song-artist">Post Malone</div>
                 </div>
             </div>
         </div>
     </div>
 
     <div class="footer-line">
-        Nexus Z‑Kit • HTML‑only mode • No JavaScript running
+        Nexus Z‑Kit • YouTube full‑song mode • If you can't find your song, tell me and I'll add it.
     </div>
 </div>
+
+<!-- Hidden YouTube Player -->
+<div id="ytplayer"></div>
+
+<script>
+// Load YouTube IFrame API
+var tag = document.createElement("script");
+tag.src = "https://www.youtube.com/iframe_api";
+document.body.appendChild(tag);
+
+let player;
+let playlist = [];
+let currentIndex = -1;
+
+// Build playlist from HTML items
+function buildPlaylist() {
+    const items = document.querySelectorAll(".result-item");
+    playlist = [];
+    items.forEach((item, idx) => {
+        playlist.push({
+            videoId: item.getAttribute("data-video-id"),
+            title: item.getAttribute("data-title"),
+            artist: item.getAttribute("data-artist")
+        });
+        item.addEventListener("click", () => {
+            playSongAtIndex(idx);
+        });
+    });
+}
+
+// YouTube API ready
+function onYouTubeIframeAPIReady() {
+    player = new YT.Player("ytplayer", {
+        height: "0",
+        width: "0",
+        videoId: "",
+        playerVars: {
+            autoplay: 1,
+            controls: 0,
+            modestbranding: 1,
+            rel: 0
+        },
+        events: {
+            onStateChange: onPlayerStateChange
+        }
+    });
+    buildPlaylist();
+}
+
+function onPlayerStateChange(e) {
+    if (e.data === YT.PlayerState.ENDED) {
+        nextSong();
+    }
+}
+
+function updateNowPlaying(song) {
+    document.getElementById("npTitle").textContent = song.title;
+    document.getElementById("npArtist").textContent = song.artist;
+}
+
+// Play by index
+function playSongAtIndex(idx) {
+    if (!playlist.length || !player) return;
+    if (idx < 0 || idx >= playlist.length) return;
+    currentIndex = idx;
+    const song = playlist[idx];
+    player.loadVideoById(song.videoId);
+    updateNowPlaying(song);
+}
+
+// Controls
+function nextSong() {
+    if (!playlist.length) return;
+    if (currentIndex === -1) currentIndex = 0;
+    else currentIndex = (currentIndex + 1) % playlist.length;
+    playSongAtIndex(currentIndex);
+}
+
+function prevSong() {
+    if (!playlist.length) return;
+    if (currentIndex === -1) currentIndex = 0;
+    else currentIndex = (currentIndex - 1 + playlist.length) % playlist.length;
+    playSongAtIndex(currentIndex);
+}
+
+function togglePlay() {
+    if (!player) return;
+    const state = player.getPlayerState();
+    if (state === YT.PlayerState.PLAYING) {
+        player.pauseVideo();
+    } else {
+        if (currentIndex === -1 && playlist.length) {
+            playSongAtIndex(0);
+        } else {
+            player.playVideo();
+        }
+    }
+}
+</script>
 
 </body>
 </html>
