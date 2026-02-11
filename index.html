@@ -322,81 +322,188 @@ nav a.active {
     background: #05050a;
     color: white;
     display: none;
-    flex-direction: column;
     padding: 20px;
     z-index: 9999;
-}
-
-.music-header {
     display: flex;
-    align-items: center;
-    gap: 12px;
+    gap: 20px;
 }
 
-.back-btn {
-    background: #1a1a1f;
-    border: none;
-    color: white;
-    font-size: 22px;
-    padding: 8px 14px;
-    border-radius: 10px;
-    cursor: pointer;
+/* LEFT SIDE */
+.music-left {
+    width: 45%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
 
 .music-search-bar {
-    flex: 1;
-    padding: 12px 14px;
+    width: 100%;
+    padding: 14px;
     border-radius: 12px;
     border: none;
-    background: #1a1a1f;
+    background: #1a1a22;
     color: white;
     font-size: 16px;
 }
 
-.now-playing {
-    margin-top: 25px;
-    display: flex;
-    align-items: center;
-    gap: 18px;
+.now-playing-box {
+    margin-top: 10px;
+    text-align: center;
+    padding: 20px;
+    border-radius: 16px;
+    background: #0f0f18;
 }
 
-.now-playing-icon {
-    font-size: 70px;
+.np-cover {
+    width: 120px;
+    height: 120px;
+    border-radius: 16px;
+    object-fit: cover;
+    display: none;
+    margin: 0 auto 10px;
 }
 
-.now-playing-info {
-    display: flex;
-    flex-direction: column;
+.big-music-icon {
+    font-size: 90px;
+    opacity: 0.7;
+}
+
+.np-title {
+    margin-top: 10px;
+    font-size: 20px;
+    font-weight: 600;
 }
 
 .np-artist {
-    color: #9a9a9a;
+    margin-top: 4px;
     font-size: 14px;
+    color: #9a9a9a;
 }
 
-.music-results-list {
-    margin-top: 25px;
+/* VISUALIZER */
+.visualizer {
+    margin-top: 14px;
+    display: flex;
+    justify-content: center;
+    gap: 4px;
+    height: 20px;
+    align-items: flex-end;
+}
+
+.visualizer span {
+    width: 4px;
+    background: #5f8dff;
+    border-radius: 999px;
+    animation: bounce 1s infinite ease-in-out;
+    opacity: 0.7;
+}
+
+.visualizer span:nth-child(2) { animation-delay: 0.1s; }
+.visualizer span:nth-child(3) { animation-delay: 0.2s; }
+.visualizer span:nth-child(4) { animation-delay: 0.3s; }
+.visualizer span:nth-child(5) { animation-delay: 0.4s; }
+
+@keyframes bounce {
+    0%, 100% { height: 4px; }
+    50% { height: 18px; }
+}
+
+/* NOW PLAYING CONTROLS */
+.np-controls {
+    margin-top: 14px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.np-btn {
+    background: #1a1a22;
+    border: none;
+    color: white;
+    padding: 10px 12px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.np-btn:hover {
+    background: #2a2a33;
+}
+
+/* FAVORITES */
+.favorites-box {
+    margin-top: 10px;
+    padding: 12px;
+    border-radius: 12px;
+    background: #0f0f18;
+}
+
+.fav-title {
+    font-size: 14px;
+    margin-bottom: 6px;
+    color: #c0c0c0;
+}
+
+.fav-list {
+    max-height: 140px;
     overflow-y: auto;
-    flex: 1;
+    font-size: 13px;
 }
 
-.music-result-item {
-    padding: 14px;
+.fav-item {
+    padding: 6px 0;
     border-bottom: 1px solid #1f1f25;
     cursor: pointer;
 }
 
-.music-result-item:hover {
+.fav-item:last-child {
+    border-bottom: none;
+}
+
+/* RIGHT SIDE */
+.music-right {
+    width: 55%;
+    display: flex;
+    flex-direction: column;
+}
+
+.results-list {
+    flex: 1;
+    overflow-y: auto;
+    border-left: 1px solid #1f1f25;
+    padding-left: 15px;
+}
+
+.result-item {
+    padding: 14px 0;
+    border-bottom: 1px solid #1f1f25;
+    cursor: pointer;
+}
+
+.result-item:hover {
     background: #15151c;
 }
 
-.music-title {
+.song-title {
     font-size: 16px;
 }
 
-.music-artist {
+.song-artist {
     font-size: 13px;
     color: #9a9a9a;
+}
+
+/* BACK BUTTON */
+.back-btn {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: #1a1a22;
+    border: none;
+    color: white;
+    padding: 10px 14px;
+    border-radius: 10px;
+    cursor: pointer;
 }
 
 /* RESPONSIVE */
@@ -407,6 +514,12 @@ nav a.active {
     }
     .main-row {
         grid-template-columns: minmax(0, 1fr);
+    }
+    .music-page {
+        flex-direction: column;
+    }
+    .music-left, .music-right {
+        width: 100%;
     }
 }
 </style>
@@ -498,20 +611,44 @@ nav a.active {
 
 <!-- FULLSCREEN MUSIC PAGE -->
 <div id="musicPage" class="music-page">
-    <div class="music-header">
-        <button class="back-btn" onclick="closeMusicPage()">←</button>
-        <input type="text" id="musicSearchInput" class="music-search-bar" placeholder="Search music..." oninput="searchMusicPage()">
-    </div>
+    
+    <!-- LEFT SIDE -->
+    <div class="music-left">
+        <input type="text" id="musicSearchInput" class="music-search-bar" placeholder="Search any song..." oninput="searchRealMusic()">
 
-    <div class="now-playing">
-        <div class="now-playing-icon">🎵</div>
-        <div class="now-playing-info">
-            <div id="npTitle">Not Playing</div>
-            <div id="npArtist" class="np-artist">The passenger of the night</div>
+        <div class="now-playing-box">
+            <img id="npCover" class="np-cover" src="" alt="">
+            <div class="big-music-icon" id="npIcon">🎵</div>
+            <div class="np-title" id="npTitle">Not Playing</div>
+            <div class="np-artist" id="npArtist">Try searching on the right</div>
+
+            <div class="visualizer">
+                <span></span><span></span><span></span><span></span><span></span>
+            </div>
+
+            <div class="np-controls">
+                <button class="np-btn" onclick="prevResult()">⏮</button>
+                <button class="np-btn" onclick="togglePlay()">⏯</button>
+                <button class="np-btn" onclick="nextResult()">⏭</button>
+                <button class="np-btn" onclick="toggleFavorite()">★</button>
+            </div>
+        </div>
+
+        <div class="favorites-box">
+            <div class="fav-title">Favorites</div>
+            <div id="favoritesList" class="fav-list"></div>
         </div>
     </div>
 
-    <div id="musicResultsList" class="music-results-list"></div>
+    <!-- RIGHT SIDE -->
+    <div class="music-right">
+        <div id="musicResultsList" class="results-list"></div>
+    </div>
+
+    <button class="back-btn" onclick="closeMusicPage()">← Back</button>
+
+    <!-- HIDDEN AUDIO PLAYER -->
+    <audio id="audioPlayer"></audio>
 </div>
 
 <script>
@@ -533,56 +670,154 @@ function updateStatus() {
 updateStatus();
 setInterval(updateStatus, 30000);
 
-// FULLSCREEN MUSIC PAGE
+// OPEN / CLOSE MUSIC PAGE
 function openMusicPage() {
     document.getElementById("musicPage").style.display = "flex";
     document.getElementById("homeShell").style.display = "none";
-    searchMusicPage(); // show list immediately
 }
 
 function closeMusicPage() {
     document.getElementById("musicPage").style.display = "none";
     document.getElementById("homeShell").style.display = "block";
+    stopAudio();
 }
 
-// LOCAL SONG LIST (you can edit these)
-const musicDatabase = [
-    { title: "Loco Contigo", artist: "DJ Snake, J Balvin, Tyga" },
-    { title: "Otro Loco", artist: "Don Omar" },
-    { title: "Loco", artist: "Justin Quiles, Chimbala, Zion" },
-    { title: "Loco", artist: "Beéle, Natti Natasha" },
-    { title: "Un Poco Loco", artist: "Anthony Gonzalez, Gael García" },
-    { title: "Loco", artist: "Enrique Iglesias, Romeo Santos" },
-    { title: "Altered Love Theme", artist: "Kill Loco" }
-];
+// GLOBAL STATE
+let currentResults = [];
+let currentIndex = -1;
+let favorites = [];
+const audioPlayer = document.getElementById("audioPlayer");
 
-// SEARCH + RENDER
-function searchMusicPage() {
-    const q = document.getElementById("musicSearchInput").value.toLowerCase();
+// REAL ONLINE SEARCH (iTunes API)
+async function searchRealMusic() {
+    const q = document.getElementById("musicSearchInput").value.trim();
     const list = document.getElementById("musicResultsList");
-    list.innerHTML = "";
 
-    const results = musicDatabase.filter(song =>
-        song.title.toLowerCase().includes(q) ||
-        song.artist.toLowerCase().includes(q)
-    );
+    if (!q) {
+        list.innerHTML = "";
+        currentResults = [];
+        currentIndex = -1;
+        return;
+    }
 
-    results.forEach(song => {
-        const div = document.createElement("div");
-        div.className = "music-result-item";
-        div.innerHTML = `
-            <div class="music-title">${song.title}</div>
-            <div class="music-artist">${song.artist}</div>
-        `;
-        div.onclick = () => playSong(song);
-        list.appendChild(div);
-    });
+    const url = `https://itunes.apple.com/search?term=${encodeURIComponent(q)}&entity=song&limit=25`;
+
+    try {
+        const res = await fetch(url);
+        const data = await res.json();
+
+        currentResults = data.results || [];
+        currentIndex = -1;
+        list.innerHTML = "";
+
+        currentResults.forEach((song, idx) => {
+            const div = document.createElement("div");
+            div.className = "result-item";
+            div.innerHTML = `
+                <div class="song-title">${song.trackName}</div>
+                <div class="song-artist">${song.artistName}</div>
+            `;
+            div.onclick = () => playSongAtIndex(idx);
+            list.appendChild(div);
+        });
+    } catch (e) {
+        list.innerHTML = "<div style='padding:10px;color:#f55;'>Error loading results.</div>";
+    }
 }
 
-// UPDATE NOW PLAYING
-function playSong(song) {
-    document.getElementById("npTitle").textContent = song.title;
-    document.getElementById("npArtist").textContent = song.artist;
+// PLAY SONG BY INDEX
+function playSongAtIndex(idx) {
+    if (idx < 0 || idx >= currentResults.length) return;
+    currentIndex = idx;
+    const song = currentResults[idx];
+
+    document.getElementById("npTitle").textContent = song.trackName;
+    document.getElementById("npArtist").textContent = song.artistName;
+
+    const cover = document.getElementById("npCover");
+    const icon = document.getElementById("npIcon");
+    if (song.artworkUrl100) {
+        cover.src = song.artworkUrl100.replace("100x100bb", "300x300bb");
+        cover.style.display = "block";
+        icon.style.display = "none";
+    } else {
+        cover.style.display = "none";
+        icon.style.display = "block";
+    }
+
+    if (song.previewUrl) {
+        audioPlayer.src = song.previewUrl;
+        audioPlayer.play().catch(()=>{});
+    }
+}
+
+// PLAY / PAUSE TOGGLE
+function togglePlay() {
+    if (!audioPlayer.src) {
+        if (currentResults.length > 0) {
+            playSongAtIndex(0);
+        }
+        return;
+    }
+    if (audioPlayer.paused) {
+        audioPlayer.play().catch(()=>{});
+    } else {
+        audioPlayer.pause();
+    }
+}
+
+// STOP AUDIO
+function stopAudio() {
+    audioPlayer.pause();
+    audioPlayer.currentTime = 0;
+}
+
+// NEXT / PREV
+function nextResult() {
+    if (!currentResults.length) return;
+    const nextIndex = (currentIndex + 1) % currentResults.length;
+    playSongAtIndex(nextIndex);
+}
+
+function prevResult() {
+    if (!currentResults.length) return;
+    const prevIndex = (currentIndex - 1 + currentResults.length) % currentResults.length;
+    playSongAtIndex(prevIndex);
+}
+
+// FAVORITES
+function toggleFavorite() {
+    if (currentIndex < 0 || currentIndex >= currentResults.length) return;
+    const song = currentResults[currentIndex];
+    const key = song.trackId;
+
+    const exists = favorites.find(f => f.trackId === key);
+    if (exists) {
+        favorites = favorites.filter(f => f.trackId !== key);
+    } else {
+        favorites.push(song);
+    }
+    renderFavorites();
+}
+
+function renderFavorites() {
+    const box = document.getElementById("favoritesList");
+    box.innerHTML = "";
+    favorites.forEach(song => {
+        const div = document.createElement("div");
+        div.className = "fav-item";
+        div.textContent = `${song.trackName} — ${song.artistName}`;
+        div.onclick = () => {
+            const indexInResults = currentResults.findIndex(r => r.trackId === song.trackId);
+            if (indexInResults !== -1) {
+                playSongAtIndex(indexInResults);
+            } else {
+                currentResults.push(song);
+                playSongAtIndex(currentResults.length - 1);
+            }
+        };
+        box.appendChild(div);
+    });
 }
 
 // PANIC KEY
