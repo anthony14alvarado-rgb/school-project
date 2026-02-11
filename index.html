@@ -226,45 +226,449 @@ nav a.active {
 }
 
 .battery {
-    width: 26<script>
-// GLOBAL STATE
-let ytPlayer = null;
-let currentResults = [];
-let currentIndex = -1;
-let favorites = [];
-
-// LOAD YOUTUBE API
-let tag = document.createElement("script");
-tag.src = "https://www.youtube.com/iframe_api";
-document.body.appendChild(tag);
-
-// YOUTUBE API READY
-function onYouTubeIframeAPIReady() {
-    ytPlayer = new YT.Player("hiddenPlayer", {
-        height: "0",
-        width: "0",
-        videoId: "",
-        playerVars: {
-            autoplay: 0,
-            controls: 0,
-            disablekb: 1,
-            fs: 0,
-            modestbranding: 1,
-            rel: 0
-        },
-        events: {
-            onReady: () => {},
-            onStateChange: onYTState
-        }
-    });
+    width: 26px;
+    height: 12px;
+    border-radius: 4px;
+    border: 1px solid var(--dim);
+    position: relative;
 }
 
-function onYTState(e) {
-    // Auto-next when video ends
-    if (e.data === YT.PlayerState.ENDED) {
-        nextResult();
+.battery::after {
+    content: "";
+    position: absolute;
+    right: -4px;
+    top: 3px;
+    width: 3px;
+    height: 6px;
+    border-radius: 2px;
+    background: var(--dim);
+}
+
+.battery-fill {
+    position: absolute;
+    inset: 1px;
+    border-radius: 3px;
+    background: #3ddc84;
+    width: 100%;
+}
+
+/* APPS PANEL */
+.panel {
+    background: var(--bg-soft);
+    border-radius: var(--radius-lg);
+    padding: 16px;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-subtle);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+    color: var(--dim);
+}
+
+.panel-header span:first-child {
+    color: var(--text);
+    font-weight: 500;
+}
+
+.app-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+}
+
+.app-card {
+    background: var(--card);
+    border-radius: var(--radius-md);
+    padding: 10px;
+    border: 1px solid rgba(255,255,255,0.02);
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.app-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 18px rgba(0,0,0,0.6);
+}
+
+.app-title {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.app-sub {
+    font-size: 11px;
+    color: var(--dim);
+    margin-top: 2px;
+}
+
+.footer-line {
+    margin-top: 12px;
+    font-size: 11px;
+    color: var(--dim);
+    text-align: center;
+}
+
+/* FULLSCREEN MUSIC PAGE */
+.music-page {
+    position: fixed;
+    inset: 0;
+    background: #05050a;
+    color: white;
+    display: none;
+    padding: 20px;
+    z-index: 9999;
+    display: none;
+    gap: 20px;
+}
+
+/* LEFT SIDE */
+.music-left {
+    width: 45%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.music-search-bar {
+    width: 100%;
+    padding: 14px;
+    border-radius: 12px;
+    border: none;
+    background: #1a1a22;
+    color: white;
+    font-size: 16px;
+}
+
+.now-playing-box {
+    margin-top: 10px;
+    text-align: center;
+    padding: 20px;
+    border-radius: 16px;
+    background: #0f0f18;
+}
+
+.np-cover {
+    width: 120px;
+    height: 120px;
+    border-radius: 16px;
+    object-fit: cover;
+    display: none;
+    margin: 0 auto 10px;
+}
+
+.big-music-icon {
+    font-size: 90px;
+    opacity: 0.7;
+}
+
+.np-title {
+    margin-top: 10px;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.np-artist {
+    margin-top: 4px;
+    font-size: 14px;
+    color: #9a9a9a;
+}
+
+/* VISUALIZER */
+.visualizer {
+    margin-top: 14px;
+    display: flex;
+    justify-content: center;
+    gap: 4px;
+    height: 20px;
+    align-items: flex-end;
+}
+
+.visualizer span {
+    width: 4px;
+    background: #5f8dff;
+    border-radius: 999px;
+    animation: bounce 1s infinite ease-in-out;
+    opacity: 0.7;
+}
+
+.visualizer span:nth-child(2) { animation-delay: 0.1s; }
+.visualizer span:nth-child(3) { animation-delay: 0.2s; }
+.visualizer span:nth-child(4) { animation-delay: 0.3s; }
+.visualizer span:nth-child(5) { animation-delay: 0.4s; }
+
+@keyframes bounce {
+    0%, 100% { height: 4px; }
+    50% { height: 18px; }
+}
+
+/* NOW PLAYING CONTROLS */
+.np-controls {
+    margin-top: 14px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.np-btn {
+    background: #1a1a22;
+    border: none;
+    color: white;
+    padding: 10px 12px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.np-btn:hover {
+    background: #2a2a33;
+}
+
+/* FAVORITES */
+.favorites-box {
+    margin-top: 10px;
+    padding: 12px;
+    border-radius: 12px;
+    background: #0f0f18;
+}
+
+.fav-title {
+    font-size: 14px;
+    margin-bottom: 6px;
+    color: #c0c0c0;
+}
+
+.fav-list {
+    max-height: 140px;
+    overflow-y: auto;
+    font-size: 13px;
+}
+
+.fav-item {
+    padding: 6px 0;
+    border-bottom: 1px solid #1f1f25;
+    cursor: pointer;
+}
+
+.fav-item:last-child {
+    border-bottom: none;
+}
+
+/* RIGHT SIDE */
+.music-right {
+    width: 55%;
+    display: flex;
+    flex-direction: column;
+}
+
+.results-list {
+    flex: 1;
+    overflow-y: auto;
+    border-left: 1px solid #1f1f25;
+    padding-left: 15px;
+}
+
+.result-item {
+    padding: 14px 0;
+    border-bottom: 1px solid #1f1f25;
+    cursor: pointer;
+}
+
+.result-item:hover {
+    background: #15151c;
+}
+
+.song-title {
+    font-size: 16px;
+}
+
+.song-artist {
+    font-size: 13px;
+    color: #9a9a9a;
+}
+
+/* BACK BUTTON */
+.back-btn {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: #1a1a22;
+    border: none;
+    color: white;
+    padding: 10px 14px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+/* RESPONSIVE */
+@media (max-width: 800px) {
+    .shell {
+        padding: 18px 14px 18px;
+        border-radius: 22px;
+    }
+    .main-row {
+        grid-template-columns: minmax(0, 1fr);
+    }
+    .music-page {
+        flex-direction: column;
+    }
+    .music-left, .music-right {
+        width: 100%;
     }
 }
+</style>
+</head>
+<body>
+
+<!-- HOME SHELL -->
+<div class="shell" id="homeShell">
+    <div class="top-row">
+        <div class="logo">N</div>
+        <div class="brand-text">
+            <span>Nexus Z‑Kit</span>
+            <span>Personal command environment</span>
+        </div>
+        <div class="online-pill">
+            <div class="online-dot"></div>
+            <span>Online: 1</span>
+        </div>
+    </div>
+
+    <nav id="nav">
+        <a href="#" class="active">Home</a>
+        <a href="#" onclick="openMusicPage()">Music</a>
+        <a href="#">Games</a>
+        <a href="#">Apps</a>
+        <a href="#">Settings</a>
+    </nav>
+
+    <div class="main-row">
+        <section class="hero">
+            <div class="hero-heading">Welcome to <span>Nexus Z‑Kit</span></div>
+            <div class="hero-sub">
+                A focused space for your tools, music, and experiments.  
+                Built to feel like your own mini‑OS in the browser.
+            </div>
+
+            <div class="hero-image-wrap">
+                <img src="dog.webp" alt="Mascot">
+            </div>
+
+            <div class="loading-line">Loading environment... please wait</div>
+
+            <div class="status-bar">
+                <div class="status-left">
+                    <span id="status-time">--:-- --</span>
+                    <span>•</span>
+                    <span id="status-temp">--°F</span>
+                </div>
+                <div class="status-right">
+                    <span id="status-battery-text">100%</span>
+                    <span class="battery">
+                        <span class="battery-fill" id="battery-fill"></span>
+                    </span>
+                </div>
+            </div>
+        </section>
+
+        <section class="panel">
+            <div class="panel-header">
+                <span>Quick Launch</span>
+                <span style="font-size:11px; color:var(--dim);">Press ~ for panic</span>
+            </div>
+
+            <div class="app-grid">
+                <div class="app-card" onclick="openMusicPage()">
+                    <div class="app-title">Music</div>
+                    <div class="app-sub">Full music dashboard</div>
+                </div>
+                <div class="app-card">
+                    <div class="app-title">Chat</div>
+                    <div class="app-sub">Future side drawer</div>
+                </div>
+                <div class="app-card">
+                    <div class="app-title">Settings</div>
+                    <div class="app-sub">Visual tweaks</div>
+                </div>
+                <div class="app-card">
+                    <div class="app-title">Games Hub</div>
+                    <div class="app-sub">Coming soon</div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div class="footer-line">
+        Nexus Z‑Kit • Built for you • Press ~ to quickly exit
+    </div>
+</div>
+
+<!-- FULLSCREEN MUSIC PAGE -->
+<div id="musicPage" class="music-page">
+    
+    <!-- LEFT SIDE -->
+    <div class="music-left">
+        <input type="text" id="musicSearchInput" class="music-search-bar" placeholder="Search any song..." oninput="searchRealMusic()">
+
+        <div class="now-playing-box">
+            <img id="npCover" class="np-cover" src="" alt="">
+            <div class="big-music-icon" id="npIcon">🎵</div>
+            <div class="np-title" id="npTitle">Not Playing</div>
+            <div class="np-artist" id="npArtist">Try searching on the right</div>
+
+            <div class="visualizer">
+                <span></span><span></span><span></span><span></span><span></span>
+            </div>
+
+            <div class="np-controls">
+                <button class="np-btn" onclick="prevResult()">⏮</button>
+                <button class="np-btn" onclick="togglePlay()">⏯</button>
+                <button class="np-btn" onclick="nextResult()">⏭</button>
+                <button class="np-btn" onclick="toggleFavorite()">★</button>
+            </div>
+        </div>
+
+        <div class="favorites-box">
+            <div class="fav-title">Favorites</div>
+            <div id="favoritesList" class="fav-list"></div>
+        </div>
+    </div>
+
+    <!-- RIGHT SIDE -->
+    <div class="music-right">
+        <div id="musicResultsList" class="results-list"></div>
+    </div>
+
+    <button class="back-btn" onclick="closeMusicPage()">← Back</button>
+
+    <!-- HIDDEN AUDIO PLAYER -->
+    <audio id="audioPlayer"></audio>
+</div>
+
+<script>
+// STATUS (TIME, TEMP, BATTERY)
+function updateStatus() {
+    const t = new Date();
+    let h = t.getHours();
+    const m = t.getMinutes().toString().padStart(2, "0");
+    const ampm = h >= 12 ? "PM" : "AM";
+    h = h % 12 || 12;
+    document.getElementById("status-time").textContent = `${h}:${m} ${ampm}`;
+    document.getElementById("status-temp").textContent = "72°F";
+    const batteryFill = document.getElementById("battery-fill");
+    const batteryText = document.getElementById("status-battery-text");
+    const level = 100;
+    batteryFill.style.width = level + "%";
+    batteryText.textContent = level + "%";
+}
+updateStatus();
+setInterval(updateStatus, 30000);
 
 // OPEN / CLOSE MUSIC PAGE
 function openMusicPage() {
@@ -278,7 +682,13 @@ function closeMusicPage() {
     stopAudio();
 }
 
-// SEARCH YOUTUBE FOR SONG
+// GLOBAL STATE
+let currentResults = [];
+let currentIndex = -1;
+let favorites = [];
+const audioPlayer = document.getElementById("audioPlayer");
+
+// REAL ONLINE SEARCH (iTunes API)
 async function searchRealMusic() {
     const q = document.getElementById("musicSearchInput").value.trim();
     const list = document.getElementById("musicResultsList");
@@ -290,70 +700,76 @@ async function searchRealMusic() {
         return;
     }
 
-    const url = `https://www.youtube.com/results?search_query=${encodeURIComponent(q + " official audio")}`;
-
-    list.innerHTML = "<div style='padding:10px;color:#aaa;'>Loading...</div>";
+    const url = `https://itunes.apple.com/search?term=${encodeURIComponent(q)}&entity=song&limit=25`;
 
     try {
-        const res = await fetch(`https://noembed.com/embed?url=https://www.youtube.com/watch?v=dQw4w9WgXcQ`);
-        // NOTE: We cannot fetch YouTube search results directly due to CORS.
-        // So we simulate results using a fallback list.
+        const res = await fetch(url);
+        const data = await res.json();
 
-        // FAKE RESULTS (YouTube blocks direct search API)
-        currentResults = [
-            { title: q + " (Official Audio)", videoId: "dQw4w9WgXcQ", artist: "Unknown Artist" },
-            { title: q + " (Lyrics)", videoId: "oHg5SJYRHA0", artist: "Unknown Artist" },
-            { title: q + " (VEVO)", videoId: "ub82Xb1C8os", artist: "Unknown Artist" }
-        ];
-
+        currentResults = data.results || [];
+        currentIndex = -1;
         list.innerHTML = "";
+
         currentResults.forEach((song, idx) => {
             const div = document.createElement("div");
             div.className = "result-item";
             div.innerHTML = `
-                <div class="song-title">${song.title}</div>
-                <div class="song-artist">${song.artist}</div>
+                <div class="song-title">${song.trackName}</div>
+                <div class="song-artist">${song.artistName}</div>
             `;
             div.onclick = () => playSongAtIndex(idx);
             list.appendChild(div);
         });
-
     } catch (e) {
         list.innerHTML = "<div style='padding:10px;color:#f55;'>Error loading results.</div>";
     }
 }
 
-// PLAY SONG
+// PLAY SONG BY INDEX
 function playSongAtIndex(idx) {
     if (idx < 0 || idx >= currentResults.length) return;
-
     currentIndex = idx;
     const song = currentResults[idx];
 
-    document.getElementById("npTitle").textContent = song.title;
-    document.getElementById("npArtist").textContent = song.artist;
+    document.getElementById("npTitle").textContent = song.trackName;
+    document.getElementById("npArtist").textContent = song.artistName;
 
-    document.getElementById("npCover").style.display = "none";
-    document.getElementById("npIcon").style.display = "block";
-
-    ytPlayer.loadVideoById(song.videoId);
-}
-
-// PLAY / PAUSE
-function togglePlay() {
-    if (!ytPlayer) return;
-
-    const state = ytPlayer.getPlayerState();
-    if (state === YT.PlayerState.PLAYING) {
-        ytPlayer.pauseVideo();
+    const cover = document.getElementById("npCover");
+    const icon = document.getElementById("npIcon");
+    if (song.artworkUrl100) {
+        cover.src = song.artworkUrl100.replace("100x100bb", "300x300bb");
+        cover.style.display = "block";
+        icon.style.display = "none";
     } else {
-        ytPlayer.playVideo();
+        cover.style.display = "none";
+        icon.style.display = "block";
+    }
+
+    if (song.previewUrl) {
+        audioPlayer.src = song.previewUrl;
+        audioPlayer.play().catch(()=>{});
     }
 }
 
-// STOP
+// PLAY / PAUSE TOGGLE
+function togglePlay() {
+    if (!audioPlayer.src) {
+        if (currentResults.length > 0) {
+            playSongAtIndex(0);
+        }
+        return;
+    }
+    if (audioPlayer.paused) {
+        audioPlayer.play().catch(()=>{});
+    } else {
+        audioPlayer.pause();
+    }
+}
+
+// STOP AUDIO
 function stopAudio() {
-    if (ytPlayer) ytPlayer.stopVideo();
+    audioPlayer.pause();
+    audioPlayer.currentTime = 0;
 }
 
 // NEXT / PREV
@@ -371,38 +787,35 @@ function prevResult() {
 
 // FAVORITES
 function toggleFavorite() {
-    if (currentIndex < 0) return;
-
+    if (currentIndex < 0 || currentIndex >= currentResults.length) return;
     const song = currentResults[currentIndex];
-    const exists = favorites.find(f => f.videoId === song.videoId);
+    const key = song.trackId;
 
+    const exists = favorites.find(f => f.trackId === key);
     if (exists) {
-        favorites = favorites.filter(f => f.videoId !== song.videoId);
+        favorites = favorites.filter(f => f.trackId !== key);
     } else {
         favorites.push(song);
     }
-
     renderFavorites();
 }
 
 function renderFavorites() {
     const box = document.getElementById("favoritesList");
     box.innerHTML = "";
-
     favorites.forEach(song => {
         const div = document.createElement("div");
         div.className = "fav-item";
-        div.textContent = song.title;
-
+        div.textContent = `${song.trackName} — ${song.artistName}`;
         div.onclick = () => {
-            const index = currentResults.findIndex(r => r.videoId === song.videoId);
-            if (index !== -1) playSongAtIndex(index);
-            else {
+            const indexInResults = currentResults.findIndex(r => r.trackId === song.trackId);
+            if (indexInResults !== -1) {
+                playSongAtIndex(indexInResults);
+            } else {
                 currentResults.push(song);
                 playSongAtIndex(currentResults.length - 1);
             }
         };
-
         box.appendChild(div);
     });
 }
@@ -415,9 +828,5 @@ window.addEventListener("keydown", (e) => {
 });
 </script>
 
-<!-- Hidden YouTube Player -->
-<div id="hiddenPlayer"></div>
-</script>
 </body>
 </html>
-    
