@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nexus Z‑Kit</title>
+<title>Nexus Z‑Kit (HTML Only)</title>
 
 <style>
 :root {
@@ -42,7 +42,7 @@ body {
     padding: 32px 10px;
 }
 
-/* MAIN SHELL (HOME) */
+/* MAIN SHELL */
 .shell {
     width: 100%;
     max-width: 980px;
@@ -200,6 +200,7 @@ nav a.active {
     margin-top: 6px;
 }
 
+/* SIMPLE STATUS (STATIC TEXT) */
 .status-bar {
     display: flex;
     justify-content: space-between;
@@ -252,7 +253,7 @@ nav a.active {
     width: 100%;
 }
 
-/* APPS PANEL */
+/* PANEL */
 .panel {
     background: var(--bg-soft);
     border-radius: var(--radius-lg);
@@ -288,13 +289,6 @@ nav a.active {
     border-radius: var(--radius-md);
     padding: 10px;
     border: 1px solid rgba(255,255,255,0.02);
-    cursor: pointer;
-    transition: 0.2s ease;
-}
-
-.app-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 0 18px rgba(0,0,0,0.6);
 }
 
 .app-title {
@@ -315,195 +309,54 @@ nav a.active {
     text-align: center;
 }
 
-/* FULLSCREEN MUSIC PAGE */
-.music-page {
-    position: fixed;
-    inset: 0;
-    background: #05050a;
-    color: white;
-    display: none;
-    padding: 20px;
-    z-index: 9999;
-    display: none;
-    gap: 20px;
-}
-
-/* LEFT SIDE */
-.music-left {
-    width: 45%;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-
-.music-search-bar {
-    width: 100%;
+/* MUSIC SECTION (HTML ONLY) */
+.music-section {
+    margin-top: 16px;
     padding: 14px;
-    border-radius: 12px;
-    border: none;
-    background: #1a1a22;
-    color: white;
-    font-size: 16px;
+    border-radius: 18px;
+    background: var(--card-soft);
+    border: 1px solid var(--border);
 }
 
-.now-playing-box {
-    margin-top: 10px;
-    text-align: center;
-    padding: 20px;
-    border-radius: 16px;
-    background: #0f0f18;
+.music-title {
+    font-size: 15px;
+    font-weight: 500;
+    margin-bottom: 8px;
 }
 
-.np-cover {
-    width: 120px;
-    height: 120px;
-    border-radius: 16px;
-    object-fit: cover;
-    display: none;
-    margin: 0 auto 10px;
+.music-sub {
+    font-size: 12px;
+    color: var(--dim);
+    margin-bottom: 10px;
 }
 
-.big-music-icon {
-    font-size: 90px;
-    opacity: 0.7;
-}
-
-.np-title {
-    margin-top: 10px;
-    font-size: 20px;
-    font-weight: 600;
-}
-
-.np-artist {
-    margin-top: 4px;
-    font-size: 14px;
-    color: #9a9a9a;
-}
-
-/* VISUALIZER */
-.visualizer {
-    margin-top: 14px;
-    display: flex;
-    justify-content: center;
-    gap: 4px;
-    height: 20px;
-    align-items: flex-end;
-}
-
-.visualizer span {
-    width: 4px;
-    background: #5f8dff;
-    border-radius: 999px;
-    animation: bounce 1s infinite ease-in-out;
-    opacity: 0.7;
-}
-
-.visualizer span:nth-child(2) { animation-delay: 0.1s; }
-.visualizer span:nth-child(3) { animation-delay: 0.2s; }
-.visualizer span:nth-child(4) { animation-delay: 0.3s; }
-.visualizer span:nth-child(5) { animation-delay: 0.4s; }
-
-@keyframes bounce {
-    0%, 100% { height: 4px; }
-    50% { height: 18px; }
-}
-
-/* NOW PLAYING CONTROLS */
-.np-controls {
-    margin-top: 14px;
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-}
-
-.np-btn {
-    background: #1a1a22;
-    border: none;
-    color: white;
-    padding: 10px 12px;
-    border-radius: 10px;
-    cursor: pointer;
-    font-size: 16px;
-}
-
-.np-btn:hover {
-    background: #2a2a33;
-}
-
-/* FAVORITES */
-.favorites-box {
-    margin-top: 10px;
-    padding: 12px;
-    border-radius: 12px;
-    background: #0f0f18;
-}
-
-.fav-title {
-    font-size: 14px;
-    margin-bottom: 6px;
-    color: #c0c0c0;
-}
-
-.fav-list {
-    max-height: 140px;
-    overflow-y: auto;
-    font-size: 13px;
-}
-
-.fav-item {
-    padding: 6px 0;
-    border-bottom: 1px solid #1f1f25;
-    cursor: pointer;
-}
-
-.fav-item:last-child {
-    border-bottom: none;
-}
-
-/* RIGHT SIDE */
-.music-right {
-    width: 55%;
+.track-list {
     display: flex;
     flex-direction: column;
-}
-
-.results-list {
-    flex: 1;
-    overflow-y: auto;
-    border-left: 1px solid #1f1f25;
-    padding-left: 15px;
-}
-
-.result-item {
-    padding: 14px 0;
-    border-bottom: 1px solid #1f1f25;
-    cursor: pointer;
-}
-
-.result-item:hover {
-    background: #15151c;
-}
-
-.song-title {
-    font-size: 16px;
-}
-
-.song-artist {
+    gap: 10px;
     font-size: 13px;
-    color: #9a9a9a;
 }
 
-/* BACK BUTTON */
-.back-btn {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    background: #1a1a22;
-    border: none;
-    color: white;
-    padding: 10px 14px;
+.track-item {
+    padding: 8px;
     border-radius: 10px;
-    cursor: pointer;
+    background: var(--card);
+    border: 1px solid rgba(255,255,255,0.03);
+}
+
+.track-name {
+    font-weight: 500;
+    margin-bottom: 4px;
+}
+
+.track-artist {
+    font-size: 11px;
+    color: var(--dim);
+    margin-bottom: 6px;
+}
+
+audio {
+    width: 100%;
 }
 
 /* RESPONSIVE */
@@ -515,19 +368,12 @@ nav a.active {
     .main-row {
         grid-template-columns: minmax(0, 1fr);
     }
-    .music-page {
-        flex-direction: column;
-    }
-    .music-left, .music-right {
-        width: 100%;
-    }
 }
 </style>
 </head>
 <body>
 
-<!-- HOME SHELL -->
-<div class="shell" id="homeShell">
+<div class="shell">
     <div class="top-row">
         <div class="logo">N</div>
         <div class="brand-text">
@@ -540,9 +386,9 @@ nav a.active {
         </div>
     </div>
 
-    <nav id="nav">
+    <nav>
         <a href="#" class="active">Home</a>
-        <a href="#" onclick="openMusicPage()">Music</a>
+        <a href="#">Music</a>
         <a href="#">Games</a>
         <a href="#">Apps</a>
         <a href="#">Settings</a>
@@ -560,18 +406,18 @@ nav a.active {
                 <img src="dog.webp" alt="Mascot">
             </div>
 
-            <div class="loading-line">Loading environment... please wait</div>
+            <div class="loading-line">Environment loaded (HTML‑only mode)</div>
 
             <div class="status-bar">
                 <div class="status-left">
-                    <span id="status-time">--:-- --</span>
+                    <span>12:00 PM</span>
                     <span>•</span>
-                    <span id="status-temp">--°F</span>
+                    <span>72°F</span>
                 </div>
                 <div class="status-right">
-                    <span id="status-battery-text">100%</span>
+                    <span>100%</span>
                     <span class="battery">
-                        <span class="battery-fill" id="battery-fill"></span>
+                        <span class="battery-fill"></span>
                     </span>
                 </div>
             </div>
@@ -580,13 +426,13 @@ nav a.active {
         <section class="panel">
             <div class="panel-header">
                 <span>Quick Launch</span>
-                <span style="font-size:11px; color:var(--dim);">Press ~ for panic</span>
+                <span style="font-size:11px; color:var(--dim);">Static HTML mode</span>
             </div>
 
             <div class="app-grid">
-                <div class="app-card" onclick="openMusicPage()">
+                <div class="app-card">
                     <div class="app-title">Music</div>
-                    <div class="app-sub">Full music dashboard</div>
+                    <div class="app-sub">Local / direct links only</div>
                 </div>
                 <div class="app-card">
                     <div class="app-title">Chat</div>
@@ -601,232 +447,54 @@ nav a.active {
                     <div class="app-sub">Coming soon</div>
                 </div>
             </div>
+
+            <div class="music-section">
+                <div class="music-title">Music Player (HTML Only)</div>
+                <div class="music-sub">
+                    This version can only play audio files or direct URLs you provide.  
+                    No search, no YouTube, no scripts—just pure HTML.
+                </div>
+
+                <div class="track-list">
+                    <div class="track-item">
+                        <div class="track-name">Sample Track 1</div>
+                        <div class="track-artist">Artist Name</div>
+                        <audio controls>
+                            <!-- Replace with your own file or URL -->
+                            <source src="sample1.mp3" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </div>
+
+                    <div class="track-item">
+                        <div class="track-name">Sample Track 2</div>
+                        <div class="track-artist">Artist Name</div>
+                        <audio controls>
+                            <!-- Replace with your own file or URL -->
+                            <source src="sample2.mp3" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </div>
+
+                    <div class="track-item">
+                        <div class="track-name">Sample Track 3 (Remote URL)</div>
+                        <div class="track-artist">Direct link</div>
+                        <audio controls>
+                            <!-- Example: direct MP3 URL if you have one -->
+                            <source src="" type="audio/mpeg">
+                            <!-- Leave empty or replace with a real URL -->
+                            Your browser does not support the audio element.
+                        </audio>
+                    </div>
+                </div>
+            </div>
         </section>
     </div>
 
     <div class="footer-line">
-        Nexus Z‑Kit • Built for you • Press ~ to quickly exit
+        Nexus Z‑Kit • HTML‑only mode • No JavaScript running
     </div>
 </div>
-
-<!-- FULLSCREEN MUSIC PAGE -->
-<div id="musicPage" class="music-page">
-    
-    <!-- LEFT SIDE -->
-    <div class="music-left">
-        <input type="text" id="musicSearchInput" class="music-search-bar" placeholder="Search any song..." oninput="searchRealMusic()">
-
-        <div class="now-playing-box">
-            <img id="npCover" class="np-cover" src="" alt="">
-            <div class="big-music-icon" id="npIcon">🎵</div>
-            <div class="np-title" id="npTitle">Not Playing</div>
-            <div class="np-artist" id="npArtist">Try searching on the right</div>
-
-            <div class="visualizer">
-                <span></span><span></span><span></span><span></span><span></span>
-            </div>
-
-            <div class="np-controls">
-                <button class="np-btn" onclick="prevResult()">⏮</button>
-                <button class="np-btn" onclick="togglePlay()">⏯</button>
-                <button class="np-btn" onclick="nextResult()">⏭</button>
-                <button class="np-btn" onclick="toggleFavorite()">★</button>
-            </div>
-        </div>
-
-        <div class="favorites-box">
-            <div class="fav-title">Favorites</div>
-            <div id="favoritesList" class="fav-list"></div>
-        </div>
-    </div>
-
-    <!-- RIGHT SIDE -->
-    <div class="music-right">
-        <div id="musicResultsList" class="results-list"></div>
-    </div>
-
-    <button class="back-btn" onclick="closeMusicPage()">← Back</button>
-
-    <!-- HIDDEN AUDIO PLAYER -->
-    <audio id="audioPlayer"></audio>
-</div>
-
-<script>
-// STATUS (TIME, TEMP, BATTERY)
-function updateStatus() {
-    const t = new Date();
-    let h = t.getHours();
-    const m = t.getMinutes().toString().padStart(2, "0");
-    const ampm = h >= 12 ? "PM" : "AM";
-    h = h % 12 || 12;
-    document.getElementById("status-time").textContent = `${h}:${m} ${ampm}`;
-    document.getElementById("status-temp").textContent = "72°F";
-    const batteryFill = document.getElementById("battery-fill");
-    const batteryText = document.getElementById("status-battery-text");
-    const level = 100;
-    batteryFill.style.width = level + "%";
-    batteryText.textContent = level + "%";
-}
-updateStatus();
-setInterval(updateStatus, 30000);
-
-// OPEN / CLOSE MUSIC PAGE
-function openMusicPage() {
-    document.getElementById("musicPage").style.display = "flex";
-    document.getElementById("homeShell").style.display = "none";
-}
-
-function closeMusicPage() {
-    document.getElementById("musicPage").style.display = "none";
-    document.getElementById("homeShell").style.display = "block";
-    stopAudio();
-}
-
-// GLOBAL STATE
-let currentResults = [];
-let currentIndex = -1;
-let favorites = [];
-const audioPlayer = document.getElementById("audioPlayer");
-
-// REAL ONLINE SEARCH (iTunes API)
-async function searchRealMusic() {
-    const q = document.getElementById("musicSearchInput").value.trim();
-    const list = document.getElementById("musicResultsList");
-
-    if (!q) {
-        list.innerHTML = "";
-        currentResults = [];
-        currentIndex = -1;
-        return;
-    }
-
-    const url = `https://itunes.apple.com/search?term=${encodeURIComponent(q)}&entity=song&limit=25`;
-
-    try {
-        const res = await fetch(url);
-        const data = await res.json();
-
-        currentResults = data.results || [];
-        currentIndex = -1;
-        list.innerHTML = "";
-
-        currentResults.forEach((song, idx) => {
-            const div = document.createElement("div");
-            div.className = "result-item";
-            div.innerHTML = `
-                <div class="song-title">${song.trackName}</div>
-                <div class="song-artist">${song.artistName}</div>
-            `;
-            div.onclick = () => playSongAtIndex(idx);
-            list.appendChild(div);
-        });
-    } catch (e) {
-        list.innerHTML = "<div style='padding:10px;color:#f55;'>Error loading results.</div>";
-    }
-}
-
-// PLAY SONG BY INDEX
-function playSongAtIndex(idx) {
-    if (idx < 0 || idx >= currentResults.length) return;
-    currentIndex = idx;
-    const song = currentResults[idx];
-
-    document.getElementById("npTitle").textContent = song.trackName;
-    document.getElementById("npArtist").textContent = song.artistName;
-
-    const cover = document.getElementById("npCover");
-    const icon = document.getElementById("npIcon");
-    if (song.artworkUrl100) {
-        cover.src = song.artworkUrl100.replace("100x100bb", "300x300bb");
-        cover.style.display = "block";
-        icon.style.display = "none";
-    } else {
-        cover.style.display = "none";
-        icon.style.display = "block";
-    }
-
-    if (song.previewUrl) {
-        audioPlayer.src = song.previewUrl;
-        audioPlayer.play().catch(()=>{});
-    }
-}
-
-// PLAY / PAUSE TOGGLE
-function togglePlay() {
-    if (!audioPlayer.src) {
-        if (currentResults.length > 0) {
-            playSongAtIndex(0);
-        }
-        return;
-    }
-    if (audioPlayer.paused) {
-        audioPlayer.play().catch(()=>{});
-    } else {
-        audioPlayer.pause();
-    }
-}
-
-// STOP AUDIO
-function stopAudio() {
-    audioPlayer.pause();
-    audioPlayer.currentTime = 0;
-}
-
-// NEXT / PREV
-function nextResult() {
-    if (!currentResults.length) return;
-    const nextIndex = (currentIndex + 1) % currentResults.length;
-    playSongAtIndex(nextIndex);
-}
-
-function prevResult() {
-    if (!currentResults.length) return;
-    const prevIndex = (currentIndex - 1 + currentResults.length) % currentResults.length;
-    playSongAtIndex(prevIndex);
-}
-
-// FAVORITES
-function toggleFavorite() {
-    if (currentIndex < 0 || currentIndex >= currentResults.length) return;
-    const song = currentResults[currentIndex];
-    const key = song.trackId;
-
-    const exists = favorites.find(f => f.trackId === key);
-    if (exists) {
-        favorites = favorites.filter(f => f.trackId !== key);
-    } else {
-        favorites.push(song);
-    }
-    renderFavorites();
-}
-
-function renderFavorites() {
-    const box = document.getElementById("favoritesList");
-    box.innerHTML = "";
-    favorites.forEach(song => {
-        const div = document.createElement("div");
-        div.className = "fav-item";
-        div.textContent = `${song.trackName} — ${song.artistName}`;
-        div.onclick = () => {
-            const indexInResults = currentResults.findIndex(r => r.trackId === song.trackId);
-            if (indexInResults !== -1) {
-                playSongAtIndex(indexInResults);
-            } else {
-                currentResults.push(song);
-                playSongAtIndex(currentResults.length - 1);
-            }
-        };
-        box.appendChild(div);
-    });
-}
-
-// PANIC KEY
-window.addEventListener("keydown", (e) => {
-    if (e.key === "~") {
-        window.location.href = "https://google.com";
-    }
-});
-</script>
 
 </body>
 </html>
