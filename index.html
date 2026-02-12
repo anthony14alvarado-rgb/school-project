@@ -1141,6 +1141,48 @@ function togglePlay() {
         }
     }
 }
+<div id="welcomePopup" style="
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #11111c;
+    padding: 14px 18px;
+    border-radius: 12px;
+    border: 1px solid #2a2a3a;
+    color: white;
+    font-size: 14px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.4);
+    opacity: 0;
+    transition: 0.4s ease;
+    z-index: 9999;
+">
+    <!-- message will be inserted by script -->
+</div>
+    <script>
+window.addEventListener("load", () => {
+    const messages = [
+        "Welcome back to Nexus Z‑Kit.",
+        "System boot complete.",
+        "Good to see you again.",
+        "Music engine loaded.",
+        "Hi! Need a song added?",
+        "Nexus is ready.",
+        "Environment initialized.",
+        "You're back — let's go."
+    ];
+
+    const popup = document.getElementById("welcomePopup");
+    popup.textContent = messages[Math.floor(Math.random() * messages.length)];
+
+    // fade in
+    popup.style.opacity = "1";
+
+    // fade out after 3 seconds
+    setTimeout(() => {
+        popup.style.opacity = "0";
+    }, 3000);
+});
+
 </script>
 
 </body>
