@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nexus Z‑Kit • Home</title>
+<title>ECTOPIC • Home</title>
 
 <style>
 :root {
     --bg: #050510;
-    --bg-soft: #0a0a18;
+    --overlay: rgba(5,5,16,0.86);
     --card: #111122;
     --accent: #b46bff;
     --accent-soft: #6f7dff;
@@ -30,31 +30,50 @@
 
 body {
     min-height: 100vh;
-    background:
-        radial-gradient(circle at top, #2a1a4a 0, transparent 55%),
-        radial-gradient(circle at bottom, #101020 0, #050510 55%);
+    background: #000;
     color: var(--text);
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 18px;
+    position: relative;
+    overflow: hidden;
 }
 
-/* SHELL */
+/* BACKGROUND IMAGE SLOT */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: url('background.jpg') center/cover no-repeat;
+    filter: blur(6px) brightness(0.6);
+    z-index: -2;
+}
+
+/* DARK OVERLAY */
+body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(circle at top, rgba(180,107,255,0.25), transparent 55%),
+                radial-gradient(circle at bottom, rgba(10,10,30,0.9), #050510 70%);
+    mix-blend-mode: normal;
+    z-index: -1;
+}
+
+/* MAIN SHELL */
 .shell {
     width: 100%;
     max-width: 1120px;
-    background: radial-gradient(circle at top left, rgba(180,107,255,0.18), transparent 55%),
-                radial-gradient(circle at bottom right, rgba(111,125,255,0.18), transparent 55%),
-                rgba(5,5,16,0.96);
+    height: 620px;
+    max-height: 90vh;
     border-radius: 32px;
-    border: 1px solid rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.08);
+    background: var(--overlay);
     box-shadow: var(--shadow-soft);
-    padding: 22px 24px 20px;
-    backdrop-filter: blur(22px);
+    padding: 22px 26px;
     display: flex;
     flex-direction: column;
-    gap: 16px;
     position: relative;
     overflow: hidden;
 }
@@ -87,8 +106,8 @@ body {
 
 .brand-text span:first-child {
     font-weight: 600;
-    letter-spacing: 0.08em;
-    font-size: 13px;
+    letter-spacing: 0.12em;
+    font-size: 12px;
 }
 
 .brand-text span:last-child {
@@ -116,30 +135,35 @@ body {
     background: #3ddc84;
 }
 
-/* MAIN HOME CENTER */
-.home-center {
+/* HOME LAYOUT */
+.home-layout {
     flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* CENTER COLUMN */
+.home-center {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    padding: 18px 10px 10px;
     text-align: center;
 }
 
 /* BIG TITLE */
 .big-title {
-    font-size: 46px;
-    letter-spacing: 0.25em;
-    text-indent: 0.25em;
+    font-size: 52px;
+    letter-spacing: 0.35em;
+    text-indent: 0.35em;
     font-weight: 800;
     text-transform: uppercase;
     color: #e5ddff;
-    text-shadow: 0 0 24px rgba(180,107,255,0.7);
+    text-shadow: 0 0 26px rgba(180,107,255,0.9);
 }
 
 .big-sub {
-    margin-top: 8px;
+    margin-top: 10px;
     font-size: 13px;
     color: var(--dim);
 }
@@ -147,15 +171,15 @@ body {
 /* SEARCH BAR */
 .search-wrap {
     margin-top: 18px;
-    width: 100%;
-    max-width: 520px;
+    width: 320px;
+    max-width: 80vw;
 }
 
 .search-input {
     width: 100%;
-    padding: 11px 14px;
+    padding: 10px 14px;
     border-radius: 999px;
-    border: 1px solid rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.18);
     background: rgba(5,5,18,0.9);
     color: var(--text);
     font-size: 13px;
@@ -167,50 +191,46 @@ body {
     color: #6f6f8a;
 }
 
-/* ICON GRID */
-.icon-grid {
+/* VERTICAL MENU */
+.vertical-menu {
     margin-top: 26px;
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 18px;
-    max-width: 520px;
-    width: 100%;
-}
-
-.icon-tile {
-    background: rgba(10,10,26,0.96);
-    border-radius: 20px;
-    padding: 14px 10px 12px;
-    border: 1px solid rgba(255,255,255,0.06);
-    cursor: pointer;
-    transition: 0.18s ease;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    gap: 6px;
-    box-shadow: 0 0 18px rgba(0,0,0,0.5);
+    gap: 10px;
 }
 
-.icon-tile:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 0 26px rgba(0,0,0,0.7);
+.menu-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    border-radius: 999px;
+    background: rgba(10,10,26,0.96);
+    border: 1px solid rgba(255,255,255,0.08);
+    cursor: pointer;
+    transition: 0.18s ease;
+    min-width: 180px;
+}
+
+.menu-item:hover {
+    transform: translateX(4px);
+    box-shadow: 0 0 22px rgba(0,0,0,0.7);
     border-color: rgba(180,107,255,0.7);
 }
 
-.icon-circle {
-    width: 40px;
-    height: 40px;
-    border-radius: 999px;
+.menu-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 12px;
     background: radial-gradient(circle at top, #b46bff, #6f7dff);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 20px;
+    font-size: 18px;
 }
 
-.icon-label {
-    font-size: 12px;
-    margin-top: 2px;
+.menu-label {
+    font-size: 13px;
 }
 
 /* BOTTOM STRIP */
@@ -218,14 +238,13 @@ body {
     margin-top: 18px;
     font-size: 11px;
     color: var(--dim);
-    text-align: center;
 }
 
-/* HIDDEN APP LAYER */
+/* APP LAYER */
 .app-layer {
     position: absolute;
     inset: 0;
-    padding: 22px 24px 20px;
+    padding: 22px 26px;
     display: none;
     flex-direction: column;
     gap: 14px;
@@ -269,7 +288,7 @@ body {
     overflow: hidden;
 }
 
-/* GENERIC SECTION STYLE INSIDE APP LAYER */
+/* GENERIC SECTION STYLE */
 .section {
     display: none;
     height: 100%;
@@ -279,7 +298,7 @@ body {
     display: block;
 }
 
-/* MUSIC PAGE (INSIDE APP LAYER) */
+/* MUSIC PAGE */
 .music-page {
     display: flex;
     gap: 18px;
@@ -363,7 +382,7 @@ body {
 .visualizer span:nth-child(1) { height: 6px; }
 .visualizer span:nth-child(2) { height: 10px; }
 .visualizer span:nth-child(3) { height: 14px; }
-.visualizer span:nth-child(4) { height: 10px; }
+visualizer span:nth-child(4) { height: 10px; }
 .visualizer span:nth-child(5) { height: 6px; }
 
 .np-controls {
@@ -423,7 +442,7 @@ body {
     color: #9a9a9a;
 }
 
-/* SIMPLE PLACEHOLDER SECTIONS */
+/* SIMPLE TEXT SECTIONS */
 .section-inner-title {
     font-size: 16px;
     font-weight: 600;
@@ -505,8 +524,12 @@ body {
 
 /* RESPONSIVE */
 @media (max-width: 900px) {
-    .icon-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+    .shell {
+        height: auto;
+    }
+    .home-layout {
+        padding-top: 20px;
+        padding-bottom: 20px;
     }
     .music-page {
         flex-direction: column;
@@ -522,10 +545,10 @@ body {
 
 <div class="shell">
     <div class="top-row">
-        <div class="logo">N</div>
+        <div class="logo">E</div>
         <div class="brand-text">
-            <span>NEXUS</span>
-            <span>Custom home environment</span>
+            <span>ECTOPIC</span>
+            <span>Custom launch environment</span>
         </div>
         <div class="online-pill">
             <div class="online-dot"></div>
@@ -533,50 +556,52 @@ body {
         </div>
     </div>
 
-    <!-- MAIN HOME SCREEN -->
-    <div class="home-center" id="homeScreen">
-        <div class="big-title">NEXUS</div>
-        <div class="big-sub">
-            Your personal launch space. Music, AI, apps, and games in one place.
-        </div>
+    <!-- HOME SCREEN -->
+    <div class="home-layout" id="homeScreen">
+        <div class="home-center">
+            <div class="big-title">ECTOPIC</div>
+            <div class="big-sub">
+                One screen. Settings, AI, apps, and games—your way.
+            </div>
 
-        <div class="search-wrap">
-            <input
-                type="text"
-                class="search-input"
-                placeholder="Search or enter URL (visual only)"
-            >
-        </div>
+            <div class="search-wrap">
+                <input
+                    type="text"
+                    class="search-input"
+                    placeholder="Search or Enter URL (visual only)"
+                >
+            </div>
 
-        <div class="icon-grid">
-            <div class="icon-tile" onclick="openLayer('settings')">
-                <div class="icon-circle">⚙️</div>
-                <div class="icon-label">Settings</div>
+            <div class="vertical-menu">
+                <div class="menu-item" onclick="openLayer('settings')">
+                    <div class="menu-icon">⚙️</div>
+                    <div class="menu-label">Settings</div>
+                </div>
+                <div class="menu-item" onclick="openLayer('ai')">
+                    <div class="menu-icon">🤖</div>
+                    <div class="menu-label">AI</div>
+                </div>
+                <div class="menu-item" onclick="openLayer('apps')">
+                    <div class="menu-icon">📦</div>
+                    <div class="menu-label">Apps (Music)</div>
+                </div>
+                <div class="menu-item" onclick="openLayer('games')">
+                    <div class="menu-icon">🎮</div>
+                    <div class="menu-label">Games</div>
+                </div>
             </div>
-            <div class="icon-tile" onclick="openLayer('ai')">
-                <div class="icon-circle">🤖</div>
-                <div class="icon-label">AI</div>
-            </div>
-            <div class="icon-tile" onclick="openLayer('apps')">
-                <div class="icon-circle">📦</div>
-                <div class="icon-label">Apps</div>
-            </div>
-            <div class="icon-tile" onclick="openLayer('games')">
-                <div class="icon-circle">🎮</div>
-                <div class="icon-label">Games</div>
-            </div>
-        </div>
 
-        <div class="bottom-strip">
-            If you can't find your song, tell me and I'll add it.
+            <div class="bottom-strip">
+                If you can't find your song, tell me and I'll add it.
+            </div>
         </div>
     </div>
 
-    <!-- APP LAYER (OVERLAY) -->
+    <!-- APP LAYER -->
     <div class="app-layer" id="appLayer">
         <div class="app-nav">
             <button class="back-btn" onclick="closeLayer()">
-                ← Back to Home
+                ← Back to ECTOPIC
             </button>
             <div class="app-nav-title" id="appNavTitle">Apps</div>
         </div>
@@ -586,12 +611,12 @@ body {
             <div class="section" id="section-ai">
                 <div class="section-inner-title">AI Console</div>
                 <div class="section-inner-sub">
-                    This is a placeholder for your AI tools. You can embed chat, APIs, or anything here.
+                    Simple local chat. Type anything and get a basic response.
                 </div>
                 <div class="chat-shell" style="margin-top:10px;">
                     <div class="chat-messages" id="chatMessages">
                         <div class="chat-message bot">
-                            <span>Welcome to Nexus AI. Type something and I'll respond in a simple way.</span>
+                            <span>Welcome to ECTOPIC AI. If you can't find your song, tell me and I'll add it.</span>
                         </div>
                     </div>
                     <div class="chat-input-row">
@@ -612,7 +637,7 @@ body {
                     <!-- LEFT -->
                     <div class="music-left">
                         <div>
-                            <div class="music-header">Nexus • Music</div>
+                            <div class="music-header">ECTOPIC • Music</div>
                             <div class="music-sub">
                                 If you can't find your song, tell me and I'll add it.
                             </div>
@@ -627,7 +652,7 @@ body {
                         <div class="now-playing-box">
                             <div class="big-music-icon" id="npIcon">🎵</div>
                             <div class="np-title" id="npTitle">Not Playing</div>
-                            <div class="np-artist" id="npArtist">Try selecting a song on the right</div>
+                            <div class="np-artist" id="npArtist">Select a song on the right</div>
 
                             <div class="visualizer">
                                 <span></span><span></span><span></span><span></span><span></span>
@@ -642,7 +667,9 @@ body {
                     </div>
 
                     <!-- RIGHT -->
-                    <!-- ~30 songs -->
+                    <div class="music-right">
+                        <div class="results-list" id="resultsList">
+                            <!-- ~30 songs -->
 <div class="result-item" data-video-id="W2J7f4K1KQQ" data-title="Tití Me Preguntó" data-artist="Bad Bunny">
     <div class="song-title">Tití Me Preguntó</div>
     <div class="song-artist">Bad Bunny</div>
@@ -777,115 +804,113 @@ body {
     <div class="song-title">Blank Space</div>
     <div class="song-artist">Taylor Swift</div>
 </div>
-             <div class="music-right">
-                   <div class="results-list" id="resultsList">
-                            <!-- ~30 songs -->
-                                    </div> <!-- end of results-list -->
-                </div> <!-- end of music-right -->
-            </div> <!-- end of music-page -->
-        </section> <!-- end of music section -->
 
-        <!-- APPS -->
-        <section id="apps" class="section">
-            <h2 style="font-size:18px; margin-bottom:8px;">Apps</h2>
-            <p style="font-size:12px; color:var(--dim); margin-bottom:10px;">
-                Launch different parts of your Nexus environment.
-            </p>
-            <div class="apps-grid">
-                <div class="app-tile" onclick="showSection('music')">
-                    <div class="app-tile-title">Music Player</div>
-                    <div class="app-tile-sub">Full YouTube playlist</div>
-                </div>
-                <div class="app-tile" onclick="showSection('chat')">
-                    <div class="app-tile-title">Chat Console</div>
-                    <div class="app-tile-sub">Talk to your assistant</div>
-                </div>
-                <div class="app-tile" onclick="showSection('games')">
-                    <div class="app-tile-title">Games Hub</div>
-                    <div class="app-tile-sub">Mini games & links</div>
-                </div>
-                <div class="app-tile" onclick="showSection('settings')">
-                    <div class="app-tile-title">Settings</div>
-                    <div class="app-tile-sub">Theme & info</div>
-                </div>
-            </div>
-        </section>
+</div> <!-- end of results-list -->
+</div> <!-- end of music-right -->
+</div> <!-- end of music-page -->
+</section> <!-- end of music section -->
 
-        <!-- GAMES -->
-        <section id="games" class="section">
-            <h2 style="font-size:18px; margin-bottom:8px;">Games Hub</h2>
-            <p style="font-size:12px; color:var(--dim); margin-bottom:10px;">
-                Simple links and placeholders for future games.
-            </p>
-            <div class="games-grid">
-                <div class="game-card">
-                    <div class="game-title">2048</div>
-                    <div class="game-sub">Classic number merge puzzle.</div>
-                </div>
-                <div class="game-card">
-                    <div class="game-title">Snake</div>
-                    <div class="game-sub">Retro arcade vibes.</div>
-                </div>
-                <div class="game-card">
-                    <div class="game-title">Tic Tac Toe</div>
-                    <div class="game-sub">Quick matches with friends.</div>
-                </div>
-                <div class="game-card">
-                    <div class="game-title">More Coming Soon</div>
-                    <div class="game-sub">You can plug in any web game here.</div>
-                </div>
-            </div>
-        </section>
-
-        <!-- CHAT -->
-        <section id="chat" class="section">
-            <div class="chat-shell">
-                <div class="chat-header">Chat Console</div>
-                <div class="chat-sub">
-                    This is a simple in‑browser chat. Type anything and the bot will respond.
-                </div>
-                <div class="chat-messages" id="chatMessages">
-                    <div class="chat-message bot">
-                        <span>Welcome to Nexus chat. If you can't find your song, tell me and I'll add it.</span>
-                    </div>
-                </div>
-                <div class="chat-input-row">
-                    <input id="chatInput" type="text" placeholder="Type a message and press Enter or Send">
-                    <button onclick="sendChat()">Send</button>
-                </div>
-            </div>
-        </section>
-
-        <!-- SETTINGS -->
-        <section id="settings" class="section">
-            <h2 style="font-size:18px; margin-bottom:8px;">Settings</h2>
-            <p style="font-size:12px; color:var(--dim); margin-bottom:10px;">
-                Visual and informational settings for Nexus Z‑Kit.
-            </p>
-            <div class="settings-grid">
-                <div class="setting-card">
-                    <div class="setting-title">Theme</div>
-                    <div class="setting-sub">Dark mode locked in. This is your command space.</div>
-                </div>
-                <div class="setting-card">
-                    <div class="setting-title">Music Engine</div>
-                    <div class="setting-sub">YouTube playlist with ~30 songs. If you want more, we can add them.</div>
-                </div>
-                <div class="setting-card">
-                    <div class="setting-title">Chat Mode</div>
-                    <div class="setting-sub">Local chat bot with simple responses.</div>
-                </div>
-                <div class="setting-card">
-                    <div class="setting-title">About</div>
-                    <div class="setting-sub">Nexus Z‑Kit is your mini‑OS in the browser.</div>
-                </div>
-            </div>
-        </section>
+<!-- APPS -->
+<section id="apps" class="section">
+    <h2 style="font-size:18px; margin-bottom:8px;">Apps</h2>
+    <p style="font-size:12px; color:var(--dim); margin-bottom:10px;">
+        Launch different parts of your Nexus environment.
+    </p>
+    <div class="apps-grid">
+        <div class="app-tile" onclick="showSection('music')">
+            <div class="app-tile-title">Music Player</div>
+            <div class="app-tile-sub">Full YouTube playlist</div>
+        </div>
+        <div class="app-tile" onclick="showSection('chat')">
+            <div class="app-tile-title">Chat Console</div>
+            <div class="app-tile-sub">Talk to your assistant</div>
+        </div>
+        <div class="app-tile" onclick="showSection('games')">
+            <div class="app-tile-title">Games Hub</div>
+            <div class="app-tile-sub">Mini games & links</div>
+        </div>
+        <div class="app-tile" onclick="showSection('settings')">
+            <div class="app-tile-title">Settings</div>
+            <div class="app-tile-sub">Theme & info</div>
+        </div>
     </div>
+</section>
 
-    <div class="footer-line">
-        Nexus Z‑Kit • Music, Games, Chat, Apps • If you can't find your song, tell me and I'll add it.
+<!-- GAMES -->
+<section id="games" class="section">
+    <h2 style="font-size:18px; margin-bottom:8px;">Games Hub</h2>
+    <p style="font-size:12px; color:var(--dim); margin-bottom:10px;">
+        Simple links and placeholders for future games.
+    </p>
+    <div class="games-grid">
+        <div class="game-card">
+            <div class="game-title">2048</div>
+            <div class="game-sub">Classic number merge puzzle.</div>
+        </div>
+        <div class="game-card">
+            <div class="game-title">Snake</div>
+            <div class="game-sub">Retro arcade vibes.</div>
+        </div>
+        <div class="game-card">
+            <div class="game-title">Tic Tac Toe</div>
+            <div class="game-sub">Quick matches with friends.</div>
+        </div>
+        <div class="game-card">
+            <div class="game-title">More Coming Soon</div>
+            <div class="game-sub">You can plug in any web game here.</div>
+        </div>
     </div>
+</section>
+
+<!-- CHAT -->
+<section id="chat" class="section">
+    <div class="chat-shell">
+        <div class="chat-header">Chat Console</div>
+        <div class="chat-sub">
+            This is a simple in‑browser chat. Type anything and the bot will respond.
+        </div>
+        <div class="chat-messages" id="chatMessages">
+            <div class="chat-message bot">
+                <span>Welcome to Nexus chat. If you can't find your song, tell me and I'll add it.</span>
+            </div>
+        </div>
+        <div class="chat-input-row">
+            <input id="chatInput" type="text" placeholder="Type a message and press Enter or Send">
+            <button onclick="sendChat()">Send</button>
+        </div>
+    </div>
+</section>
+
+<!-- SETTINGS -->
+<section id="settings" class="section">
+    <h2 style="font-size:18px; margin-bottom:8px;">Settings</h2>
+    <p style="font-size:12px; color:var(--dim); margin-bottom:10px;">
+        Visual and informational settings for Nexus Z‑Kit.
+    </p>
+    <div class="settings-grid">
+        <div class="setting-card">
+            <div class="setting-title">Theme</div>
+            <div class="setting-sub">Dark mode locked in. This is your command space.</div>
+        </div>
+        <div class="setting-card">
+            <div class="setting-title">Music Engine</div>
+            <div class="setting-sub">YouTube playlist with ~30 songs. If you want more, we can add them.</div>
+        </div>
+        <div class="setting-card">
+            <div class="setting-title">Chat Mode</div>
+            <div class="setting-sub">Local chat bot with simple responses.</div>
+        </div>
+        <div class="setting-card">
+            <div class="setting-title">About</div>
+            <div class="setting-sub">Nexus Z‑Kit is your mini‑OS in the browser.</div>
+        </div>
+    </div>
+</section>
+</div>
+
+<div class="footer-line">
+    Nexus Z‑Kit • Music, Games, Chat, Apps • If you can't find your song, tell me and I'll add it.
+</div>
 </div>
 
 <!-- Welcome popup -->
@@ -1031,59 +1056,9 @@ function prevSong() {
 }
 
 function togglePlay() {
-    if (!player) return;
-    const state = player.getPlayerState();
-    if (state === YT.PlayerState.PLAYING) {
-        player.pauseVideo();
-    } else {
-        if (currentIndex === -1) {
-            playSongAtIndex(0);
-        } else {
-            player.playVideo();
-        }
-    }
-}
-
-/* RANDOM WELCOME + TIP POPUP */
-window.addEventListener("load", () => {
-    const greetings = [
-        "Welcome back to Nexus Z‑Kit.",
-        "System boot complete.",
-        "Good to see you again.",
-        "Environment initialized.",
-        "You're back — let's go.",
-        "Hi Anthony, your system is ready.",
-        "Nexus OS online.",
-        "Boot sequence finished."
-    ];
-
-    const tips = [
-        "Tip: If you can't find your song, tell me and I'll add it.",
-        "Tip: You can switch pages instantly using the top navigation.",
-        "Tip: Try the chat console — it responds to anything.",
-        "Tip: Add more songs anytime by editing the playlist.",
-        "Tip: Music auto‑plays the next track when one ends.",
-        "Tip: You can expand Nexus Z‑Kit with more apps.",
-        "Tip: Refresh the page to get a new welcome message.",
-        "Tip: Your playlist supports unlimited songs."
-    ];
-
-    const popup = document.getElementById("welcomePopup");
-    const randomGreeting = greetings[Math.floor(Math.random() * greetings.length)];
-    const randomTip = tips[Math.floor(Math.random() * tips.length)];
-
-    popup.innerHTML = `
-        <strong>${randomGreeting}</strong><br>
-        <span style="color:#9a9aa9;">${randomTip}</span>
-    `;
-
-    popup.style.opacity = "1";
-
-    setTimeout(() => {
-        popup.style.opacity = "0";
-    }, 3000);
-});
-</script>
-        
-</body> 
+    if (!player)
+  </script>
+</body>
 </html>
+        
+  
