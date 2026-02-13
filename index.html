@@ -3,23 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nexus Z‑Kit OS</title>
+<title>Nexus Z‑Kit • Home</title>
 
 <style>
 :root {
-    --bg: #05050a;
-    --bg-soft: #0b0b14;
-    --card: #11111c;
-    --card-soft: #181824;
-    --accent: #5f8dff;
-    --accent-strong: #8b5dff;
-    --text: #f5f5f7;
-    --dim: #9a9aa5;
-    --border: #232334;
-    --radius-lg: 22px;
-    --radius-md: 16px;
-    --shadow-soft: 0 0 40px rgba(0,0,0,0.55);
-    --shadow-subtle: 0 0 18px rgba(0,0,0,0.35);
+    --bg: #050510;
+    --bg-soft: #0a0a18;
+    --card: #111122;
+    --accent: #b46bff;
+    --accent-soft: #6f7dff;
+    --text: #f5f5ff;
+    --dim: #9a9ab5;
+    --border: #26263a;
+    --radius-lg: 26px;
+    --radius-md: 18px;
+    --shadow-soft: 0 0 40px rgba(0,0,0,0.7);
 }
 
 /* RESET */
@@ -33,47 +31,51 @@
 body {
     min-height: 100vh;
     background:
-        radial-gradient(circle at top, #202040 0, transparent 55%),
-        radial-gradient(circle at bottom, #101020 0, #05050a 55%);
+        radial-gradient(circle at top, #2a1a4a 0, transparent 55%),
+        radial-gradient(circle at bottom, #101020 0, #050510 55%);
     color: var(--text);
     display: flex;
     justify-content: center;
-    align-items: flex-start;
-    padding: 24px 10px;
+    align-items: center;
+    padding: 18px;
 }
 
 /* SHELL */
 .shell {
     width: 100%;
     max-width: 1120px;
-    background: rgba(5,5,12,0.96);
-    border-radius: 28px;
-    border: 1px solid rgba(255,255,255,0.04);
+    background: radial-gradient(circle at top left, rgba(180,107,255,0.18), transparent 55%),
+                radial-gradient(circle at bottom right, rgba(111,125,255,0.18), transparent 55%),
+                rgba(5,5,16,0.96);
+    border-radius: 32px;
+    border: 1px solid rgba(255,255,255,0.06);
     box-shadow: var(--shadow-soft);
-    padding: 18px 20px 20px;
-    backdrop-filter: blur(18px);
+    padding: 22px 24px 20px;
+    backdrop-filter: blur(22px);
     display: flex;
     flex-direction: column;
-    gap: 14px;
+    gap: 16px;
+    position: relative;
+    overflow: hidden;
 }
 
 /* TOP BAR */
 .top-row {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
 }
 
 .logo {
-    width: 42px;
-    height: 42px;
+    width: 40px;
+    height: 40px;
     border-radius: 14px;
-    background: conic-gradient(from 210deg, #5f8dff, #8b5dff, #ff6fb1, #5f8dff);
+    background: conic-gradient(from 210deg, #b46bff, #6f7dff, #ff6fb1, #b46bff);
     display: flex;
     justify-content: center;
     align-items: center;
     font-weight: 800;
-    font-size: 22px;
+    font-size: 20px;
     color: #fff;
 }
 
@@ -85,18 +87,18 @@ body {
 
 .brand-text span:first-child {
     font-weight: 600;
-    letter-spacing: 0.04em;
-    font-size: 15px;
+    letter-spacing: 0.08em;
+    font-size: 13px;
 }
 
 .brand-text span:last-child {
-    font-size: 12px;
+    font-size: 11px;
     color: var(--dim);
 }
 
 .online-pill {
     margin-left: auto;
-    font-size: 12px;
+    font-size: 11px;
     color: var(--dim);
     padding: 4px 10px;
     border-radius: 999px;
@@ -104,7 +106,7 @@ body {
     display: flex;
     align-items: center;
     gap: 6px;
-    background: rgba(15,15,25,0.9);
+    background: rgba(10,10,22,0.9);
 }
 
 .online-dot {
@@ -114,246 +116,173 @@ body {
     background: #3ddc84;
 }
 
-/* NAV */
-nav {
-    border-radius: 999px;
-    background: rgba(8,8,16,0.98);
-    border: 1px solid var(--border);
-    padding: 4px;
+/* MAIN HOME CENTER */
+.home-center {
+    flex: 1;
     display: flex;
-    flex-wrap: wrap;
-    gap: 4px;
-}
-
-.nav-btn {
-    flex: 1 1 auto;
-    min-width: 90px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 18px 10px 10px;
     text-align: center;
-    font-size: 13px;
-    padding: 8px 12px;
-    border-radius: 999px;
-    color: var(--dim);
-    text-decoration: none;
-    transition: 0.18s ease;
-    white-space: nowrap;
-    border: none;
-    background: transparent;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
 }
 
-.nav-btn span.icon {
-    font-size: 14px;
-    opacity: 0.9;
-}
-
-.nav-btn:hover {
-    color: var(--text);
-    background: #151525;
-}
-
-.nav-btn.active {
-    background: linear-gradient(135deg, var(--accent), var(--accent-strong));
-    color: #fff;
-}
-
-/* CONTENT AREA */
-.content {
-    margin-top: 4px;
-    border-radius: 22px;
-    background: rgba(5,5,12,0.96);
-    border: 1px solid var(--border);
-    padding: 16px;
-    min-height: 480px;
-    overflow: hidden;
-    position: relative;
-}
-
-/* SECTIONS */
-.section {
-    display: none;
-    height: 100%;
-    opacity: 0;
-    transform: translateY(8px);
-    transition: opacity 0.18s ease, transform 0.18s ease;
-}
-.section.active {
-    display: block;
-    opacity: 1;
-    transform: translateY(0);
-}
-
-/* HOME */
-.home-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
-    gap: 18px;
-}
-
-.hero {
-    background: var(--bg-soft);
-    border-radius: var(--radius-lg);
-    padding: 18px;
-    border: 1px solid var(--border);
-    box-shadow: var(--shadow-subtle);
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-.hero-heading {
-    font-size: 26px;
-    font-weight: 600;
-}
-
-.hero-heading span {
+/* BIG TITLE */
+.big-title {
+    font-size: 46px;
+    letter-spacing: 0.25em;
+    text-indent: 0.25em;
     font-weight: 800;
+    text-transform: uppercase;
+    color: #e5ddff;
+    text-shadow: 0 0 24px rgba(180,107,255,0.7);
 }
 
-.hero-sub {
+.big-sub {
+    margin-top: 8px;
     font-size: 13px;
     color: var(--dim);
-    max-width: 380px;
 }
 
-.hero-image-wrap {
-    margin-top: 6px;
-    border-radius: 18px;
-    overflow: hidden;
-    background: #181824;
-    height: 170px;
+/* SEARCH BAR */
+.search-wrap {
+    margin-top: 18px;
+    width: 100%;
+    max-width: 520px;
+}
+
+.search-input {
+    width: 100%;
+    padding: 11px 14px;
+    border-radius: 999px;
+    border: 1px solid rgba(255,255,255,0.12);
+    background: rgba(5,5,18,0.9);
+    color: var(--text);
+    font-size: 13px;
+    outline: none;
+    box-shadow: 0 0 18px rgba(0,0,0,0.5);
+}
+
+.search-input::placeholder {
+    color: #6f6f8a;
+}
+
+/* ICON GRID */
+.icon-grid {
+    margin-top: 26px;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 18px;
+    max-width: 520px;
+    width: 100%;
+}
+
+.icon-tile {
+    background: rgba(10,10,26,0.96);
+    border-radius: 20px;
+    padding: 14px 10px 12px;
+    border: 1px solid rgba(255,255,255,0.06);
+    cursor: pointer;
+    transition: 0.18s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0 0 18px rgba(0,0,0,0.5);
+}
+
+.icon-tile:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 26px rgba(0,0,0,0.7);
+    border-color: rgba(180,107,255,0.7);
+}
+
+.icon-circle {
+    width: 40px;
+    height: 40px;
+    border-radius: 999px;
+    background: radial-gradient(circle at top, #b46bff, #6f7dff);
     display: flex;
     align-items: center;
     justify-content: center;
+    font-size: 20px;
 }
 
-.hero-image-wrap img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.loading-line {
-    font-size: 13px;
-    color: var(--dim);
-    font-style: italic;
-    margin-top: 6px;
-}
-
-.status-bar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+.icon-label {
     font-size: 12px;
-    color: var(--dim);
-    border-radius: 999px;
-    border: 1px solid var(--border);
-    padding: 6px 12px;
-    margin-top: 4px;
-    background: rgba(10,10,18,0.95);
-}
-
-.status-left {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-}
-
-.status-right {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-}
-
-.battery {
-    width: 26px;
-    height: 12px;
-    border-radius: 4px;
-    border: 1px solid var(--dim);
-    position: relative;
-}
-
-.battery::after {
-    content: "";
-    position: absolute;
-    right: -4px;
-    top: 3px;
-    width: 3px;
-    height: 6px;
-    border-radius: 2px;
-    background: var(--dim);
-}
-
-.battery-fill {
-    position: absolute;
-    inset: 1px;
-    border-radius: 3px;
-    background: #3ddc84;
-    width: 100%;
-}
-
-.panel {
-    background: var(--bg-soft);
-    border-radius: var(--radius-lg);
-    padding: 16px;
-    border: 1px solid var(--border);
-    box-shadow: var(--shadow-subtle);
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.panel-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 13px;
-    color: var(--dim);
-}
-
-.panel-header span:first-child {
-    color: var(--text);
-    font-weight: 500;
-}
-
-.app-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 10px;
-}
-
-.app-card {
-    background: var(--card);
-    border-radius: var(--radius-md);
-    padding: 10px;
-    border: 1px solid rgba(255,255,255,0.02);
-    cursor: pointer;
-    transition: 0.16s ease;
-}
-
-.app-card:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 0 16px rgba(0,0,0,0.4);
-}
-
-.app-title {
-    font-size: 14px;
-    font-weight: 500;
-}
-
-.app-sub {
-    font-size: 11px;
-    color: var(--dim);
     margin-top: 2px;
 }
 
-/* MUSIC SECTION */
+/* BOTTOM STRIP */
+.bottom-strip {
+    margin-top: 18px;
+    font-size: 11px;
+    color: var(--dim);
+    text-align: center;
+}
+
+/* HIDDEN APP LAYER */
+.app-layer {
+    position: absolute;
+    inset: 0;
+    padding: 22px 24px 20px;
+    display: none;
+    flex-direction: column;
+    gap: 14px;
+    background: radial-gradient(circle at top left, rgba(180,107,255,0.12), transparent 55%),
+                radial-gradient(circle at bottom right, rgba(111,125,255,0.12), transparent 55%),
+                rgba(5,5,16,0.98);
+}
+
+/* APP NAV */
+.app-nav {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.back-btn {
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: rgba(10,10,22,0.9);
+    color: var(--text);
+    font-size: 12px;
+    padding: 6px 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.app-nav-title {
+    font-size: 13px;
+    color: var(--dim);
+}
+
+/* APP CONTENT */
+.app-content {
+    flex: 1;
+    border-radius: 22px;
+    border: 1px solid var(--border);
+    background: rgba(5,5,16,0.96);
+    padding: 14px;
+    overflow: hidden;
+}
+
+/* GENERIC SECTION STYLE INSIDE APP LAYER */
+.section {
+    display: none;
+    height: 100%;
+}
+
+.section.active {
+    display: block;
+}
+
+/* MUSIC PAGE (INSIDE APP LAYER) */
 .music-page {
     display: flex;
-    gap: 20px;
+    gap: 18px;
     height: 100%;
 }
 
@@ -362,28 +291,28 @@ nav {
     width: 40%;
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 16px;
 }
 
 .music-header {
-    font-size: 18px;
+    font-size: 17px;
     font-weight: 600;
 }
 
 .music-sub {
-    font-size: 12px;
+    font-size: 11px;
     color: var(--dim);
     margin-top: 4px;
 }
 
 .music-search-bar {
     width: 100%;
-    padding: 12px;
+    padding: 10px;
     border-radius: 12px;
     border: 1px solid #262636;
     background: #11111c;
     color: white;
-    font-size: 14px;
+    font-size: 13px;
 }
 
 .music-search-bar::placeholder {
@@ -391,68 +320,66 @@ nav {
 }
 
 .now-playing-box {
-    margin-top: 6px;
+    margin-top: 4px;
     text-align: center;
-    padding: 18px;
+    padding: 16px;
     border-radius: 16px;
     background: #0f0f18;
     border: 1px solid #232334;
 }
 
 .big-music-icon {
-    font-size: 80px;
+    font-size: 64px;
     opacity: 0.7;
 }
 
 .np-title {
-    margin-top: 10px;
-    font-size: 18px;
+    margin-top: 8px;
+    font-size: 16px;
     font-weight: 600;
 }
 
 .np-artist {
     margin-top: 4px;
-    font-size: 13px;
+    font-size: 12px;
     color: #9a9a9a;
 }
 
-/* VISUALIZER (STATIC) */
 .visualizer {
-    margin-top: 14px;
+    margin-top: 10px;
     display: flex;
     justify-content: center;
     gap: 4px;
-    height: 20px;
+    height: 18px;
     align-items: flex-end;
 }
 
 .visualizer span {
     width: 4px;
-    background: #5f8dff;
+    background: #b46bff;
     border-radius: 999px;
 }
 
 .visualizer span:nth-child(1) { height: 6px; }
 .visualizer span:nth-child(2) { height: 10px; }
-.visualizer span:nth-child(3) { height: 16px; }
+.visualizer span:nth-child(3) { height: 14px; }
 .visualizer span:nth-child(4) { height: 10px; }
 .visualizer span:nth-child(5) { height: 6px; }
 
-/* CONTROLS */
 .np-controls {
-    margin-top: 14px;
+    margin-top: 12px;
     display: flex;
     justify-content: center;
-    gap: 10px;
+    gap: 8px;
 }
 
 .np-btn {
     background: #1a1a22;
     border: 1px solid #2a2a3a;
     color: white;
-    padding: 8px 11px;
+    padding: 7px 10px;
     border-radius: 10px;
-    font-size: 15px;
+    font-size: 14px;
     cursor: pointer;
     transition: 0.15s ease;
 }
@@ -472,11 +399,11 @@ nav {
     flex: 1;
     overflow-y: auto;
     border-left: 1px solid #1f1f25;
-    padding-left: 15px;
+    padding-left: 12px;
 }
 
 .result-item {
-    padding: 10px 0;
+    padding: 8px 0;
     border-bottom: 1px solid #1f1f25;
     cursor: pointer;
     transition: 0.12s ease;
@@ -484,110 +411,50 @@ nav {
 
 .result-item:hover {
     background: #15151c;
-    padding-left: 6px;
+    padding-left: 4px;
 }
 
 .song-title {
-    font-size: 15px;
+    font-size: 14px;
 }
 
 .song-artist {
-    font-size: 12px;
+    font-size: 11px;
     color: #9a9a9a;
 }
 
-/* APPS SECTION */
-.apps-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-    gap: 12px;
-}
-
-.app-tile {
-    background: var(--card);
-    border-radius: 16px;
-    padding: 14px;
-    border: 1px solid rgba(255,255,255,0.04);
-    cursor: pointer;
-    transition: 0.16s ease;
-}
-
-.app-tile:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 0 16px rgba(0,0,0,0.4);
-}
-
-.app-tile-title {
-    font-size: 14px;
-    font-weight: 600;
-}
-
-.app-tile-sub {
-    font-size: 11px;
-    color: var(--dim);
-    margin-top: 4px;
-}
-
-/* GAMES SECTION */
-.games-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 12px;
-}
-
-.game-card {
-    background: var(--card-soft);
-    border-radius: 16px;
-    padding: 12px;
-    border: 1px solid rgba(255,255,255,0.04);
-}
-
-.game-title {
-    font-size: 14px;
-    font-weight: 600;
-}
-
-.game-sub {
-    font-size: 11px;
-    color: var(--dim);
-    margin-top: 4px;
-}
-
-/* CHAT SECTION */
-.chat-shell {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    background: var(--bg-soft);
-    border-radius: 18px;
-    border: 1px solid var(--border);
-    padding: 12px;
-}
-
-.chat-header {
-    font-size: 15px;
+/* SIMPLE PLACEHOLDER SECTIONS */
+.section-inner-title {
+    font-size: 16px;
     font-weight: 600;
     margin-bottom: 6px;
 }
 
-.chat-sub {
-    font-size: 11px;
+.section-inner-sub {
+    font-size: 12px;
     color: var(--dim);
-    margin-bottom: 8px;
+}
+
+/* CHAT */
+.chat-shell {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background: #090914;
+    border-radius: 16px;
+    border: 1px solid #1f1f2a;
+    padding: 10px;
 }
 
 .chat-messages {
     flex: 1;
     overflow-y: auto;
-    padding: 8px;
-    border-radius: 12px;
-    background: #090914;
-    border: 1px solid #1f1f2a;
+    padding: 6px;
 }
 
 .chat-message {
-    margin-bottom: 8px;
-    font-size: 13px;
+    margin-bottom: 6px;
+    font-size: 12px;
 }
 
 .chat-message.me {
@@ -596,9 +463,9 @@ nav {
 
 .chat-message.me span {
     display: inline-block;
-    background: #5f8dff;
+    background: #b46bff;
     color: white;
-    padding: 6px 9px;
+    padding: 5px 8px;
     border-radius: 12px 12px 2px 12px;
 }
 
@@ -606,73 +473,40 @@ nav {
     display: inline-block;
     background: #181824;
     color: var(--text);
-    padding: 6px 9px;
+    padding: 5px 8px;
     border-radius: 12px 12px 12px 2px;
 }
 
 .chat-input-row {
     display: flex;
-    gap: 8px;
-    margin-top: 8px;
+    gap: 6px;
+    margin-top: 6px;
 }
 
 .chat-input-row input {
     flex: 1;
-    padding: 10px;
+    padding: 8px;
     border-radius: 999px;
     border: 1px solid #2a2a3a;
     background: #11111c;
     color: var(--text);
-    font-size: 13px;
+    font-size: 12px;
 }
 
 .chat-input-row button {
-    padding: 8px 14px;
+    padding: 6px 12px;
     border-radius: 999px;
     border: none;
-    background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+    background: linear-gradient(135deg, #b46bff, #6f7dff);
     color: white;
-    font-size: 13px;
+    font-size: 12px;
     cursor: pointer;
-}
-
-/* SETTINGS SECTION */
-.settings-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 12px;
-}
-
-.setting-card {
-    background: var(--card);
-    border-radius: 16px;
-    padding: 12px;
-    border: 1px solid rgba(255,255,255,0.04);
-}
-
-.setting-title {
-    font-size: 14px;
-    font-weight: 600;
-}
-
-.setting-sub {
-    font-size: 11px;
-    color: var(--dim);
-    margin-top: 4px;
-}
-
-/* FOOTER */
-.footer-line {
-    margin-top: 6px;
-    font-size: 11px;
-    color: var(--dim);
-    text-align: center;
 }
 
 /* RESPONSIVE */
 @media (max-width: 900px) {
-    .home-grid {
-        grid-template-columns: minmax(0, 1fr);
+    .icon-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
     .music-page {
         flex-direction: column;
@@ -690,136 +524,125 @@ nav {
     <div class="top-row">
         <div class="logo">N</div>
         <div class="brand-text">
-            <span>Nexus Z‑Kit</span>
-            <span>Personal command environment</span>
+            <span>NEXUS</span>
+            <span>Custom home environment</span>
         </div>
         <div class="online-pill">
             <div class="online-dot"></div>
-            <span>Online: 1</span>
+            <span>Online</span>
         </div>
     </div>
 
-    <nav>
-        <button class="nav-btn active" onclick="showSection('home')">
-            <span class="icon">🏠</span><span>Home</span>
-        </button>
-        <button class="nav-btn" onclick="showSection('music')">
-            <span class="icon">🎵</span><span>Music</span>
-        </button>
-        <button class="nav-btn" onclick="showSection('apps')">
-            <span class="icon">📦</span><span>Apps</span>
-        </button>
-        <button class="nav-btn" onclick="showSection('games')">
-            <span class="icon">🎮</span><span>Games</span>
-        </button>
-        <button class="nav-btn" onclick="showSection('chat')">
-            <span class="icon">💬</span><span>Chat</span>
-        </button>
-        <button class="nav-btn" onclick="showSection('settings')">
-            <span class="icon">⚙️</span><span>Settings</span>
-        </button>
-    </nav>
+    <!-- MAIN HOME SCREEN -->
+    <div class="home-center" id="homeScreen">
+        <div class="big-title">NEXUS</div>
+        <div class="big-sub">
+            Your personal launch space. Music, AI, apps, and games in one place.
+        </div>
 
-    <div class="content">
-        <!-- HOME -->
-        <section id="home" class="section active">
-            <div class="home-grid">
-                <section class="hero">
-                    <div class="hero-heading">Welcome to <span>Nexus Z‑Kit</span></div>
-                    <div class="hero-sub">
-                        A focused space for your tools, music, chat, and experiments.  
-                        If you can't find your song, tell me and I'll add it.
-                    </div>
+        <div class="search-wrap">
+            <input
+                type="text"
+                class="search-input"
+                placeholder="Search or enter URL (visual only)"
+            >
+        </div>
 
-                    <div class="hero-image-wrap">
-                        <img src="dog.webp" alt="Mascot">
-                    </div>
-
-                    <div class="loading-line">Environment loaded • Music engine ready</div>
-
-                    <div class="status-bar">
-                        <div class="status-left">
-                            <span id="statusTime">--:--</span>
-                            <span>•</span>
-                            <span>72°F</span>
-                        </div>
-                        <div class="status-right">
-                            <span>100%</span>
-                            <span class="battery">
-                                <span class="battery-fill"></span>
-                            </span>
-                        </div>
-                    </div>
-                </section>
-
-                <section class="panel">
-                    <div class="panel-header">
-                        <span>Quick Launch</span>
-                        <span style="font-size:11px; color:var(--dim);">Tap to jump</span>
-                    </div>
-
-                    <div class="app-grid">
-                        <div class="app-card" onclick="showSection('music')">
-                            <div class="app-title">Music</div>
-                            <div class="app-sub">Full songs via YouTube</div>
-                        </div>
-                        <div class="app-card" onclick="showSection('chat')">
-                            <div class="app-title">Chat</div>
-                            <div class="app-sub">Talk to your assistant</div>
-                        </div>
-                        <div class="app-card" onclick="showSection('games')">
-                            <div class="app-title">Games</div>
-                            <div class="app-sub">Mini game hub</div>
-                        </div>
-                        <div class="app-card" onclick="showSection('settings')">
-                            <div class="app-title">Settings</div>
-                            <div class="app-sub">Visual tweaks</div>
-                        </div>
-                    </div>
-                </section>
+        <div class="icon-grid">
+            <div class="icon-tile" onclick="openLayer('settings')">
+                <div class="icon-circle">⚙️</div>
+                <div class="icon-label">Settings</div>
             </div>
-        </section>
+            <div class="icon-tile" onclick="openLayer('ai')">
+                <div class="icon-circle">🤖</div>
+                <div class="icon-label">AI</div>
+            </div>
+            <div class="icon-tile" onclick="openLayer('apps')">
+                <div class="icon-circle">📦</div>
+                <div class="icon-label">Apps</div>
+            </div>
+            <div class="icon-tile" onclick="openLayer('games')">
+                <div class="icon-circle">🎮</div>
+                <div class="icon-label">Games</div>
+            </div>
+        </div>
 
-        <!-- MUSIC -->
-        <section id="music" class="section">
-            <div class="music-page">
-                <!-- LEFT -->
-                <div class="music-left">
-                    <div>
-                        <div class="music-header">Nexus Z‑Kit • Music</div>
-                        <div class="music-sub">
-                            If you can't find your song, tell me and I'll add it.
+        <div class="bottom-strip">
+            If you can't find your song, tell me and I'll add it.
+        </div>
+    </div>
+
+    <!-- APP LAYER (OVERLAY) -->
+    <div class="app-layer" id="appLayer">
+        <div class="app-nav">
+            <button class="back-btn" onclick="closeLayer()">
+                ← Back to Home
+            </button>
+            <div class="app-nav-title" id="appNavTitle">Apps</div>
+        </div>
+
+        <div class="app-content">
+            <!-- AI SECTION -->
+            <div class="section" id="section-ai">
+                <div class="section-inner-title">AI Console</div>
+                <div class="section-inner-sub">
+                    This is a placeholder for your AI tools. You can embed chat, APIs, or anything here.
+                </div>
+                <div class="chat-shell" style="margin-top:10px;">
+                    <div class="chat-messages" id="chatMessages">
+                        <div class="chat-message bot">
+                            <span>Welcome to Nexus AI. Type something and I'll respond in a simple way.</span>
                         </div>
                     </div>
-
-                    <input
-                        type="text"
-                        class="music-search-bar"
-                        placeholder="Search any song (visual only)"
-                    >
-
-                    <div class="now-playing-box">
-                        <div class="big-music-icon" id="npIcon">🎵</div>
-                        <div class="np-title" id="npTitle">Not Playing</div>
-                        <div class="np-artist" id="npArtist">Try selecting a song on the right</div>
-
-                        <div class="visualizer">
-                            <span></span><span></span><span></span><span></span><span></span>
-                        </div>
-
-                        <div class="np-controls">
-                            <button class="np-btn" onclick="prevSong()">⏮</button>
-                            <button class="np-btn" onclick="togglePlay()">⏯</button>
-                            <button class="np-btn" onclick="nextSong()">⏭</button>
-                        </div>
+                    <div class="chat-input-row">
+                        <input id="chatInput" type="text" placeholder="Type a message and press Enter or Send">
+                        <button onclick="sendChat()">Send</button>
                     </div>
                 </div>
+            </div>
 
-                <!-- RIGHT -->
-                <div class="music-right">
-                    <div class="results-list" id="resultsList">
-                        <!-- ~30 songs -->
-                        <!-- ~30 songs -->
+            <!-- APPS SECTION (MUSIC HUB) -->
+            <div class="section" id="section-apps">
+                <div class="section-inner-title">Music Hub</div>
+                <div class="section-inner-sub">
+                    Full YouTube playlist. Click any song to start playing.
+                </div>
+
+                <div class="music-page" style="margin-top:10px;">
+                    <!-- LEFT -->
+                    <div class="music-left">
+                        <div>
+                            <div class="music-header">Nexus • Music</div>
+                            <div class="music-sub">
+                                If you can't find your song, tell me and I'll add it.
+                            </div>
+                        </div>
+
+                        <input
+                            type="text"
+                            class="music-search-bar"
+                            placeholder="Search any song (visual only)"
+                        >
+
+                        <div class="now-playing-box">
+                            <div class="big-music-icon" id="npIcon">🎵</div>
+                            <div class="np-title" id="npTitle">Not Playing</div>
+                            <div class="np-artist" id="npArtist">Try selecting a song on the right</div>
+
+                            <div class="visualizer">
+                                <span></span><span></span><span></span><span></span><span></span>
+                            </div>
+
+                            <div class="np-controls">
+                                <button class="np-btn" onclick="prevSong()">⏮</button>
+                                <button class="np-btn" onclick="togglePlay()">⏯</button>
+                                <button class="np-btn" onclick="nextSong()">⏭</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- RIGHT -->
+                    <!-- ~30 songs -->
 <div class="result-item" data-video-id="W2J7f4K1KQQ" data-title="Tití Me Preguntó" data-artist="Bad Bunny">
     <div class="song-title">Tití Me Preguntó</div>
     <div class="song-artist">Bad Bunny</div>
@@ -954,8 +777,11 @@ nav {
     <div class="song-title">Blank Space</div>
     <div class="song-artist">Taylor Swift</div>
 </div>
-                     </div> <!-- end of results-list -->
-                </div> <!-- end ofmusic-right -->
+             <div class="music-right">
+                   <div class="results-list" id="resultsList">
+                            <!-- ~30 songs -->
+                                    </div> <!-- end of results-list -->
+                </div> <!-- end of music-right -->
             </div> <!-- end of music-page -->
         </section> <!-- end of music section -->
 
@@ -1258,6 +1084,6 @@ window.addEventListener("load", () => {
     }, 3000);
 });
 </script>
-
-</body>
+        
+</body> 
 </html>
