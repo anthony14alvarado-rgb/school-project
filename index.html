@@ -45,10 +45,10 @@ body {
 /* SHELL */
 .shell {
     width: 100%;
-    max-width: 1100px;
-    background: rgba(5,5,12,0.94);
+    max-width: 1120px;
+    background: rgba(5,5,12,0.96);
     border-radius: 28px;
-    border: 1px solid rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.04);
     box-shadow: var(--shadow-soft);
     padding: 18px 20px 20px;
     backdrop-filter: blur(18px);
@@ -117,7 +117,7 @@ body {
 /* NAV */
 nav {
     border-radius: 999px;
-    background: rgba(8,8,16,0.95);
+    background: rgba(8,8,16,0.98);
     border: 1px solid var(--border);
     padding: 4px;
     display: flex;
@@ -127,10 +127,10 @@ nav {
 
 .nav-btn {
     flex: 1 1 auto;
-    min-width: 80px;
+    min-width: 90px;
     text-align: center;
     font-size: 13px;
-    padding: 7px 10px;
+    padding: 8px 12px;
     border-radius: 999px;
     color: var(--dim);
     text-decoration: none;
@@ -139,6 +139,15 @@ nav {
     border: none;
     background: transparent;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.nav-btn span.icon {
+    font-size: 14px;
+    opacity: 0.9;
 }
 
 .nav-btn:hover {
@@ -155,20 +164,26 @@ nav {
 .content {
     margin-top: 4px;
     border-radius: 22px;
-    background: rgba(5,5,12,0.9);
+    background: rgba(5,5,12,0.96);
     border: 1px solid var(--border);
     padding: 16px;
     min-height: 480px;
     overflow: hidden;
+    position: relative;
 }
 
 /* SECTIONS */
 .section {
     display: none;
     height: 100%;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 0.18s ease, transform 0.18s ease;
 }
 .section.active {
     display: block;
+    opacity: 1;
+    transform: translateY(0);
 }
 
 /* HOME */
@@ -201,19 +216,24 @@ nav {
 .hero-sub {
     font-size: 13px;
     color: var(--dim);
-    max-width: 360px;
+    max-width: 380px;
 }
 
 .hero-image-wrap {
-    margin-top: 4px;
+    margin-top: 6px;
     border-radius: 18px;
     overflow: hidden;
     background: #181824;
+    height: 170px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .hero-image-wrap img {
     width: 100%;
-    display: block;
+    height: 100%;
+    object-fit: cover;
 }
 
 .loading-line {
@@ -310,6 +330,13 @@ nav {
     border-radius: var(--radius-md);
     padding: 10px;
     border: 1px solid rgba(255,255,255,0.02);
+    cursor: pointer;
+    transition: 0.16s ease;
+}
+
+.app-card:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 0 16px rgba(0,0,0,0.4);
 }
 
 .app-title {
@@ -351,36 +378,41 @@ nav {
 
 .music-search-bar {
     width: 100%;
-    padding: 14px;
+    padding: 12px;
     border-radius: 12px;
-    border: none;
-    background: #1a1a22;
+    border: 1px solid #262636;
+    background: #11111c;
     color: white;
-    font-size: 16px;
+    font-size: 14px;
+}
+
+.music-search-bar::placeholder {
+    color: #66667a;
 }
 
 .now-playing-box {
-    margin-top: 10px;
+    margin-top: 6px;
     text-align: center;
-    padding: 20px;
+    padding: 18px;
     border-radius: 16px;
     background: #0f0f18;
+    border: 1px solid #232334;
 }
 
 .big-music-icon {
-    font-size: 90px;
+    font-size: 80px;
     opacity: 0.7;
 }
 
 .np-title {
     margin-top: 10px;
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 600;
 }
 
 .np-artist {
     margin-top: 4px;
-    font-size: 14px;
+    font-size: 13px;
     color: #9a9a9a;
 }
 
@@ -416,12 +448,17 @@ nav {
 
 .np-btn {
     background: #1a1a22;
-    border: none;
+    border: 1px solid #2a2a3a;
     color: white;
-    padding: 10px 12px;
+    padding: 8px 11px;
     border-radius: 10px;
-    font-size: 16px;
+    font-size: 15px;
     cursor: pointer;
+    transition: 0.15s ease;
+}
+
+.np-btn:hover {
+    background: #252535;
 }
 
 /* RIGHT SIDE */
@@ -442,10 +479,12 @@ nav {
     padding: 10px 0;
     border-bottom: 1px solid #1f1f25;
     cursor: pointer;
+    transition: 0.12s ease;
 }
 
 .result-item:hover {
     background: #15151c;
+    padding-left: 6px;
 }
 
 .song-title {
@@ -460,7 +499,7 @@ nav {
 /* APPS SECTION */
 .apps-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
     gap: 12px;
 }
 
@@ -469,6 +508,13 @@ nav {
     border-radius: 16px;
     padding: 14px;
     border: 1px solid rgba(255,255,255,0.04);
+    cursor: pointer;
+    transition: 0.16s ease;
+}
+
+.app-tile:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 0 16px rgba(0,0,0,0.4);
 }
 
 .app-tile-title {
@@ -485,7 +531,7 @@ nav {
 /* GAMES SECTION */
 .games-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
     gap: 12px;
 }
 
@@ -654,12 +700,24 @@ nav {
     </div>
 
     <nav>
-        <button class="nav-btn active" onclick="showSection('home')">Home</button>
-        <button class="nav-btn" onclick="showSection('music')">Music</button>
-        <button class="nav-btn" onclick="showSection('apps')">Apps</button>
-        <button class="nav-btn" onclick="showSection('games')">Games</button>
-        <button class="nav-btn" onclick="showSection('chat')">Chat</button>
-        <button class="nav-btn" onclick="showSection('settings')">Settings</button>
+        <button class="nav-btn active" onclick="showSection('home')">
+            <span class="icon">🏠</span><span>Home</span>
+        </button>
+        <button class="nav-btn" onclick="showSection('music')">
+            <span class="icon">🎵</span><span>Music</span>
+        </button>
+        <button class="nav-btn" onclick="showSection('apps')">
+            <span class="icon">📦</span><span>Apps</span>
+        </button>
+        <button class="nav-btn" onclick="showSection('games')">
+            <span class="icon">🎮</span><span>Games</span>
+        </button>
+        <button class="nav-btn" onclick="showSection('chat')">
+            <span class="icon">💬</span><span>Chat</span>
+        </button>
+        <button class="nav-btn" onclick="showSection('settings')">
+            <span class="icon">⚙️</span><span>Settings</span>
+        </button>
     </nav>
 
     <div class="content">
@@ -760,9 +818,144 @@ nav {
                 <!-- RIGHT -->
                 <div class="music-right">
                     <div class="results-list" id="resultsList">
-                    <!--muisc-->
-                    </div> <!-- end of results-list -->
-                </div> <!-- end of music-right -->
+                        <!-- ~30 songs -->
+                        <!-- ~30 songs -->
+<div class="result-item" data-video-id="W2J7f4K1KQQ" data-title="Tití Me Preguntó" data-artist="Bad Bunny">
+    <div class="song-title">Tití Me Preguntó</div>
+    <div class="song-artist">Bad Bunny</div>
+</div>
+
+<div class="result-item" data-video-id="4I25nV9hXGA" data-title="Me Porto Bonito" data-artist="Bad Bunny ft. Chencho Corleone">
+    <div class="song-title">Me Porto Bonito</div>
+    <div class="song-artist">Bad Bunny ft. Chencho Corleone</div>
+</div>
+
+<div class="result-item" data-video-id="adLGHcj_fmA" data-title="Moscow Mule" data-artist="Bad Bunny">
+    <div class="song-title">Moscow Mule</div>
+    <div class="song-artist">Bad Bunny</div>
+</div>
+
+<div class="result-item" data-video-id="OSUxrSe5GbI" data-title="Callaíta" data-artist="Bad Bunny & Tainy">
+    <div class="song-title">Callaíta</div>
+    <div class="song-artist">Bad Bunny & Tainy</div>
+</div>
+
+<div class="result-item" data-video-id="p38WgakuYDo" data-title="Yonaguni" data-artist="Bad Bunny">
+    <div class="song-title">Yonaguni</div>
+    <div class="song-artist">Bad Bunny</div>
+</div>
+
+<div class="result-item" data-video-id="Mkxj5F3q5U4" data-title="La Canción" data-artist="Bad Bunny & J Balvin">
+    <div class="song-title">La Canción</div>
+    <div class="song-artist">Bad Bunny & J Balvin</div>
+</div>
+
+<div class="result-item" data-video-id="vR5HqTQ7kK4" data-title="Dákiti" data-artist="Bad Bunny & Jhay Cortez">
+    <div class="song-title">Dákiti</div>
+    <div class="song-artist">Bad Bunny & Jhay Cortez</div>
+</div>
+
+<div class="result-item" data-video-id="QYh6mYIJG2Y" data-title="Un Preview" data-artist="Bad Bunny">
+    <div class="song-title">Un Preview</div>
+    <div class="song-artist">Bad Bunny</div>
+</div>
+
+<div class="result-item" data-video-id="kTlv5_Bs8aw" data-title="Despacito" data-artist="Luis Fonsi ft. Daddy Yankee">
+    <div class="song-title">Despacito</div>
+    <div class="song-artist">Luis Fonsi ft. Daddy Yankee</div>
+</div>
+
+<div class="result-item" data-video-id="JGwWNGJdvx8" data-title="Shape of You" data-artist="Ed Sheeran">
+    <div class="song-title">Shape of You</div>
+    <div class="song-artist">Ed Sheeran</div>
+</div>
+
+<div class="result-item" data-video-id="fHI8X4OXluQ" data-title="Blinding Lights" data-artist="The Weeknd">
+    <div class="song-title">Blinding Lights</div>
+    <div class="song-artist">The Weeknd</div>
+</div>
+
+<div class="result-item" data-video-id="TUVcZfQe-Kw" data-title="Levitating" data-artist="Dua Lipa">
+    <div class="song-title">Levitating</div>
+    <div class="song-artist">Dua Lipa</div>
+</div>
+
+<div class="result-item" data-video-id="wXhTHyIgQ_U" data-title="Circles" data-artist="Post Malone">
+    <div class="song-title">Circles</div>
+    <div class="song-artist">Post Malone</div>
+</div>
+
+<div class="result-item" data-video-id="UceaB4D0jpo" data-title="Sunflower" data-artist="Post Malone & Swae Lee">
+    <div class="song-title">Sunflower</div>
+    <div class="song-artist">Post Malone & Swae Lee</div>
+</div>
+
+<div class="result-item" data-video-id="K0ibBPhiaG0" data-title="Industry Baby" data-artist="Lil Nas X & Jack Harlow">
+    <div class="song-title">Industry Baby</div>
+    <div class="song-artist">Lil Nas X & Jack Harlow</div>
+</div>
+
+<div class="result-item" data-video-id="9bZkp7q19f0" data-title="Gangnam Style" data-artist="PSY">
+    <div class="song-title">Gangnam Style</div>
+    <div class="song-artist">PSY</div>
+</div>
+
+<div class="result-item" data-video-id="3JZ_D3ELwOQ" data-title="See You Again" data-artist="Wiz Khalifa ft. Charlie Puth">
+    <div class="song-title">See You Again</div>
+    <div class="song-artist">Wiz Khalifa ft. Charlie Puth</div>
+</div>
+
+<div class="result-item" data-video-id="OPf0YbXqDm0" data-title="Uptown Funk" data-artist="Mark Ronson ft. Bruno Mars">
+    <div class="song-title">Uptown Funk</div>
+    <div class="song-artist">Mark Ronson ft. Bruno Mars</div>
+</div>
+
+<div class="result-item" data-video-id="2Vv-BfVoq4g" data-title="Perfect" data-artist="Ed Sheeran">
+    <div class="song-title">Perfect</div>
+    <div class="song-artist">Ed Sheeran</div>
+</div>
+
+<div class="result-item" data-video-id="gOsM-DYAEhY" data-title="Believer" data-artist="Imagine Dragons">
+    <div class="song-title">Believer</div>
+    <div class="song-artist">Imagine Dragons</div>
+</div>
+
+<div class="result-item" data-video-id="60ItHLz5WEA" data-title="Faded" data-artist="Alan Walker">
+    <div class="song-title">Faded</div>
+    <div class="song-artist">Alan Walker</div>
+</div>
+
+<div class="result-item" data-video-id="pXRviuL6vMY" data-title="Stressed Out" data-artist="Twenty One Pilots">
+    <div class="song-title">Stressed Out</div>
+    <div class="song-artist">Twenty One Pilots</div>
+</div>
+
+<div class="result-item" data-video-id="hT_nvWreIhg" data-title="Demons" data-artist="Imagine Dragons">
+    <div class="song-title">Demons</div>
+    <div class="song-artist">Imagine Dragons</div>
+</div>
+
+<div class="result-item" data-video-id="RgKAFK5djSk" data-title="See You Again (Alt)" data-artist="Wiz Khalifa ft. Charlie Puth">
+    <div class="song-title">See You Again (Alt)</div>
+    <div class="song-artist">Wiz Khalifa ft. Charlie Puth</div>
+</div>
+
+<div class="result-item" data-video-id="SlPhMPnQ58k" data-title="Memories" data-artist="Maroon 5">
+    <div class="song-title">Memories</div>
+    <div class="song-artist">Maroon 5</div>
+</div>
+
+<div class="result-item" data-video-id="kXYiU_JCYtU" data-title="Numb" data-artist="Linkin Park">
+    <div class="song-title">Numb</div>
+    <div class="song-artist">Linkin Park</div>
+</div>
+
+<div class="result-item" data-video-id="e-ORhEE9VVg" data-title="Blank Space" data-artist="Taylor Swift">
+    <div class="song-title">Blank Space</div>
+    <div class="song-artist">Taylor Swift</div>
+</div>
+                     </div> <!-- end of results-list -->
+                </div> <!-- end ofmusic-right -->
             </div> <!-- end of music-page -->
         </section> <!-- end of music section -->
 
@@ -890,18 +1083,18 @@ nav {
 <div id="ytplayer"></div>
 
 <script>
-// NAVIGATION
+/* NAVIGATION */
 function showSection(id) {
     document.querySelectorAll('.section').forEach(sec => {
         sec.classList.toggle('active', sec.id === id);
     });
     document.querySelectorAll('.nav-btn').forEach(btn => {
         const text = btn.textContent.trim().toLowerCase();
-        btn.classList.toggle('active', text === id);
+        btn.classList.toggle('active', text.includes(id));
     });
 }
 
-// CHAT
+/* CHAT */
 const chatInput = document.getElementById('chatInput');
 const chatMessages = document.getElementById('chatMessages');
 
@@ -938,7 +1131,7 @@ chatInput.addEventListener('keydown', e => {
     if (e.key === 'Enter') sendChat();
 });
 
-// MUSIC / YOUTUBE
+/* MUSIC / YOUTUBE */
 var tag = document.createElement("script");
 tag.src = "https://www.youtube.com/iframe_api";
 document.body.appendChild(tag);
@@ -1025,7 +1218,7 @@ function togglePlay() {
     }
 }
 
-// RANDOM WELCOME + TIP POPUP
+/* RANDOM WELCOME + TIP POPUP */
 window.addEventListener("load", () => {
     const greetings = [
         "Welcome back to Nexus Z‑Kit.",
