@@ -3,21 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Project Miku | Home</title>
-    <link rel="icon" href="https://ssl.gstatic.com/images/branding/product/1x/drive_2020q4_32dp.png">
+    <title>Google Drive</title> <link rel="icon" href="https://ssl.gstatic.com/images/branding/product/1x/drive_2020q4_32dp.png">
     <style>
         :root {
-            --miku-teal: #39C5BB;
-            --glass-bg: rgba(255, 255, 255, 0.1);
+            --miku-cyan: #39C5BB;
+            --miku-cyan-glow: rgba(57, 197, 187, 0.6);
+            --miku-pink: #E12885;
+            --bg-dark: #0a0e17;
+            --glass-bg: rgba(16, 22, 34, 0.6);
             --glass-border: rgba(57, 197, 187, 0.3);
         }
 
-        body {
+        * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+
+        body {
             height: 100vh;
-            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--bg-dark), #15232d);
+            /* Optional: Add a subtle tech grid background here */
+            background-size: cover;
             color: white;
             display: flex;
             flex-direction: column;
@@ -26,93 +34,194 @@
             overflow: hidden;
         }
 
-        /* Glassmorphism Background */
-        .dashboard {
-            width: 80%;
-            max-width: 900px;
-            height: 60vh;
+        /* Cinematic Slide-Up Animation */
+        @keyframes slideUp {
+            0% { transform: translateY(50px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+
+        /* Main OS Window */
+        .os-window {
+            width: 85%;
+            max-width: 1000px;
+            height: 65vh;
             background: var(--glass-bg);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             border: 1px solid var(--glass-border);
-            border-radius: 20px;
+            border-radius: 24px;
             padding: 40px;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-            text-align: center;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5), inset 0 0 20px rgba(57, 197, 187, 0.1);
+            display: flex;
+            flex-direction: column;
+            animation: slideUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
         }
 
-        h1 {
-            color: var(--miku-teal);
-            font-size: 2.5rem;
-            margin-bottom: 20px;
-            text-shadow: 0 0 10px var(--miku-teal);
+        /* Top Bar of the Window */
+        .window-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 15px;
         }
 
+        .window-title {
+            color: var(--miku-cyan);
+            font-size: 1.5rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            text-shadow: 0 0 10px var(--miku-cyan-glow);
+        }
+
+        /* Functional-looking Search Bar */
+        .search-container {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            margin-bottom: 40px;
+        }
+
+        .search-bar {
+            width: 60%;
+            padding: 15px 25px;
+            border-radius: 30px;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid var(--miku-cyan);
+            color: white;
+            font-size: 1.1rem;
+            outline: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 10px rgba(0,0,0,0.3);
+        }
+
+        .search-bar:focus {
+            box-shadow: 0 0 20px var(--miku-cyan-glow);
+            width: 65%;
+            background: rgba(0, 0, 0, 0.6);
+        }
+
+        /* App Grid */
         .app-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-            gap: 20px;
-            margin-top: 30px;
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
         }
 
-        .app-icon {
+        .app-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 16px;
+            padding: 20px;
+            width: 120px;
+            text-align: center;
             cursor: pointer;
-            transition: transform 0.2s;
+            transition: all 0.3s ease;
         }
 
-        .app-icon:hover {
-            transform: scale(1.1);
+        .app-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--miku-cyan);
+            box-shadow: 0 10px 20px rgba(57, 197, 187, 0.2);
+            background: rgba(57, 197, 187, 0.1);
         }
 
-        .app-icon img {
-            width: 60px;
-            border-radius: 12px;
-            border: 2px solid var(--miku-teal);
+        .app-card div {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
         }
 
         .app-label {
-            margin-top: 8px;
             font-size: 0.9rem;
+            color: #ccc;
+            letter-spacing: 1px;
         }
 
-        /* Hidden Panic Key Overlay */
-        #panic-screen {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: white; color: black;
-            z-index: 9999; padding: 50px;
+        /* Bottom Taskbar */
+        .taskbar {
+            position: absolute;
+            bottom: 20px;
+            width: 60%;
+            height: 60px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .taskbar-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: 0.2s;
+            border: 1px solid transparent;
+        }
+
+        .taskbar-icon:hover {
+            background: rgba(57, 197, 187, 0.2);
+            border-color: var(--miku-cyan);
+            transform: scale(1.1);
         }
     </style>
 </head>
 <body>
 
-    <div class="dashboard">
-        <h1 id="dynamic-title">Project Miku</h1>
-        <p>Select a module to begin.</p>
+    <div class="os-window">
+        <div class="window-header">
+            <div class="window-title">System 39</div>
+            <div style="color: var(--miku-pink); font-weight: bold; cursor: pointer;" onclick="panic()">[ P ] Panic</div>
+        </div>
+
+        <div class="search-container">
+            <input type="text" class="search-bar" placeholder="Enter URL or Search Query..." id="url-input">
+        </div>
 
         <div class="app-grid">
-            <div class="app-icon" onclick="launchApp('https://google.com')">
-                <img src="https://api.iconify.design/logos:google-icon.svg" alt="App">
-                <div class="app-label">Search</div>
+            <div class="app-card" onclick="launchApp('https://example.com')">
+                <div>🌐</div>
+                <div class="app-label">Browser</div>
             </div>
-
-            <div class="app-icon" onclick="launchApp('https://example.com')">
-                <img src="https://api.iconify.design/fluent-emoji:leek.svg" alt="Miku">
-                <div class="app-label">Vocaloid Hub</div>
+            <div class="app-card" onclick="launchApp('https://example.com')">
+                <div>🎵</div>
+                <div class="app-label">Media</div>
+            </div>
+            <div class="app-card" onclick="launchApp('https://example.com')">
+                <div>⚙️</div>
+                <div class="app-label">Settings</div>
             </div>
         </div>
     </div>
 
-    <div id="panic-screen">
-        <h1>Google Docs</h1>
-        <hr>
-        <p>Loading document history...</p>
+    <div class="taskbar">
+        <div class="taskbar-icon">💠</div>
+        <div class="taskbar-icon">📁</div>
+        <div class="taskbar-icon" style="color: var(--miku-pink);">🛑</div>
     </div>
 
     <script>
-        // 1. The About:Blank Cloaker (Bypasses Lightspeed history)
+        // Cloaker Function
         function launchApp(url) {
+            let val = document.getElementById('url-input').value;
+            let finalUrl = val ? val : url; // Uses search bar if typed, otherwise default app URL
+            
+            // Add https:// if user forgets it
+            if (!finalUrl.startsWith('http')) {
+                finalUrl = 'https://' + finalUrl;
+            }
+
             const win = window.open('about:blank', '_blank');
             if (win) {
                 win.document.body.style.margin = '0';
@@ -121,23 +230,21 @@
                 iframe.style.border = 'none';
                 iframe.style.width = '100%';
                 iframe.style.height = '100%';
-                iframe.src = url;
+                iframe.src = finalUrl;
                 win.document.body.appendChild(iframe);
             }
         }
 
-        // 2. Panic Key Logic (Press 'P' to hide everything)
-        document.addEventListener('keydown', (e) => {
-            if (e.key.toLowerCase() === 'p') {
-                document.getElementById('panic-screen').style.display = 'block';
-                document.title = "Google Docs";
-            }
-        });
+        // Panic Function
+        function panic() {
+            window.location.href = "https://classroom.google.com";
+        }
 
-        // 3. Simple Base64 Decoder for Titles (Countering Keyword Scanners)
-        // 'UHJveHkgSHVi' is Base64 for 'Proxy Hub'
-        const secretTitle = 'UHJveHkgSHVi';
-        console.log("System Initialized...");
+        // Listen for "P" key
+        document.addEventListener('keydown', (e) => {
+            if (e.key.toLowerCase() === 'p') panic();
+            if (e.key === 'Enter') launchApp(''); // Allows hitting Enter in the search bar
+        });
     </script>
 </body>
 </html>
