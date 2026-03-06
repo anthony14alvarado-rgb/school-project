@@ -22,7 +22,7 @@
             position: relative; touch-action: none;
         }
 
-        /* CANVAS LAYER (STRICTLY LOCKED) */
+        /* CANVAS LAYER (LOCKED) */
         #snowCanvas {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             pointer-events: none; z-index: 2;
@@ -30,7 +30,6 @@
             filter: invert(1) contrast(2) brightness(1.5) grayscale(1); 
         }
 
-        /* MAIN UI SYSTEM */
         .os-interface {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             display: flex; flex-direction: column; justify-content: space-between;
@@ -41,48 +40,36 @@
         .btn-glass { 
             background: var(--dark-glass); backdrop-filter: blur(20px); 
             border: 1.5px solid var(--border-glass); border-radius: 40px; 
-            padding: 15px 25px; color: white; font-weight: 900;
+            padding: 12px 22px; color: white; font-weight: 900;
             box-shadow: 0 4px 15px rgba(0,0,0,0.3); cursor: pointer;
         }
-
-        .dropdown-menu {
-            position: absolute; top: 90px; left: 25px; width: 280px; background: var(--dark-glass);
-            backdrop-filter: blur(25px); border: 1.5px solid var(--border-glass);
-            border-radius: 20px; padding: 20px; color: white; display: none; flex-direction: column; gap: 10px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5); z-index: 1000;
-        }
-        .dropdown-menu.active { display: flex; }
 
         .main-view { display: flex; flex-direction: column; align-items: center; justify-content: center; flex-grow: 1; gap: 15px; }
         
         .welcome-text {
             color: white; font-weight: 900; font-size: 2.2rem; 
             text-shadow: 0 0 15px rgba(255,255,255,0.7), 0 0 25px var(--miku-cyan); 
-            letter-spacing: 3px; text-transform: uppercase; border-radius: 20px; padding: 5px 15px;
+            letter-spacing: 3px; text-transform: uppercase;
         }
 
         .search-bar { 
             width: 90%; max-width: 550px; 
             background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(30px); 
             border: 2px solid var(--border-glass); border-radius: 50px; 
-            padding: 20px; display: flex; align-items: center; position: relative; overflow: hidden;
+            padding: 18px; display: flex; align-items: center; position: relative; overflow: hidden;
         }
-        .search-bar::before {
-            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), rgba(57, 197, 187, 0.4) 0%, transparent 70%);
-            opacity: 0; transition: opacity 0.4s ease; pointer-events: none;
-        }
-        .search-bar:hover::before { opacity: 1; }
         .search-input { background: transparent; border: none; outline: none; color: white; font-size: 1.2rem; width: 100%; text-align: center; font-weight: 700; position: relative; z-index: 2; }
 
-        /* QUICK LINKS STYLE */
-        .links-bar { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; max-width: 90%; margin-top: 10px; }
+        /* QUICK LINKS WITH LOGOS */
+        .links-bar { display: flex; gap: 15px; flex-wrap: wrap; justify-content: center; max-width: 90%; margin-top: 10px; }
         .link-item { 
             background: var(--dark-glass); border: 1.5px solid var(--border-glass); 
-            padding: 10px 18px; border-radius: 20px; color: white; 
-            font-weight: 800; font-size: 0.9rem; cursor: pointer; transition: 0.3s;
+            padding: 8px 15px; border-radius: 15px; color: white; 
+            font-weight: 800; font-size: 0.85rem; cursor: pointer; transition: 0.3s;
+            display: flex; align-items: center; gap: 8px;
         }
-        .link-item:hover { background: var(--miku-cyan); color: #0d1926; transform: scale(1.05); }
+        .link-item img { width: 18px; height: 18px; border-radius: 4px; pointer-events: none; }
+        .link-item:hover { background: var(--miku-cyan); color: #0d1926; transform: translateY(-3px); }
         .add-link { border: 2px dashed var(--miku-cyan); color: var(--miku-cyan); background: transparent; }
 
         .bottom-dock { display: flex; justify-content: center; padding-bottom: 40px; }
@@ -98,19 +85,13 @@
 
     <div class="os-interface">
         <header class="top-bar">
-            <div class="btn-glass" onclick="toggleMenu()">≡ APPS • DEV</div>
-            <div id="updateMenu" class="dropdown-menu">
-                <div style="font-weight:900; color:var(--miku-cyan); border-bottom:1px solid rgba(255,255,255,0.2); display:flex; justify-content:space-between;">
-                    UPDATE 6.26 <span style="cursor:pointer; color:#ff5f5f;" onclick="toggleMenu()">[CLOSE]</span>
-                </div>
-                <ul style="list-style:none; font-size:0.85rem; padding-top:10px;">
-                    <li>• Two-State Miku Cursor</li>
-                    <li>• Puffy Random Welcome Text</li>
-                    <li>• Custom Quick Links Bar</li>
-                    <li>• URL Persistence System</li>
-                </ul>
+            <div class="btn-glass" onclick="document.getElementById('updateMenu').classList.toggle('active')">≡ TITAN • OS</div>
+            <div id="updateMenu" style="display:none; position:absolute; top:85px; left:25px; width:220px; background:var(--dark-glass); padding:15px; border-radius:15px; border:1px solid var(--border-glass); color:white; z-index:1000;" onclick="this.classList.toggle('active')">
+                <p style="font-weight:900; color:var(--miku-cyan);">UPDATE 6.27</p>
+                <li style="list-style:none; font-size:0.8rem;">• Added SFlix Movie Link</li>
+                <li style="list-style:none; font-size:0.8rem;">• Official Logos Enabled</li>
             </div>
-            <div class="btn-glass" onclick="location.replace('https://classroom.google.com')">⚙ SETTINGS</div>
+            <div class="btn-glass" onclick="location.replace('https://classroom.google.com')">⚙ CLASSROOM</div>
         </header>
 
         <main class="main-view">
@@ -121,9 +102,18 @@
             </div>
 
             <div class="links-bar" id="links-container">
-                <div class="link-item" onclick="sys_launch('https://youtube.com')">YouTube</div>
-                <div class="link-item" onclick="sys_launch('https://tiktok.com')">TikTok</div>
-                <div class="link-item" onclick="sys_launch('https://hianime.to')">HiAnime</div>
+                <div class="link-item" onclick="sys_launch('https://youtube.com')">
+                    <img src="https://www.google.com/s2/favicons?domain=youtube.com&sz=64"> YouTube
+                </div>
+                <div class="link-item" onclick="sys_launch('https://tiktok.com')">
+                    <img src="https://www.google.com/s2/favicons?domain=tiktok.com&sz=64"> TikTok
+                </div>
+                <div class="link-item" onclick="sys_launch('https://hianime.to')">
+                    <img src="https://www.google.com/s2/favicons?domain=hianime.to&sz=64"> HiAnime
+                </div>
+                <div class="link-item" onclick="sys_launch('https://sflix.to')">
+                    <img src="https://www.google.com/s2/favicons?domain=sflix.to&sz=64"> SFlix
+                </div>
                 <div class="link-item add-link" onclick="addLinkPrompt()">+ ADD URL</div>
             </div>
         </main>
@@ -133,7 +123,6 @@
                 <div class="dock-icon" onclick="sys_launch('https://google.com')">WEB</div>
                 <div class="dock-icon" onclick="sys_launch('https://youtube.com')">VIDEO</div>
                 <div class="dock-icon" onclick="sys_launch('https://now.gg')">GAMES</div>
-                <div class="dock-icon" onclick="sys_launch('https://discord.com')">SOCIAL</div>
             </div>
         </footer>
     </div>
@@ -142,19 +131,18 @@
 
     <script>
         // --- 1. RANDOM TEXT ---
-        const messages = ["MIKU", "HELLO", "CHECK FOR NEW UPDATES", "MIKU IS THE BEST", "TITAN OS V1.0", "SCRIPTING...", "CYBER-POP VIBES"];
+        const messages = ["MIKU", "HELLO", "TITAN OS", "WATCHING MOVIES...", "CYBER-POP"];
         document.getElementById('splash-text').innerText = messages[Math.floor(Math.random() * messages.length)];
 
-        // --- 2. QUICK LINK PERSISTENCE ---
+        // --- 2. LINK STORAGE ---
         function addLinkPrompt() {
-            const name = prompt("Name of the site:");
-            const url = prompt("URL (e.g., roblox.com):");
+            const name = prompt("Name:");
+            const url = prompt("URL (e.g. roblox.com):");
             if(name && url) {
                 const finalUrl = url.startsWith('http') ? url : 'https://' + url;
-                const linkData = { name, url: finalUrl };
-                let links = JSON.parse(localStorage.getItem('titan_links') || '[]');
-                links.push(linkData);
-                localStorage.setItem('titan_links', JSON.stringify(links));
+                let links = JSON.parse(localStorage.getItem('os_links_v2') || '[]');
+                links.push({ name, url: finalUrl });
+                localStorage.setItem('os_links_v2', JSON.stringify(links));
                 renderLinks();
             }
         }
@@ -162,15 +150,17 @@
         function renderLinks() {
             const container = document.getElementById('links-container');
             container.innerHTML = `
-                <div class="link-item" onclick="sys_launch('https://youtube.com')">YouTube</div>
-                <div class="link-item" onclick="sys_launch('https://tiktok.com')">TikTok</div>
-                <div class="link-item" onclick="sys_launch('https://hianime.to')">HiAnime</div>
+                <div class="link-item" onclick="sys_launch('https://youtube.com')"><img src="https://www.google.com/s2/favicons?domain=youtube.com&sz=64"> YouTube</div>
+                <div class="link-item" onclick="sys_launch('https://tiktok.com')"><img src="https://www.google.com/s2/favicons?domain=tiktok.com&sz=64"> TikTok</div>
+                <div class="link-item" onclick="sys_launch('https://hianime.to')"><img src="https://www.google.com/s2/favicons?domain=hianime.to&sz=64"> HiAnime</div>
+                <div class="link-item" onclick="sys_launch('https://sflix.to')"><img src="https://www.google.com/s2/favicons?domain=sflix.to&sz=64"> SFlix</div>
             `;
-            const saved = JSON.parse(localStorage.getItem('titan_links') || '[]');
+            const saved = JSON.parse(localStorage.getItem('os_links_v2') || '[]');
             saved.forEach(item => {
+                const domain = new URL(item.url).hostname;
                 const div = document.createElement('div');
                 div.className = 'link-item';
-                div.innerText = item.name;
+                div.innerHTML = `<img src="https://www.google.com/s2/favicons?domain=${domain}&sz=64"> ${item.name}`;
                 div.onclick = () => sys_launch(item.url);
                 container.appendChild(div);
             });
@@ -182,58 +172,40 @@
         }
         renderLinks();
 
-        // --- 3. LOCKED SNOW LOGIC ---
+        // --- 3. SNOW (LOCKED) ---
+        const canvas = document.getElementById('snowCanvas'); const ctx = canvas.getContext('2d');
+        const snowImg = new Image(); snowImg.src = "https://cdn.discordapp.com/attachments/1444592922447057040/1479367313026191401/Screenshot_20260306-003642.Chrome.png?ex=69abc7ac&is=69aa762c&hm=66b2ad1775d64dcc27d2fb69cfb24a4faa73d4cdd0d2797e989fe71d53849d64&";
+        let p = [];
+        function res() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        window.onresize = res; res();
+        for(let i=0; i<40; i++) p.push({x:Math.random()*canvas.width, y:Math.random()*canvas.height, s:Math.random()*20+15, sp:Math.random()*2+1, a:Math.random()*360});
+        function animate() {
+            ctx.clearRect(0,0,canvas.width,canvas.height);
+            p.forEach(i => {
+                i.y += i.sp; i.a += 1; if(i.y > canvas.height) i.y = -20;
+                ctx.save(); ctx.translate(i.x, i.y); ctx.rotate(i.a*Math.PI/180);
+                ctx.drawImage(snowImg, -i.s/2, -i.s/2, i.s, i.s); ctx.restore();
+            });
+            requestAnimationFrame(animate);
+        }
+        animate();
+
+        // --- 4. MIKU CURSOR (TWO-STATE) ---
+        const mRoot = document.getElementById('miku-root');
+        const m = document.createElement('img');
         const ASSETS = {
-            snow: "https://cdn.discordapp.com/attachments/1444592922447057040/1479367313026191401/Screenshot_20260306-003642.Chrome.png?ex=69abc7ac&is=69aa762c&hm=66b2ad1775d64dcc27d2fb69cfb24a4faa73d4cdd0d2797e989fe71d53849d64&",
             idle: "https://cdn.discordapp.com/attachments/1444592922447057040/1479376567242330163/Screenshot_20260306-010851.Photos.png?ex=69abd04b&is=69aa7ecb&hm=d9ad588ac9f7b1bcaeb6d7906ef3caf0322c694b945b5c2f2ece4b5e18f9af14&",
             click: "https://cdn.discordapp.com/attachments/1444592922447057040/1479376566839410859/Screenshot_20260306-011055.Photos.png?ex=69abd04b&is=69aa7ecb&hm=bc9b954a686baf68327d99f4a796753c77387c5fd842ee401b331b0ab8ebfd95&"
         };
-        const canvas = document.getElementById('snowCanvas');
-        const ctx = canvas.getContext('2d');
-        const snowImg = new Image(); snowImg.src = ASSETS.snow;
-        let particles = [];
-        function initCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
-        window.onresize = initCanvas; initCanvas();
-        class Particle {
-            constructor() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * -canvas.height;
-                this.size = Math.random() * 20 + 15;
-                this.speed = Math.random() * 2 + 1;
-                this.angle = Math.random() * 360;
-            }
-            update() { this.y += this.speed; this.angle += 1; if (this.y > canvas.height) { this.y = -50; this.x = Math.random() * canvas.width; } }
-            draw() { ctx.save(); ctx.translate(this.x, this.y); ctx.rotate(this.angle * Math.PI / 180); ctx.drawImage(snowImg, -this.size/2, -this.size/2, this.size, this.size); ctx.restore(); }
-        }
-        for(let i=0; i<40; i++) particles.push(new Particle());
-        function animate() { ctx.clearRect(0, 0, canvas.width, canvas.height); particles.forEach(p => { p.update(); p.draw(); }); requestAnimationFrame(animate); }
-        animate();
+        m.src = ASSETS.idle;
+        m.style.cssText = `position: fixed; width: 90px; display: none; pointer-events: none; mix-blend-mode: multiply; z-index: 999999;`;
+        mRoot.appendChild(m);
+        function move(e) { const t = e.touches ? e.touches[0] : e; m.style.transform = `translate3d(${t.clientX - 45}px, ${t.clientY - 45}px, 0)`; }
+        window.addEventListener('touchstart', (e) => { m.style.display = 'block'; m.src = ASSETS.click; move(e); });
+        window.addEventListener('touchmove', (e) => { move(e); e.preventDefault(); }, {passive: false});
+        window.addEventListener('touchend', () => { m.src = ASSETS.idle; });
 
-        // --- 4. MIKU CURSOR (RESTORED TWO-STATE) ---
-        function toggleMenu() { document.getElementById('updateMenu').classList.toggle('active'); }
-        const root = document.getElementById('miku-root');
-        const miku = document.createElement('img');
-        miku.src = ASSETS.idle;
-        miku.style.cssText = `position: fixed; width: 90px; height: auto; display: none; pointer-events: none; mix-blend-mode: multiply; will-change: transform; transform: translateZ(0); filter: contrast(1.1) brightness(1.1);`;
-        root.appendChild(miku);
-
-        function handleTouch(e) { const t = e.touches ? e.touches[0] : e; miku.style.transform = `translate3d(${t.clientX - 45}px, ${t.clientY - 45}px, 0)`; }
-        window.addEventListener('touchstart', (e) => { miku.style.display = 'block'; miku.src = ASSETS.click; handleTouch(e); }, {passive: false});
-        window.addEventListener('touchmove', (e) => { handleTouch(e); e.preventDefault(); }, {passive: false});
-        window.addEventListener('touchend', () => { miku.src = ASSETS.idle; });
-
-        const bar = document.getElementById('glow-bar');
-        bar.addEventListener('mousemove', (e) => {
-            const rect = bar.getBoundingClientRect();
-            bar.style.setProperty('--x', `${e.clientX - rect.left}px`);
-            bar.style.setProperty('--y', `${e.clientY - rect.top}px`);
-        });
-
-        function sys_launch(url) {
-            let target = url;
-            if (!target.startsWith('http')) target = 'https://' + target;
-            window.open(target, '_blank');
-        }
+        function sys_launch(url) { window.open(url.startsWith('http') ? url : 'https://' + url, '_blank'); }
     </script>
 </body>
 </html>
