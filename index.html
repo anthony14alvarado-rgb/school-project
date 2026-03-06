@@ -10,24 +10,25 @@
 
         :root {
             --miku-cyan: #39C5BB;
-            --dark-glass: rgba(13, 25, 38, 0.65);
+            --miku-glow: rgba(57, 197, 187, 0.6);
+            --dark-glass: rgba(13, 25, 38, 0.7);
             --border-glass: rgba(57, 197, 187, 0.4);
         }
 
         * {
             margin: 0; padding: 0; box-sizing: border-box;
             font-family: 'Nunito', sans-serif; user-select: none;
+            /* Verified Glowing Cyan Cursor */
             cursor: url('https://cur.cursors-4u.net/symbols/sym-9/sym833.cur'), auto;
         }
 
         body {
             width: 100vw; height: 100vh; overflow: hidden;
-            /* Bringing back the Blue Sky Theme */
             background: linear-gradient(180deg, #4A90E2 0%, #87CEEB 50%, #B0E0E6 100%);
             position: relative; display: flex; flex-direction: column; justify-content: space-between;
         }
 
-        /* Snowflake Layer - Using the working "Screen" trick */
+        /* Snowflake Layer */
         #snow-layer {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             pointer-events: none; z-index: 5;
@@ -35,9 +36,8 @@
 
         .falling-item {
             position: absolute; top: -50px;
-            width: 30px; height: auto;
-            mix-blend-mode: screen; 
-            filter: brightness(1.5);
+            width: 25px; height: auto;
+            filter: drop-shadow(0 0 8px white);
             animation: fall linear infinite;
         }
 
@@ -48,6 +48,22 @@
             100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
         }
 
+        /* Top Nav */
+        .top-nav {
+            position: relative; z-index: 10;
+            display: flex; justify-content: space-between; padding: 30px 50px;
+        }
+
+        .nav-pill {
+            background: var(--dark-glass); backdrop-filter: blur(15px);
+            border: 1px solid var(--border-glass); border-radius: 30px;
+            padding: 12px 25px; color: white; font-weight: 700;
+            letter-spacing: 2px; cursor: pointer; transition: 0.3s;
+        }
+
+        .nav-pill:hover { border-color: white; box-shadow: 0 0 15px var(--miku-cyan); }
+
+        /* Center Stage */
         .center-stage {
             position: relative; z-index: 10;
             display: flex; flex-direction: column; align-items: center;
@@ -55,31 +71,30 @@
         }
 
         .miku-character {
-            height: 500px; width: auto;
-            /* MULTIPLY removes the white/checkered background */
-            mix-blend-mode: multiply; 
-            /* Filter helps Miku pop against the sky */
-            filter: brightness(1.2) contrast(1.1);
+            height: 480px; width: auto;
             animation: floatCharacter 6s ease-in-out infinite;
-            z-index: 8;
+            filter: drop-shadow(0 0 30px var(--miku-glow));
+            z-index: 2;
         }
 
         @keyframes floatCharacter {
             0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-25px); }
+            50% { transform: translateY(-20px); }
         }
 
         .miku-text {
-            font-size: 9.5rem; font-weight: 900; color: white;
-            text-shadow: 0 0 15px var(--miku-cyan), 0 0 35px var(--miku-cyan);
-            letter-spacing: 15px; margin-top: -180px; z-index: 9;
+            font-size: 9rem; font-weight: 900; color: white;
+            text-shadow: 0 0 15px var(--miku-cyan), 0 0 35px var(--miku-cyan), 0 0 70px var(--miku-cyan);
+            letter-spacing: 15px; margin-top: -160px; z-index: 3;
         }
 
+        /* Search Bar */
         .search-container {
-            width: 600px; margin-top: 25px; z-index: 10;
-            background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(20px);
-            border: 2px solid var(--border-glass); border-radius: 50px;
-            padding: 16px 35px; display: flex; align-items: center;
+            width: 600px; margin-top: 25px; z-index: 4;
+            background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(25px);
+            border: 2px solid var(--border-glass); border-radius: 60px;
+            padding: 18px 35px; display: flex; align-items: center;
+            box-shadow: 0 15px 45px rgba(0,0,0,0.1);
         }
 
         .search-input {
@@ -96,30 +111,35 @@
 
         .dock-bar {
             background: var(--dark-glass); backdrop-filter: blur(20px);
-            border: 1px solid var(--border-glass); border-radius: 30px;
-            padding: 15px 45px; display: flex; gap: 40px;
+            border: 1px solid var(--border-glass); border-radius: 35px;
+            padding: 18px 45px; display: flex; gap: 45px;
         }
 
         .dock-item {
-            color: var(--miku-cyan); font-weight: 800; font-size: 0.8rem;
-            cursor: pointer;
+            display: flex; flex-direction: column; align-items: center;
+            cursor: pointer; transition: 0.3s; color: var(--miku-cyan);
+            font-weight: 800; font-size: 0.85rem;
         }
+
+        .dock-item:hover { transform: translateY(-12px); color: white; }
     </style>
 </head>
 <body>
 
     <div id="snow-layer"></div>
 
-    <nav style="display: flex; justify-content: space-between; padding: 30px 50px; position: relative; z-index: 10;">
-        <div style="background: var(--dark-glass); backdrop-filter: blur(12px); border: 1px solid var(--border-glass); border-radius: 30px; padding: 12px 25px; color: white; font-weight: 700; letter-spacing: 2px;">≡ GAMES • UPDATES</div>
-        <div style="background: var(--dark-glass); backdrop-filter: blur(12px); border: 1px solid var(--border-glass); border-radius: 30px; padding: 12px 25px; color: white; font-weight: 700; letter-spacing: 2px;" onclick="panic()">⚙ SETTINGS</div>
+    <nav class="top-nav">
+        <div class="nav-pill">≡ GAMES • UPDATES</div>
+        <div class="nav-pill" onclick="panic()">⚙ SETTINGS</div>
     </nav>
 
     <main class="center-stage">
-        <img src="https://cdn.discordapp.com/attachments/1444592922447057040/1479367313441685625/Screenshot_20260306-003617.Chrome.png?ex=69abc7ac&is=69aa762c&hm=80dc9ec41e65c30c36d69c5948d7dc875f52ec81f998756e2bbe3fe262c44f0d&" class="miku-character">
+        <img src="https://www.pngarts.com/files/10/Hatsune-Miku-PNG-Transparent-Image.png" class="miku-character">
+        
         <h1 class="miku-text">MIKU</h1>
+
         <div class="search-container">
-            <input type="text" class="search-input" placeholder="Search or Enter URL..." id="url-input">
+            <input type="text" class="search-input" placeholder="Enter URL to launch..." id="url-input">
         </div>
     </main>
 
@@ -133,8 +153,9 @@
     </footer>
 
     <script>
+        // Verified Transparent Snowflake
+        const snowImg = "https://www.pngall.com/wp-content/uploads/13/Snowflake-Transparent.png";
         const snowLayer = document.getElementById('snow-layer');
-        const snowImg = "https://cdn.discordapp.com/attachments/1444592922447057040/1479367313026191401/Screenshot_20260306-003642.Chrome.png?ex=69abc7ac&is=69aa762c&hm=66b2ad1775d64dcc27d2fb69cfb24a4faa73d4cdd0d2797e989fe71d53849d64&";
 
         function spawn() {
             const s = document.createElement('img');
@@ -142,10 +163,11 @@
             s.style.left = Math.random() * 100 + 'vw';
             const d = Math.random() * 4 + 4;
             s.style.animationDuration = d + 's';
+            s.style.width = (Math.random() * 15 + 15) + 'px';
             snowLayer.appendChild(s);
             setTimeout(() => s.remove(), d * 1000);
         }
-        setInterval(spawn, 550);
+        setInterval(spawn, 600);
 
         function launch(url) {
             let val = document.getElementById('url-input').value || url;
@@ -159,6 +181,7 @@
                 win.document.body.appendChild(iframe);
             }
         }
+
         document.getElementById('url-input').onkeydown = (e) => { if(e.key === 'Enter') launch(''); };
         function panic() { window.location.replace("https://classroom.google.com"); }
     </script>
