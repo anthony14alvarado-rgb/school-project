@@ -24,11 +24,11 @@
             width: 100vw; height: 100vh; overflow: hidden;
             background: linear-gradient(180deg, #4A90E2 0%, #87CEEB 50%, #B0E0E6 100%);
             background-size: cover;
-            position: relative; display: flex; flex-direction: column; justify-content: space-between;
+            position: relative; 
             touch-action: none;
         }
 
-        /* SNOWFLAKE FIX: NO BLACK BOXES, WHITE SNOW */
+        /* 1. BACKGROUND PARTICLES */
         #snow-layer {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             pointer-events: none; z-index: 1;
@@ -37,9 +37,11 @@
         .falling-item {
             position: absolute; top: -50px;
             width: 25px; height: auto;
-            /* This filter targets the light blue background specifically */
-            filter: brightness(2) contrast(1.5) grayscale(1);
-            mix-blend-mode: screen; 
+            /* FIX: Multiply mode removes WHITE backgrounds. 
+               We brighten the image so the light blue turns white, 
+               making the background vanish while the snowflake stays. */
+            filter: brightness(1.8) contrast(1.2);
+            mix-blend-mode: multiply; 
             animation: fall linear infinite;
         }
 
@@ -50,11 +52,11 @@
             100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
         }
 
-        /* UI LAYER (Middle) */
-        .ui-content {
-            position: relative; z-index: 10;
-            width: 100%; height: 100%;
+        /* 2. UI LAYER (The Dashboard) */
+        .ui-system {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             display: flex; flex-direction: column; justify-content: space-between;
+            z-index: 10; /* Lower than Miku */
         }
 
         .top-nav { display: flex; justify-content: space-between; padding: 30px 20px; }
@@ -78,13 +80,13 @@
         .dock-bar { background: var(--dark-glass); backdrop-filter: blur(20px); border: 1px solid var(--border-glass); border-radius: 30px; padding: 15px 30px; display: flex; gap: 25px; }
         .dock-item { display: flex; flex-direction: column; align-items: center; color: var(--miku-cyan); font-weight: 800; font-size: 0.75rem; }
 
-        /* MIKU OVERLAY (Top) */
-        #miku-cursor {
+        /* 3. MIKU CURSOR (The Global Top Layer) */
+        #miku-global {
             position: fixed;
-            width: 85px;
+            width: 80px;
             height: auto;
-            pointer-events: none;
-            z-index: 2147483647; /* Front of everything */
+            pointer-events: none; /* Crucial: clicks go THROUGH her to the buttons */
+            z-index: 999999999;   /* Maximum priority */
             display: none;
             mix-blend-mode: multiply;
             filter: contrast(1.1) brightness(1.1);
@@ -95,7 +97,7 @@
 
     <div id="snow-layer"></div>
 
-    <div class="ui-content">
+    <div class="ui-system">
         <nav class="top-nav">
             <div class="nav-pill">≡ GAMES • UPDATES</div>
             <div class="nav-pill" onclick="panic()">⚙ SETTINGS</div>
@@ -117,13 +119,14 @@
         </footer>
     </div>
 
-    <img id="miku-cursor" src="" alt="cursor">
+    <img id="miku-global" src="" alt="cursor">
 
     <script>
         const snowImg = "https://cdn.discordapp.com/attachments/1444592922447057040/1479367313026191401/Screenshot_20260306-003642.Chrome.png?ex=69abc7ac&is=69aa762c&hm=66b2ad1775d64dcc27d2fb69cfb24a4faa73d4cdd0d2797e989fe71d53849d64&";
         const mikuIdle = "https://cdn.discordapp.com/attachments/1444592922447057040/1479376567242330163/Screenshot_20260306-010851.Photos.png?ex=69abd04b&is=69aa7ecb&hm=d9ad588ac9f7b1bcaeb6d7906ef3caf0322c694b945b5c2f2ece4b5e18f9af14&";
         const mikuClick = "https://cdn.discordapp.com/attachments/1444592922447057040/1479376566839410859/Screenshot_20260306-011055.Photos.png?ex=69abd04b&is=69aa7ecb&hm=bc9b954a686baf68327d99f4a796753c77387c5fd842ee401b331b0ab8ebfd95&";
 
+        // SNOW LOGIC
         const snowLayer = document.getElementById('snow-layer');
         function spawn() {
             const s = document.createElement('img');
@@ -137,18 +140,19 @@
         }
         setInterval(spawn, 400);
 
-        const miku = document.getElementById('miku-cursor');
+        // GLOBAL MIKU LOGIC
+        const miku = document.getElementById('miku-global');
         miku.src = mikuIdle;
 
         function updatePos(e) {
             const touch = e.touches[0];
-            miku.style.left = (touch.clientX - 42) + 'px';
-            miku.style.top = (touch.clientY - 42) + 'px';
+            miku.style.left = (touch.clientX - 40) + 'px';
+            miku.style.top = (touch.clientY - 40) + 'px';
         }
 
         window.addEventListener('touchstart', (e) => {
             miku.style.display = 'block';
-            miku.src = mikuClick;
+            miku.src = mikuClick; // Uses click screenshot
             updatePos(e);
         });
 
@@ -157,9 +161,10 @@
         });
 
         window.addEventListener('touchend', () => {
-            miku.src = mikuIdle;
+            miku.src = mikuIdle; // Uses idle screenshot
         });
 
+        // SYSTEM FUNCTIONS
         function launch(url) {
             let val = document.getElementById('url-input').value || url;
             if (!val.startsWith('http')) val = 'https://' + val;
