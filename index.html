@@ -32,6 +32,9 @@
             width: 100%; height: 100%;
             pointer-events: none;
             z-index: 2; /* Below UI */
+            /* THE FIX: Moved to CSS to kill lag and actually blend with the background */
+            mix-blend-mode: multiply; 
+            filter: brightness(2.2) contrast(1.2) grayscale(1); 
         }
 
         /* MAIN UI SYSTEM */
@@ -145,10 +148,9 @@
                 ctx.translate(this.x, this.y);
                 ctx.rotate(this.angle * Math.PI / 180);
                 
-                // MASKING FIX: Invert turns the white box black and the snowflake white
-                ctx.globalCompositeOperation = 'screen'; 
-                ctx.filter = 'invert(1) brightness(2) contrast(3) grayscale(1)'; 
+                // THE FIX: Removed the heavy JS filters from here! Lightning fast drawing now.
                 ctx.drawImage(snowImg, -this.size/2, -this.size/2, this.size, this.size);
+                
                 ctx.restore();
             }
         }
