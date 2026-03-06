@@ -32,9 +32,9 @@
             width: 100%; height: 100%;
             pointer-events: none;
             z-index: 2; /* Below UI */
-            /* THE FIX: Moved to CSS to kill lag and actually blend with the background */
-            mix-blend-mode: multiply; 
-            filter: brightness(2.2) contrast(1.2) grayscale(1); 
+            /* THE FIX: Screen + Invert makes the snowflakes bright white! */
+            mix-blend-mode: screen; 
+            filter: invert(1) contrast(2) brightness(1.5) grayscale(1); 
         }
 
         /* MAIN UI SYSTEM */
