@@ -15,9 +15,11 @@
             --border-glass: rgba(57, 197, 187, 0.4);
         }
 
+        /* CUSTOM CURSOR - Paste your link here when you find it */
         * {
             margin: 0; padding: 0; box-sizing: border-box;
             font-family: 'Nunito', sans-serif; user-select: none;
+            cursor: url('YOUR_CURSOR_LINK_HERE'), auto;
         }
 
         body {
@@ -69,7 +71,8 @@
 
         .miku-character {
             height: 500px; width: auto;
-            mix-blend-mode: screen; /* Removes black background */
+            /* Blending to help hide the fake transparency grid */
+            mix-blend-mode: screen; 
             animation: floatCharacter 6s ease-in-out infinite;
             filter: drop-shadow(0 0 20px rgba(57, 197, 187, 0.4));
             z-index: 2;
@@ -151,7 +154,6 @@
     </footer>
 
     <script>
-        // Snowflake Engine
         const snowLayer = document.getElementById('snow-layer');
         const snowImg = "https://cdn.discordapp.com/attachments/1444592922447057040/1479367313026191401/Screenshot_20260306-003642.Chrome.png?ex=69abc7ac&is=69aa762c&hm=66b2ad1775d64dcc27d2fb69cfb24a4faa73d4cdd0d2797e989fe71d53849d64&";
 
