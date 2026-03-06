@@ -44,6 +44,15 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.3); cursor: pointer;
         }
 
+        /* DROPDOWN MENU RESTORED */
+        .dropdown-menu {
+            position: absolute; top: 90px; left: 25px; width: 280px; background: var(--dark-glass);
+            backdrop-filter: blur(25px); border: 1.5px solid var(--border-glass);
+            border-radius: 20px; padding: 20px; color: white; display: none; flex-direction: column; gap: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5); z-index: 1000;
+        }
+        .dropdown-menu.active { display: flex; }
+
         .main-view { display: flex; flex-direction: column; align-items: center; justify-content: center; flex-grow: 1; gap: 15px; }
         
         .welcome-text {
@@ -60,7 +69,6 @@
         }
         .search-input { background: transparent; border: none; outline: none; color: white; font-size: 1.2rem; width: 100%; text-align: center; font-weight: 700; position: relative; z-index: 2; }
 
-        /* QUICK LINKS WITH LOGOS */
         .links-bar { display: flex; gap: 15px; flex-wrap: wrap; justify-content: center; max-width: 90%; margin-top: 10px; }
         .link-item { 
             background: var(--dark-glass); border: 1.5px solid var(--border-glass); 
@@ -85,35 +93,31 @@
 
     <div class="os-interface">
         <header class="top-bar">
-            <div class="btn-glass" onclick="document.getElementById('updateMenu').classList.toggle('active')">≡ TITAN • OS</div>
-            <div id="updateMenu" style="display:none; position:absolute; top:85px; left:25px; width:220px; background:var(--dark-glass); padding:15px; border-radius:15px; border:1px solid var(--border-glass); color:white; z-index:1000;" onclick="this.classList.toggle('active')">
-                <p style="font-weight:900; color:var(--miku-cyan);">UPDATE 6.27</p>
-                <li style="list-style:none; font-size:0.8rem;">• Added SFlix Movie Link</li>
-                <li style="list-style:none; font-size:0.8rem;">• Official Logos Enabled</li>
+            <div class="btn-glass" onclick="toggleMenu()">≡ APPS • DEV</div>
+            <div id="updateMenu" class="dropdown-menu">
+                <div style="font-weight:900; color:var(--miku-cyan); border-bottom:1px solid rgba(255,255,255,0.2); display:flex; justify-content:space-between;">
+                    UPDATE 6.26 <span style="cursor:pointer; color:#ff5f5f;" onclick="toggleMenu()">[CLOSE]</span>
+                </div>
+                <ul style="list-style:none; font-size:0.85rem; padding-top:10px;">
+                    <li>• Fixed Snowflake Background</li>
+                    <li>• Search Glow Effect</li>
+                    <li>• Added SFlix & Official Logos</li>
+                    <li>• URL Persistence System</li>
+                </ul>
             </div>
-            <div class="btn-glass" onclick="location.replace('https://classroom.google.com')">⚙ CLASSROOM</div>
+            <div class="btn-glass" onclick="location.replace('https://classroom.google.com')">⚙ SETTINGS</div>
         </header>
 
         <main class="main-view">
             <div class="welcome-text" id="splash-text">LOADING...</div>
-            
             <div class="search-bar" id="glow-bar">
                 <input type="text" class="search-input" placeholder="Search Titan OS..." id="url-box" onkeydown="if(event.key==='Enter')sys_launch(this.value)">
             </div>
-
             <div class="links-bar" id="links-container">
-                <div class="link-item" onclick="sys_launch('https://youtube.com')">
-                    <img src="https://www.google.com/s2/favicons?domain=youtube.com&sz=64"> YouTube
-                </div>
-                <div class="link-item" onclick="sys_launch('https://tiktok.com')">
-                    <img src="https://www.google.com/s2/favicons?domain=tiktok.com&sz=64"> TikTok
-                </div>
-                <div class="link-item" onclick="sys_launch('https://hianime.to')">
-                    <img src="https://www.google.com/s2/favicons?domain=hianime.to&sz=64"> HiAnime
-                </div>
-                <div class="link-item" onclick="sys_launch('https://sflix.to')">
-                    <img src="https://www.google.com/s2/favicons?domain=sflix.to&sz=64"> SFlix
-                </div>
+                <div class="link-item" onclick="sys_launch('https://youtube.com')"><img src="https://www.google.com/s2/favicons?domain=youtube.com&sz=64"> YouTube</div>
+                <div class="link-item" onclick="sys_launch('https://tiktok.com')"><img src="https://www.google.com/s2/favicons?domain=tiktok.com&sz=64"> TikTok</div>
+                <div class="link-item" onclick="sys_launch('https://hianime.to')"><img src="https://www.google.com/s2/favicons?domain=hianime.to&sz=64"> HiAnime</div>
+                <div class="link-item" onclick="sys_launch('https://sflix.to')"><img src="https://www.google.com/s2/favicons?domain=sflix.to&sz=64"> SFlix</div>
                 <div class="link-item add-link" onclick="addLinkPrompt()">+ ADD URL</div>
             </div>
         </main>
@@ -130,14 +134,13 @@
     <div id="miku-root"></div>
 
     <script>
-        // --- 1. RANDOM TEXT ---
+        function toggleMenu() { document.getElementById('updateMenu').classList.toggle('active'); }
         const messages = ["MIKU", "HELLO", "TITAN OS", "WATCHING MOVIES...", "CYBER-POP"];
         document.getElementById('splash-text').innerText = messages[Math.floor(Math.random() * messages.length)];
 
-        // --- 2. LINK STORAGE ---
         function addLinkPrompt() {
             const name = prompt("Name:");
-            const url = prompt("URL (e.g. roblox.com):");
+            const url = prompt("URL:");
             if(name && url) {
                 const finalUrl = url.startsWith('http') ? url : 'https://' + url;
                 let links = JSON.parse(localStorage.getItem('os_links_v2') || '[]');
@@ -172,7 +175,7 @@
         }
         renderLinks();
 
-        // --- 3. SNOW (LOCKED) ---
+        // SNOW (LOCKED)
         const canvas = document.getElementById('snowCanvas'); const ctx = canvas.getContext('2d');
         const snowImg = new Image(); snowImg.src = "https://cdn.discordapp.com/attachments/1444592922447057040/1479367313026191401/Screenshot_20260306-003642.Chrome.png?ex=69abc7ac&is=69aa762c&hm=66b2ad1775d64dcc27d2fb69cfb24a4faa73d4cdd0d2797e989fe71d53849d64&";
         let p = [];
@@ -190,7 +193,7 @@
         }
         animate();
 
-        // --- 4. MIKU CURSOR (TWO-STATE) ---
+        // MIKU CURSOR (TWO-STATE)
         const mRoot = document.getElementById('miku-root');
         const m = document.createElement('img');
         const ASSETS = {
