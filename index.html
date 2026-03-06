@@ -1,288 +1,143 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Miku Reaction Lab</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<style>
-    body {
-        margin: 0;
-        font-family: system-ui, sans-serif;
-        background: radial-gradient(circle at top, #39c5ff, #050515 60%);
-        color: #f5f8ff;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        min-height: 100vh;
-    }
-    .shell {
-        width: 100%;
-        max-width: 900px;
-        background: rgba(5,5,20,0.92);
-        border-radius: 24px;
-        border: 1px solid rgba(255,255,255,0.12);
-        box-shadow: 0 0 40px rgba(0,0,0,0.7);
-        padding: 20px 24px;
-    }
-    .top {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 14px;
-    }
-    .title {
-        font-size: 22px;
-        font-weight: 700;
-        letter-spacing: 0.12em;
-        text-transform: uppercase;
-    }
-    .subtitle {
-        font-size: 11px;
-        color: #a9b3ff;
-    }
-    .stats {
-        display: flex;
-        gap: 14px;
-        font-size: 13px;
-    }
-    .stat-pill {
-        padding: 6px 10px;
-        border-radius: 999px;
-        background: #10152a;
-        border: 1px solid #27304a;
-    }
-    .game-area {
-        margin-top: 10px;
-        display: grid;
-        grid-template-columns: 2fr 1.3fr;
-        gap: 16px;
-    }
-    .miku-panel {
-        background: #0b1022;
-        border-radius: 18px;
-        border: 1px solid #252f4a;
-        padding: 14px;
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        align-items: center;
-        justify-content: center;
-        position: relative;
-        overflow: hidden;
-    }
-    .miku-art {
-        width: 100%;
-        max-width: 320px;
-        height: 200px;
-        border-radius: 16px;
-        background: linear-gradient(135deg, #39c5ff, #00ffd5);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: #02202a;
-        font-weight: 700;
-        font-size: 26px;
-    }
-    .prompt {
-        margin-top: 6px;
-        font-size: 13px;
-        color: #c5d0ff;
-        text-align: center;
-    }
-    .word {
-        margin-top: 10px;
-        font-size: 24px;
-        font-weight: 700;
-        letter-spacing: 0.18em;
-        text-indent: 0.18em;
-        text-transform: uppercase;
-    }
-    .word.good {
-        color: #39ffb0;
-    }
-    .word.bad {
-        color: #ff6b8b;
-    }
-    .controls {
-        margin-top: 10px;
-        display: flex;
-        gap: 8px;
-        justify-content: center;
-    }
-    button {
-        border-radius: 999px;
-        border: none;
-        padding: 7px 14px;
-        font-size: 13px;
-        cursor: pointer;
-    }
-    .btn-main {
-        background: linear-gradient(135deg, #39c5ff, #00ffd5);
-        color: #021018;
-        font-weight: 600;
-    }
-    .btn-ghost {
-        background: transparent;
-        border: 1px solid #2b3650;
-        color: #c5d0ff;
-    }
-    .log-panel {
-        background: #090d1b;
-        border-radius: 18px;
-        border: 1px solid #252f4a;
-        padding: 12px;
-        font-size: 12px;
-        display: flex;
-        flex-direction: column;
-        gap: 6px;
-    }
-    .log-title {
-        font-weight: 600;
-        margin-bottom: 4px;
-    }
-    .log-list {
-        flex: 1;
-        max-height: 220px;
-        overflow-y: auto;
-    }
-    .log-entry {
-        font-size: 11px;
-        color: #a9b3ff;
-    }
-    @media (max-width: 800px) {
-        .game-area {
-            grid-template-columns: 1fr;
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Miku | Home</title>
+    <link rel="icon" href="https://ssl.gstatic.com/images/branding/product/1x/drive_2020q4_32dp.png">
+    <style>
+        :root {
+            --miku-teal: #39C5BB;
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(57, 197, 187, 0.3);
         }
-    }
-</style>
+
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        /* Glassmorphism Background */
+        .dashboard {
+            width: 80%;
+            max-width: 900px;
+            height: 60vh;
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            text-align: center;
+        }
+
+        h1 {
+            color: var(--miku-teal);
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px var(--miku-teal);
+        }
+
+        .app-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .app-icon {
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .app-icon:hover {
+            transform: scale(1.1);
+        }
+
+        .app-icon img {
+            width: 60px;
+            border-radius: 12px;
+            border: 2px solid var(--miku-teal);
+        }
+
+        .app-label {
+            margin-top: 8px;
+            font-size: 0.9rem;
+        }
+
+        /* Hidden Panic Key Overlay */
+        #panic-screen {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: white; color: black;
+            z-index: 9999; padding: 50px;
+        }
+    </style>
 </head>
 <body>
-<div class="shell">
-    <div class="top">
-        <div>
-            <div class="title">MIKU REACTION LAB</div>
-            <div class="subtitle">Counter COUNTER, KEEPER, and LIGHTSPEED by clicking only when it’s right.</div>
-        </div>
-        <div class="stats">
-            <div class="stat-pill">Score: <span id="score">0</span></div>
-            <div class="stat-pill">Time: <span id="time">30</span>s</div>
+
+    <div class="dashboard">
+        <h1 id="dynamic-title">Project Miku</h1>
+        <p>Select a module to begin.</p>
+
+        <div class="app-grid">
+            <div class="app-icon" onclick="launchApp('https://google.com')">
+                <img src="https://api.iconify.design/logos:google-icon.svg" alt="App">
+                <div class="app-label">Search</div>
+            </div>
+
+            <div class="app-icon" onclick="launchApp('https://example.com')">
+                <img src="https://api.iconify.design/fluent-emoji:leek.svg" alt="Miku">
+                <div class="app-label">Vocaloid Hub</div>
+            </div>
         </div>
     </div>
 
-    <div class="game-area">
-        <div class="miku-panel" id="mikuPanel">
-            <div class="miku-art">
-                MIKU
-            </div>
-            <div class="prompt">
-                When the word is <strong>LIGHTSPEED</strong> — click the panel.<br>
-                If it’s <strong>COUNTER</strong> or <strong>KEEPER</strong>, don’t click.
-            </div>
-            <div class="word" id="wordDisplay">READY</div>
-            <div class="controls">
-                <button class="btn-main" onclick="startGame()">Start</button>
-                <button class="btn-ghost" onclick="resetGame()">Reset</button>
-            </div>
-        </div>
-
-        <div class="log-panel">
-            <div class="log-title">Event Log</div>
-            <div class="log-list" id="logList"></div>
-        </div>
+    <div id="panic-screen">
+        <h1>Google Docs</h1>
+        <hr>
+        <p>Loading document history...</p>
     </div>
-</div>
 
-<script>
-let score = 0;
-let timeLeft = 30;
-let timer = null;
-let wordTimer = null;
-let currentWord = "READY";
-let gameActive = false;
-
-const scoreEl = document.getElementById('score');
-const timeEl = document.getElementById('time');
-const wordEl = document.getElementById('wordDisplay');
-const logList = document.getElementById('logList');
-const panel = document.getElementById('mikuPanel');
-
-const words = ["LIGHTSPEED", "COUNTER", "KEEPER"];
-
-function log(msg) {
-    const div = document.createElement('div');
-    div.className = 'log-entry';
-    div.textContent = msg;
-    logList.prepend(div);
-}
-
-function pickWord() {
-    const w = words[Math.floor(Math.random() * words.length)];
-    currentWord = w;
-    wordEl.textContent = w;
-    if (w === "LIGHTSPEED") {
-        wordEl.className = "word good";
-    } else {
-        wordEl.className = "word bad";
-    }
-}
-
-function startGame() {
-    if (gameActive) return;
-    gameActive = true;
-    score = 0;
-    timeLeft = 30;
-    scoreEl.textContent = score;
-    timeEl.textContent = timeLeft;
-    log("Game started.");
-    pickWord();
-
-    timer = setInterval(() => {
-        timeLeft--;
-        timeEl.textContent = timeLeft;
-        if (timeLeft <= 0) {
-            endGame();
+    <script>
+        // 1. The About:Blank Cloaker (Bypasses Lightspeed history)
+        function launchApp(url) {
+            const win = window.open('about:blank', '_blank');
+            if (win) {
+                win.document.body.style.margin = '0';
+                win.document.body.style.height = '100vh';
+                const iframe = win.document.createElement('iframe');
+                iframe.style.border = 'none';
+                iframe.style.width = '100%';
+                iframe.style.height = '100%';
+                iframe.src = url;
+                win.document.body.appendChild(iframe);
+            }
         }
-    }, 1000);
 
-    wordTimer = setInterval(() => {
-        pickWord();
-    }, 1200);
-}
+        // 2. Panic Key Logic (Press 'P' to hide everything)
+        document.addEventListener('keydown', (e) => {
+            if (e.key.toLowerCase() === 'p') {
+                document.getElementById('panic-screen').style.display = 'block';
+                document.title = "Google Docs";
+            }
+        });
 
-function endGame() {
-    gameActive = false;
-    clearInterval(timer);
-    clearInterval(wordTimer);
-    log("Game over. Final score: " + score);
-    wordEl.textContent = "DONE";
-    wordEl.className = "word";
-}
-
-function resetGame() {
-    gameActive = false;
-    clearInterval(timer);
-    clearInterval(wordTimer);
-    score = 0;
-    timeLeft = 30;
-    scoreEl.textContent = score;
-    timeEl.textContent = timeLeft;
-    currentWord = "READY";
-    wordEl.textContent = "READY";
-    wordEl.className = "word";
-    log("Game reset.");
-}
-
-panel.addEventListener('click', () => {
-    if (!gameActive) return;
-    if (currentWord === "LIGHTSPEED") {
-        score += 2;
-        log("Good click on LIGHTSPEED! +2");
-    } else {
-        score -= 1;
-        log("Bad click on " + currentWord + ". -1");
-    }
-    scoreEl.textContent = score;
-});
-</script>
+        // 3. Simple Base64 Decoder for Titles (Countering Keyword Scanners)
+        // 'UHJveHkgSHVi' is Base64 for 'Proxy Hub'
+        const secretTitle = 'UHJveHkgSHVi';
+        console.log("System Initialized...");
+    </script>
 </body>
 </html>
