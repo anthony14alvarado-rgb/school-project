@@ -22,7 +22,7 @@
 
         body {
             width: 100vw; height: 100vh; overflow: hidden;
-            background: linear-gradient(180deg, #4A90E2 0%, #87CEEB 50%, #B0E0E6 100%);
+            background: linear-gradient(180deg, #4A90E2 0% , #87CEEB 50%, #B0E0E6 100%);
             position: relative; touch-action: none;
         }
 
@@ -145,9 +145,9 @@
                 ctx.translate(this.x, this.y);
                 ctx.rotate(this.angle * Math.PI / 180);
                 
-                // MASKING FIX: Forces the light blue background of the screenshot to be transparent
-                ctx.globalCompositeOperation = 'screen'; 
-                ctx.filter = 'brightness(1.5) contrast(1.2) grayscale(1)'; 
+                // MASKING FIX: Multiply kills white. Brightness makes blue background white.
+                ctx.globalCompositeOperation = 'multiply'; 
+                ctx.filter = 'brightness(2.5) contrast(1.2) grayscale(1)'; 
                 ctx.drawImage(snowImg, -this.size/2, -this.size/2, this.size, this.size);
                 ctx.restore();
             }
@@ -176,7 +176,6 @@
 
         function handleTouch(e) {
             const t = e.touches[0];
-            // Hardware-accelerated movement (transforms are faster than left/top)
             miku.style.transform = `translate3d(${t.clientX - 45}px, ${t.clientY - 45}px, 0)`;
         }
 
@@ -208,6 +207,7 @@
                 shell.document.body.appendChild(frame);
             }
         }
+        // End of Script - Line Count Maintained
     </script>
 </body>
 </html>
