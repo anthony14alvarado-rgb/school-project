@@ -25,10 +25,10 @@
             background: linear-gradient(180deg, #4A90E2 0%, #87CEEB 50%, #B0E0E6 100%);
             background-size: cover;
             position: relative; display: flex; flex-direction: column; justify-content: space-between;
-            touch-action: none; /* Prevents browser pull-to-refresh */
+            touch-action: none;
         }
 
-        /* Snowflake Layer */
+        /* SNOWFLAKE BOX FIX */
         #snow-layer {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             pointer-events: none; z-index: 5;
@@ -38,8 +38,8 @@
             position: absolute; top: -50px;
             width: 25px; height: auto;
             mix-blend-mode: screen; 
-            /* Filter to clean up snowflake background boxes */
-            filter: brightness(1.2) contrast(1.2) drop-shadow(0 0 5px white);
+            /* THE FIX: Aggressive contrast pushes the light blue background to black */
+            filter: contrast(5) brightness(0.6) grayscale(1) drop-shadow(0 0 2px white);
             animation: fall linear infinite;
         }
 
@@ -50,66 +50,27 @@
             100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
         }
 
-        /* UI Elements */
-        .top-nav {
-            position: relative; z-index: 10;
-            display: flex; justify-content: space-between; padding: 30px 20px;
-        }
+        /* UI LAYERS (Lowered Z-Index) */
+        .top-nav { position: relative; z-index: 10; display: flex; justify-content: space-between; padding: 30px 20px; }
+        .nav-pill { background: var(--dark-glass); backdrop-filter: blur(15px); border: 1px solid var(--border-glass); border-radius: 30px; padding: 12px 20px; color: white; font-weight: 700; }
+        
+        .center-stage { position: relative; z-index: 10; display: flex; flex-direction: column; align-items: center; justify-content: center; flex-grow: 1; padding: 0 20px; }
+        .search-container { width: 100%; max-width: 500px; background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(25px); border: 2px solid var(--border-glass); border-radius: 60px; padding: 15px 25px; display: flex; align-items: center; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+        .search-input { background: transparent; border: none; outline: none; color: white; font-size: 1.1rem; width: 100%; font-weight: 600; text-align: center; }
 
-        .nav-pill {
-            background: var(--dark-glass); backdrop-filter: blur(15px);
-            border: 1px solid var(--border-glass); border-radius: 30px;
-            padding: 12px 20px; color: white; font-weight: 700;
-            letter-spacing: 1px; font-size: 0.9rem;
-        }
+        .dock { width: 100%; display: flex; justify-content: center; padding-bottom: 30px; z-index: 10; }
+        .dock-bar { background: var(--dark-glass); backdrop-filter: blur(20px); border: 1px solid var(--border-glass); border-radius: 30px; padding: 15px 30px; display: flex; gap: 25px; }
+        .dock-item { display: flex; flex-direction: column; align-items: center; color: var(--miku-cyan); font-weight: 800; font-size: 0.75rem; }
 
-        .center-stage {
-            position: relative; z-index: 10;
-            display: flex; flex-direction: column; align-items: center;
-            justify-content: center; flex-grow: 1;
-            padding: 0 20px;
-        }
-
-        .search-container {
-            width: 100%; max-width: 500px; z-index: 10;
-            background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(25px);
-            border: 2px solid var(--border-glass); border-radius: 60px;
-            padding: 15px 25px; display: flex; align-items: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-        }
-
-        .search-input {
-            background: transparent; border: none; outline: none;
-            color: white; font-size: 1.1rem; width: 100%; font-weight: 600;
-            text-align: center;
-        }
-
-        .dock {
-            width: 100%; display: flex; justify-content: center;
-            padding-bottom: 30px; z-index: 10;
-        }
-
-        .dock-bar {
-            background: var(--dark-glass); backdrop-filter: blur(20px);
-            border: 1px solid var(--border-glass); border-radius: 30px;
-            padding: 15px 30px; display: flex; gap: 25px;
-        }
-
-        .dock-item {
-            display: flex; flex-direction: column; align-items: center;
-            color: var(--miku-cyan); font-weight: 800; font-size: 0.75rem;
-        }
-
-        /* Miku Custom Cursor */
+        /* ABSOLUTE FRONT-LAYER MIKU */
         #miku-cursor {
             position: fixed;
             width: 75px;
             height: auto;
-            pointer-events: none;
-            z-index: 99999; /* Higher than everything else */
+            pointer-events: none; /* Critical: allows clicking buttons THROUGH Miku */
+            z-index: 2147483647; /* Maximum possible stacking value */
             display: none;
             mix-blend-mode: multiply;
-            /* Extra filter to ensure the light background is fully gone */
             filter: contrast(1.1) brightness(1.1);
         }
     </style>
@@ -117,7 +78,6 @@
 <body>
 
     <div id="snow-layer"></div>
-    <img id="miku-cursor" src="" alt="cursor">
 
     <nav class="top-nav">
         <div class="nav-pill">≡ GAMES • UPDATES</div>
@@ -139,13 +99,13 @@
         </div>
     </footer>
 
+    <img id="miku-cursor" src="" alt="cursor">
+
     <script>
-        // --- ASSET LINKS ---
         const snowImg = "https://cdn.discordapp.com/attachments/1444592922447057040/1479367313026191401/Screenshot_20260306-003642.Chrome.png?ex=69abc7ac&is=69aa762c&hm=66b2ad1775d64dcc27d2fb69cfb24a4faa73d4cdd0d2797e989fe71d53849d64&";
         const mikuIdle = "https://cdn.discordapp.com/attachments/1444592922447057040/1479376567242330163/Screenshot_20260306-010851.Photos.png?ex=69abd04b&is=69aa7ecb&hm=d9ad588ac9f7b1bcaeb6d7906ef3caf0322c694b945b5c2f2ece4b5e18f9af14&";
         const mikuClick = "https://cdn.discordapp.com/attachments/1444592922447057040/1479376566839410859/Screenshot_20260306-011055.Photos.png?ex=69abd04b&is=69aa7ecb&hm=bc9b954a686baf68327d99f4a796753c77387c5fd842ee401b331b0ab8ebfd95&";
 
-        // --- SNOW LOGIC ---
         const snowLayer = document.getElementById('snow-layer');
         function spawn() {
             const s = document.createElement('img');
@@ -159,13 +119,11 @@
         }
         setInterval(spawn, 500);
 
-        // --- MIKU TOUCH LOGIC ---
         const miku = document.getElementById('miku-cursor');
         miku.src = mikuIdle;
 
         function updatePos(e) {
             const touch = e.touches[0];
-            // Center Miku on finger
             miku.style.left = (touch.clientX - 37) + 'px';
             miku.style.top = (touch.clientY - 37) + 'px';
         }
@@ -184,7 +142,6 @@
             miku.src = mikuIdle;
         });
 
-        // --- FUNCTIONS ---
         function launch(url) {
             let val = document.getElementById('url-input').value || url;
             if (!val.startsWith('http')) val = 'https://' + val;
