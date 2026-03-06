@@ -7,11 +7,10 @@
     <style>
         :root {
             --miku-cyan: #39C5BB;
-            --miku-cyan-glow: rgba(57, 197, 187, 0.6);
+            --miku-cyan-glow: rgba(57, 197, 187, 0.7);
             --miku-pink: #E12885;
-            --bg-dark: #0a0e17;
-            --glass-bg: rgba(16, 22, 34, 0.6);
-            --glass-border: rgba(57, 197, 187, 0.3);
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
         }
 
         * {
@@ -19,231 +18,251 @@
             margin: 0;
             padding: 0;
             font-family: 'Segoe UI', system-ui, sans-serif;
+            user-select: none; /* Prevents text highlights from ruining the look */
         }
 
         body {
             height: 100vh;
-            background: linear-gradient(135deg, var(--bg-dark), #15232d);
-            /* Optional: Add a subtle tech grid background here */
-            background-size: cover;
+            width: 100vw;
+            /* Background: A beautiful cloudy sky gradient with dynamic blue shadows */
+            background: radial-gradient(circle at top left, #69bef9, #addbff, #8fcfff);
             color: white;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            overflow: hidden;
-        }
-
-        /* Cinematic Slide-Up Animation */
-        @keyframes slideUp {
-            0% { transform: translateY(50px); opacity: 0; }
-            100% { transform: translateY(0); opacity: 1; }
-        }
-
-        /* Main OS Window */
-        .os-window {
-            width: 85%;
-            max-width: 1000px;
-            height: 65vh;
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            border-radius: 24px;
-            padding: 40px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.5), inset 0 0 20px rgba(57, 197, 187, 0.1);
-            display: flex;
-            flex-direction: column;
-            animation: slideUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
-        }
-
-        /* Top Bar of the Window */
-        .window-header {
-            display: flex;
             justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            padding-bottom: 15px;
+            overflow: hidden;
+            position: relative;
         }
 
-        .window-title {
-            color: var(--miku-cyan);
-            font-size: 1.5rem;
-            font-weight: 600;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            text-shadow: 0 0 10px var(--miku-cyan-glow);
+        /* Subtle "Floating" Animation for Miku/Text */
+        @keyframes floating {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
         }
 
-        /* Functional-looking Search Bar */
-        .search-container {
+        /* ==================== Top Navigation ==================== */
+        .top-nav {
             width: 100%;
             display: flex;
+            justify-content: space-between;
+            padding: 20px 40px;
+            z-index: 10;
+        }
+
+        .nav-group {
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav-item {
+            color: var(--miku-cyan);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-decoration: none;
+            cursor: pointer;
+            text-shadow: 0 0 10px var(--miku-cyan-glow);
+            transition: 0.3s;
+        }
+
+        .nav-item:hover {
+            color: white;
+            text-shadow: 0 0 15px white;
+        }
+
+        /* ==================== Center Content ==================== */
+        .center-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             justify-content: center;
-            margin-bottom: 40px;
+            flex-grow: 1;
+            animation: floating 6s ease-in-out infinite;
+        }
+
+        /* Placeholder for where Miku (the character) will visually go */
+        .miku-visual {
+            font-size: 5rem;
+            margin-bottom: -10px;
+            /* In your live version, replace this with an image/SVG */
+        }
+
+        .main-title {
+            font-size: 5rem;
+            font-weight: 800;
+            color: white;
+            text-shadow: 0 0 20px var(--miku-cyan), 0 0 40px var(--miku-cyan);
+            letter-spacing: 5px;
+            margin-bottom: 30px;
+        }
+
+        /* Glassmorphic Search Bar */
+        .search-wrapper {
+            width: 90%;
+            max-width: 600px;
+            display: flex;
+            align-items: center;
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border);
+            border-radius: 50px;
+            padding: 10px 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: 0.3s ease;
+        }
+
+        .search-wrapper:focus-within {
+            box-shadow: 0 0 25px var(--miku-cyan-glow);
+            border-color: var(--miku-cyan);
+            width: 95%;
+        }
+
+        .search-icon {
+            color: var(--miku-cyan);
+            margin-right: 15px;
+            font-size: 1.2rem;
         }
 
         .search-bar {
-            width: 60%;
-            padding: 15px 25px;
-            border-radius: 30px;
-            background: rgba(0, 0, 0, 0.4);
-            border: 1px solid var(--miku-cyan);
+            flex-grow: 1;
+            background: transparent;
+            border: none;
+            outline: none;
             color: white;
             font-size: 1.1rem;
-            outline: none;
-            transition: all 0.3s ease;
-            box-shadow: 0 0 10px rgba(0,0,0,0.3);
         }
 
-        .search-bar:focus {
-            box-shadow: 0 0 20px var(--miku-cyan-glow);
-            width: 65%;
-            background: rgba(0, 0, 0, 0.6);
+        .search-bar::placeholder {
+            color: rgba(255, 255, 255, 0.6);
         }
 
-        /* App Grid */
-        .app-grid {
+        /* ==================== Bottom Apps ==================== */
+        .app-dock {
             display: flex;
             justify-content: center;
             gap: 40px;
-            flex-wrap: wrap;
+            padding: 20px 40px 40px 40px;
+            width: 100%;
+            z-index: 10;
         }
 
-        .app-card {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 16px;
-            padding: 20px;
-            width: 120px;
-            text-align: center;
+        .app-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: 0.3s ease;
+            color: var(--miku-cyan);
         }
 
-        .app-card:hover {
-            transform: translateY(-10px);
-            border-color: var(--miku-cyan);
-            box-shadow: 0 10px 20px rgba(57, 197, 187, 0.2);
-            background: rgba(57, 197, 187, 0.1);
+        .app-item:hover {
+            transform: scale(1.1) translateY(-5px);
+            color: white;
+            text-shadow: 0 0 15px var(--miku-cyan-glow);
         }
 
-        .app-card div {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
+        .app-icon {
+            font-size: 2.2rem;
+            margin-bottom: 8px;
         }
 
         .app-label {
-            font-size: 0.9rem;
-            color: #ccc;
+            font-size: 0.8rem;
+            text-transform: uppercase;
             letter-spacing: 1px;
-        }
-
-        /* Bottom Taskbar */
-        .taskbar {
-            position: absolute;
-            bottom: 20px;
-            width: 60%;
-            height: 60px;
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            border-radius: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
-
-        .taskbar-icon {
-            width: 40px;
-            height: 40px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: 0.2s;
-            border: 1px solid transparent;
-        }
-
-        .taskbar-icon:hover {
-            background: rgba(57, 197, 187, 0.2);
-            border-color: var(--miku-cyan);
-            transform: scale(1.1);
+            font-weight: 600;
         }
     </style>
 </head>
 <body>
 
-    <div class="os-window">
-        <div class="window-header">
-            <div class="window-title">System 39</div>
-            <div style="color: var(--miku-pink); font-weight: bold; cursor: pointer;" onclick="panic()">[ P ] Panic</div>
+    <header class="top-nav">
+        <div class="nav-group">
+            <a href="#" class="nav-item">UPDATES</a>
+            <a href="#" class="nav-item">GAMES</a>
         </div>
-
-        <div class="search-container">
-            <input type="text" class="search-bar" placeholder="Enter URL or Search Query..." id="url-input">
+        <div class="nav-group">
+            <a href="#" class="nav-item" style="color: var(--miku-pink);" onclick="panic()">PANIC [P]</a>
+            <a href="#" class="nav-item">SETTINGS</a>
         </div>
+    </header>
 
-        <div class="app-grid">
-            <div class="app-card" onclick="launchApp('https://example.com')">
-                <div>🌐</div>
-                <div class="app-label">Browser</div>
-            </div>
-            <div class="app-card" onclick="launchApp('https://example.com')">
-                <div>🎵</div>
-                <div class="app-label">Media</div>
-            </div>
-            <div class="app-card" onclick="launchApp('https://example.com')">
-                <div>⚙️</div>
-                <div class="app-label">Settings</div>
-            </div>
+    <main class="center-container">
+        <div class="miku-visual">💠</div> 
+        <h1 class="main-title">MIKU</h1>
+
+        <div class="search-wrapper">
+            <div class="search-icon">🔍</div>
+            <input type="text" class="search-bar" placeholder="Enter URL or search query..." id="url-input">
         </div>
-    </div>
+    </main>
 
-    <div class="taskbar">
-        <div class="taskbar-icon">💠</div>
-        <div class="taskbar-icon">📁</div>
-        <div class="taskbar-icon" style="color: var(--miku-pink);">🛑</div>
-    </div>
+    <footer class="app-dock">
+        <div class="app-item" onclick="launchProxy('https://google.com')">
+            <div class="app-icon">🌐</div>
+            <div class="app-label">Browser</div>
+        </div>
+        <div class="app-item" onclick="launchProxy('https://youtube.com')">
+            <div class="app-icon">🎵</div>
+            <div class="app-label">Media</div>
+        </div>
+        <div class="app-item" onclick="launchProxy('https://example.com')">
+            <div class="app-icon">🎮</div>
+            <div class="app-label">Games</div>
+        </div>
+        <div class="app-item" onclick="launchProxy('https://discord.com')">
+            <div class="app-icon">💬</div>
+            <div class="app-label">Chat</div>
+        </div>
+    </footer>
 
     <script>
-        // Cloaker Function
-        function launchApp(url) {
-            let val = document.getElementById('url-input').value;
-            let finalUrl = val ? val : url; // Uses search bar if typed, otherwise default app URL
-            
-            // Add https:// if user forgets it
-            if (!finalUrl.startsWith('http')) {
+        // ==================== Cloaking Logic ====================
+
+        // The key function to bypass history filters (like Lightspeed)
+        function launchProxy(url) {
+            let inputVal = document.getElementById('url-input').value;
+            let finalUrl = inputVal ? inputVal : url; // If search bar is empty, use the icon's default URL
+
+            // Basic URL formatting
+            if (!finalUrl.startsWith('http') && finalUrl !== '') {
                 finalUrl = 'https://' + finalUrl;
             }
 
+            // Open a completely blank tab
             const win = window.open('about:blank', '_blank');
             if (win) {
+                // Style the new blank page to remove margins
                 win.document.body.style.margin = '0';
                 win.document.body.style.height = '100vh';
+                win.document.body.style.overflow = 'hidden';
+
+                // Create an iframe to display the target site inside that blank page
                 const iframe = win.document.createElement('iframe');
                 iframe.style.border = 'none';
                 iframe.style.width = '100%';
                 iframe.style.height = '100%';
                 iframe.src = finalUrl;
+                
                 win.document.body.appendChild(iframe);
             }
         }
 
-        // Panic Function
+        // ==================== Panic Key Logic ====================
+
+        // A quick redirect function (Panic Screen)
         function panic() {
+            // Redirect the current tab to something safe
             window.location.href = "https://classroom.google.com";
         }
 
-        // Listen for "P" key
+        // Listen for user input: 'P' or 'Enter' keys
         document.addEventListener('keydown', (e) => {
-            if (e.key.toLowerCase() === 'p') panic();
-            if (e.key === 'Enter') launchApp(''); // Allows hitting Enter in the search bar
+            if (e.key.toLowerCase() === 'p') panic(); // Panic Key
+            if (e.key === 'Enter') launchProxy(''); // Allow hitting Enter in search bar
         });
     </script>
 </body>
