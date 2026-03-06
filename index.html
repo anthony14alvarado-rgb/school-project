@@ -22,7 +22,7 @@
             position: relative; touch-action: none;
         }
 
-        /* CANVAS LAYER (STRICTLY LOCKED) */
+        /* CANVAS LAYER (STRICTLY LOCKED - DO NOT TOUCH) */
         #snowCanvas {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             pointer-events: none; z-index: 2;
@@ -55,11 +55,16 @@
 
         .main-view { display: flex; flex-direction: column; align-items: center; justify-content: center; flex-grow: 1; gap: 15px; }
         
-        /* NEW: WELCOME TEXT STYLE */
+        /* UPDATED: BIGGER AND PUFFY WELCOME TEXT STYLE */
         .welcome-text {
-            color: white; font-weight: 900; font-size: 1.4rem;
-            text-shadow: 0 0 10px var(--miku-cyan);
-            letter-spacing: 2px; text-transform: uppercase;
+            color: white; 
+            font-weight: 900; /* Max boldness for puffiness */
+            font-size: 2.2rem; /* Increased size significantly */
+            text-shadow: 0 0 15px rgba(255,255,255,0.7), 0 0 25px var(--miku-cyan); /* Softened and amplified glow */
+            letter-spacing: 3px; 
+            text-transform: uppercase;
+            border-radius: 20px;
+            padding: 5px 15px;
         }
 
         .search-bar { 
@@ -98,7 +103,7 @@
                     <li>• Fixed Snowflake Background</li>
                     <li>• No-Lag Hardware Snow</li>
                     <li>• Search Glow Effect</li>
-                    <li>• Welcome Text System</li>
+                    <li>• Puffy Welcome Text</li>
                 </ul>
             </div>
             <div class="btn-glass" onclick="location.replace('https://classroom.google.com')">⚙ SETTINGS</div>
@@ -137,7 +142,7 @@
         ];
         document.getElementById('splash-text').innerText = messages[Math.floor(Math.random() * messages.length)];
 
-        // --- 2. LOCKED SNOW LOGIC ---
+        // --- 2. LOCKED SNOW LOGIC (DO NOT TOUCH) ---
         const ASSETS = {
             snow: "https://cdn.discordapp.com/attachments/1444592922447057040/1479367313026191401/Screenshot_20260306-003642.Chrome.png?ex=69abc7ac&is=69aa762c&hm=66b2ad1775d64dcc27d2fb69cfb24a4faa73d4cdd0d2797e989fe71d53849d64&",
             idle: "https://cdn.discordapp.com/attachments/1444592922447057040/1479376567242330163/Screenshot_20260306-010851.Photos.png?ex=69abd04b&is=69aa7ecb&hm=d9ad588ac9f7b1bcaeb6d7906ef3caf0322c694b945b5c2f2ece4b5e18f9af14&",
@@ -164,7 +169,7 @@
         function animate() { ctx.clearRect(0, 0, canvas.width, canvas.height); particles.forEach(p => { p.update(); p.draw(); }); requestAnimationFrame(animate); }
         animate();
 
-        // --- 3. MIKU & UI ---
+        // --- 3. MIKU & UI (DO NOT TOUCH SNOW) ---
         function toggleMenu() { document.getElementById('updateMenu').classList.toggle('active'); }
         const root = document.getElementById('miku-root');
         const miku = document.createElement('img');
