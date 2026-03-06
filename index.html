@@ -28,7 +28,7 @@
             touch-action: none;
         }
 
-        /* 1. BACKGROUND PARTICLES (Lowest Layer) */
+        /* SNOWFLAKE FIX: NO BLACK BOXES, WHITE SNOW */
         #snow-layer {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             pointer-events: none; z-index: 1;
@@ -37,9 +37,8 @@
         .falling-item {
             position: absolute; top: -50px;
             width: 25px; height: auto;
-            /* FIX: Drastic filter to force the light blue background of the screenshot to pure black */
-            /* This allows 'screen' mode to actually work */
-            filter: contrast(10) brightness(0.5) grayscale(1) invert(1) brightness(2) invert(1);
+            /* This filter targets the light blue background specifically */
+            filter: brightness(2) contrast(1.5) grayscale(1);
             mix-blend-mode: screen; 
             animation: fall linear infinite;
         }
@@ -51,19 +50,18 @@
             100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
         }
 
-        /* 2. MAIN UI CONTENT (Middle Layer) */
-        .ui-wrapper {
-            position: relative; width: 100%; height: 100%;
+        /* UI LAYER (Middle) */
+        .ui-content {
+            position: relative; z-index: 10;
+            width: 100%; height: 100%;
             display: flex; flex-direction: column; justify-content: space-between;
-            z-index: 10; /* Lower than Miku */
         }
 
         .top-nav { display: flex; justify-content: space-between; padding: 30px 20px; }
         .nav-pill { 
             background: var(--dark-glass); backdrop-filter: blur(15px); 
             border: 1px solid var(--border-glass); border-radius: 30px; 
-            padding: 12px 20px; color: white; font-weight: 700; 
-            pointer-events: auto;
+            padding: 12px 20px; color: white; font-weight: 700;
         }
         
         .center-stage { display: flex; flex-direction: column; align-items: center; justify-content: center; flex-grow: 1; padding: 0 20px; }
@@ -80,17 +78,16 @@
         .dock-bar { background: var(--dark-glass); backdrop-filter: blur(20px); border: 1px solid var(--border-glass); border-radius: 30px; padding: 15px 30px; display: flex; gap: 25px; }
         .dock-item { display: flex; flex-direction: column; align-items: center; color: var(--miku-cyan); font-weight: 800; font-size: 0.75rem; }
 
-        /* 3. GLOBAL OVERLAY (Highest Layer) */
+        /* MIKU OVERLAY (Top) */
         #miku-cursor {
             position: fixed;
             width: 85px;
             height: auto;
-            pointer-events: none; /* Allows clicks to pass through to buttons */
-            z-index: 999999999;   /* Absolute front */
+            pointer-events: none;
+            z-index: 2147483647; /* Front of everything */
             display: none;
             mix-blend-mode: multiply;
-            /* Clean up the sprite background */
-            filter: contrast(1.2) brightness(1.1);
+            filter: contrast(1.1) brightness(1.1);
         }
     </style>
 </head>
@@ -98,7 +95,7 @@
 
     <div id="snow-layer"></div>
 
-    <div class="ui-wrapper">
+    <div class="ui-content">
         <nav class="top-nav">
             <div class="nav-pill">≡ GAMES • UPDATES</div>
             <div class="nav-pill" onclick="panic()">⚙ SETTINGS</div>
@@ -127,7 +124,6 @@
         const mikuIdle = "https://cdn.discordapp.com/attachments/1444592922447057040/1479376567242330163/Screenshot_20260306-010851.Photos.png?ex=69abd04b&is=69aa7ecb&hm=d9ad588ac9f7b1bcaeb6d7906ef3caf0322c694b945b5c2f2ece4b5e18f9af14&";
         const mikuClick = "https://cdn.discordapp.com/attachments/1444592922447057040/1479376566839410859/Screenshot_20260306-011055.Photos.png?ex=69abd04b&is=69aa7ecb&hm=bc9b954a686baf68327d99f4a796753c77387c5fd842ee401b331b0ab8ebfd95&";
 
-        // SNOW LOGIC
         const snowLayer = document.getElementById('snow-layer');
         function spawn() {
             const s = document.createElement('img');
@@ -141,20 +137,18 @@
         }
         setInterval(spawn, 400);
 
-        // MIKU LOGIC
         const miku = document.getElementById('miku-cursor');
         miku.src = mikuIdle;
 
         function updatePos(e) {
             const touch = e.touches[0];
-            // Exact centering for mobile fingertips
             miku.style.left = (touch.clientX - 42) + 'px';
             miku.style.top = (touch.clientY - 42) + 'px';
         }
 
         window.addEventListener('touchstart', (e) => {
             miku.style.display = 'block';
-            miku.src = mikuClick; // Swap to the click state
+            miku.src = mikuClick;
             updatePos(e);
         });
 
@@ -163,10 +157,9 @@
         });
 
         window.addEventListener('touchend', () => {
-            miku.src = mikuIdle; // Return to idle state
+            miku.src = mikuIdle;
         });
 
-        // CORE SYSTEM
         function launch(url) {
             let val = document.getElementById('url-input').value || url;
             if (!val.startsWith('http')) val = 'https://' + val;
