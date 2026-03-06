@@ -17,13 +17,11 @@
         * {
             margin: 0; padding: 0; box-sizing: border-box;
             font-family: 'Nunito', sans-serif; user-select: none;
-            cursor: url('https://cur.cursors-4u.net/symbols/sym-9/sym833.cur'), auto;
         }
 
         body {
             width: 100vw; height: 100vh; overflow: hidden;
-            /* CHANGE YOUR BACKGROUND IMAGE HERE */
-            background: url('YOUR_BACKGROUND_IMAGE_LINK_HERE') no-repeat center center fixed;
+            background: linear-gradient(180deg, #4A90E2 0%, #87CEEB 50%, #B0E0E6 100%);
             background-size: cover;
             position: relative; display: flex; flex-direction: column; justify-content: space-between;
         }
@@ -37,7 +35,7 @@
         .falling-item {
             position: absolute; top: -50px;
             width: 25px; height: auto;
-            mix-blend-mode: screen; /* Keep this if your snow has a black background */
+            mix-blend-mode: screen; 
             filter: drop-shadow(0 0 5px white);
             animation: fall linear infinite;
         }
@@ -59,7 +57,7 @@
             background: var(--dark-glass); backdrop-filter: blur(15px);
             border: 1px solid var(--border-glass); border-radius: 30px;
             padding: 12px 25px; color: white; font-weight: 700;
-            letter-spacing: 2px; cursor: pointer; transition: 0.3s;
+            letter-spacing: 2px;
         }
 
         .center-stage {
@@ -95,11 +93,8 @@
 
         .dock-item {
             display: flex; flex-direction: column; align-items: center;
-            cursor: pointer; transition: 0.3s; color: var(--miku-cyan);
-            font-weight: 800; font-size: 0.85rem;
+            color: var(--miku-cyan); font-weight: 800; font-size: 0.85rem;
         }
-
-        .dock-item:hover { transform: translateY(-12px); color: white; }
     </style>
 </head>
 <body>
@@ -127,7 +122,7 @@
     </footer>
 
     <script>
-        // Snowflakes - Using your working snowflake link from earlier
+        // --- SNOWFLAKE LOGIC ---
         const snowImg = "https://cdn.discordapp.com/attachments/1444592922447057040/1479367313026191401/Screenshot_20260306-003642.Chrome.png?ex=69abc7ac&is=69aa762c&hm=66b2ad1775d64dcc27d2fb69cfb24a4faa73d4cdd0d2797e989fe71d53849d64&";
         const snowLayer = document.getElementById('snow-layer');
 
@@ -135,7 +130,7 @@
             const s = document.createElement('img');
             s.src = snowImg; s.className = 'falling-item';
             s.style.left = Math.random() * 100 + 'vw';
-            const d = Math.random() * 4 + 6; // Slightly slower fall for atmosphere
+            const d = Math.random() * 4 + 6;
             s.style.animationDuration = d + 's';
             s.style.width = (Math.random() * 20 + 10) + 'px';
             snowLayer.appendChild(s);
@@ -143,6 +138,36 @@
         }
         setInterval(spawn, 500);
 
+        // --- MIKU TWO-STATE TOUCH CURSOR ---
+        const mikuIdle = "https://cdn.discordapp.com/attachments/1444592922447057040/1479376567242330163/Screenshot_20260306-010851.Photos.png?ex=69abd04b&is=69aa7ecb&hm=d9ad588ac9f7b1bcaeb6d7906ef3caf0322c694b945b5c2f2ece4b5e18f9af14&";
+        const mikuClick = "https://cdn.discordapp.com/attachments/1444592922447057040/1479376566839410859/Screenshot_20260306-011055.Photos.png?ex=69abd04b&is=69aa7ecb&hm=bc9b954a686baf68327d99f4a796753c77387c5fd842ee401b331b0ab8ebfd95&";
+
+        const mikuCursor = document.createElement('img');
+        mikuCursor.src = mikuIdle;
+        mikuCursor.style = "position:fixed; width:70px; height:auto; pointer-events:none; z-index:10000; display:none; mix-blend-mode:multiply;";
+        document.body.appendChild(mikuCursor);
+
+        function moveMiku(e) {
+            const touch = e.touches[0];
+            mikuCursor.style.left = (touch.clientX - 35) + 'px';
+            mikuCursor.style.top = (touch.clientY - 35) + 'px';
+        }
+
+        window.addEventListener('touchstart', (e) => {
+            mikuCursor.style.display = 'block';
+            mikuCursor.src = mikuClick;
+            moveMiku(e);
+        });
+
+        window.addEventListener('touchmove', (e) => {
+            moveMiku(e);
+        });
+
+        window.addEventListener('touchend', () => {
+            mikuCursor.src = mikuIdle;
+        });
+
+        // --- CORE FUNCTIONS ---
         function launch(url) {
             let val = document.getElementById('url-input').value || url;
             if (!val.startsWith('http')) val = 'https://' + val;
