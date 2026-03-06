@@ -10,21 +10,21 @@
 
         :root {
             --miku-cyan: #39C5BB;
-            --miku-glow: rgba(57, 197, 187, 0.6);
-            --dark-glass: rgba(13, 25, 38, 0.7);
+            --dark-glass: rgba(13, 25, 38, 0.75);
             --border-glass: rgba(57, 197, 187, 0.4);
         }
 
         * {
             margin: 0; padding: 0; box-sizing: border-box;
             font-family: 'Nunito', sans-serif; user-select: none;
-            /* Verified Glowing Cyan Cursor */
             cursor: url('https://cur.cursors-4u.net/symbols/sym-9/sym833.cur'), auto;
         }
 
         body {
             width: 100vw; height: 100vh; overflow: hidden;
-            background: linear-gradient(180deg, #4A90E2 0%, #87CEEB 50%, #B0E0E6 100%);
+            /* CHANGE YOUR BACKGROUND IMAGE HERE */
+            background: url('YOUR_BACKGROUND_IMAGE_LINK_HERE') no-repeat center center fixed;
+            background-size: cover;
             position: relative; display: flex; flex-direction: column; justify-content: space-between;
         }
 
@@ -37,7 +37,8 @@
         .falling-item {
             position: absolute; top: -50px;
             width: 25px; height: auto;
-            filter: drop-shadow(0 0 8px white);
+            mix-blend-mode: screen; /* Keep this if your snow has a black background */
+            filter: drop-shadow(0 0 5px white);
             animation: fall linear infinite;
         }
 
@@ -48,7 +49,7 @@
             100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
         }
 
-        /* Top Nav */
+        /* UI Elements */
         .top-nav {
             position: relative; z-index: 10;
             display: flex; justify-content: space-between; padding: 30px 50px;
@@ -61,40 +62,18 @@
             letter-spacing: 2px; cursor: pointer; transition: 0.3s;
         }
 
-        .nav-pill:hover { border-color: white; box-shadow: 0 0 15px var(--miku-cyan); }
-
-        /* Center Stage */
         .center-stage {
             position: relative; z-index: 10;
             display: flex; flex-direction: column; align-items: center;
-            justify-content: center; flex-grow: 1; margin-top: -30px;
+            justify-content: center; flex-grow: 1;
         }
 
-        .miku-character {
-            height: 480px; width: auto;
-            animation: floatCharacter 6s ease-in-out infinite;
-            filter: drop-shadow(0 0 30px var(--miku-glow));
-            z-index: 2;
-        }
-
-        @keyframes floatCharacter {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
-        }
-
-        .miku-text {
-            font-size: 9rem; font-weight: 900; color: white;
-            text-shadow: 0 0 15px var(--miku-cyan), 0 0 35px var(--miku-cyan), 0 0 70px var(--miku-cyan);
-            letter-spacing: 15px; margin-top: -160px; z-index: 3;
-        }
-
-        /* Search Bar */
         .search-container {
-            width: 600px; margin-top: 25px; z-index: 4;
-            background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(25px);
+            width: 600px; z-index: 10;
+            background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(25px);
             border: 2px solid var(--border-glass); border-radius: 60px;
             padding: 18px 35px; display: flex; align-items: center;
-            box-shadow: 0 15px 45px rgba(0,0,0,0.1);
+            box-shadow: 0 15px 45px rgba(0,0,0,0.3);
         }
 
         .search-input {
@@ -103,7 +82,6 @@
             text-align: center;
         }
 
-        /* Bottom Dock */
         .dock {
             width: 100%; display: flex; justify-content: center;
             padding-bottom: 40px; z-index: 10;
@@ -134,12 +112,8 @@
     </nav>
 
     <main class="center-stage">
-        <img src="https://www.pngarts.com/files/10/Hatsune-Miku-PNG-Transparent-Image.png" class="miku-character">
-        
-        <h1 class="miku-text">MIKU</h1>
-
         <div class="search-container">
-            <input type="text" class="search-input" placeholder="Enter URL to launch..." id="url-input">
+            <input type="text" class="search-input" placeholder="Search or Enter URL..." id="url-input">
         </div>
     </main>
 
@@ -153,21 +127,21 @@
     </footer>
 
     <script>
-        // Verified Transparent Snowflake
-        const snowImg = "https://www.pngall.com/wp-content/uploads/13/Snowflake-Transparent.png";
+        // Snowflakes - Using your working snowflake link from earlier
+        const snowImg = "https://cdn.discordapp.com/attachments/1444592922447057040/1479367313026191401/Screenshot_20260306-003642.Chrome.png?ex=69abc7ac&is=69aa762c&hm=66b2ad1775d64dcc27d2fb69cfb24a4faa73d4cdd0d2797e989fe71d53849d64&";
         const snowLayer = document.getElementById('snow-layer');
 
         function spawn() {
             const s = document.createElement('img');
             s.src = snowImg; s.className = 'falling-item';
             s.style.left = Math.random() * 100 + 'vw';
-            const d = Math.random() * 4 + 4;
+            const d = Math.random() * 4 + 6; // Slightly slower fall for atmosphere
             s.style.animationDuration = d + 's';
-            s.style.width = (Math.random() * 15 + 15) + 'px';
+            s.style.width = (Math.random() * 20 + 10) + 'px';
             snowLayer.appendChild(s);
             setTimeout(() => s.remove(), d * 1000);
         }
-        setInterval(spawn, 600);
+        setInterval(spawn, 500);
 
         function launch(url) {
             let val = document.getElementById('url-input').value || url;
