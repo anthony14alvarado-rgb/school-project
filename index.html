@@ -17,17 +17,17 @@
         * {
             margin: 0; padding: 0; box-sizing: border-box;
             font-family: 'Nunito', sans-serif; user-select: none;
-            /* Verified Glowing Cyan Cursor */
             cursor: url('https://cur.cursors-4u.net/symbols/sym-9/sym833.cur'), auto;
         }
 
         body {
             width: 100vw; height: 100vh; overflow: hidden;
+            /* Bringing back the Blue Sky Theme */
             background: linear-gradient(180deg, #4A90E2 0%, #87CEEB 50%, #B0E0E6 100%);
             position: relative; display: flex; flex-direction: column; justify-content: space-between;
         }
 
-        /* Snowflake Layer */
+        /* Snowflake Layer - Using the working "Screen" trick */
         #snow-layer {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             pointer-events: none; z-index: 5;
@@ -36,9 +36,8 @@
         .falling-item {
             position: absolute; top: -50px;
             width: 30px; height: auto;
-            /* This is the setting that removes the black background from your snowflake */
-            mix-blend-mode: screen;
-            filter: brightness(1.2);
+            mix-blend-mode: screen; 
+            filter: brightness(1.5);
             animation: fall linear infinite;
         }
 
@@ -49,35 +48,19 @@
             100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
         }
 
-        /* Top Nav */
-        .top-nav {
-            position: relative; z-index: 10;
-            display: flex; justify-content: space-between; padding: 30px 50px;
-        }
-
-        .nav-pill {
-            background: var(--dark-glass); backdrop-filter: blur(12px);
-            border: 1px solid var(--border-glass); border-radius: 30px;
-            padding: 12px 25px; color: white; font-weight: 700;
-            letter-spacing: 2px;
-        }
-
-        /* Center Stage */
         .center-stage {
             position: relative; z-index: 10;
-            display: flex; flex-grow: 1; align-items: center;
-            justify-content: center; flex-direction: column;
-            margin-top: -30px;
+            display: flex; flex-direction: column; align-items: center;
+            justify-content: center; flex-grow: 1; margin-top: -30px;
         }
 
         .miku-character {
             height: 500px; width: auto;
-            /* "Screen" blend mode for Miku's black background */
-            mix-blend-mode: screen; 
-            display: block !important;
-            visibility: visible !important;
+            /* MULTIPLY removes the white/checkered background */
+            mix-blend-mode: multiply; 
+            /* Filter helps Miku pop against the sky */
+            filter: brightness(1.2) contrast(1.1);
             animation: floatCharacter 6s ease-in-out infinite;
-            filter: brightness(1.1) contrast(1.1);
             z-index: 8;
         }
 
@@ -92,7 +75,6 @@
             letter-spacing: 15px; margin-top: -180px; z-index: 9;
         }
 
-        /* Search Bar */
         .search-container {
             width: 600px; margin-top: 25px; z-index: 10;
             background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(20px);
@@ -128,9 +110,9 @@
 
     <div id="snow-layer"></div>
 
-    <nav class="top-nav">
-        <div class="nav-pill">≡ GAMES • UPDATES</div>
-        <div class="nav-pill" onclick="panic()">⚙ SETTINGS</div>
+    <nav style="display: flex; justify-content: space-between; padding: 30px 50px; position: relative; z-index: 10;">
+        <div style="background: var(--dark-glass); backdrop-filter: blur(12px); border: 1px solid var(--border-glass); border-radius: 30px; padding: 12px 25px; color: white; font-weight: 700; letter-spacing: 2px;">≡ GAMES • UPDATES</div>
+        <div style="background: var(--dark-glass); backdrop-filter: blur(12px); border: 1px solid var(--border-glass); border-radius: 30px; padding: 12px 25px; color: white; font-weight: 700; letter-spacing: 2px;" onclick="panic()">⚙ SETTINGS</div>
     </nav>
 
     <main class="center-stage">
