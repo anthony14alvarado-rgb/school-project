@@ -17,6 +17,7 @@
         * {
             margin: 0; padding: 0; box-sizing: border-box;
             font-family: 'Nunito', sans-serif; user-select: none;
+            /* Verified Glowing Cyan Cursor */
             cursor: url('https://cur.cursors-4u.net/symbols/sym-9/sym833.cur'), auto;
         }
 
@@ -35,9 +36,9 @@
         .falling-item {
             position: absolute; top: -50px;
             width: 30px; height: auto;
-            /* This makes the black background of your snowflake screenshot invisible */
+            /* This is the setting that removes the black background from your snowflake */
             mix-blend-mode: screen;
-            filter: brightness(1.5);
+            filter: brightness(1.2);
             animation: fall linear infinite;
         }
 
@@ -64,16 +65,20 @@
         /* Center Stage */
         .center-stage {
             position: relative; z-index: 10;
-            display: flex; flex-direction: column; align-items: center;
-            justify-content: center; flex-grow: 1; margin-top: -30px;
+            display: flex; flex-grow: 1; align-items: center;
+            justify-content: center; flex-direction: column;
+            margin-top: -30px;
         }
 
         .miku-character {
             height: 500px; width: auto;
-            /* MULTIPLY removes the white/grey checkerboard from your Miku image */
-            mix-blend-mode: multiply; 
+            /* "Screen" blend mode for Miku's black background */
+            mix-blend-mode: screen; 
+            display: block !important;
+            visibility: visible !important;
             animation: floatCharacter 6s ease-in-out infinite;
-            z-index: 2;
+            filter: brightness(1.1) contrast(1.1);
+            z-index: 8;
         }
 
         @keyframes floatCharacter {
@@ -84,12 +89,12 @@
         .miku-text {
             font-size: 9.5rem; font-weight: 900; color: white;
             text-shadow: 0 0 15px var(--miku-cyan), 0 0 35px var(--miku-cyan);
-            letter-spacing: 15px; margin-top: -180px; z-index: 3;
+            letter-spacing: 15px; margin-top: -180px; z-index: 9;
         }
 
         /* Search Bar */
         .search-container {
-            width: 600px; margin-top: 25px; z-index: 4;
+            width: 600px; margin-top: 25px; z-index: 10;
             background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(20px);
             border: 2px solid var(--border-glass); border-radius: 50px;
             padding: 16px 35px; display: flex; align-items: center;
@@ -115,6 +120,7 @@
 
         .dock-item {
             color: var(--miku-cyan); font-weight: 800; font-size: 0.8rem;
+            cursor: pointer;
         }
     </style>
 </head>
@@ -128,10 +134,8 @@
     </nav>
 
     <main class="center-stage">
-        <img src="https://cdn.discordapp.com/attachments/1444592922447057040/1479367313441685625/Screenshot_20260306-003617.Chrome.png?ex=69abc7ac&is=69aa762c&hm=80dc9ec41e65c30c36d69c5948d7dc875f52ec81f998756e2ptrue" class="miku-character">
-        
+        <img src="https://cdn.discordapp.com/attachments/1444592922447057040/1479367313441685625/Screenshot_20260306-003617.Chrome.png?ex=69abc7ac&is=69aa762c&hm=80dc9ec41e65c30c36d69c5948d7dc875f52ec81f998756e2bbe3fe262c44f0d&" class="miku-character">
         <h1 class="miku-text">MIKU</h1>
-
         <div class="search-container">
             <input type="text" class="search-input" placeholder="Search or Enter URL..." id="url-input">
         </div>
@@ -147,7 +151,6 @@
     </footer>
 
     <script>
-        // Back to YOUR snowflake image link
         const snowLayer = document.getElementById('snow-layer');
         const snowImg = "https://cdn.discordapp.com/attachments/1444592922447057040/1479367313026191401/Screenshot_20260306-003642.Chrome.png?ex=69abc7ac&is=69aa762c&hm=66b2ad1775d64dcc27d2fb69cfb24a4faa73d4cdd0d2797e989fe71d53849d64&";
 
