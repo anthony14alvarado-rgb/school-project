@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Google Drive</title>
     <link rel="icon" href="https://ssl.gstatic.com/images/branding/product/1x/drive_2020q4_32dp.png">
     <style>
@@ -17,6 +17,7 @@
         * {
             margin: 0; padding: 0; box-sizing: border-box;
             font-family: 'Nunito', sans-serif; user-select: none;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
@@ -24,6 +25,7 @@
             background: linear-gradient(180deg, #4A90E2 0%, #87CEEB 50%, #B0E0E6 100%);
             background-size: cover;
             position: relative; display: flex; flex-direction: column; justify-content: space-between;
+            touch-action: none; /* Prevents browser pull-to-refresh */
         }
 
         /* Snowflake Layer */
@@ -36,7 +38,8 @@
             position: absolute; top: -50px;
             width: 25px; height: auto;
             mix-blend-mode: screen; 
-            filter: drop-shadow(0 0 5px white);
+            /* Filter to clean up snowflake background boxes */
+            filter: brightness(1.2) contrast(1.2) drop-shadow(0 0 5px white);
             animation: fall linear infinite;
         }
 
@@ -50,56 +53,71 @@
         /* UI Elements */
         .top-nav {
             position: relative; z-index: 10;
-            display: flex; justify-content: space-between; padding: 30px 50px;
+            display: flex; justify-content: space-between; padding: 30px 20px;
         }
 
         .nav-pill {
             background: var(--dark-glass); backdrop-filter: blur(15px);
             border: 1px solid var(--border-glass); border-radius: 30px;
-            padding: 12px 25px; color: white; font-weight: 700;
-            letter-spacing: 2px;
+            padding: 12px 20px; color: white; font-weight: 700;
+            letter-spacing: 1px; font-size: 0.9rem;
         }
 
         .center-stage {
             position: relative; z-index: 10;
             display: flex; flex-direction: column; align-items: center;
             justify-content: center; flex-grow: 1;
+            padding: 0 20px;
         }
 
         .search-container {
-            width: 600px; z-index: 10;
+            width: 100%; max-width: 500px; z-index: 10;
             background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(25px);
             border: 2px solid var(--border-glass); border-radius: 60px;
-            padding: 18px 35px; display: flex; align-items: center;
-            box-shadow: 0 15px 45px rgba(0,0,0,0.3);
+            padding: 15px 25px; display: flex; align-items: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
         }
 
         .search-input {
             background: transparent; border: none; outline: none;
-            color: white; font-size: 1.25rem; width: 100%; font-weight: 600;
+            color: white; font-size: 1.1rem; width: 100%; font-weight: 600;
             text-align: center;
         }
 
         .dock {
             width: 100%; display: flex; justify-content: center;
-            padding-bottom: 40px; z-index: 10;
+            padding-bottom: 30px; z-index: 10;
         }
 
         .dock-bar {
             background: var(--dark-glass); backdrop-filter: blur(20px);
-            border: 1px solid var(--border-glass); border-radius: 35px;
-            padding: 18px 45px; display: flex; gap: 45px;
+            border: 1px solid var(--border-glass); border-radius: 30px;
+            padding: 15px 30px; display: flex; gap: 25px;
         }
 
         .dock-item {
             display: flex; flex-direction: column; align-items: center;
-            color: var(--miku-cyan); font-weight: 800; font-size: 0.85rem;
+            color: var(--miku-cyan); font-weight: 800; font-size: 0.75rem;
+        }
+
+        /* Miku Custom Cursor */
+        #miku-cursor {
+            position: fixed;
+            width: 75px;
+            height: auto;
+            pointer-events: none;
+            z-index: 99999; /* Higher than everything else */
+            display: none;
+            mix-blend-mode: multiply;
+            /* Extra filter to ensure the light background is fully gone */
+            filter: contrast(1.1) brightness(1.1);
         }
     </style>
 </head>
 <body>
 
     <div id="snow-layer"></div>
+    <img id="miku-cursor" src="" alt="cursor">
 
     <nav class="top-nav">
         <div class="nav-pill">≡ GAMES • UPDATES</div>
@@ -122,10 +140,13 @@
     </footer>
 
     <script>
-        // --- SNOWFLAKE LOGIC ---
+        // --- ASSET LINKS ---
         const snowImg = "https://cdn.discordapp.com/attachments/1444592922447057040/1479367313026191401/Screenshot_20260306-003642.Chrome.png?ex=69abc7ac&is=69aa762c&hm=66b2ad1775d64dcc27d2fb69cfb24a4faa73d4cdd0d2797e989fe71d53849d64&";
-        const snowLayer = document.getElementById('snow-layer');
+        const mikuIdle = "https://cdn.discordapp.com/attachments/1444592922447057040/1479376567242330163/Screenshot_20260306-010851.Photos.png?ex=69abd04b&is=69aa7ecb&hm=d9ad588ac9f7b1bcaeb6d7906ef3caf0322c694b945b5c2f2ece4b5e18f9af14&";
+        const mikuClick = "https://cdn.discordapp.com/attachments/1444592922447057040/1479376566839410859/Screenshot_20260306-011055.Photos.png?ex=69abd04b&is=69aa7ecb&hm=bc9b954a686baf68327d99f4a796753c77387c5fd842ee401b331b0ab8ebfd95&";
 
+        // --- SNOW LOGIC ---
+        const snowLayer = document.getElementById('snow-layer');
         function spawn() {
             const s = document.createElement('img');
             s.src = snowImg; s.className = 'falling-item';
@@ -138,36 +159,32 @@
         }
         setInterval(spawn, 500);
 
-        // --- MIKU TWO-STATE TOUCH CURSOR ---
-        const mikuIdle = "https://cdn.discordapp.com/attachments/1444592922447057040/1479376567242330163/Screenshot_20260306-010851.Photos.png?ex=69abd04b&is=69aa7ecb&hm=d9ad588ac9f7b1bcaeb6d7906ef3caf0322c694b945b5c2f2ece4b5e18f9af14&";
-        const mikuClick = "https://cdn.discordapp.com/attachments/1444592922447057040/1479376566839410859/Screenshot_20260306-011055.Photos.png?ex=69abd04b&is=69aa7ecb&hm=bc9b954a686baf68327d99f4a796753c77387c5fd842ee401b331b0ab8ebfd95&";
+        // --- MIKU TOUCH LOGIC ---
+        const miku = document.getElementById('miku-cursor');
+        miku.src = mikuIdle;
 
-        const mikuCursor = document.createElement('img');
-        mikuCursor.src = mikuIdle;
-        mikuCursor.style = "position:fixed; width:70px; height:auto; pointer-events:none; z-index:10000; display:none; mix-blend-mode:multiply;";
-        document.body.appendChild(mikuCursor);
-
-        function moveMiku(e) {
+        function updatePos(e) {
             const touch = e.touches[0];
-            mikuCursor.style.left = (touch.clientX - 35) + 'px';
-            mikuCursor.style.top = (touch.clientY - 35) + 'px';
+            // Center Miku on finger
+            miku.style.left = (touch.clientX - 37) + 'px';
+            miku.style.top = (touch.clientY - 37) + 'px';
         }
 
         window.addEventListener('touchstart', (e) => {
-            mikuCursor.style.display = 'block';
-            mikuCursor.src = mikuClick;
-            moveMiku(e);
+            miku.style.display = 'block';
+            miku.src = mikuClick;
+            updatePos(e);
         });
 
         window.addEventListener('touchmove', (e) => {
-            moveMiku(e);
+            updatePos(e);
         });
 
         window.addEventListener('touchend', () => {
-            mikuCursor.src = mikuIdle;
+            miku.src = mikuIdle;
         });
 
-        // --- CORE FUNCTIONS ---
+        // --- FUNCTIONS ---
         function launch(url) {
             let val = document.getElementById('url-input').value || url;
             if (!val.startsWith('http')) val = 'https://' + val;
