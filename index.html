@@ -42,10 +42,11 @@
         }
 
         /* SCREEN SWITCHING */
-        .hidden { opacity: 0; pointer-events: none; transform: scale(0.95); position: absolute; }
+        .hidden { opacity: 0; pointer-events: none; transform: scale(0.95); position: absolute; width: 100%; }
         .visible { opacity: 1; pointer-events: auto; transform: scale(1); }
 
-        .top-bar { display: flex; justify-content: space-between; padding: 25px; position: relative; z-index: 2001; }
+        /* SETTINGS POSITIONED LEFT */
+        .top-bar { display: flex; justify-content: flex-start; padding: 25px; position: relative; z-index: 2001; }
         .btn-glass { 
             background: var(--dark-glass); backdrop-filter: blur(20px); 
             border: 1.5px solid var(--border-glass); border-radius: 40px; 
@@ -55,7 +56,7 @@
         .btn-glass:hover { transform: translateY(-2px); border-color: var(--miku-cyan); }
 
         .dropdown-menu {
-            position: absolute; top: 90px; width: 320px; background: var(--dark-glass);
+            position: absolute; top: 90px; left: 25px; width: 320px; background: var(--dark-glass);
             backdrop-filter: blur(25px); border: 1.5px solid var(--border-glass);
             border-radius: 20px; padding: 25px; color: white; display: none; flex-direction: column; gap: 15px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5); z-index: 3000;
@@ -90,8 +91,8 @@
 
         .search-input { background: transparent; border: none; outline: none; color: white; font-size: 1.2rem; width: 100%; text-align: center; font-weight: 700; position: relative; z-index: 2; }
 
-        /* SEARCH PORTAL SPECIFIC */
-        #search-portal-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; width: 100%; }
+        /* SEARCH PORTAL VIEW */
+        #search-portal-view { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; width: 100%; }
         .portal-wide-bar { max-width: 800px; transform: scale(1.1); }
         .back-msg { margin-top: 30px; color: white; font-weight: 900; opacity: 0.5; font-size: 0.7rem; letter-spacing: 3px; cursor: pointer; transition: 0.3s; }
         .back-msg:hover { opacity: 1; color: var(--miku-cyan); }
@@ -106,31 +107,21 @@
         .link-item img { width: 18px; height: 18px; border-radius: 4px; pointer-events: none; }
         .link-item:hover { background: var(--miku-cyan); color: #0d1926; transform: scale(1.05); }
 
-        .bottom-dock { display: flex; justify-content: center; padding-bottom: 40px; }
+        /* DOCK AT BOTTOM */
+        .bottom-dock { display: flex; justify-content: center; padding-bottom: 40px; position: relative; z-index: 1001; }
         .dock-container { background: var(--dark-glass); backdrop-filter: blur(25px); border: 1.5px solid var(--border-glass); border-radius: 35px; padding: 15px 35px; display: flex; gap: 30px; }
         .dock-icon { color: var(--miku-cyan); font-weight: 900; font-size: 0.8rem; text-align: center; cursor: pointer; transition: 0.3s; }
         .dock-icon:hover { transform: translateY(-5px); text-shadow: 0 0 10px var(--miku-cyan); }
 
-        #miku-root { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9999999; }
+        #miku-root { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 99999999; }
     </style>
 </head>
 <body class="miku-cursor-active" id="mainBody">
 
     <canvas id="snowCanvas"></canvas>
 
-    <div class="os-interface" id="main-dashboard">
+    <div class="os-interface">
         <header class="top-bar">
-            <div class="btn-glass" onclick="toggleMenu('updateMenu')">≡ APPS • DEV</div>
-            <div id="updateMenu" class="dropdown-menu">
-                <p style="font-weight:900; color:var(--miku-cyan); border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:5px;">TITAN OS 6.28</p>
-                <ul style="list-style:none; font-size:0.85rem; line-height:1.6;">
-                    <li>• Two-Room System Fully Operational</li>
-                    <li>• Persistence Logic Restored</li>
-                    <li>• High-Density Snow Rotation</li>
-                    <li>• Search Glow UI Restored</li>
-                </ul>
-            </div>
-
             <div class="btn-glass" onclick="toggleMenu('settingsMenu')">⚙ SETTINGS</div>
             <div id="settingsMenu" class="dropdown-menu">
                 <p style="font-weight:900; color:var(--miku-cyan); text-align:center;">SYSTEM CUSTOMIZER</p>
@@ -150,22 +141,23 @@
                 <div class="search-input" style="opacity:0.5;">Enter Search Portal...</div>
             </div>
             <div class="links-bar" id="links-container"></div>
-            <footer class="bottom-dock">
-                <div class="dock-container">
-                    <div class="dock-icon" onclick="sys_launch('https://google.com')">WEB</div>
-                    <div class="dock-icon" onclick="sys_launch('https://youtube.com')">VIDEO</div>
-                    <div class="dock-icon" onclick="sys_launch('https://now.gg')">GAMES</div>
-                </div>
-            </footer>
         </main>
 
         <main class="main-view hidden" id="search-portal-view">
             <div class="welcome-text" style="font-size:3rem; margin-bottom:20px;">TITAN SEARCH</div>
             <div class="search-bar portal-wide-bar" id="portal-search-bar">
-                <input type="text" class="search-input" placeholder="Search the web..." id="portal-input" onkeydown="if(event.key==='Enter')sys_launch(this.value); if(event.key==='Escape')closeSearchPortal();">
+                <input type="text" class="search-input" placeholder="Search DuckDuckGo..." id="portal-input" onkeydown="if(event.key==='Enter')sys_launch(this.value); if(event.key==='Escape')closeSearchPortal();">
             </div>
             <div class="back-msg" onclick="closeSearchPortal()">[ ESC TO DASHBOARD ]</div>
         </main>
+
+        <footer class="bottom-dock">
+            <div class="dock-container">
+                <div class="dock-icon" onclick="sys_launch('duckduckgo.com')">WEB</div>
+                <div class="dock-icon" onclick="sys_launch('youtube.com')">VIDEO</div>
+                <div class="dock-icon" onclick="sys_launch('now.gg')">GAMES</div>
+            </div>
+        </footer>
     </div>
 
     <div id="miku-root"></div>
@@ -197,7 +189,7 @@
             document.getElementById('dash-view').classList.replace('hidden', 'visible');
         }
 
-        // --- 3. MIKU CURSOR MATH (RESTORED) ---
+        // --- 3. MIKU CURSOR LOGIC (RESTORED) ---
         const ASSETS = {
             idle: "https://cdn.discordapp.com/attachments/1444592922447057040/1479376567242330163/Screenshot_20260306-010851.Photos.png?ex=69abd04b&is=69aa7ecb&hm=d9ad588ac9f7b1bcaeb6d7906ef3caf0322c694b945b5c2f2ece4b5e18f9af14&",
             click: "https://cdn.discordapp.com/attachments/1444592922447057040/1479376566839410859/Screenshot_20260306-011055.Photos.png?ex=69abd04b&is=69aa7ecb&hm=bc9b954a686baf68327d99f4a796753c77387c5fd842ee401b331b0ab8ebfd95&"
@@ -229,12 +221,11 @@
         function renderLinks() {
             const container = document.getElementById('links-container');
             container.innerHTML = `
-                <div class="link-item" onclick="sys_launch('https://youtube.com')"><img src="https://www.google.com/s2/favicons?domain=youtube.com&sz=64"> YouTube</div>
-                <div class="link-item" onclick="sys_launch('https://tiktok.com')"><img src="https://www.google.com/s2/favicons?domain=tiktok.com&sz=64"> TikTok</div>
-                <div class="link-item" onclick="sys_launch('https://hianime.to')"><img src="https://www.google.com/s2/favicons?domain=hianime.to&sz=64"> HiAnime</div>
-                <div class="link-item" onclick="sys_launch('https://sflix.to')"><img src="https://www.google.com/s2/favicons?domain=sflix.to&sz=64"> SFlix</div>
+                <div class="link-item" onclick="sys_launch('youtube.com')"><img src="https://www.google.com/s2/favicons?domain=youtube.com&sz=64"> YouTube</div>
+                <div class="link-item" onclick="sys_launch('tiktok.com')"><img src="https://www.google.com/s2/favicons?domain=tiktok.com&sz=64"> TikTok</div>
+                <div class="link-item" onclick="sys_launch('hianime.to')"><img src="https://www.google.com/s2/favicons?domain=hianime.to&sz=64"> HiAnime</div>
             `;
-            const saved = JSON.parse(localStorage.getItem('titan_links_v2') || '[]');
+            const saved = JSON.parse(localStorage.getItem('titan_vfinal_links') || '[]');
             saved.forEach(l => {
                 container.innerHTML += `<div class="link-item" onclick="sys_launch('${l.u}')"><img src="https://www.google.com/s2/favicons?domain=${l.u}&sz=64"> ${l.n}</div>`;
             });
@@ -243,9 +234,9 @@
         function addLink() {
             const n = prompt("Name:"), u = prompt("URL:");
             if(n && u) {
-                let list = JSON.parse(localStorage.getItem('titan_links_v2') || '[]');
-                list.push({n, u: u.includes('://') ? u : 'https://' + u});
-                localStorage.setItem('titan_links_v2', JSON.stringify(list));
+                let list = JSON.parse(localStorage.getItem('titan_vfinal_links') || '[]');
+                list.push({n, u: u.includes('.') ? u : u + '.com'});
+                localStorage.setItem('titan_vfinal_links', JSON.stringify(list));
                 renderLinks();
             }
         }
@@ -258,7 +249,10 @@
             document.querySelectorAll('.dropdown-menu').forEach(el => el.classList.remove('active'));
             if(!isActive) menu.classList.add('active');
         }
-        function sys_launch(u) { window.open(u.includes('.') && !u.includes(' ') ? (u.startsWith('http') ? u : 'https://' + u) : 'https://google.com/search?q=' + encodeURIComponent(u), '_blank'); }
+        function sys_launch(u) { 
+            const final = u.includes('.') && !u.includes(' ') ? (u.startsWith('http') ? u : 'https://' + u) : 'https://duckduckgo.com/?q=' + encodeURIComponent(u);
+            window.open(final, '_blank'); 
+        }
 
         const canvas = document.getElementById('snowCanvas'); const ctx = canvas.getContext('2d');
         const img = new Image(); img.src = "https://cdn.discordapp.com/attachments/1444592922447057040/1479367313026191401/Screenshot_20260306-003642.Chrome.png?ex=69abc7ac&is=69aa762c&hm=66b2ad1775d64dcc27d2fb69cfb24a4faa73d4cdd0d2797e989fe71d53849d64&";
@@ -272,7 +266,6 @@
             requestAnimationFrame(animate);
         }
         animate();
-        document.getElementById('splash-text').innerText = "TITAN OS";
     </script>
 </body>
 </html>
