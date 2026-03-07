@@ -113,8 +113,8 @@
                     UPDATE 6.26 <span style="cursor:pointer; color:#ff5f5f;" onclick="toggleMenu('updateMenu')">[X]</span>
                 </div>
                 <ul style="list-style:none; font-size:0.85rem; padding-top:10px;">
+                    <li>• Cursor Offset Fixed</li>
                     <li>• Search Glow Restored</li>
-                    <li>• Two-State Miku Cursor</li>
                     <li>• PC & Mobile Support</li>
                     <li>• Added SFlix Movie Link</li>
                 </ul>
@@ -173,7 +173,8 @@
         function move(e) {
             const x = e.clientX || (e.touches ? e.touches[0].clientX : 0);
             const y = e.clientY || (e.touches ? e.touches[0].clientY : 0);
-            miku.style.transform = `translate3d(${x - 40}px, ${y - 40}px, 0)`;
+            // Offset changed from -40px to +5px so she sits bottom-right of the click point!
+            miku.style.transform = `translate3d(${x + 5}px, ${y + 5}px, 0)`;
         }
         window.addEventListener('mousemove', move);
         window.addEventListener('mousedown', () => { if(cursorActive) miku.src = ASSETS.click; });
