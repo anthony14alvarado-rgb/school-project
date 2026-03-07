@@ -72,6 +72,15 @@
             border: 2px solid var(--border-glass); border-radius: 50px; 
             padding: 20px; display: flex; align-items: center; position: relative; overflow: hidden;
         }
+        
+        /* SEARCH BAR GLOW TRACKING */
+        .search-bar::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(400px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(57, 197, 187, 0.5), transparent 40%);
+            opacity: 0; transition: opacity 0.3s ease; pointer-events: none; z-index: 1;
+        }
+        .search-bar:hover::before { opacity: 1; }
+
         .search-input { background: transparent; border: none; outline: none; color: white; font-size: 1.2rem; width: 100%; text-align: center; font-weight: 700; position: relative; z-index: 2; }
 
         .links-bar { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; max-width: 90%; margin-top: 10px; }
@@ -79,9 +88,9 @@
             background: var(--dark-glass); border: 1.5px solid var(--border-glass); 
             padding: 10px 18px; border-radius: 20px; color: white; 
             font-weight: 800; font-size: 0.9rem; cursor: pointer; transition: 0.3s;
-            display: flex; align-items: center; gap: 8px;
+            display: flex; align-items: center; gap: 8px; position: relative; z-index: 10;
         }
-        .link-item img { width: 18px; height: 18px; border-radius: 4px; }
+        .link-item img { width: 18px; height: 18px; border-radius: 4px; pointer-events: none; }
         .link-item:hover { background: var(--miku-cyan); color: #0d1926; transform: scale(1.05); }
         .add-link { border: 2px dashed var(--miku-cyan); color: var(--miku-cyan); background: transparent; }
 
@@ -104,10 +113,10 @@
                     UPDATE 6.26 <span style="cursor:pointer; color:#ff5f5f;" onclick="toggleMenu('updateMenu')">[X]</span>
                 </div>
                 <ul style="list-style:none; font-size:0.85rem; padding-top:10px;">
+                    <li>• Search Glow Restored</li>
                     <li>• Two-State Miku Cursor</li>
                     <li>• PC & Mobile Support</li>
                     <li>• Added SFlix Movie Link</li>
-                    <li>• Custom URL Saving</li>
                 </ul>
             </div>
 
@@ -141,7 +150,15 @@
     <div id="miku-root"></div>
 
     <script>
-        // --- 1. MIKU CURSOR ---
+        // --- 1. SEARCH GLOW TRACKER ---
+        const glowBar = document.getElementById('glow-bar');
+        glowBar.addEventListener('mousemove', e => {
+            const rect = glowBar.getBoundingClientRect();
+            glowBar.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`);
+            glowBar.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
+        });
+
+        // --- 2. MIKU CURSOR ---
         const ASSETS = {
             idle: "https://cdn.discordapp.com/attachments/1444592922447057040/1479376567242330163/Screenshot_20260306-010851.Photos.png?ex=69abd04b&is=69aa7ecb&hm=d9ad588ac9f7b1bcaeb6d7906ef3caf0322c694b945b5c2f2ece4b5e18f9af14&",
             click: "https://cdn.discordapp.com/attachments/1444592922447057040/1479376566839410859/Screenshot_20260306-011055.Photos.png?ex=69abd04b&is=69aa7ecb&hm=bc9b954a686baf68327d99f4a796753c77387c5fd842ee401b331b0ab8ebfd95&"
@@ -171,7 +188,7 @@
             document.getElementById('cursorToggle').innerText = cursorActive ? "ON" : "OFF";
         }
 
-        // --- 2. LINKS ---
+        // --- 3. LINKS ---
         function addLinkPrompt() {
             const n = prompt("Name:"), u = prompt("URL:");
             if(n && u) {
@@ -196,7 +213,7 @@
         }
         renderLinks();
 
-        // --- 3. UI & SNOW ---
+        // --- 4. UI & SNOW ---
         function toggleMenu(id) { 
             const m = document.getElementById(id);
             const isA = m.style.display === 'flex';
