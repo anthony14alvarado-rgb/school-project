@@ -33,23 +33,23 @@
         #startup-screen {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background: var(--bg-dark); z-index: 999999; display: flex; flex-direction: column;
-            align-items: center; justify-content: center; transition: opacity 0.8s ease;
+            align-items: center; justify-content: center; transition: opacity 1s ease;
         }
         .miku-loader-img {
-            width: 130px; height: 130px; border-radius: 50%; object-fit: cover;
-            box-shadow: 0 0 30px var(--miku-cyan); margin-bottom: 25px;
-            animation: loader-pulse 1.5s infinite alternate; border: 3px solid var(--miku-cyan);
+            width: 150px; height: 150px; border-radius: 50%; object-fit: cover;
+            box-shadow: 0 0 40px var(--miku-cyan); margin-bottom: 25px;
+            animation: loader-pulse 2s infinite alternate; border: 4px solid var(--miku-cyan);
         }
         @keyframes loader-pulse {
-            0% { transform: scale(0.95); box-shadow: 0 0 15px var(--miku-cyan); }
-            100% { transform: scale(1.05); box-shadow: 0 0 45px var(--miku-cyan); }
+            0% { transform: scale(0.98); box-shadow: 0 0 20px var(--miku-cyan); }
+            100% { transform: scale(1.05); box-shadow: 0 0 55px var(--miku-cyan); }
         }
         .loader-text {
-            color: var(--miku-cyan); font-weight: 900; font-size: 1.5rem;
-            letter-spacing: 5px; text-transform: uppercase; animation: loader-blink 1.2s infinite;
+            color: var(--miku-cyan); font-weight: 900; font-size: 1.6rem;
+            letter-spacing: 6px; text-transform: uppercase; animation: loader-blink 1.5s infinite;
         }
-        @keyframes loader-blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
-        .sub-loader-text { color: white; opacity: 0.6; font-size: 0.85rem; margin-top: 10px; letter-spacing: 2px; }
+        @keyframes loader-blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+        .sub-loader-text { color: white; opacity: 0.5; font-size: 0.8rem; margin-top: 12px; letter-spacing: 3px; font-weight: 700; }
 
         /* --- SNOW SYSTEM --- */
         #snowCanvas {
@@ -61,10 +61,9 @@
         .os-interface {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             display: flex; flex-direction: column; justify-content: space-between;
-            z-index: 100; transition: opacity 0.5s ease, transform 0.5s ease;
+            z-index: 100; transition: opacity 0.5s ease;
         }
 
-        /* SCREEN SWITCHING */
         .hidden { opacity: 0; pointer-events: none; transform: scale(0.95); position: absolute; width: 100%; }
         .visible { opacity: 1; pointer-events: auto; transform: scale(1); }
 
@@ -113,13 +112,13 @@
         .search-bar:hover::before { opacity: 0.5; }
         .search-input { background: transparent; border: none; outline: none; color: white; font-size: 1.2rem; width: 100%; text-align: center; font-weight: 700; position: relative; z-index: 2; }
 
-        /* PORTAL VIEW */
+        /* SEARCH PORTAL */
         #search-portal-view { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; width: 100%; }
         .portal-wide-bar { max-width: 800px; transform: scale(1.1); }
         .back-msg { margin-top: 30px; color: white; font-weight: 900; opacity: 0.5; font-size: 0.7rem; letter-spacing: 3px; cursor: pointer; transition: 0.3s; }
         .back-msg:hover { opacity: 1; color: var(--miku-cyan); }
 
-        /* LINKS SYSTEM */
+        /* LINKS */
         .links-bar { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; max-width: 90%; margin-top: 10px; }
         .link-item { 
             background: var(--dark-glass); border: 1.5px solid var(--border-glass); 
@@ -130,22 +129,21 @@
         .link-item img { width: 18px; height: 18px; border-radius: 4px; pointer-events: none; }
         .link-item:hover { background: var(--miku-cyan); color: #0d1926; transform: scale(1.05); }
 
-        /* BOTTOM DOCK */
+        /* DOCK */
         .bottom-dock { display: flex; justify-content: center; padding-bottom: 40px; position: relative; z-index: 1001; }
         .dock-container { background: var(--dark-glass); backdrop-filter: blur(25px); border: 1.5px solid var(--border-glass); border-radius: 35px; padding: 15px 35px; display: flex; gap: 30px; }
         .dock-icon { color: var(--miku-cyan); font-weight: 900; font-size: 0.8rem; text-align: center; cursor: pointer; transition: 0.3s; }
         .dock-icon:hover { transform: translateY(-5px); text-shadow: 0 0 10px var(--miku-cyan); }
 
-        /* MIKU ROOT LAYER */
         #miku-root { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 99999999; }
     </style>
 </head>
 <body class="miku-cursor-active" id="mainBody">
 
     <div id="startup-screen">
-        <img src="https://media.tenor.com/2sXG_k11U6MAAAAi/miku-hatsune-miku.gif" class="miku-loader-img" alt="Miku Loading">
+        <img src="https://cdn.discordapp.com/attachments/1444592922447057040/1480014533241077921/Screenshot_20260307-192854.Chrome.png?ex=69ae2272&is=69acd0f2&hm=f14e8be9d72ae18a338b225613089369b872399eeaae4157f5bb0cbcf62348d5&" class="miku-loader-img" alt="Titan OS Core">
         <div class="loader-text">INITIALIZING TITAN OS</div>
-        <div class="sub-loader-text">Please wait until systems fully load...</div>
+        <div class="sub-loader-text">PLEASE WAIT UNTIL FULLY LOADED...</div>
     </div>
 
     <canvas id="snowCanvas"></canvas>
@@ -167,20 +165,20 @@
             </div>
 
             <div id="updateMenu" class="dropdown-menu" style="left: 170px;">
-                <p style="font-weight:900; color:var(--miku-cyan); border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:5px;">TITAN OS 6.31</p>
+                <p style="font-weight:900; color:var(--miku-cyan); border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:5px;">TITAN OS 6.32</p>
                 <ul id="log-list" style="list-style:none; font-size:0.85rem; line-height:1.6;">
-                    <li>• Added Miku-Themed Boot Sequence</li>
-                    <li>• Integrated DuckDuckGo Engine</li>
-                    <li>• Shifted Settings UI to Left-Side</li>
-                    <li>• Restored Full Persist/Favicon Logic</li>
-                    <li>• 330+ Line Master Build Restored</li>
+                    <li>• Custom Miku Boot Image Integrated</li>
+                    <li>• Dynamic Load Sequence Logic</li>
+                    <li>• Search Engine: DuckDuckGo</li>
+                    <li>• Left-Side Navigation Layout</li>
+                    <li>• Full Persist/Favicon Logic Active</li>
                 </ul>
             </div>
         </header>
 
         <main class="main-view visible" id="dash-view">
             <div class="welcome-text" id="splash-text">TITAN OS</div>
-            <div class="search-bar" id="dash-search-bar" onclick="openSearchPortal()">
+            <div class="search-bar" onclick="openSearchPortal()">
                 <div class="search-input" style="opacity:0.5;">Launch Search Portal...</div>
             </div>
             <div class="links-bar" id="links-container"></div>
@@ -206,16 +204,21 @@
     <div id="miku-root"></div>
 
     <script>
-        // --- 0. STARTUP LOGIC ---
+        // --- 0. SMART BOOT LOGIC ---
         window.addEventListener('load', () => {
-            setTimeout(() => {
-                const l = document.getElementById('startup-screen');
-                l.style.opacity = '0';
-                setTimeout(() => { l.style.display = 'none'; }, 800);
-            }, 2800);
+            const loadStart = Date.now();
+            // Minimum 2.5s showtime, but waits for hardware if needed
+            const checkLoad = setInterval(() => {
+                if (Date.now() - loadStart > 2500) {
+                    clearInterval(checkLoad);
+                    const l = document.getElementById('startup-screen');
+                    l.style.opacity = '0';
+                    setTimeout(() => { l.style.display = 'none'; }, 1000);
+                }
+            }, 100);
         });
 
-        // --- 1. STATE & THEMES ---
+        // --- 1. CORE ENGINE ---
         let snowActive = true;
         let cursorActive = true;
 
@@ -241,7 +244,7 @@
             document.getElementById('dash-view').classList.replace('hidden', 'visible');
         }
 
-        // --- 3. MIKU CURSOR MASTER ---
+        // --- 3. MIKU CURSOR ---
         const ASSETS = {
             idle: "https://cdn.discordapp.com/attachments/1444592922447057040/1479376567242330163/Screenshot_20260306-010851.Photos.png?ex=69abd04b&is=69aa7ecb&hm=d9ad588ac9f7b1bcaeb6d7906ef3caf0322c694b945b5c2f2ece4b5e18f9af14&",
             click: "https://cdn.discordapp.com/attachments/1444592922447057040/1479376566839410859/Screenshot_20260306-011055.Photos.png?ex=69abd04b&is=69aa7ecb&hm=bc9b954a686baf68327d99f4a796753c77387c5fd842ee401b331b0ab8ebfd95&"
@@ -269,7 +272,7 @@
             document.getElementById('cursorToggle').innerText = cursorActive ? "ON" : "OFF";
         }
 
-        // --- 4. PERSISTENT LINKS ---
+        // --- 4. LINKS ---
         function renderLinks() {
             const container = document.getElementById('links-container');
             container.innerHTML = `
@@ -278,9 +281,7 @@
                 <div class="link-item" onclick="sys_launch('hianime.to')"><img src="https://www.google.com/s2/favicons?domain=hianime.to&sz=64"> HiAnime</div>
             `;
             const saved = JSON.parse(localStorage.getItem('titan_vfinal_links') || '[]');
-            saved.forEach(l => {
-                container.innerHTML += `<div class="link-item" onclick="sys_launch('${l.u}')"><img src="https://www.google.com/s2/favicons?domain=${l.u}&sz=64"> ${l.n}</div>`;
-            });
+            saved.forEach(l => { container.innerHTML += `<div class="link-item" onclick="sys_launch('${l.u}')"><img src="https://www.google.com/s2/favicons?domain=${l.u}&sz=64"> ${l.n}</div>`; });
             container.innerHTML += `<div class="link-item" style="border:2px dashed var(--miku-cyan); color:var(--miku-cyan);" onclick="addLink()">+ ADD</div>`;
         }
         function addLink() {
