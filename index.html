@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Google Drive</title>
     <link rel="icon" href="https://ssl.gstatic.com/images/branding/product/1x/drive_2020q4_32dp.png">
+    
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap');
 
@@ -14,12 +18,14 @@
             --border-glass: rgba(57, 197, 187, 0.5);
             --bg-dark: #0a0f16;
             --alert-red: #ff3366;
+            --classic-white: #f0f0f0;
         }
 
         /* PC CURSOR LOGIC */
         .miku-cursor-active { 
             cursor: none !important; 
         }
+
         .miku-cursor-active input, 
         .miku-cursor-active div, 
         .miku-cursor-active button, 
@@ -35,8 +41,9 @@
             user-select: none; 
             -webkit-tap-highlight-color: transparent; 
         }
-        
-        input, textarea { 
+
+        input, 
+        textarea { 
             user-select: text !important; 
         } 
 
@@ -67,6 +74,7 @@
             justify-content: center; 
             transition: opacity 1s ease; 
         }
+
         .miku-loader-img { 
             width: 150px; 
             height: 150px; 
@@ -77,10 +85,18 @@
             animation: loader-pulse 2s infinite alternate; 
             border: 4px solid var(--miku-cyan); 
         }
+
         @keyframes loader-pulse { 
-            0% { transform: scale(0.98); box-shadow: 0 0 20px var(--miku-cyan); } 
-            100% { transform: scale(1.05); box-shadow: 0 0 55px var(--miku-cyan); } 
+            0% { 
+                transform: scale(0.98); 
+                box-shadow: 0 0 20px var(--miku-cyan); 
+            } 
+            100% { 
+                transform: scale(1.05); 
+                box-shadow: 0 0 55px var(--miku-cyan); 
+            } 
         }
+
         .loader-text { 
             color: var(--miku-cyan); 
             font-weight: 900; 
@@ -89,10 +105,16 @@
             text-transform: uppercase; 
             animation: loader-blink 1.5s infinite; 
         }
+
         @keyframes loader-blink { 
-            0%, 100% { opacity: 1; } 
-            50% { opacity: 0.3; } 
+            0%, 100% { 
+                opacity: 1; 
+            } 
+            50% { 
+                opacity: 0.3; 
+            } 
         }
+
         .sub-loader-text { 
             color: white; 
             opacity: 0.5; 
@@ -135,6 +157,7 @@
             position: absolute; 
             width: 100%; 
         }
+
         .visible { 
             opacity: 1; 
             pointer-events: auto; 
@@ -150,6 +173,7 @@
             position: relative; 
             z-index: 2001; 
         }
+
         .btn-glass { 
             background: var(--dark-glass); 
             backdrop-filter: blur(20px); 
@@ -162,6 +186,7 @@
             cursor: pointer; 
             transition: 0.3s; 
         }
+
         .btn-glass:hover { 
             transform: translateY(-2px); 
             border-color: var(--miku-cyan); 
@@ -185,15 +210,18 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
             z-index: 3000; 
         }
+
         .dropdown-menu.active { 
             display: flex; 
         }
+
         .setting-item { 
             display: flex; 
             justify-content: space-between; 
             align-items: center; 
             font-size: 0.9rem; 
         }
+
         .setting-input { 
             background: rgba(255,255,255,0.1); 
             border: 1px solid var(--border-glass); 
@@ -204,6 +232,7 @@
             margin-top: 5px; 
             outline: none; 
         }
+
         .toggle-btn { 
             padding: 8px 15px; 
             border-radius: 12px; 
@@ -214,9 +243,10 @@
             color: #0d1926; 
             transition: 0.2s; 
         }
+
         .admin-btn { 
-            background: var(--alert-red); 
-            color: white; 
+            background: var(--miku-cyan); 
+            color: #0d1926; 
             border: none; 
             padding: 10px; 
             border-radius: 10px; 
@@ -227,76 +257,113 @@
             letter-spacing: 2px; 
         }
 
-        /* MODALS (ADMIN & ANNOUNCEMENT) */
+        /* CLASSIC MODALS (ADMIN & ANNOUNCEMENT) */
         .modal-overlay { 
             position: fixed; 
             top: 0; 
             left: 0; 
             width: 100%; 
             height: 100%; 
-            background: rgba(0,0,0,0.6); 
-            backdrop-filter: blur(10px); 
+            background: rgba(0,0,0,0.7); 
+            backdrop-filter: blur(15px); 
             z-index: 5000; 
             display: flex; 
             justify-content: center; 
             align-items: center; 
         }
+        
         .modal-box { 
             background: var(--dark-glass); 
-            border: 2px solid var(--miku-cyan); 
-            border-radius: 25px; 
-            padding: 30px; 
+            border: 1px solid rgba(255,255,255,0.2); 
+            border-radius: 12px; 
+            padding: 35px; 
             width: 90%; 
-            max-width: 500px; 
-            text-align: center; 
+            max-width: 550px; 
+            text-align: left; 
             color: white; 
-            box-shadow: 0 15px 50px rgba(0,0,0,0.8); 
+            box-shadow: 0 20px 60px rgba(0,0,0,0.9); 
         }
-        .modal-box.alert { 
-            border-color: var(--alert-red); 
-            box-shadow: 0 0 40px rgba(255, 51, 102, 0.4); 
-        }
-        .announce-title { 
-            color: var(--alert-red); 
+
+        .classic-title { 
+            color: var(--classic-white); 
             font-weight: 900; 
-            font-size: 1.5rem; 
-            letter-spacing: 3px; 
-            margin-bottom: 20px; 
-            animation: loader-blink 2s infinite; 
+            font-size: 1.1rem; 
+            letter-spacing: 2px; 
+            margin-bottom: 25px; 
+            border-bottom: 1px solid rgba(255,255,255,0.2); 
+            padding-bottom: 15px; 
+            text-transform: uppercase; 
+            display: flex; 
+            align-items: center; 
+            gap: 10px; 
         }
-        .announce-text { 
-            font-size: 1.2rem; 
-            line-height: 1.5; 
-            margin-bottom: 30px; 
-            font-weight: 700; 
+
+        .classic-title::before { 
+            content: ''; 
+            display: block; 
+            width: 12px; 
+            height: 12px; 
+            background: var(--miku-cyan); 
+            border-radius: 50%; 
+            box-shadow: 0 0 10px var(--miku-cyan); 
         }
+        
+        .classic-text { 
+            font-size: 1.1rem; 
+            line-height: 1.6; 
+            margin-bottom: 35px; 
+            font-weight: 400; 
+            color: #e0e0e0; 
+        }
+        
         .admin-textarea { 
             width: 100%; 
-            height: 100px; 
-            background: rgba(0,0,0,0.5); 
+            height: 120px; 
+            background: rgba(0,0,0,0.6); 
             border: 1px solid var(--border-glass); 
             color: white; 
             padding: 15px; 
-            border-radius: 15px; 
+            border-radius: 8px; 
             resize: none; 
             outline: none; 
-            margin-top: 15px; 
-            margin-bottom: 15px; 
+            margin-bottom: 20px; 
             font-size: 1rem; 
         }
+        
+        .btn-row { 
+            display: flex; 
+            justify-content: flex-end; 
+            gap: 15px; 
+        }
+
         .modal-btn { 
+            background: transparent; 
+            color: white; 
+            border: 1px solid rgba(255,255,255,0.3); 
+            padding: 10px 25px; 
+            font-weight: 700; 
+            border-radius: 6px; 
+            cursor: pointer; 
+            font-size: 0.9rem; 
+            letter-spacing: 1px; 
+            transition: 0.2s; 
+        }
+
+        .modal-btn:hover { 
+            background: rgba(255,255,255,0.1); 
+            border-color: white; 
+        }
+
+        .modal-btn.primary { 
             background: var(--miku-cyan); 
             color: #0d1926; 
             border: none; 
-            padding: 12px 30px; 
             font-weight: 900; 
-            border-radius: 15px; 
-            cursor: pointer; 
-            font-size: 1.1rem; 
-            transition: 0.3s; 
         }
-        .modal-btn:hover { 
-            transform: scale(1.05); 
+
+        .modal-btn.primary:hover { 
+            background: white; 
+            transform: scale(1.02); 
         }
 
         /* DASHBOARD ELEMENTS */
@@ -309,6 +376,7 @@
             gap: 15px; 
             width: 100%; 
         }
+
         .welcome-text { 
             color: white; 
             font-weight: 900; 
@@ -317,6 +385,7 @@
             letter-spacing: 3px; 
             text-transform: uppercase; 
         }
+
         .search-bar { 
             width: 90%; 
             max-width: 550px; 
@@ -331,6 +400,7 @@
             overflow: hidden; 
             cursor: pointer; 
         }
+
         .search-bar::before { 
             content: ''; 
             position: absolute; 
@@ -344,9 +414,11 @@
             pointer-events: none; 
             z-index: 1; 
         }
+
         .search-bar:hover::before { 
             opacity: 0.5; 
         }
+
         .search-input { 
             background: transparent; 
             border: none; 
@@ -369,10 +441,12 @@
             height: 100%; 
             width: 100%; 
         }
+
         .portal-wide-bar { 
             max-width: 800px; 
             transform: scale(1.1); 
         }
+
         .back-msg { 
             margin-top: 30px; 
             color: white; 
@@ -383,10 +457,12 @@
             cursor: pointer; 
             transition: 0.3s; 
         }
+
         .back-msg:hover { 
             opacity: 1; 
             color: var(--miku-cyan); 
         }
+
         .links-bar { 
             display: flex; 
             gap: 12px; 
@@ -395,6 +471,7 @@
             max-width: 90%; 
             margin-top: 10px; 
         }
+
         .link-item { 
             background: var(--dark-glass); 
             border: 1.5px solid var(--border-glass); 
@@ -411,12 +488,14 @@
             position: relative; 
             z-index: 10; 
         }
+
         .link-item img { 
             width: 18px; 
             height: 18px; 
             border-radius: 4px; 
             pointer-events: none; 
         }
+
         .link-item:hover { 
             background: var(--miku-cyan); 
             color: #0d1926; 
@@ -431,6 +510,7 @@
             position: relative; 
             z-index: 1001; 
         }
+
         .dock-container { 
             background: var(--dark-glass); 
             backdrop-filter: blur(25px); 
@@ -440,6 +520,7 @@
             display: flex; 
             gap: 30px; 
         }
+
         .dock-icon { 
             color: var(--miku-cyan); 
             font-weight: 900; 
@@ -448,6 +529,7 @@
             cursor: pointer; 
             transition: 0.3s; 
         }
+
         .dock-icon:hover { 
             transform: translateY(-5px); 
             text-shadow: 0 0 10px var(--miku-cyan); 
@@ -481,50 +563,57 @@
             
             <div id="settingsMenu" class="dropdown-menu">
                 <p style="font-weight:900; color:var(--miku-cyan); text-align:center;">SYSTEM CUSTOMIZER</p>
+                
                 <div class="setting-item">
                     <span>Miku Cursor</span>
                     <button id="cursorToggle" class="toggle-btn" onclick="toggleCursor()">ON</button>
                 </div>
+                
                 <div class="setting-item">
                     <span>Snow Effect</span>
                     <button id="snowToggle" class="toggle-btn" onclick="toggleSnow()">ON</button>
                 </div>
+                
                 <div class="setting-item">
                     <span>Theme Color</span>
                     <input type="color" id="themeColor" value="#39C5BB" oninput="changeTheme(this.value)" style="background:none; border:none; width:40px; cursor:pointer;">
                 </div>
+                
                 <div style="display:flex; flex-direction:column; gap:5px;">
                     <span style="font-size:0.75rem;">WALLPAPER URL:</span>
                     <input type="text" class="setting-input" placeholder="Paste image link..." onchange="changeBG(this.value)">
                 </div>
-                <div class="admin-btn" onclick="openAdminTerminal()">[ OWNER TERMINAL ]</div>
+                
+                <div class="admin-btn" onclick="openAdminTerminal()">[ SYSTEM BROADCAST ]</div>
             </div>
 
             <div id="updateMenu" class="dropdown-menu" style="left: 170px;">
-                <p style="font-weight:900; color:var(--miku-cyan); border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:5px;">TITAN OS 6.35</p>
+                <p style="font-weight:900; color:var(--miku-cyan); border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:5px;">TITAN OS 6.36</p>
                 <ul id="log-list" style="list-style:none; font-size:0.85rem; line-height:1.6;">
-                    <li>• Admin Broadcast System Added</li>
+                    <li>• Network Bridge Added (Firebase)</li>
+                    <li>• UI Overhaul: Classic Alerts</li>
                     <li>• Password Lock (Mikuistop1)</li>
-                    <li>• Custom Miku Boot Image</li>
-                    <li>• DuckDuckGo Core Engine</li>
-                    <li>• Fully Expanded Codebase</li>
                 </ul>
             </div>
         </header>
 
         <main class="main-view visible" id="dash-view">
             <div class="welcome-text" id="splash-text">TITAN OS</div>
+            
             <div class="search-bar" onclick="openSearchPortal()">
                 <div class="search-input" style="opacity:0.5;">Launch Search Portal...</div>
             </div>
+            
             <div class="links-bar" id="links-container"></div>
         </main>
 
         <main class="main-view hidden" id="search-portal-view">
             <div class="welcome-text" style="font-size:3rem; margin-bottom:20px;">TITAN SEARCH</div>
+            
             <div class="search-bar portal-wide-bar">
-                <input type="text" class="search-input" placeholder="Search DuckDuckGo..." id="portal-input" onkeydown="if(event.key==='Enter')sys_launch(this.value); if(event.key==='Escape')closeSearchPortal();">
+                <input type="text" class="search-input" placeholder="Search DuckDuckGo..." id="portal-input" onkeydown="handlePortalKeydown(event)">
             </div>
+            
             <div class="back-msg" onclick="closeSearchPortal()">[ ESC TO DASHBOARD ]</div>
         </main>
 
@@ -539,50 +628,79 @@
 
     <div id="admin-modal" class="modal-overlay hidden">
         <div class="modal-box">
-            <h2 style="color:var(--miku-cyan); font-weight:900; letter-spacing:3px;">OWNER TERMINAL</h2>
-            <textarea id="broadcast-input" class="admin-textarea" placeholder="Type your system announcement here..."></textarea>
-            <div style="display:flex; justify-content:center; gap:15px;">
-                <button class="modal-btn" style="background:var(--alert-red); color:white;" onclick="closeAdminTerminal()">CANCEL</button>
-                <button class="modal-btn" onclick="sendBroadcast()">BROADCAST</button>
+            <div class="classic-title">Network Broadcast Terminal</div>
+            <textarea id="broadcast-input" class="admin-textarea" placeholder="Enter system-wide message..."></textarea>
+            
+            <div class="btn-row">
+                <button class="modal-btn" onclick="closeAdminTerminal()">Cancel</button>
+                <button class="modal-btn primary" onclick="sendBroadcast()">Transmit</button>
             </div>
         </div>
     </div>
 
     <div id="announce-modal" class="modal-overlay hidden">
-        <div class="modal-box alert">
-            <div class="announce-title">⚠️ SYSTEM ANNOUNCEMENT ⚠️</div>
-            <div class="announce-text" id="announce-message-text">Message goes here...</div>
-            <button class="modal-btn" onclick="closeAnnouncement()">OKAY</button>
+        <div class="modal-box">
+            <div class="classic-title">System Broadcast</div>
+            <div class="classic-text" id="announce-message-text">Message goes here...</div>
+            
+            <div class="btn-row">
+                <button class="modal-btn primary" onclick="closeAnnouncement()">Acknowledge</button>
+            </div>
         </div>
     </div>
 
     <div id="miku-root"></div>
 
     <script>
-        // --- 0. SMART BOOT LOGIC ---
+        // ==========================================
+        //  0. SMART BOOT LOGIC
+        // ==========================================
         window.addEventListener('load', () => {
             const loadStart = Date.now();
+            
             const checkLoad = setInterval(() => {
                 if (Date.now() - loadStart > 2500) {
                     clearInterval(checkLoad);
-                    const l = document.getElementById('startup-screen');
-                    l.style.opacity = '0';
+                    const startupScreen = document.getElementById('startup-screen');
+                    startupScreen.style.opacity = '0';
+                    
                     setTimeout(() => { 
-                        l.style.display = 'none'; 
+                        startupScreen.style.display = 'none'; 
                     }, 1000);
                 }
             }, 100);
         });
 
-        // --- 1. ADMIN BROADCAST SYSTEM ---
+        // ==========================================
+        //  1. GLOBAL NETWORK SCRIPT (FIREBASE)
+        // ==========================================
+        const firebaseConfig = {
+            apiKey: "PASTE_YOUR_API_KEY_HERE",
+            authDomain: "PASTE_YOUR_DOMAIN_HERE",
+            databaseURL: "PASTE_YOUR_DB_URL_HERE",
+            projectId: "PASTE_YOUR_PROJECT_ID_HERE"
+        };
+
+        let useCloudNetwork = false;
+        
+        if (firebaseConfig.apiKey !== "PASTE_YOUR_API_KEY_HERE") {
+            firebase.initializeApp(firebaseConfig);
+            useCloudNetwork = true;
+            console.log("Titan OS Connected to Global Cloud.");
+        }
+
+        // ==========================================
+        //  2. ADMIN BROADCAST SYSTEM
+        // ==========================================
         let lastBroadcastTime = 0;
 
         function openAdminTerminal() {
-            const pass = prompt("ENTER OWNER PASSWORD:");
+            const pass = prompt("Enter Administrator Password:");
+            
             if (pass === "Mikuistop1") {
                 document.getElementById('admin-modal').classList.replace('hidden', 'visible');
             } else if (pass !== null) {
-                alert("ACCESS DENIED.");
+                alert("Access Denied.");
             }
         }
 
@@ -593,11 +711,21 @@
 
         function sendBroadcast() {
             const txt = document.getElementById('broadcast-input').value;
-            if (!txt) return;
             
-            // Save to local storage with a timestamp
-            const payload = { msg: txt, time: Date.now() };
-            localStorage.setItem('titan_announcement', JSON.stringify(payload));
+            if (!txt) {
+                return;
+            }
+            
+            const payload = { 
+                msg: txt, 
+                time: Date.now() 
+            };
+
+            if (useCloudNetwork) {
+                firebase.database().ref('titan/announcement').set(payload);
+            } else {
+                localStorage.setItem('titan_announcement', JSON.stringify(payload));
+            }
             
             closeAdminTerminal();
         }
@@ -606,43 +734,61 @@
             document.getElementById('announce-modal').classList.replace('visible', 'hidden');
         }
 
-        // Listener checks for new announcements every half second
-        setInterval(() => {
-            const data = localStorage.getItem('titan_announcement');
-            if (data) {
-                const parsed = JSON.parse(data);
-                if (parsed.time > lastBroadcastTime) {
-                    lastBroadcastTime = parsed.time;
-                    document.getElementById('announce-message-text').innerText = parsed.msg;
+        if (useCloudNetwork) {
+            firebase.database().ref('titan/announcement').on('value', (snapshot) => {
+                const data = snapshot.val();
+                if (data && data.time > lastBroadcastTime) {
+                    lastBroadcastTime = data.time;
+                    document.getElementById('announce-message-text').innerText = data.msg;
                     document.getElementById('announce-modal').classList.replace('hidden', 'visible');
                 }
-            }
-        }, 500);
+            });
+        } else {
+            setInterval(() => {
+                const data = localStorage.getItem('titan_announcement');
+                if (data) {
+                    const parsed = JSON.parse(data);
+                    if (parsed.time > lastBroadcastTime) {
+                        lastBroadcastTime = parsed.time;
+                        document.getElementById('announce-message-text').innerText = parsed.msg;
+                        document.getElementById('announce-modal').classList.replace('hidden', 'visible');
+                    }
+                }
+            }, 500);
+        }
 
-        // --- 2. CORE ENGINE & VISUALS ---
+        // ==========================================
+        //  3. CORE ENGINE & VISUALS
+        // ==========================================
         let snowActive = true; 
         let cursorActive = true;
 
-        function changeBG(u) { 
-            document.getElementById('mainBody').style.backgroundImage = `url('${u}')`; 
+        function changeBG(url) { 
+            document.getElementById('mainBody').style.backgroundImage = `url('${url}')`; 
         }
 
-        function changeTheme(h) { 
-            document.documentElement.style.setProperty('--miku-cyan', h); 
-            document.documentElement.style.setProperty('--border-glass', h + '80'); 
+        function changeTheme(hexColor) { 
+            document.documentElement.style.setProperty('--miku-cyan', hexColor); 
+            document.documentElement.style.setProperty('--border-glass', hexColor + '80'); 
         }
 
         function toggleSnow() { 
             snowActive = !snowActive; 
-            document.getElementById('snowCanvas').style.display = snowActive ? 'block' : 'none'; 
-            document.getElementById('snowToggle').innerText = snowActive ? "ON" : "OFF"; 
+            if (snowActive) {
+                document.getElementById('snowCanvas').style.display = 'block';
+                document.getElementById('snowToggle').innerText = "ON";
+            } else {
+                document.getElementById('snowCanvas').style.display = 'none';
+                document.getElementById('snowToggle').innerText = "OFF";
+            }
         }
 
         function openSearchPortal() { 
             document.getElementById('dash-view').classList.replace('visible', 'hidden'); 
             document.getElementById('search-portal-view').classList.replace('hidden', 'visible'); 
-            setTimeout(() => {
-                document.getElementById('portal-input').focus();
+            
+            setTimeout(() => { 
+                document.getElementById('portal-input').focus(); 
             }, 300); 
         }
 
@@ -651,44 +797,72 @@
             document.getElementById('dash-view').classList.replace('hidden', 'visible'); 
         }
 
-        // --- 3. MIKU CURSOR LOGIC ---
+        function handlePortalKeydown(event) {
+            if (event.key === 'Enter') {
+                sys_launch(event.target.value);
+            }
+            if (event.key === 'Escape') {
+                closeSearchPortal();
+            }
+        }
+
+        // ==========================================
+        //  4. MIKU CURSOR LOGIC
+        // ==========================================
         const ASSETS = { 
             idle: "https://cdn.discordapp.com/attachments/1444592922447057040/1479376567242330163/Screenshot_20260306-010851.Photos.png?ex=69abd04b&is=69aa7ecb&hm=d9ad588ac9f7b1bcaeb6d7906ef3caf0322c694b945b5c2f2ece4b5e18f9af14&", 
             click: "https://cdn.discordapp.com/attachments/1444592922447057040/1479376566839410859/Screenshot_20260306-011055.Photos.png?ex=69abd04b&is=69aa7ecb&hm=bc9b954a686baf68327d99f4a796753c77387c5fd842ee401b331b0ab8ebfd95&" 
         };
+        
         const mRoot = document.getElementById('miku-root'); 
         const miku = document.createElement('img'); 
+        
         miku.src = ASSETS.idle; 
         miku.style.cssText = `position: fixed; width: 80px; pointer-events: none; z-index: 99999999; transform: translate3d(-100px, -100px, 0); mix-blend-mode: multiply;`; 
         mRoot.appendChild(miku);
 
-        window.addEventListener('mousemove', e => { 
+        window.addEventListener('mousemove', (e) => { 
             miku.style.transform = `translate3d(${e.clientX + 5}px, ${e.clientY + 5}px, 0)`; 
+            
             document.querySelectorAll('.search-bar').forEach(bar => { 
-                const r = bar.getBoundingClientRect(); 
-                bar.style.setProperty('--mouse-x', `${e.clientX - r.left}px`); 
-                bar.style.setProperty('--mouse-y', `${e.clientY - r.top}px`); 
+                const rect = bar.getBoundingClientRect(); 
+                bar.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`); 
+                bar.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`); 
             }); 
         });
 
         window.addEventListener('mousedown', () => { 
-            if(cursorActive) miku.src = ASSETS.click; 
+            if (cursorActive) {
+                miku.src = ASSETS.click; 
+            }
         }); 
 
         window.addEventListener('mouseup', () => { 
-            if(cursorActive) miku.src = ASSETS.idle; 
+            if (cursorActive) {
+                miku.src = ASSETS.idle; 
+            }
         });
 
         function toggleCursor() { 
             cursorActive = !cursorActive; 
-            miku.style.display = cursorActive ? 'block' : 'none'; 
-            document.body.classList.toggle('miku-cursor-active', cursorActive); 
-            document.getElementById('cursorToggle').innerText = cursorActive ? "ON" : "OFF"; 
+            
+            if (cursorActive) {
+                miku.style.display = 'block';
+                document.body.classList.add('miku-cursor-active');
+                document.getElementById('cursorToggle').innerText = "ON";
+            } else {
+                miku.style.display = 'none';
+                document.body.classList.remove('miku-cursor-active');
+                document.getElementById('cursorToggle').innerText = "OFF";
+            }
         }
 
-        // --- 4. LINKS LOGIC ---
+        // ==========================================
+        //  5. LINKS LOGIC
+        // ==========================================
         function renderLinks() {
             const container = document.getElementById('links-container');
+            
             container.innerHTML = `
                 <div class="link-item" onclick="sys_launch('youtube.com')">
                     <img src="https://www.google.com/s2/favicons?domain=youtube.com&sz=64"> YouTube
@@ -700,60 +874,95 @@
                     <img src="https://www.google.com/s2/favicons?domain=hianime.to&sz=64"> HiAnime
                 </div>
             `;
-            const saved = JSON.parse(localStorage.getItem('titan_vfinal_links') || '[]'); 
-            saved.forEach(l => { 
+            
+            const savedData = localStorage.getItem('titan_vfinal_links');
+            const savedLinks = JSON.parse(savedData || '[]'); 
+            
+            savedLinks.forEach(link => { 
                 container.innerHTML += `
-                <div class="link-item" onclick="sys_launch('${l.u}')">
-                    <img src="https://www.google.com/s2/favicons?domain=${l.u}&sz=64"> ${l.n}
+                <div class="link-item" onclick="sys_launch('${link.u}')">
+                    <img src="https://www.google.com/s2/favicons?domain=${link.u}&sz=64"> ${link.n}
                 </div>`; 
             });
+            
             container.innerHTML += `
                 <div class="link-item" style="border:2px dashed var(--miku-cyan); color:var(--miku-cyan);" onclick="addLink()">
                     + ADD
-                </div>`;
+                </div>
+            `;
         }
 
         function addLink() { 
-            const n = prompt("Name:");
-            const u = prompt("URL:"); 
-            if(n && u) { 
-                let list = JSON.parse(localStorage.getItem('titan_vfinal_links') || '[]'); 
-                list.push({n, u: u.includes('.') ? u : u + '.com'}); 
+            const name = prompt("Name:"); 
+            const url = prompt("URL:"); 
+            
+            if (name && url) { 
+                const savedData = localStorage.getItem('titan_vfinal_links');
+                let list = JSON.parse(savedData || '[]'); 
+                
+                const formattedUrl = url.includes('.') ? url : url + '.com';
+                list.push({ n: name, u: formattedUrl }); 
+                
                 localStorage.setItem('titan_vfinal_links', JSON.stringify(list)); 
                 renderLinks(); 
             } 
         } 
+        
         renderLinks();
 
-        // --- 5. SYSTEM FUNCTIONALITY ---
+        // ==========================================
+        //  6. SYSTEM LAUNCHER
+        // ==========================================
         function toggleMenu(id) { 
-            const m = document.getElementById(id); 
-            const active = m.classList.contains('active'); 
-            document.querySelectorAll('.dropdown-menu').forEach(el => el.classList.remove('active')); 
-            if(!active) m.classList.add('active'); 
+            const targetMenu = document.getElementById(id); 
+            const isActive = targetMenu.classList.contains('active'); 
+            
+            document.querySelectorAll('.dropdown-menu').forEach(menu => {
+                menu.classList.remove('active');
+            }); 
+            
+            if (!isActive) {
+                targetMenu.classList.add('active'); 
+            }
         }
 
-        function sys_launch(u) { 
-            const f = u.includes('.') && !u.includes(' ') ? (u.startsWith('http') ? u : 'https://' + u) : 'https://duckduckgo.com/?q=' + encodeURIComponent(u); 
-            window.open(f, '_blank'); 
+        function sys_launch(url) { 
+            let finalUrl = "";
+            
+            if (url.includes('.') && !url.includes(' ')) {
+                if (url.startsWith('http')) {
+                    finalUrl = url;
+                } else {
+                    finalUrl = 'https://' + url;
+                }
+            } else {
+                finalUrl = 'https://duckduckgo.com/?q=' + encodeURIComponent(url);
+            }
+            
+            window.open(finalUrl, '_blank'); 
         }
 
-        // --- 6. SNOW ANIMATION ---
+        // ==========================================
+        //  7. SNOW ANIMATION SYSTEM
+        // ==========================================
         const canvas = document.getElementById('snowCanvas'); 
         const ctx = canvas.getContext('2d'); 
         const img = new Image(); 
+        
         img.src = "https://cdn.discordapp.com/attachments/1444592922447057040/1479367313026191401/Screenshot_20260306-003642.Chrome.png?ex=69abc7ac&is=69aa762c&hm=66b2ad1775d64dcc27d2fb69cfb24a4faa73d4cdd0d2797e989fe71d53849d64&";
-        let p = []; 
+        
+        let particles = []; 
 
-        function res() { 
+        function resizeCanvas() { 
             canvas.width = window.innerWidth; 
             canvas.height = window.innerHeight; 
         } 
-        window.onresize = res; 
-        res();
+        
+        window.onresize = resizeCanvas; 
+        resizeCanvas();
 
-        for(let i=0; i<45; i++) {
-            p.push({
+        for (let i = 0; i < 45; i++) {
+            particles.push({
                 x: Math.random() * canvas.width, 
                 y: Math.random() * canvas.height, 
                 s: Math.random() * 20 + 15, 
@@ -762,23 +971,30 @@
             });
         }
 
-        function animate() { 
+        function animateSnow() { 
             ctx.clearRect(0, 0, canvas.width, canvas.height); 
-            if(snowActive) {
-                p.forEach(i => { 
-                    i.y += i.sp; 
-                    i.a += 1; 
-                    if(i.y > canvas.height) i.y = -20; 
+            
+            if (snowActive) {
+                particles.forEach(particle => { 
+                    particle.y += particle.sp; 
+                    particle.a += 1; 
+                    
+                    if (particle.y > canvas.height) {
+                        particle.y = -20; 
+                    }
+                    
                     ctx.save(); 
-                    ctx.translate(i.x, i.y); 
-                    ctx.rotate(i.a * Math.PI / 180); 
-                    ctx.drawImage(img, -i.s/2, -i.s/2, i.s, i.s); 
+                    ctx.translate(particle.x, particle.y); 
+                    ctx.rotate(particle.a * Math.PI / 180); 
+                    ctx.drawImage(img, -particle.s / 2, -particle.s / 2, particle.s, particle.s); 
                     ctx.restore(); 
                 }); 
             }
-            requestAnimationFrame(animate); 
+            
+            requestAnimationFrame(animateSnow); 
         } 
-        animate();
+        
+        animateSnow();
     </script>
 </body>
 </html>
