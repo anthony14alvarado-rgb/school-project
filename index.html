@@ -10,132 +10,458 @@
 
         :root {
             --miku-cyan: #39C5BB;
-            --dark-glass: rgba(13, 25, 38, 0.7);
+            --dark-glass: rgba(13, 25, 38, 0.85);
             --border-glass: rgba(57, 197, 187, 0.5);
             --bg-dark: #0a0f16;
+            --alert-red: #ff3366;
         }
 
         /* PC CURSOR LOGIC */
-        .miku-cursor-active { cursor: none !important; }
-        .miku-cursor-active input, .miku-cursor-active div, .miku-cursor-active button { cursor: none !important; }
+        .miku-cursor-active { 
+            cursor: none !important; 
+        }
+        .miku-cursor-active input, 
+        .miku-cursor-active div, 
+        .miku-cursor-active button, 
+        .miku-cursor-active textarea { 
+            cursor: none !important; 
+        }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Nunito', sans-serif; user-select: none; -webkit-tap-highlight-color: transparent; }
-        input { user-select: text !important; } 
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            font-family: 'Nunito', sans-serif; 
+            user-select: none; 
+            -webkit-tap-highlight-color: transparent; 
+        }
+        
+        input, textarea { 
+            user-select: text !important; 
+        } 
 
         body {
-            width: 100vw; height: 100vh; overflow: hidden;
+            width: 100vw; 
+            height: 100vh; 
+            overflow: hidden;
             background: linear-gradient(180deg, #4A90E2 0%, #87CEEB 50%, #B0E0E6 100%);
-            background-size: cover; background-position: center;
-            position: relative; touch-action: none; transition: background 0.5s ease;
+            background-size: cover; 
+            background-position: center;
+            position: relative; 
+            touch-action: none; 
+            transition: background 0.5s ease;
         }
 
-        /* --- STARTUP SCREEN LAYER --- */
-        #startup-screen {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: var(--bg-dark); z-index: 999999; display: flex; flex-direction: column;
-            align-items: center; justify-content: center; transition: opacity 1s ease;
+        /* STARTUP SCREEN */
+        #startup-screen { 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100vw; 
+            height: 100vh; 
+            background: var(--bg-dark); 
+            z-index: 999999; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            transition: opacity 1s ease; 
         }
-        .miku-loader-img {
-            width: 150px; height: 150px; border-radius: 50%; object-fit: cover;
-            box-shadow: 0 0 40px var(--miku-cyan); margin-bottom: 25px;
-            animation: loader-pulse 2s infinite alternate; border: 4px solid var(--miku-cyan);
+        .miku-loader-img { 
+            width: 150px; 
+            height: 150px; 
+            border-radius: 50%; 
+            object-fit: cover; 
+            box-shadow: 0 0 40px var(--miku-cyan); 
+            margin-bottom: 25px; 
+            animation: loader-pulse 2s infinite alternate; 
+            border: 4px solid var(--miku-cyan); 
         }
-        @keyframes loader-pulse {
-            0% { transform: scale(0.98); box-shadow: 0 0 20px var(--miku-cyan); }
-            100% { transform: scale(1.05); box-shadow: 0 0 55px var(--miku-cyan); }
+        @keyframes loader-pulse { 
+            0% { transform: scale(0.98); box-shadow: 0 0 20px var(--miku-cyan); } 
+            100% { transform: scale(1.05); box-shadow: 0 0 55px var(--miku-cyan); } 
         }
-        .loader-text {
-            color: var(--miku-cyan); font-weight: 900; font-size: 1.6rem;
-            letter-spacing: 6px; text-transform: uppercase; animation: loader-blink 1.5s infinite;
+        .loader-text { 
+            color: var(--miku-cyan); 
+            font-weight: 900; 
+            font-size: 1.6rem; 
+            letter-spacing: 6px; 
+            text-transform: uppercase; 
+            animation: loader-blink 1.5s infinite; 
         }
-        @keyframes loader-blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
-        .sub-loader-text { color: white; opacity: 0.5; font-size: 0.8rem; margin-top: 12px; letter-spacing: 3px; font-weight: 700; }
+        @keyframes loader-blink { 
+            0%, 100% { opacity: 1; } 
+            50% { opacity: 0.3; } 
+        }
+        .sub-loader-text { 
+            color: white; 
+            opacity: 0.5; 
+            font-size: 0.8rem; 
+            margin-top: 12px; 
+            letter-spacing: 3px; 
+            font-weight: 700; 
+        }
 
-        /* --- SNOW SYSTEM --- */
-        #snowCanvas {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none; z-index: 2; mix-blend-mode: screen; 
+        /* SNOW SYSTEM */
+        #snowCanvas { 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            pointer-events: none; 
+            z-index: 2; 
+            mix-blend-mode: screen; 
             filter: invert(1) contrast(2) brightness(1.5) grayscale(1); 
         }
 
-        .os-interface {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            display: flex; flex-direction: column; justify-content: space-between;
-            z-index: 100; transition: opacity 0.5s ease;
+        .os-interface { 
+            position: absolute; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: space-between; 
+            z-index: 100; 
+            transition: opacity 0.5s ease; 
         }
 
-        .hidden { opacity: 0; pointer-events: none; transform: scale(0.95); position: absolute; width: 100%; }
-        .visible { opacity: 1; pointer-events: auto; transform: scale(1); }
+        .hidden { 
+            opacity: 0; 
+            pointer-events: none; 
+            transform: scale(0.95); 
+            position: absolute; 
+            width: 100%; 
+        }
+        .visible { 
+            opacity: 1; 
+            pointer-events: auto; 
+            transform: scale(1); 
+        }
 
         /* HEADER & NAVIGATION */
-        .top-bar { display: flex; justify-content: flex-start; padding: 25px; gap: 15px; position: relative; z-index: 2001; }
-        .btn-glass { 
-            background: var(--dark-glass); backdrop-filter: blur(20px); 
-            border: 1.5px solid var(--border-glass); border-radius: 40px; 
-            padding: 15px 25px; color: white; font-weight: 900;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3); cursor: pointer; transition: 0.3s;
+        .top-bar { 
+            display: flex; 
+            justify-content: flex-start; 
+            padding: 25px; 
+            gap: 15px; 
+            position: relative; 
+            z-index: 2001; 
         }
-        .btn-glass:hover { transform: translateY(-2px); border-color: var(--miku-cyan); }
+        .btn-glass { 
+            background: var(--dark-glass); 
+            backdrop-filter: blur(20px); 
+            border: 1.5px solid var(--border-glass); 
+            border-radius: 40px; 
+            padding: 15px 25px; 
+            color: white; 
+            font-weight: 900; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3); 
+            cursor: pointer; 
+            transition: 0.3s; 
+        }
+        .btn-glass:hover { 
+            transform: translateY(-2px); 
+            border-color: var(--miku-cyan); 
+        }
 
         /* DROPDOWNS */
-        .dropdown-menu {
-            position: absolute; top: 90px; left: 25px; width: 320px; background: var(--dark-glass);
-            backdrop-filter: blur(25px); border: 1.5px solid var(--border-glass);
-            border-radius: 20px; padding: 25px; color: white; display: none; flex-direction: column; gap: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5); z-index: 3000;
+        .dropdown-menu { 
+            position: absolute; 
+            top: 90px; 
+            left: 25px; 
+            width: 320px; 
+            background: var(--dark-glass); 
+            backdrop-filter: blur(25px); 
+            border: 1.5px solid var(--border-glass); 
+            border-radius: 20px; 
+            padding: 25px; 
+            color: white; 
+            display: none; 
+            flex-direction: column; 
+            gap: 15px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
+            z-index: 3000; 
         }
-        .dropdown-menu.active { display: flex; }
+        .dropdown-menu.active { 
+            display: flex; 
+        }
+        .setting-item { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            font-size: 0.9rem; 
+        }
+        .setting-input { 
+            background: rgba(255,255,255,0.1); 
+            border: 1px solid var(--border-glass); 
+            color: white; 
+            border-radius: 10px; 
+            padding: 10px; 
+            width: 100%; 
+            margin-top: 5px; 
+            outline: none; 
+        }
+        .toggle-btn { 
+            padding: 8px 15px; 
+            border-radius: 12px; 
+            background: var(--miku-cyan); 
+            border: none; 
+            font-weight: 900; 
+            cursor: pointer; 
+            color: #0d1926; 
+            transition: 0.2s; 
+        }
+        .admin-btn { 
+            background: var(--alert-red); 
+            color: white; 
+            border: none; 
+            padding: 10px; 
+            border-radius: 10px; 
+            font-weight: 900; 
+            cursor: pointer; 
+            margin-top: 10px; 
+            text-align: center; 
+            letter-spacing: 2px; 
+        }
 
-        .setting-item { display: flex; justify-content: space-between; align-items: center; font-size: 0.9rem; }
-        .setting-input { background: rgba(255,255,255,0.1); border: 1px solid var(--border-glass); color: white; border-radius: 10px; padding: 10px; width: 100%; margin-top: 5px; outline: none; }
-        .toggle-btn { padding: 8px 15px; border-radius: 12px; background: var(--miku-cyan); border: none; font-weight: 900; cursor: pointer; color: #0d1926; transition: 0.2s; }
+        /* MODALS (ADMIN & ANNOUNCEMENT) */
+        .modal-overlay { 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            background: rgba(0,0,0,0.6); 
+            backdrop-filter: blur(10px); 
+            z-index: 5000; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+        }
+        .modal-box { 
+            background: var(--dark-glass); 
+            border: 2px solid var(--miku-cyan); 
+            border-radius: 25px; 
+            padding: 30px; 
+            width: 90%; 
+            max-width: 500px; 
+            text-align: center; 
+            color: white; 
+            box-shadow: 0 15px 50px rgba(0,0,0,0.8); 
+        }
+        .modal-box.alert { 
+            border-color: var(--alert-red); 
+            box-shadow: 0 0 40px rgba(255, 51, 102, 0.4); 
+        }
+        .announce-title { 
+            color: var(--alert-red); 
+            font-weight: 900; 
+            font-size: 1.5rem; 
+            letter-spacing: 3px; 
+            margin-bottom: 20px; 
+            animation: loader-blink 2s infinite; 
+        }
+        .announce-text { 
+            font-size: 1.2rem; 
+            line-height: 1.5; 
+            margin-bottom: 30px; 
+            font-weight: 700; 
+        }
+        .admin-textarea { 
+            width: 100%; 
+            height: 100px; 
+            background: rgba(0,0,0,0.5); 
+            border: 1px solid var(--border-glass); 
+            color: white; 
+            padding: 15px; 
+            border-radius: 15px; 
+            resize: none; 
+            outline: none; 
+            margin-top: 15px; 
+            margin-bottom: 15px; 
+            font-size: 1rem; 
+        }
+        .modal-btn { 
+            background: var(--miku-cyan); 
+            color: #0d1926; 
+            border: none; 
+            padding: 12px 30px; 
+            font-weight: 900; 
+            border-radius: 15px; 
+            cursor: pointer; 
+            font-size: 1.1rem; 
+            transition: 0.3s; 
+        }
+        .modal-btn:hover { 
+            transform: scale(1.05); 
+        }
 
         /* DASHBOARD ELEMENTS */
-        .main-view { display: flex; flex-direction: column; align-items: center; justify-content: center; flex-grow: 1; gap: 15px; width: 100%; }
-        .welcome-text {
-            color: white; font-weight: 900; font-size: 2.2rem; 
+        .main-view { 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            flex-grow: 1; 
+            gap: 15px; 
+            width: 100%; 
+        }
+        .welcome-text { 
+            color: white; 
+            font-weight: 900; 
+            font-size: 2.2rem; 
             text-shadow: 0 0 15px rgba(255,255,255,0.7), 0 0 25px var(--miku-cyan); 
-            letter-spacing: 3px; text-transform: uppercase;
+            letter-spacing: 3px; 
+            text-transform: uppercase; 
         }
-
         .search-bar { 
-            width: 90%; max-width: 550px; 
-            background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(30px); 
-            border: 2px solid var(--border-glass); border-radius: 50px; 
-            padding: 20px; display: flex; align-items: center; position: relative; overflow: hidden; cursor: pointer;
+            width: 90%; 
+            max-width: 550px; 
+            background: rgba(255, 255, 255, 0.1); 
+            backdrop-filter: blur(30px); 
+            border: 2px solid var(--border-glass); 
+            border-radius: 50px; 
+            padding: 20px; 
+            display: flex; 
+            align-items: center; 
+            position: relative; 
+            overflow: hidden; 
+            cursor: pointer; 
         }
-        .search-bar::before {
-            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-            background: radial-gradient(400px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), var(--miku-cyan), transparent 40%);
-            opacity: 0; transition: opacity 0.3s ease; pointer-events: none; z-index: 1;
+        .search-bar::before { 
+            content: ''; 
+            position: absolute; 
+            top: 0; 
+            left: 0; 
+            right: 0; 
+            bottom: 0; 
+            background: radial-gradient(400px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), var(--miku-cyan), transparent 40%); 
+            opacity: 0; 
+            transition: opacity 0.3s ease; 
+            pointer-events: none; 
+            z-index: 1; 
         }
-        .search-bar:hover::before { opacity: 0.5; }
-        .search-input { background: transparent; border: none; outline: none; color: white; font-size: 1.2rem; width: 100%; text-align: center; font-weight: 700; position: relative; z-index: 2; }
+        .search-bar:hover::before { 
+            opacity: 0.5; 
+        }
+        .search-input { 
+            background: transparent; 
+            border: none; 
+            outline: none; 
+            color: white; 
+            font-size: 1.2rem; 
+            width: 100%; 
+            text-align: center; 
+            font-weight: 700; 
+            position: relative; 
+            z-index: 2; 
+        }
 
-        /* SEARCH PORTAL */
-        #search-portal-view { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; width: 100%; }
-        .portal-wide-bar { max-width: 800px; transform: scale(1.1); }
-        .back-msg { margin-top: 30px; color: white; font-weight: 900; opacity: 0.5; font-size: 0.7rem; letter-spacing: 3px; cursor: pointer; transition: 0.3s; }
-        .back-msg:hover { opacity: 1; color: var(--miku-cyan); }
-
-        /* LINKS */
-        .links-bar { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; max-width: 90%; margin-top: 10px; }
+        /* PORTAL & LINKS */
+        #search-portal-view { 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            height: 100%; 
+            width: 100%; 
+        }
+        .portal-wide-bar { 
+            max-width: 800px; 
+            transform: scale(1.1); 
+        }
+        .back-msg { 
+            margin-top: 30px; 
+            color: white; 
+            font-weight: 900; 
+            opacity: 0.5; 
+            font-size: 0.7rem; 
+            letter-spacing: 3px; 
+            cursor: pointer; 
+            transition: 0.3s; 
+        }
+        .back-msg:hover { 
+            opacity: 1; 
+            color: var(--miku-cyan); 
+        }
+        .links-bar { 
+            display: flex; 
+            gap: 12px; 
+            flex-wrap: wrap; 
+            justify-content: center; 
+            max-width: 90%; 
+            margin-top: 10px; 
+        }
         .link-item { 
-            background: var(--dark-glass); border: 1.5px solid var(--border-glass); 
-            padding: 10px 18px; border-radius: 20px; color: white; 
-            font-weight: 800; font-size: 0.9rem; cursor: pointer; transition: 0.3s;
-            display: flex; align-items: center; gap: 8px; position: relative; z-index: 10;
+            background: var(--dark-glass); 
+            border: 1.5px solid var(--border-glass); 
+            padding: 10px 18px; 
+            border-radius: 20px; 
+            color: white; 
+            font-weight: 800; 
+            font-size: 0.9rem; 
+            cursor: pointer; 
+            transition: 0.3s; 
+            display: flex; 
+            align-items: center; 
+            gap: 8px; 
+            position: relative; 
+            z-index: 10; 
         }
-        .link-item img { width: 18px; height: 18px; border-radius: 4px; pointer-events: none; }
-        .link-item:hover { background: var(--miku-cyan); color: #0d1926; transform: scale(1.05); }
+        .link-item img { 
+            width: 18px; 
+            height: 18px; 
+            border-radius: 4px; 
+            pointer-events: none; 
+        }
+        .link-item:hover { 
+            background: var(--miku-cyan); 
+            color: #0d1926; 
+            transform: scale(1.05); 
+        }
 
         /* DOCK */
-        .bottom-dock { display: flex; justify-content: center; padding-bottom: 40px; position: relative; z-index: 1001; }
-        .dock-container { background: var(--dark-glass); backdrop-filter: blur(25px); border: 1.5px solid var(--border-glass); border-radius: 35px; padding: 15px 35px; display: flex; gap: 30px; }
-        .dock-icon { color: var(--miku-cyan); font-weight: 900; font-size: 0.8rem; text-align: center; cursor: pointer; transition: 0.3s; }
-        .dock-icon:hover { transform: translateY(-5px); text-shadow: 0 0 10px var(--miku-cyan); }
+        .bottom-dock { 
+            display: flex; 
+            justify-content: center; 
+            padding-bottom: 40px; 
+            position: relative; 
+            z-index: 1001; 
+        }
+        .dock-container { 
+            background: var(--dark-glass); 
+            backdrop-filter: blur(25px); 
+            border: 1.5px solid var(--border-glass); 
+            border-radius: 35px; 
+            padding: 15px 35px; 
+            display: flex; 
+            gap: 30px; 
+        }
+        .dock-icon { 
+            color: var(--miku-cyan); 
+            font-weight: 900; 
+            font-size: 0.8rem; 
+            text-align: center; 
+            cursor: pointer; 
+            transition: 0.3s; 
+        }
+        .dock-icon:hover { 
+            transform: translateY(-5px); 
+            text-shadow: 0 0 10px var(--miku-cyan); 
+        }
 
-        #miku-root { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 99999999; }
+        #miku-root { 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            pointer-events: none; 
+            z-index: 99999999; 
+        }
     </style>
 </head>
 <body class="miku-cursor-active" id="mainBody">
@@ -155,23 +481,33 @@
             
             <div id="settingsMenu" class="dropdown-menu">
                 <p style="font-weight:900; color:var(--miku-cyan); text-align:center;">SYSTEM CUSTOMIZER</p>
-                <div class="setting-item"><span>Miku Cursor</span><button id="cursorToggle" class="toggle-btn" onclick="toggleCursor()">ON</button></div>
-                <div class="setting-item"><span>Snow Effect</span><button id="snowToggle" class="toggle-btn" onclick="toggleSnow()">ON</button></div>
-                <div class="setting-item"><span>Theme Color</span><input type="color" id="themeColor" value="#39C5BB" oninput="changeTheme(this.value)" style="background:none; border:none; width:40px; cursor:pointer;"></div>
+                <div class="setting-item">
+                    <span>Miku Cursor</span>
+                    <button id="cursorToggle" class="toggle-btn" onclick="toggleCursor()">ON</button>
+                </div>
+                <div class="setting-item">
+                    <span>Snow Effect</span>
+                    <button id="snowToggle" class="toggle-btn" onclick="toggleSnow()">ON</button>
+                </div>
+                <div class="setting-item">
+                    <span>Theme Color</span>
+                    <input type="color" id="themeColor" value="#39C5BB" oninput="changeTheme(this.value)" style="background:none; border:none; width:40px; cursor:pointer;">
+                </div>
                 <div style="display:flex; flex-direction:column; gap:5px;">
                     <span style="font-size:0.75rem;">WALLPAPER URL:</span>
                     <input type="text" class="setting-input" placeholder="Paste image link..." onchange="changeBG(this.value)">
                 </div>
+                <div class="admin-btn" onclick="openAdminTerminal()">[ OWNER TERMINAL ]</div>
             </div>
 
             <div id="updateMenu" class="dropdown-menu" style="left: 170px;">
-                <p style="font-weight:900; color:var(--miku-cyan); border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:5px;">TITAN OS 6.32</p>
+                <p style="font-weight:900; color:var(--miku-cyan); border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:5px;">TITAN OS 6.35</p>
                 <ul id="log-list" style="list-style:none; font-size:0.85rem; line-height:1.6;">
-                    <li>• Custom Miku Boot Image Integrated</li>
-                    <li>• Dynamic Load Sequence Logic</li>
-                    <li>• Search Engine: DuckDuckGo</li>
-                    <li>• Left-Side Navigation Layout</li>
-                    <li>• Full Persist/Favicon Logic Active</li>
+                    <li>• Admin Broadcast System Added</li>
+                    <li>• Password Lock (Mikuistop1)</li>
+                    <li>• Custom Miku Boot Image</li>
+                    <li>• DuckDuckGo Core Engine</li>
+                    <li>• Fully Expanded Codebase</li>
                 </ul>
             </div>
         </header>
@@ -201,121 +537,247 @@
         </footer>
     </div>
 
+    <div id="admin-modal" class="modal-overlay hidden">
+        <div class="modal-box">
+            <h2 style="color:var(--miku-cyan); font-weight:900; letter-spacing:3px;">OWNER TERMINAL</h2>
+            <textarea id="broadcast-input" class="admin-textarea" placeholder="Type your system announcement here..."></textarea>
+            <div style="display:flex; justify-content:center; gap:15px;">
+                <button class="modal-btn" style="background:var(--alert-red); color:white;" onclick="closeAdminTerminal()">CANCEL</button>
+                <button class="modal-btn" onclick="sendBroadcast()">BROADCAST</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="announce-modal" class="modal-overlay hidden">
+        <div class="modal-box alert">
+            <div class="announce-title">⚠️ SYSTEM ANNOUNCEMENT ⚠️</div>
+            <div class="announce-text" id="announce-message-text">Message goes here...</div>
+            <button class="modal-btn" onclick="closeAnnouncement()">OKAY</button>
+        </div>
+    </div>
+
     <div id="miku-root"></div>
 
     <script>
         // --- 0. SMART BOOT LOGIC ---
         window.addEventListener('load', () => {
             const loadStart = Date.now();
-            // Minimum 2.5s showtime, but waits for hardware if needed
             const checkLoad = setInterval(() => {
                 if (Date.now() - loadStart > 2500) {
                     clearInterval(checkLoad);
                     const l = document.getElementById('startup-screen');
                     l.style.opacity = '0';
-                    setTimeout(() => { l.style.display = 'none'; }, 1000);
+                    setTimeout(() => { 
+                        l.style.display = 'none'; 
+                    }, 1000);
                 }
             }, 100);
         });
 
-        // --- 1. CORE ENGINE ---
-        let snowActive = true;
+        // --- 1. ADMIN BROADCAST SYSTEM ---
+        let lastBroadcastTime = 0;
+
+        function openAdminTerminal() {
+            const pass = prompt("ENTER OWNER PASSWORD:");
+            if (pass === "Mikuistop1") {
+                document.getElementById('admin-modal').classList.replace('hidden', 'visible');
+            } else if (pass !== null) {
+                alert("ACCESS DENIED.");
+            }
+        }
+
+        function closeAdminTerminal() {
+            document.getElementById('admin-modal').classList.replace('visible', 'hidden');
+            document.getElementById('broadcast-input').value = "";
+        }
+
+        function sendBroadcast() {
+            const txt = document.getElementById('broadcast-input').value;
+            if (!txt) return;
+            
+            // Save to local storage with a timestamp
+            const payload = { msg: txt, time: Date.now() };
+            localStorage.setItem('titan_announcement', JSON.stringify(payload));
+            
+            closeAdminTerminal();
+        }
+
+        function closeAnnouncement() {
+            document.getElementById('announce-modal').classList.replace('visible', 'hidden');
+        }
+
+        // Listener checks for new announcements every half second
+        setInterval(() => {
+            const data = localStorage.getItem('titan_announcement');
+            if (data) {
+                const parsed = JSON.parse(data);
+                if (parsed.time > lastBroadcastTime) {
+                    lastBroadcastTime = parsed.time;
+                    document.getElementById('announce-message-text').innerText = parsed.msg;
+                    document.getElementById('announce-modal').classList.replace('hidden', 'visible');
+                }
+            }
+        }, 500);
+
+        // --- 2. CORE ENGINE & VISUALS ---
+        let snowActive = true; 
         let cursorActive = true;
 
-        function changeBG(u) { document.getElementById('mainBody').style.backgroundImage = `url('${u}')`; }
-        function changeTheme(h) {
-            document.documentElement.style.setProperty('--miku-cyan', h);
-            document.documentElement.style.setProperty('--border-glass', h + '80');
-        }
-        function toggleSnow() {
-            snowActive = !snowActive;
-            document.getElementById('snowCanvas').style.display = snowActive ? 'block' : 'none';
-            document.getElementById('snowToggle').innerText = snowActive ? "ON" : "OFF";
+        function changeBG(u) { 
+            document.getElementById('mainBody').style.backgroundImage = `url('${u}')`; 
         }
 
-        // --- 2. NAVIGATION ---
-        function openSearchPortal() {
-            document.getElementById('dash-view').classList.replace('visible', 'hidden');
-            document.getElementById('search-portal-view').classList.replace('hidden', 'visible');
-            setTimeout(() => document.getElementById('portal-input').focus(), 300);
-        }
-        function closeSearchPortal() {
-            document.getElementById('search-portal-view').classList.replace('visible', 'hidden');
-            document.getElementById('dash-view').classList.replace('hidden', 'visible');
+        function changeTheme(h) { 
+            document.documentElement.style.setProperty('--miku-cyan', h); 
+            document.documentElement.style.setProperty('--border-glass', h + '80'); 
         }
 
-        // --- 3. MIKU CURSOR ---
-        const ASSETS = {
-            idle: "https://cdn.discordapp.com/attachments/1444592922447057040/1479376567242330163/Screenshot_20260306-010851.Photos.png?ex=69abd04b&is=69aa7ecb&hm=d9ad588ac9f7b1bcaeb6d7906ef3caf0322c694b945b5c2f2ece4b5e18f9af14&",
-            click: "https://cdn.discordapp.com/attachments/1444592922447057040/1479376566839410859/Screenshot_20260306-011055.Photos.png?ex=69abd04b&is=69aa7ecb&hm=bc9b954a686baf68327d99f4a796753c77387c5fd842ee401b331b0ab8ebfd95&"
+        function toggleSnow() { 
+            snowActive = !snowActive; 
+            document.getElementById('snowCanvas').style.display = snowActive ? 'block' : 'none'; 
+            document.getElementById('snowToggle').innerText = snowActive ? "ON" : "OFF"; 
+        }
+
+        function openSearchPortal() { 
+            document.getElementById('dash-view').classList.replace('visible', 'hidden'); 
+            document.getElementById('search-portal-view').classList.replace('hidden', 'visible'); 
+            setTimeout(() => {
+                document.getElementById('portal-input').focus();
+            }, 300); 
+        }
+
+        function closeSearchPortal() { 
+            document.getElementById('search-portal-view').classList.replace('visible', 'hidden'); 
+            document.getElementById('dash-view').classList.replace('hidden', 'visible'); 
+        }
+
+        // --- 3. MIKU CURSOR LOGIC ---
+        const ASSETS = { 
+            idle: "https://cdn.discordapp.com/attachments/1444592922447057040/1479376567242330163/Screenshot_20260306-010851.Photos.png?ex=69abd04b&is=69aa7ecb&hm=d9ad588ac9f7b1bcaeb6d7906ef3caf0322c694b945b5c2f2ece4b5e18f9af14&", 
+            click: "https://cdn.discordapp.com/attachments/1444592922447057040/1479376566839410859/Screenshot_20260306-011055.Photos.png?ex=69abd04b&is=69aa7ecb&hm=bc9b954a686baf68327d99f4a796753c77387c5fd842ee401b331b0ab8ebfd95&" 
         };
-        const mRoot = document.getElementById('miku-root');
-        const miku = document.createElement('img');
-        miku.src = ASSETS.idle;
-        miku.style.cssText = `position: fixed; width: 80px; pointer-events: none; z-index: 99999999; transform: translate3d(-100px, -100px, 0); mix-blend-mode: multiply;`;
+        const mRoot = document.getElementById('miku-root'); 
+        const miku = document.createElement('img'); 
+        miku.src = ASSETS.idle; 
+        miku.style.cssText = `position: fixed; width: 80px; pointer-events: none; z-index: 99999999; transform: translate3d(-100px, -100px, 0); mix-blend-mode: multiply;`; 
         mRoot.appendChild(miku);
 
-        window.addEventListener('mousemove', e => {
-            miku.style.transform = `translate3d(${e.clientX + 5}px, ${e.clientY + 5}px, 0)`;
-            document.querySelectorAll('.search-bar').forEach(bar => {
-                const r = bar.getBoundingClientRect();
-                bar.style.setProperty('--mouse-x', `${e.clientX - r.left}px`);
-                bar.style.setProperty('--mouse-y', `${e.clientY - r.top}px`);
-            });
+        window.addEventListener('mousemove', e => { 
+            miku.style.transform = `translate3d(${e.clientX + 5}px, ${e.clientY + 5}px, 0)`; 
+            document.querySelectorAll('.search-bar').forEach(bar => { 
+                const r = bar.getBoundingClientRect(); 
+                bar.style.setProperty('--mouse-x', `${e.clientX - r.left}px`); 
+                bar.style.setProperty('--mouse-y', `${e.clientY - r.top}px`); 
+            }); 
         });
-        window.addEventListener('mousedown', () => { if(cursorActive) miku.src = ASSETS.click; });
-        window.addEventListener('mouseup', () => { if(cursorActive) miku.src = ASSETS.idle; });
-        function toggleCursor() {
-            cursorActive = !cursorActive;
-            miku.style.display = cursorActive ? 'block' : 'none';
-            document.body.classList.toggle('miku-cursor-active', cursorActive);
-            document.getElementById('cursorToggle').innerText = cursorActive ? "ON" : "OFF";
+
+        window.addEventListener('mousedown', () => { 
+            if(cursorActive) miku.src = ASSETS.click; 
+        }); 
+
+        window.addEventListener('mouseup', () => { 
+            if(cursorActive) miku.src = ASSETS.idle; 
+        });
+
+        function toggleCursor() { 
+            cursorActive = !cursorActive; 
+            miku.style.display = cursorActive ? 'block' : 'none'; 
+            document.body.classList.toggle('miku-cursor-active', cursorActive); 
+            document.getElementById('cursorToggle').innerText = cursorActive ? "ON" : "OFF"; 
         }
 
-        // --- 4. LINKS ---
+        // --- 4. LINKS LOGIC ---
         function renderLinks() {
             const container = document.getElementById('links-container');
             container.innerHTML = `
-                <div class="link-item" onclick="sys_launch('youtube.com')"><img src="https://www.google.com/s2/favicons?domain=youtube.com&sz=64"> YouTube</div>
-                <div class="link-item" onclick="sys_launch('tiktok.com')"><img src="https://www.google.com/s2/favicons?domain=tiktok.com&sz=64"> TikTok</div>
-                <div class="link-item" onclick="sys_launch('hianime.to')"><img src="https://www.google.com/s2/favicons?domain=hianime.to&sz=64"> HiAnime</div>
+                <div class="link-item" onclick="sys_launch('youtube.com')">
+                    <img src="https://www.google.com/s2/favicons?domain=youtube.com&sz=64"> YouTube
+                </div> 
+                <div class="link-item" onclick="sys_launch('tiktok.com')">
+                    <img src="https://www.google.com/s2/favicons?domain=tiktok.com&sz=64"> TikTok
+                </div> 
+                <div class="link-item" onclick="sys_launch('hianime.to')">
+                    <img src="https://www.google.com/s2/favicons?domain=hianime.to&sz=64"> HiAnime
+                </div>
             `;
-            const saved = JSON.parse(localStorage.getItem('titan_vfinal_links') || '[]');
-            saved.forEach(l => { container.innerHTML += `<div class="link-item" onclick="sys_launch('${l.u}')"><img src="https://www.google.com/s2/favicons?domain=${l.u}&sz=64"> ${l.n}</div>`; });
-            container.innerHTML += `<div class="link-item" style="border:2px dashed var(--miku-cyan); color:var(--miku-cyan);" onclick="addLink()">+ ADD</div>`;
+            const saved = JSON.parse(localStorage.getItem('titan_vfinal_links') || '[]'); 
+            saved.forEach(l => { 
+                container.innerHTML += `
+                <div class="link-item" onclick="sys_launch('${l.u}')">
+                    <img src="https://www.google.com/s2/favicons?domain=${l.u}&sz=64"> ${l.n}
+                </div>`; 
+            });
+            container.innerHTML += `
+                <div class="link-item" style="border:2px dashed var(--miku-cyan); color:var(--miku-cyan);" onclick="addLink()">
+                    + ADD
+                </div>`;
         }
-        function addLink() {
-            const n = prompt("Name:"), u = prompt("URL:");
-            if(n && u) {
-                let list = JSON.parse(localStorage.getItem('titan_vfinal_links') || '[]');
-                list.push({n, u: u.includes('.') ? u : u + '.com'});
-                localStorage.setItem('titan_vfinal_links', JSON.stringify(list));
-                renderLinks();
-            }
-        }
+
+        function addLink() { 
+            const n = prompt("Name:");
+            const u = prompt("URL:"); 
+            if(n && u) { 
+                let list = JSON.parse(localStorage.getItem('titan_vfinal_links') || '[]'); 
+                list.push({n, u: u.includes('.') ? u : u + '.com'}); 
+                localStorage.setItem('titan_vfinal_links', JSON.stringify(list)); 
+                renderLinks(); 
+            } 
+        } 
         renderLinks();
 
-        // --- 5. SYSTEM ENGINE ---
+        // --- 5. SYSTEM FUNCTIONALITY ---
         function toggleMenu(id) { 
-            const m = document.getElementById(id);
-            const active = m.classList.contains('active');
-            document.querySelectorAll('.dropdown-menu').forEach(el => el.classList.remove('active'));
-            if(!active) m.classList.add('active');
+            const m = document.getElementById(id); 
+            const active = m.classList.contains('active'); 
+            document.querySelectorAll('.dropdown-menu').forEach(el => el.classList.remove('active')); 
+            if(!active) m.classList.add('active'); 
         }
+
         function sys_launch(u) { 
-            const f = u.includes('.') && !u.includes(' ') ? (u.startsWith('http') ? u : 'https://' + u) : 'https://duckduckgo.com/?q=' + encodeURIComponent(u);
+            const f = u.includes('.') && !u.includes(' ') ? (u.startsWith('http') ? u : 'https://' + u) : 'https://duckduckgo.com/?q=' + encodeURIComponent(u); 
             window.open(f, '_blank'); 
         }
 
-        const canvas = document.getElementById('snowCanvas'); const ctx = canvas.getContext('2d');
-        const img = new Image(); img.src = "https://cdn.discordapp.com/attachments/1444592922447057040/1479367313026191401/Screenshot_20260306-003642.Chrome.png?ex=69abc7ac&is=69aa762c&hm=66b2ad1775d64dcc27d2fb69cfb24a4faa73d4cdd0d2797e989fe71d53849d64&";
-        let p = []; function res() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; } window.onresize = res; res();
-        for(let i=0; i<45; i++) p.push({x:Math.random()*canvas.width, y:Math.random()*canvas.height, s:Math.random()*20+15, sp:Math.random()*2+1, a:Math.random()*360});
-        function animate() {
-            ctx.clearRect(0,0,canvas.width,canvas.height);
-            if(snowActive) p.forEach(i => { i.y += i.sp; i.a += 1; if(i.y > canvas.height) i.y = -20; ctx.save(); ctx.translate(i.x, i.y); ctx.rotate(i.a*Math.PI/180); ctx.drawImage(img, -i.s/2, -i.s/2, i.s, i.s); ctx.restore(); });
-            requestAnimationFrame(animate);
+        // --- 6. SNOW ANIMATION ---
+        const canvas = document.getElementById('snowCanvas'); 
+        const ctx = canvas.getContext('2d'); 
+        const img = new Image(); 
+        img.src = "https://cdn.discordapp.com/attachments/1444592922447057040/1479367313026191401/Screenshot_20260306-003642.Chrome.png?ex=69abc7ac&is=69aa762c&hm=66b2ad1775d64dcc27d2fb69cfb24a4faa73d4cdd0d2797e989fe71d53849d64&";
+        let p = []; 
+
+        function res() { 
+            canvas.width = window.innerWidth; 
+            canvas.height = window.innerHeight; 
+        } 
+        window.onresize = res; 
+        res();
+
+        for(let i=0; i<45; i++) {
+            p.push({
+                x: Math.random() * canvas.width, 
+                y: Math.random() * canvas.height, 
+                s: Math.random() * 20 + 15, 
+                sp: Math.random() * 2 + 1, 
+                a: Math.random() * 360
+            });
         }
+
+        function animate() { 
+            ctx.clearRect(0, 0, canvas.width, canvas.height); 
+            if(snowActive) {
+                p.forEach(i => { 
+                    i.y += i.sp; 
+                    i.a += 1; 
+                    if(i.y > canvas.height) i.y = -20; 
+                    ctx.save(); 
+                    ctx.translate(i.x, i.y); 
+                    ctx.rotate(i.a * Math.PI / 180); 
+                    ctx.drawImage(img, -i.s/2, -i.s/2, i.s, i.s); 
+                    ctx.restore(); 
+                }); 
+            }
+            requestAnimationFrame(animate); 
+        } 
         animate();
     </script>
 </body>
