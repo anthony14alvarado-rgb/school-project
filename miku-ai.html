@@ -1,1 +1,61 @@
+<div id="ai-wrap" style="background: #000; color: #00ffff; height: 100vh; font-family: monospace; padding: 20px; display: flex; flex-direction: column;">
+    
+    <div id="chat-logs" style="flex-grow: 1; overflow-y: auto; border: 1px solid #00ffff; padding: 15px; margin-bottom: 10px; background: rgba(0,255,255,0.05);">
+        <div>[SYSTEM]: Miku Core Online. Ask me anything.</div>
+    </div>
 
+    <div style="display: flex; gap: 10px;">
+        <input type="text" id="user-msg" placeholder="Type here..." onkeypress="if(event.key==='Enter') talk()" 
+               style="flex-grow: 1; background: #111; border: 1px solid #00ffff; color: #fff; padding: 10px; outline: none;">
+        <button onclick="talk()" style="background: #00ffff; color: #000; border: none; padding: 10px 20px; font-weight: bold; cursor: pointer;">SEND</button>
+    </div>
+</div>
+
+<script>
+    // --- LOCAL BRAIN (Roblox & Math) ---
+    const LOCAL_DATA = {
+        "roblox": "For R6 rigs, you need to use Motor6D to connect parts like the Torso and Head.",
+        "r6": "R6 is your preferred rig! It uses 6 parts and is great for retro-style animations.",
+        "geometry": "C = 2 * π * r. I can help with your circle calculations!",
+        "titan": "Titan OS is your dashboard. I am the AI core living inside it."
+    };
+
+    async function talk() {
+        const input = document.getElementById('user-msg');
+        const logs = document.getElementById('chat-logs');
+        const query = input.value.trim().toLowerCase();
+        if (!query) return;
+
+        // 1. Show User Message
+        logs.innerHTML += `<div style="color: #fff; margin-top: 10px;">> ${input.value}</div>`;
+        input.value = "";
+
+        // 2. Miku Thinking
+        const replyId = "reply-" + Date.now();
+        logs.innerHTML += `<div id="${replyId}" style="color: #00ffff; margin-bottom: 5px;">MIKU: Thinking...</div>`;
+        logs.scrollTop = logs.scrollHeight;
+
+        let response = "";
+
+        // 3. Check Local Brain First
+        for (let key in LOCAL_DATA) {
+            if (query.includes(key)) { response = LOCAL_DATA[key]; break; }
+        }
+
+        // 4. If not local, use Wikipedia (The "Know Everything" Part)
+        if (!response) {
+            try {
+                // ADDED 'origin=*' to fix the loading error
+                const wikiUrl = `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(query)}?origin=*`;
+                const res = await fetch(wikiUrl);
+                const data = await res.json();
+                response = data.extract ? data.extract : "I couldn't find that in the archives. Try a different word?";
+            } catch (err) {
+                response = "Connection error. My uplink to the web is offline.";
+            }
+        }
+
+        document.getElementById(replyId).innerText = "MIKU: " + response;
+        logs.scrollTop = logs.scrollHeight;
+    }
+</script>
