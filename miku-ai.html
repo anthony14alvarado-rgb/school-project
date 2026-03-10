@@ -1,49 +1,58 @@
-<script>
-    // 1. ASSETS - These stay the same
-    const FACES = {
-        smiling: "https://cdn.discordapp.com/attachments/1444592922447057040/1480790018594443447/image.png?ex=69b0f4ac&is=69afa32c&hm=27b57a62482364599007a95cc21027f6126235201a9825105aa172bd315b95c4&",
-        thinking: "https://cdn.discordapp.com/attachments/1444592922447057040/1480790067743162409/Screenshot_20260309-234509.Google.png?ex=69b0f4b7&is=69afa337&hm=e0439e45b29c1eeaac09fcab84aec3b714ff15ff953e68eec1a8b6b3269389ad&",
-        sleeping: "https://cdn.discordapp.com/attachments/1444592922447057040/1480790067327795300/Screenshot_20260309-234840.Chrome.png?ex=69b0f4b7&is=69afa337&hm=cc70cc2e9454a127bc95d8e445f92bb27b490b5f67fcc3a801f3c874674bad3e&"
-    };
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Miku AI Core</title>
+    <style>
+        body { background: #050505; color: #33ccff; font-family: sans-serif; overflow: hidden; }
+        .terminal { width: 90%; max-width: 500px; margin: 20px auto; background: rgba(20,20,20,0.8); border: 2px solid #33ccff; border-radius: 15px; padding: 20px; box-shadow: 0 0 20px #33ccff; height: 80vh; position: relative; }
+        #chat-logs { height: 70%; overflow-y: auto; margin-bottom: 10px; border-bottom: 1px solid #33ccff; }
+        input { width: 70%; background: none; border: 1px solid #33ccff; color: white; padding: 10px; border-radius: 5px; }
+        button { background: #33ccff; border: none; padding: 10px; font-weight: bold; cursor: pointer; border-radius: 5px; }
+    </style>
+</head>
+<body>
 
-    const faceImg = document.getElementById('miku-face');
+<div class="terminal">
+    <center><img id="miku-face" src="https://cdn.discordapp.com/attachments/1444592922447057040/1480790018594443447/image.png?..." style="width:100px; border-radius:50%; border:2px solid #33ccff;"></center>
+    <div id="chat-logs"><div>[SYSTEM]: Miku AI Online. Type below to begin.</div></div>
+    <input type="text" id="user-msg" placeholder="Command Miku...">
+    <button onclick="talk()">SEND</button>
+</div>
+
+<div id="miku-bubble" style="position: fixed; bottom: 20px; right: 20px; cursor: pointer;" onclick="document.getElementById('user-msg').focus();">
+    <img id="bubble-img" src="https://cdn.discordapp.com/attachments/1444592922447057040/1480790018594443447/image.png?..." style="width:60px; height:60px; border-radius:50%; border:2px solid #33ccff;">
+</div>
+
+<script>
+    const face = document.getElementById('miku-face');
     const logs = document.getElementById('chat-logs');
+    const faces = {
+        smile: "https://cdn.discordapp.com/attachments/1444592922447057040/1480790018594443447/image.png?...",
+        think: "https://cdn.discordapp.com/attachments/1444592922447057040/1480790067743162409/Screenshot_20260309-234509.Google.png?..."
+    };
 
     function talk() {
         const input = document.getElementById('user-msg');
-        const text = input.value.trim().toLowerCase();
-        
-        if (text === "") return;
+        const text = input.value.toLowerCase();
+        if(!text) return;
 
-        // Add your message to the screen
-        logs.innerHTML += `<div class="user-msg">${input.value}</div>`;
-        faceImg.src = FACES.thinking; // Switch to thinking face
+        logs.innerHTML += `<div style="color:white; margin-top:10px;">> ${input.value}</div>`;
+        face.src = faces.think;
 
         setTimeout(() => {
-            let response = "";
-
-            // --- THE BRAIN ---
-            if (text.includes("hello") || text.includes("hi")) {
-                response = "Miku Core online! Ready to help with Titan OS.";
-            } 
-            else if (text.includes("roblox") || text.includes("r6")) {
-                response = "R6 Scripting detected. I recommend checking Motor6D offsets for that rig!";
-            }
-            else if (text.includes("math") || text.includes("geometry")) {
-                response = "Math module active. Calculating radius or circumference?";
-            }
+            let reply = "Processing...";
+            if(text.includes("roblox")) reply = "R6 Scripting protocols ready!";
+            else if(text.includes("math")) reply = "C = 2 * π * r. Ready to calculate!";
             else {
-                // THE "KNOW EVERYTHING" LOGIC
-                response = "I'm searching the global web for that... hold on!";
-                // Automatically opens the answer in a new tab for you
+                reply = "Opening global archives for: " + text;
                 window.open("https://duckduckgo.com/?q=" + encodeURIComponent(text), "_blank");
             }
-
-            logs.innerHTML += `<div class="miku-msg">${response}</div>`;
-            faceImg.src = FACES.smiling;
+            logs.innerHTML += `<div style="margin-top:5px;">MIKU: ${reply}</div>`;
+            face.src = faces.smile;
             logs.scrollTop = logs.scrollHeight;
         }, 800);
-
         input.value = "";
     }
 </script>
+</body>
+</html>
