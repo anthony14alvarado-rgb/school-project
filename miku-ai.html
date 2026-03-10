@@ -1,58 +1,93 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Miku AI Core</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Miku AI Terminal</title>
     <style>
-        body { background: #050505; color: #33ccff; font-family: sans-serif; overflow: hidden; }
-        .terminal { width: 90%; max-width: 500px; margin: 20px auto; background: rgba(20,20,20,0.8); border: 2px solid #33ccff; border-radius: 15px; padding: 20px; box-shadow: 0 0 20px #33ccff; height: 80vh; position: relative; }
-        #chat-logs { height: 70%; overflow-y: auto; margin-bottom: 10px; border-bottom: 1px solid #33ccff; }
-        input { width: 70%; background: none; border: 1px solid #33ccff; color: white; padding: 10px; border-radius: 5px; }
-        button { background: #33ccff; border: none; padding: 10px; font-weight: bold; cursor: pointer; border-radius: 5px; }
+        body { background: #000; color: #00ffff; font-family: monospace; margin: 0; padding: 20px; }
+        
+        /* THE MAIN BOX */
+        .terminal { 
+            border: 3px solid #00ffff; 
+            background: rgba(0, 20, 20, 0.9); 
+            padding: 20px; 
+            border-radius: 15px; 
+            box-shadow: 0 0 30px #00ffff;
+            height: 70vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #chat-logs { flex-grow: 1; overflow-y: auto; margin-bottom: 10px; font-size: 14px; }
+
+        /* THE INPUT AREA */
+        .input-area { display: flex; gap: 10px; }
+        input { flex-grow: 1; background: #111; border: 1px solid #00ffff; color: #fff; padding: 12px; border-radius: 5px; }
+        button { background: #00ffff; color: #000; border: none; padding: 10px 20px; font-weight: bold; cursor: pointer; border-radius: 5px; }
+
+        /* THE FLOATING BUBBLE (BOTTOM RIGHT) */
+        #miku-bubble { 
+            position: fixed; 
+            bottom: 30px; 
+            right: 30px; 
+            z-index: 10000; /* This makes sure she is ON TOP of everything */
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        #miku-bubble img { 
+            width: 80px; 
+            height: 80px; 
+            border-radius: 50%; 
+            border: 4px solid #00ffff; 
+            box-shadow: 0 0 25px #00ffff; 
+        }
     </style>
 </head>
 <body>
 
 <div class="terminal">
-    <center><img id="miku-face" src="https://cdn.discordapp.com/attachments/1444592922447057040/1480790018594443447/image.png?..." style="width:100px; border-radius:50%; border:2px solid #33ccff;"></center>
-    <div id="chat-logs"><div>[SYSTEM]: Miku AI Online. Type below to begin.</div></div>
-    <input type="text" id="user-msg" placeholder="Command Miku...">
-    <button onclick="talk()">SEND</button>
+    <center><img id="miku-face" src="https://cdn.discordapp.com/attachments/1444592922447057040/1480790018594443447/image.png?..." style="width:120px; border-radius:50%; border:2px solid #00ffff;"></center>
+    <div id="chat-logs"><div>[SYSTEM]: Titan OS Intelligence Active...</div></div>
+    
+    <div class="input-area">
+        <input type="text" id="user-msg" placeholder="Command Miku...">
+        <button onclick="talk()">SEND</button>
+    </div>
 </div>
 
-<div id="miku-bubble" style="position: fixed; bottom: 20px; right: 20px; cursor: pointer;" onclick="document.getElementById('user-msg').focus();">
-    <img id="bubble-img" src="https://cdn.discordapp.com/attachments/1444592922447057040/1480790018594443447/image.png?..." style="width:60px; height:60px; border-radius:50%; border:2px solid #33ccff;">
+<div id="miku-bubble" onclick="document.getElementById('user-msg').focus();">
+    <img src="https://cdn.discordapp.com/attachments/1444592922447057040/1480790018594443447/image.png?..." alt="Miku Bubble">
 </div>
 
 <script>
     const face = document.getElementById('miku-face');
     const logs = document.getElementById('chat-logs');
-    const faces = {
-        smile: "https://cdn.discordapp.com/attachments/1444592922447057040/1480790018594443447/image.png?...",
-        think: "https://cdn.discordapp.com/attachments/1444592922447057040/1480790067743162409/Screenshot_20260309-234509.Google.png?..."
-    };
+    const input = document.getElementById('user-msg');
 
     function talk() {
-        const input = document.getElementById('user-msg');
         const text = input.value.toLowerCase();
         if(!text) return;
 
-        logs.innerHTML += `<div style="color:white; margin-top:10px;">> ${input.value}</div>`;
-        face.src = faces.think;
-
+        logs.innerHTML += `<div style="color:#fff; margin-top:10px;">> ${input.value}</div>`;
+        
         setTimeout(() => {
-            let reply = "Processing...";
-            if(text.includes("roblox")) reply = "R6 Scripting protocols ready!";
-            else if(text.includes("math")) reply = "C = 2 * π * r. Ready to calculate!";
-            else {
-                reply = "Opening global archives for: " + text;
+            let reply = "Opening archives for: " + text;
+            if(text.includes("roblox")) reply = "R6 Scripting protocols ready for Roblox!";
+            else if(text.includes("math")) reply = "C = 2 * PI * R. I'm ready to calculate!";
+            
+            // THE KNOW EVERYTHING ENGINE
+            if(!text.includes("roblox") && !text.includes("math")) {
                 window.open("https://duckduckgo.com/?q=" + encodeURIComponent(text), "_blank");
             }
-            logs.innerHTML += `<div style="margin-top:5px;">MIKU: ${reply}</div>`;
-            face.src = faces.smile;
+
+            logs.innerHTML += `<div style="margin-top:5px; color:#00ffff;">MIKU: ${reply}</div>`;
             logs.scrollTop = logs.scrollHeight;
-        }, 800);
+        }, 600);
+        
         input.value = "";
     }
 </script>
+
 </body>
 </html>
