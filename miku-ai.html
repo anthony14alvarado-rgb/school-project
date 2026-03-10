@@ -1,66 +1,49 @@
 <script>
-    // 1. YOUR SAVED ASSETS (The Core Four)
+    // 1. ASSETS - These stay the same
     const FACES = {
         smiling: "https://cdn.discordapp.com/attachments/1444592922447057040/1480790018594443447/image.png?ex=69b0f4ac&is=69afa32c&hm=27b57a62482364599007a95cc21027f6126235201a9825105aa172bd315b95c4&",
         thinking: "https://cdn.discordapp.com/attachments/1444592922447057040/1480790067743162409/Screenshot_20260309-234509.Google.png?ex=69b0f4b7&is=69afa337&hm=e0439e45b29c1eeaac09fcab84aec3b714ff15ff953e68eec1a8b6b3269389ad&",
-        sleeping: "https://cdn.discordapp.com/attachments/1444592922447057040/1480790067327795300/Screenshot_20260309-234840.Chrome.png?ex=69b0f4b7&is=69afa337&hm=cc70cc2e9454a127bc95d8e445f92bb27b490b5f67fcc3a801f3c874674bad3e&",
-        shocked: "https://cdn.discordapp.com/attachments/1444592922447057040/1480790018594443447/image.png?ex=69b0f4ac&is=69afa32c&hm=27b57a62482364599007a95cc21027f6126235201a9825105aa172bd315b95c4&"
+        sleeping: "https://cdn.discordapp.com/attachments/1444592922447057040/1480790067327795300/Screenshot_20260309-234840.Chrome.png?ex=69b0f4b7&is=69afa337&hm=cc70cc2e9454a127bc95d8e445f92bb27b490b5f67fcc3a801f3c874674bad3e&"
     };
 
     const faceImg = document.getElementById('miku-face');
     const logs = document.getElementById('chat-logs');
-    let idleTimer;
 
-    // 2. THE TALK FUNCTION (The Brain)
     function talk() {
         const input = document.getElementById('user-msg');
-        const query = input.value.trim().toLowerCase();
+        const text = input.value.trim().toLowerCase();
         
-        if (query === "") return;
+        if (text === "") return;
 
-        // Add User Message to screen
-        logs.innerHTML += `<div class="bubble user-reply">${input.value}</div>`;
-        
-        // Miku swaps to Thinking Face
-        faceImg.src = FACES.thinking;
+        // Add your message to the screen
+        logs.innerHTML += `<div class="user-msg">${input.value}</div>`;
+        faceImg.src = FACES.thinking; // Switch to thinking face
 
         setTimeout(() => {
             let response = "";
 
-            // --- SMART LOGIC ---
-            if (query.includes("roblox") || query.includes("r6") || query.includes("script")) {
-                response = "R6 Scripting protocols active. Are we working on Motor6D joints or custom animations?";
-            } else if (query.includes("math") || query.includes("geometry") || query.includes("circumference")) {
-                response = "Geometry module engaged. The formula for circumference is C = 2 * π * r. Need me to solve one?";
-            } else if (query.includes("who are you") || query.includes("name")) {
-                response = "I am the Titan OS Core Intelligence. I manage your web, games, and security!";
-            } else if (query.includes("time")) {
-                response = "System time is currently: " + new Date().toLocaleTimeString();
-            } else {
-                // THE "KNOW EVERYTHING" ENGINE
-                response = "I'm pulling data from the global archives for '" + query + "'... Check the new tab!";
-                window.open("https://duckduckgo.com/?q=" + encodeURIComponent(query), "_blank");
+            // --- THE BRAIN ---
+            if (text.includes("hello") || text.includes("hi")) {
+                response = "Miku Core online! Ready to help with Titan OS.";
+            } 
+            else if (text.includes("roblox") || text.includes("r6")) {
+                response = "R6 Scripting detected. I recommend checking Motor6D offsets for that rig!";
+            }
+            else if (text.includes("math") || text.includes("geometry")) {
+                response = "Math module active. Calculating radius or circumference?";
+            }
+            else {
+                // THE "KNOW EVERYTHING" LOGIC
+                response = "I'm searching the global web for that... hold on!";
+                // Automatically opens the answer in a new tab for you
+                window.open("https://duckduckgo.com/?q=" + encodeURIComponent(text), "_blank");
             }
 
-            // Show Miku's response
-            logs.innerHTML += `<div class="bubble miku-reply">${response}</div>`;
-            faceImg.src = FACES.smiling; // Back to smiling
+            logs.innerHTML += `<div class="miku-msg">${response}</div>`;
+            faceImg.src = FACES.smiling;
             logs.scrollTop = logs.scrollHeight;
-        }, 1000);
+        }, 800);
 
         input.value = "";
-        resetIdle();
     }
-
-    // 3. THE SLEEP TIMER
-    function resetIdle() {
-        clearTimeout(idleTimer);
-        if (faceImg.src === FACES.sleeping) faceImg.src = FACES.smiling;
-        idleTimer = setTimeout(() => {
-            faceImg.src = FACES.sleeping;
-        }, 60000); // 1 minute to sleep
-    }
-
-    window.addEventListener('mousemove', resetIdle);
-    resetIdle();
 </script>
